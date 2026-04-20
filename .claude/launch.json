@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mirar-dist",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "dist", "-p", "3456", "--no-clipboard"],
+      "port": 3456
+    }
+  ]
+}

@@ -1,18 +1,20 @@
 {
   "expo": {
-    "name": "mirar-app",
+    "name": "Mirar",
     "slug": "mirar-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "mirar",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F0EDE8"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mirar.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +27,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      ["expo-notifications", {
+        "icon": "./assets/icon.png",
+        "color": "#F0EDE8"
+      }]
+    ]
   }
 }
