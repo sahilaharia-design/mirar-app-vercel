@@ -105,33 +105,33 @@ export const RADIUS = {
 export const THEMES: Record<ThemeCode, ThemeMeta> = {
   IAP: {
     code: 'IAP',
-    name: 'Inner Alignment & Purpose',
-    shortDescription: 'Direction clarity, value congruence, purpose awareness',
+    name: 'Direction',
+    shortDescription: 'What feels true, chosen, and internally clear',
   },
   EWB: {
     code: 'EWB',
-    name: 'Energy & Well-being',
-    shortDescription: 'Recovery, emotional steadiness, internal bandwidth',
+    name: 'Energy',
+    shortDescription: 'Capacity, heaviness, steadiness, and recovery',
   },
   FAF: {
     code: 'FAF',
-    name: 'Focus & Flow',
-    shortDescription: 'Distraction awareness, depth of engagement, attention stability',
+    name: 'Attention',
+    shortDescription: 'Where your mind keeps returning',
   },
   RC: {
     code: 'RC',
-    name: 'Relational Capital',
-    shortDescription: 'Boundary clarity, connection depth, emotional honesty',
+    name: 'Connection',
+    shortDescription: 'How honest and spacious relationships feel',
   },
   GAL: {
     code: 'GAL',
-    name: 'Growth & Learning',
-    shortDescription: 'Adaptability, reflection depth, insight integration',
+    name: 'Growth',
+    shortDescription: 'Openness, change, and what is becoming visible',
   },
   RA: {
     code: 'RA',
-    name: 'Resilience & Action',
-    shortDescription: 'Momentum, resistance patterns, follow-through integrity',
+    name: 'Movement',
+    shortDescription: 'Small steps, hesitation, and follow-through',
   },
 };
 

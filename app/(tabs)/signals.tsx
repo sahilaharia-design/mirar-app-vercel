@@ -5,6 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,6 +19,7 @@ import { MirarLogo } from '../../components/ui/MirarLogo';
 import { ThemeScore, ThemeCode } from '../../types/mirar';
 import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES, THEME_ORDER } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
+import { ThemeDetailSheet } from '../../components/dashboard/ThemeDetailSheet';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -60,6 +62,7 @@ export default function SignalsScreen() {
   } = useCycleStore();
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [selectedTheme, setSelectedTheme] = React.useState<ThemeCode | null>(null);
 
   const load = async () => {
     if (session?.user?.id) {
@@ -154,17 +157,24 @@ export default function SignalsScreen() {
                 const prevStatus = prevThemeStatusMap[code] as any ?? null;
 
                 return (
-                  <ThemeSignalRow
+                  <TouchableOpacity
                     key={code}
-                    code={code as ThemeCode}
-                    name={score.name}
-                    status={score.status}
-                    average={score.average}
-                    signalCount={score.signalCount}
-                    history={history}
-                    previousStatus={prevStatus}
-                    index={index}
-                  />
+                    activeOpacity={0.75}
+                    onPress={() => setSelectedTheme(code as ThemeCode)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`View ${score.name} detail`}
+                  >
+                    <ThemeSignalRow
+                      code={code as ThemeCode}
+                      name={score.name}
+                      status={score.status}
+                      average={score.average}
+                      signalCount={score.signalCount}
+                      history={history}
+                      previousStatus={prevStatus}
+                      index={index}
+                    />
+                  </TouchableOpacity>
                 );
               })}
             </View>
@@ -200,6 +210,16 @@ export default function SignalsScreen() {
 
         <View style={{ height: SPACING.xl }} />
       </ScrollView>
+
+      <ThemeDetailSheet
+        visible={selectedTheme !== null}
+        themeCode={selectedTheme}
+        cycleNumber={activeCycle?.cycle_number ?? 1}
+        currentDay={currentDay}
+        stageOverviews={stageOverviews}
+        themeHistories={themeHistories}
+        onClose={() => setSelectedTheme(null)}
+      />
     </SafeAreaView>
   );
 }

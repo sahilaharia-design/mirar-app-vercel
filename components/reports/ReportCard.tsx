@@ -11,10 +11,10 @@ interface ReportCardProps {
 }
 
 const CHAPTER_LABELS: Record<number, string> = {
-  1: 'Chapter 1 — First Signals',
-  2: 'Chapter 2 — Patterns Emerge',
-  3: 'Chapter 3 — Signal in Action',
-  4: 'Chapter 4 — Mirror Deepens',
+  1: 'First Signals',
+  2: 'Patterns Emerging',
+  3: 'Movement Noticed',
+  4: 'Mirror Deepening',
   0: 'Full Cycle Mirror',
 };
 

@@ -28,7 +28,7 @@ import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { useTranslation } from 'react-i18next';
 import { useColors } from '../../contexts/theme-context';
-import { FONT_SIZE, SPACING, RADIUS, STAGES } from '../../lib/constants';
+import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES } from '../../lib/constants';
 import { getAlignmentStatus } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
 import { ThemeCode } from '../../types/mirar';
@@ -45,19 +45,21 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
     journalText,
     isSubmitting,
     isCompleted,
-    completedOptionId,
-    completedAt,
-    submittedSignal,
     selectOption,
     setJournalText,
     submitCheckIn,
   } = useCheckInStore();
 
+  // V3: two-step flow — step 1 = question+options, step 2 = journal
+  const [checkInStep, setCheckInStep] = React.useState<1 | 2>(1);
+
+  // Derive selected option data for journal echo
+  const selectedOption = question?.options?.find((o) => o.id === selectedOptionId) ?? null;
+
   const handleSubmit = async () => {
     if (!session?.user?.id || !activeCycle?.id || !selectedOptionId) return;
     const result = await submitCheckIn(session.user.id, activeCycle.id);
     if (!result.error) {
-      // Navigate to dedicated Mirror Screen with signal params
       const signal = useCheckInStore.getState().submittedSignal;
       const currentDayNum = useCycleStore.getState().currentDay;
       const cycleNum = activeCycle.cycle_number ?? 1;
@@ -91,54 +93,65 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   if (isCompleted) return null;
 
   const stage = getStageFromDay(question.day_number ?? 1);
+  const dayNum = question.day_number ?? 1;
 
+  // ── Step 2: Journal ─────────────────────────────────────────────────────────
+  if (checkInStep === 2) {
+    return (
+      <JournalExpander
+        dayNumber={dayNum}
+        selectedOptionText={selectedOption?.option_text ?? undefined}
+        theme1Code={selectedOption?.theme_1_code ?? undefined}
+        theme1Level={selectedOption?.theme_1_level ?? undefined}
+        theme2Code={selectedOption?.theme_2_code ?? undefined}
+        theme2Level={selectedOption?.theme_2_level ?? undefined}
+        value={journalText}
+        onChangeText={setJournalText}
+        disabled={isSubmitting}
+        isSubmitting={isSubmitting}
+        onSubmit={handleSubmit}
+        onSkip={handleSubmit}
+      />
+    );
+  }
+
+  // ── Step 1: Question + Options ──────────────────────────────────────────────
   return (
     <>
       <ScrollView
-        style={{ flex: 1, backgroundColor: colors.cream }}
+        style={{ flex: 1, backgroundColor: COLORS.paper }}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         <PromptCard
-          dayNumber={question.day_number ?? 1}
+          dayNumber={dayNum}
           stage={stage}
           promptText={question.prompt_text}
         />
-        <View style={[styles.divider, { backgroundColor: colors.borderLight }]} />
+        <View style={[styles.divider, { backgroundColor: COLORS.ruleLight }]} />
         <OptionSelector
           options={question.options ?? []}
           selectedOptionId={selectedOptionId}
           onSelect={selectOption}
           disabled={isSubmitting}
         />
-        <View style={[styles.divider, { backgroundColor: colors.borderLight }]} />
-        <JournalExpander
-          journalPrompt={question.journal_prompt}
-          value={journalText}
-          onChangeText={setJournalText}
-          disabled={isSubmitting}
-        />
       </ScrollView>
 
-      <View style={[styles.submitContainer, { backgroundColor: colors.cream, borderTopColor: colors.borderLight }]}>
+      <View style={[styles.submitContainer, { backgroundColor: COLORS.paper, borderTopColor: COLORS.ruleLight }]}>
         <TouchableOpacity
           style={[
             styles.submitButton,
-            { backgroundColor: colors.slate },
-            (!selectedOptionId || isSubmitting) && styles.submitButtonDisabled,
+            { backgroundColor: COLORS.slate },
+            !selectedOptionId && styles.submitButtonDisabled,
           ]}
-          onPress={handleSubmit}
-          disabled={!selectedOptionId || isSubmitting}
+          onPress={() => setCheckInStep(2)}
+          disabled={!selectedOptionId}
           activeOpacity={0.85}
         >
-          {isSubmitting ? (
-            <ActivityIndicator color={colors.creamLight} size="small" />
-          ) : (
-            <Text style={[styles.submitButtonText, { color: colors.creamLight }]}>
-              {t('common.record_checkin')}
-            </Text>
-          )}
+          <Text style={[styles.submitButtonText, { color: COLORS.cream }]}>
+            Continue →
+          </Text>
         </TouchableOpacity>
       </View>
     </>
@@ -277,8 +290,8 @@ export default function TodayScreen() {
   // ─── Check-in flow active ───────────────────────────────────────────────────
   if (showCheckin && !isCompleted) {
     return (
-      <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
-        <View style={[styles.header, { borderBottomColor: colors.borderLight }]}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: COLORS.paper }]}>
+        <View style={[styles.header, { borderBottomColor: COLORS.ruleLight }]}>
           <TouchableOpacity onPress={() => setShowCheckin(false)}>
             <Text style={[styles.backLink, { color: colors.slateMid }]}>← Today</Text>
           </TouchableOpacity>

@@ -73,13 +73,13 @@ export default function ReportsScreen() {
             />
           }
         >
-          <Text style={styles.pageTitle}>Alignment Summaries</Text>
+          <Text style={styles.pageTitle}>Mirror Reports</Text>
           <Text style={styles.pageDesc}>
-            Generated at each stage close. Available after{'\n'}start date + 6 days + 20 hours.
+            Short reflections appear as your daily signals build.
           </Text>
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Stage Summaries</Text>
+            <Text style={styles.sectionLabel}>Chapter Mirrors</Text>
             {[1, 2, 3, 4].map((stage) => (
               <ReportCard
                 key={stage}
@@ -107,7 +107,7 @@ export default function ReportsScreen() {
 
           <View style={styles.note}>
             <Text style={styles.noteText}>
-              Signal observations only. Mirar reads — you interpret.
+              Signal observations only. Mirar reflects — you interpret.
             </Text>
           </View>
 

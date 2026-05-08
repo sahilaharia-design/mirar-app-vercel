@@ -13,41 +13,41 @@ const STAGE_LABELS: Record<number, string> = {
 // ─── Observational summary lines per theme+status ────────────────────────────
 // Language rule: describe what appeared, not what it means.
 const SUMMARY_LINES: Record<string, string> = {
-  IAP_Aligned: 'Signals for Inner Alignment & Purpose appeared consistently across this stage.',
-  IAP_Forming: 'Signals for Inner Alignment & Purpose appeared with moderate regularity.',
-  IAP_Stabilizing: 'Signals for Inner Alignment & Purpose appeared intermittently.',
-  'IAP_Under Load': 'Signals for Inner Alignment & Purpose registered at low levels throughout this stage.',
-  IAP_NoReading: 'Coverage insufficient for an Inner Alignment & Purpose reading.',
+  IAP_Aligned: 'Direction signals appeared consistently across this chapter.',
+  IAP_Forming: 'Direction signals appeared with moderate regularity.',
+  IAP_Stabilizing: 'Direction signals appeared intermittently.',
+  'IAP_Under Load': 'Direction signals registered under load across this chapter.',
+  IAP_NoReading: 'Coverage was not yet enough for a Direction reading.',
 
-  EWB_Aligned: 'Energy & Well-being signals were present and stable.',
-  EWB_Forming: 'Energy & Well-being signals appeared with moderate consistency.',
-  EWB_Stabilizing: 'Energy & Well-being signals appeared at variable levels.',
-  'EWB_Under Load': 'Energy & Well-being signals registered at low levels.',
-  EWB_NoReading: 'Coverage insufficient for an Energy & Well-being reading.',
+  EWB_Aligned: 'Energy signals were present and stable.',
+  EWB_Forming: 'Energy signals appeared with moderate consistency.',
+  EWB_Stabilizing: 'Energy signals appeared at variable levels.',
+  'EWB_Under Load': 'Energy signals registered under load.',
+  EWB_NoReading: 'Coverage was not yet enough for an Energy reading.',
 
-  FAF_Aligned: 'Focus & Flow signals appeared with stability across this stage.',
-  FAF_Forming: 'Focus & Flow signals were present at moderate levels.',
-  FAF_Stabilizing: 'Focus & Flow signals showed variability.',
-  'FAF_Under Load': 'Focus & Flow signals registered at low levels.',
-  FAF_NoReading: 'Coverage insufficient for a Focus & Flow reading.',
+  FAF_Aligned: 'Attention signals appeared with stability across this chapter.',
+  FAF_Forming: 'Attention signals were present at moderate levels.',
+  FAF_Stabilizing: 'Attention signals showed variability.',
+  'FAF_Under Load': 'Attention signals registered under load.',
+  FAF_NoReading: 'Coverage was not yet enough for an Attention reading.',
 
-  RC_Aligned: 'Relational Capital signals were consistent and present.',
-  RC_Forming: 'Relational Capital signals appeared at moderate levels.',
-  RC_Stabilizing: 'Relational Capital signals appeared intermittently.',
-  'RC_Under Load': 'Relational Capital signals registered at low levels.',
-  RC_NoReading: 'Coverage insufficient for a Relational Capital reading.',
+  RC_Aligned: 'Connection signals were consistent and present.',
+  RC_Forming: 'Connection signals appeared at moderate levels.',
+  RC_Stabilizing: 'Connection signals appeared intermittently.',
+  'RC_Under Load': 'Connection signals registered under load.',
+  RC_NoReading: 'Coverage was not yet enough for a Connection reading.',
 
-  GAL_Aligned: 'Growth & Learning signals were consistently present.',
-  GAL_Forming: 'Growth & Learning signals appeared with moderate regularity.',
-  GAL_Stabilizing: 'Growth & Learning signals appeared intermittently.',
-  'GAL_Under Load': 'Growth & Learning signals registered at low levels.',
-  GAL_NoReading: 'Coverage insufficient for a Growth & Learning reading.',
+  GAL_Aligned: 'Growth signals were consistently present.',
+  GAL_Forming: 'Growth signals appeared with moderate regularity.',
+  GAL_Stabilizing: 'Growth signals appeared intermittently.',
+  'GAL_Under Load': 'Growth signals registered under load.',
+  GAL_NoReading: 'Coverage was not yet enough for a Growth reading.',
 
-  RA_Aligned: 'Resilience & Action signals were stable and present.',
-  RA_Forming: 'Resilience & Action signals appeared with moderate consistency.',
-  RA_Stabilizing: 'Resilience & Action signals showed variation.',
-  'RA_Under Load': 'Resilience & Action signals registered at low levels.',
-  RA_NoReading: 'Coverage insufficient for a Resilience & Action reading.',
+  RA_Aligned: 'Movement signals were stable and present.',
+  RA_Forming: 'Movement signals appeared with moderate consistency.',
+  RA_Stabilizing: 'Movement signals showed variation.',
+  'RA_Under Load': 'Movement signals registered under load.',
+  RA_NoReading: 'Coverage was not yet enough for a Movement reading.',
 };
 
 function getSummaryLine(themeCode: string, status: string): string {
@@ -125,7 +125,7 @@ export function assembleReportText(
   lines.push(`MIRAR ALIGNMENT SUMMARY — ${stageLabel.toUpperCase()}`);
   lines.push(`Mirar ID: ${mirarid}`);
   lines.push('');
-  lines.push(`Stage: ${stageLabel}`);
+  lines.push(`Chapter: ${stageLabel}`);
   lines.push(`"${stageDesc}"`);
   lines.push('');
   lines.push(`Coverage: ${coverage} of ${coverageTotal} check-ins recorded.`);

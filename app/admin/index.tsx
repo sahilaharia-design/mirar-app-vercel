@@ -38,12 +38,12 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const THEME_NAMES: Record<string, string> = {
-  IAP: 'Inner Alignment & Purpose',
+  IAP: 'Direction',
   EWB: 'Energy & Well-being',
-  FAF: 'Focus & Flow',
-  RC: 'Relational Capital',
+  FAF: 'Attention',
+  RC: 'Connection',
   GAL: 'Growth & Learning',
-  RA: 'Resilience & Action',
+  RA: 'Movement',
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────────────

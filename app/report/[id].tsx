@@ -127,7 +127,7 @@ export default function ReportDetailScreen() {
 
         {/* Theme blocks */}
         <View style={styles.themeSection}>
-          <Text style={styles.sectionLabel}>Theme Signal Status</Text>
+          <Text style={styles.sectionLabel}>Signal Areas</Text>
           <View style={styles.themeList}>
             {themeBlocks.map((block) => (
               <ThemeBlock key={block.code} block={block} />

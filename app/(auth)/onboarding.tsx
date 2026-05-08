@@ -15,16 +15,14 @@ import { useAuthStore } from '../../stores/auth-store';
 import { generateMirarId } from '../../lib/scoring';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { LanguagePicker } from '../../components/ui/LanguagePicker';
-import { COLORS, FONT_SIZE, SPACING, RADIUS, THEMES, THEME_ORDER } from '../../lib/constants';
+import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const SLIDE_KEYS = [
-  { key: 'recognition', titleKey: 'onboarding.slide1_title', bodyKey: 'onboarding.slide1_body', accent: null },
-  { key: 'mechanism',   titleKey: 'onboarding.slide2_title', bodyKey: 'onboarding.slide2_body', accent: null },
-  { key: 'themes',      titleKey: 'onboarding.slide3_title', bodyKey: null,                     accent: 'themes' as const },
-  { key: 'mirror',      titleKey: 'onboarding.slide4_title', bodyKey: 'onboarding.slide4_body', accent: 'mirror' as const },
-  { key: 'privacy',     titleKey: 'onboarding.slide5_title', bodyKey: 'onboarding.slide5_body', accent: null },
+  { key: 'daily', titleKey: 'onboarding.slide1_title', bodyKey: 'onboarding.slide1_body' },
+  { key: 'notice', titleKey: 'onboarding.slide2_title', bodyKey: 'onboarding.slide2_body' },
+  { key: 'time', titleKey: 'onboarding.slide3_title', bodyKey: 'onboarding.slide3_body' },
 ];
 
 export default function OnboardingScreen() {
@@ -120,32 +118,6 @@ export default function OnboardingScreen() {
 
               {slide.bodyKey && (
                 <Text style={styles.slideBody}>{t(slide.bodyKey)}</Text>
-              )}
-
-              {slide.accent === 'themes' && (
-                <View style={styles.themeGrid}>
-                  {THEME_ORDER.map((code) => (
-                    <View key={code} style={styles.themeChip}>
-                      <Text style={styles.themeCode}>{code}</Text>
-                      <View style={styles.themeTextCol}>
-                        <Text style={styles.themeName}>{THEMES[code].name}</Text>
-                        <Text style={styles.themeShort}>{THEMES[code].shortDescription}</Text>
-                      </View>
-                    </View>
-                  ))}
-                </View>
-              )}
-
-              {slide.accent === 'mirror' && (
-                <View style={styles.mirrorMock}>
-                  <View style={styles.mirrorMockLabelRow}>
-                    <View style={styles.mirrorMockDot} />
-                    <Text style={styles.mirrorMockLabel}>AI MIRROR · TODAY'S SIGNAL</Text>
-                  </View>
-                  <Text style={styles.mirrorMockText}>
-                    "Energy & Well-being has been reading low for 3 days. Focus & Flow held stable. Inner Alignment & Purpose shows a slight upward shift."
-                  </Text>
-                </View>
               )}
             </View>
           ))}
