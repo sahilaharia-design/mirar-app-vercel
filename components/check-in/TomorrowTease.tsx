@@ -7,12 +7,12 @@ interface TomorrowTeaseProps {
   tomorrowDayNumber: number;
 }
 
-export function TomorrowTease({ tomorrowTease, tomorrowDayNumber }: TomorrowTeaseProps) {
+export function TomorrowTease({ tomorrowTease, tomorrowDayNumber: _tomorrowDayNumber }: TomorrowTeaseProps) {
   if (!tomorrowTease) return null;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Day {tomorrowDayNumber}</Text>
+      <Text style={styles.label}>Next mirror</Text>
       <Text style={styles.tease}>{tomorrowTease}</Text>
     </View>
   );

@@ -46,7 +46,6 @@ import {
   SPACING,
   THEMES,
   CYCLE_DAYS,
-  STAGES,
 } from '../../lib/constants';
 import {
   V3_SETTLE_EASING,
@@ -123,7 +122,7 @@ function buildObservations(score: ThemeScore, history: ThemeDataPoint[]): ObsRow
   const { lowCount, mediumCount, highCount, signalCount, status } = score;
 
   if (signalCount === 0) {
-    obs.push({ text: 'No signals recorded yet.', meta: 'data · insufficient', brass: false });
+    obs.push({ text: 'Not enough reflections yet.', meta: 'still forming', brass: false });
     return obs;
   }
 
@@ -131,27 +130,27 @@ function buildObservations(score: ThemeScore, history: ThemeDataPoint[]): ObsRow
   const midHigh = mediumCount + highCount;
   obs.push({
     text: `${midHigh} of ${signalCount} signals held mid or above.`,
-    meta: `distribution · ${Math.round((midHigh / signalCount) * 100)}%`,
+    meta: 'recent reflections',
     brass: false,
   });
 
   // Row 2: Status-driven pattern
   if (status === 'Under Load' && lowCount >= 2) {
     obs.push({
-      text: `Low readings across ${lowCount} signals. Pressure is sustained.`,
-      meta: 'load pattern · present',
+      text: `Pressure appeared across ${lowCount} reflections.`,
+      meta: 'pattern present',
       brass: true,
     });
   } else if (status === 'Aligned' && highCount >= 2) {
     obs.push({
-      text: `${highCount} high readings registered. Signal is holding.`,
-      meta: 'alignment · stable',
+      text: `${highCount} reflections showed steadiness.`,
+      meta: 'holding steady',
       brass: false,
     });
   } else if (status === 'Forming' || status === 'Stabilizing') {
     obs.push({
-      text: 'Variability in readings. Pattern still forming.',
-      meta: 'calibration · ongoing',
+      text: 'The readings vary. The pattern is still forming.',
+      meta: 'still forming',
       brass: false,
     });
   }
@@ -163,14 +162,14 @@ function buildObservations(score: ThemeScore, history: ThemeDataPoint[]): ObsRow
     const delta = recent[2] - recent[0];
     if (delta <= -0.3) {
       obs.push({
-        text: 'Reading has been declining over recent days.',
-        meta: 'trend · downward',
+        text: 'The reading has carried more pressure recently.',
+        meta: 'recent shift',
         brass: true,
       });
     } else if (delta >= 0.3) {
       obs.push({
-        text: 'Reading has been rising over recent days.',
-        meta: 'trend · upward',
+        text: 'The reading has shown more steadiness recently.',
+        meta: 'recent shift',
         brass: false,
       });
     }
@@ -312,7 +311,7 @@ function DailySignature({
         );
       })}
 
-      {/* Stage divider — brass dashed at day 14 */}
+      {/* Gentle divider between recent reflection windows */}
       <Line
         x1={dividerX}
         y1={8}
@@ -323,7 +322,7 @@ function DailySignature({
         strokeDasharray="1,3"
       />
 
-      {/* Stage labels */}
+      {/* Window labels */}
       <SvgText
         x={stageLabel1X}
         y={6}
@@ -333,7 +332,7 @@ function DailySignature({
         fill={COLORS.slateLight}
         textAnchor="middle"
       >
-        {STAGES[0].label.toUpperCase()}
+        RECENT
       </SvgText>
       <SvgText
         x={stageLabel2X}
@@ -344,7 +343,7 @@ function DailySignature({
         fill={COLORS.slateLight}
         textAnchor="middle"
       >
-        {STAGES[1].label.toUpperCase()}
+        EARLIER
       </SvgText>
     </Svg>
   );
@@ -434,12 +433,13 @@ export function ThemeDetailSheet({
       if (!aggregateScore) {
         aggregateScore = { ...ts };
       } else {
+        const previousScore: ThemeScore = aggregateScore;
         aggregateScore = {
-          ...aggregateScore,
-          lowCount: aggregateScore.lowCount + ts.lowCount,
-          mediumCount: aggregateScore.mediumCount + ts.mediumCount,
-          highCount: aggregateScore.highCount + ts.highCount,
-          signalCount: aggregateScore.signalCount + ts.signalCount,
+          ...previousScore,
+          lowCount: previousScore.lowCount + ts.lowCount,
+          mediumCount: previousScore.mediumCount + ts.mediumCount,
+          highCount: previousScore.highCount + ts.highCount,
+          signalCount: previousScore.signalCount + ts.signalCount,
           average: ts.average, // use most recent stage's average
           status: ts.status,   // use most recent stage's status
         };
@@ -495,7 +495,7 @@ export function ThemeDetailSheet({
                 <Text style={styles.capsLabel}>← Signals</Text>
               </TouchableOpacity>
               <Text style={styles.capsLabel}>
-                {themeCode} · Cycle {cycleNumber}
+                Reflection area
               </Text>
             </View>
             <View style={styles.rule} />
@@ -523,7 +523,7 @@ export function ThemeDetailSheet({
             <View style={styles.readingRow}>
               {/* Left: status label + trend */}
               <View>
-                <Text style={styles.capsLabel}>Current</Text>
+                <Text style={styles.capsLabel}>Now</Text>
                 <View style={styles.statusRow}>
                   <Text style={styles.statusNum}>{statusLabel(currentStatus)}</Text>
                   {badge ? (
@@ -533,9 +533,9 @@ export function ThemeDetailSheet({
               </View>
               {/* Right: coverage */}
               <View style={styles.coverageBlock}>
-                <Text style={styles.capsLabel}>Coverage</Text>
+                <Text style={styles.capsLabel}>Reflections</Text>
                 <Text style={styles.coverageNum}>
-                  {totalSignals} / {CYCLE_DAYS}
+                  {totalSignals} recorded
                 </Text>
               </View>
             </View>
@@ -549,7 +549,7 @@ export function ThemeDetailSheet({
           {/* ── Daily signature ─────────────────────────────────────────── */}
           <FadeSlide delayMs={stagger(3)} reducedMotion={reducedMotion.current} style={styles.signatureSection}>
             <Text style={[styles.capsLabel, { marginBottom: 10 }]}>
-              Daily signature · this cycle
+              Recent reflection pattern
             </Text>
             <DailySignature history={history} currentDay={currentDay} />
           </FadeSlide>
@@ -557,7 +557,7 @@ export function ThemeDetailSheet({
           {/* ── Observed rows ───────────────────────────────────────────── */}
           {observations.length > 0 && (
             <FadeSlide delayMs={stagger(4)} reducedMotion={reducedMotion.current} style={styles.observedSection}>
-              <Text style={[styles.capsLabel, { marginBottom: 10 }]}>Observed</Text>
+              <Text style={[styles.capsLabel, { marginBottom: 10 }]}>What showed up</Text>
               <View style={styles.obsCard}>
                 {observations.map((obs, i) => (
                   <React.Fragment key={i}>

@@ -13,12 +13,11 @@ export function ThemeBlock({ block }: ThemeBlockProps) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.name}>{block.name}</Text>
-        <Text style={styles.code}>{block.code}</Text>
       </View>
       <View style={styles.footer}>
         <StatusBadge status={block.status} size="sm" />
         {block.averageScore !== null && (
-          <Text style={styles.score}>avg {block.averageScore.toFixed(2)}</Text>
+          <Text style={styles.score}>based on reflections</Text>
         )}
       </View>
     </View>

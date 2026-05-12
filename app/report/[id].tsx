@@ -14,20 +14,36 @@ import { ReportRow, ThemeScore, ReportDisplay } from '../../types/mirar';
 import { buildReportDisplay } from '../../lib/report-generator';
 import { ThemeBlock } from '../../components/reports/ThemeBlock';
 import { SignalList } from '../../components/reports/SignalList';
+import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 
 const STAGE_DESCRIPTIONS: Record<number, string> = {
   1: 'What became noticeable',
   2: 'Where adjustment signals appeared',
   3: 'Where movement occurred',
   4: 'What remained visible by the end of the cycle',
-  0: 'Full cycle signal summary',
+  0: 'Full pattern summary',
 };
+
+function softenReportLine(line: string): string {
+  return line
+    .replace(/\s+\((IAP|EWB|FAF|RC|GAL|RA)\)/g, '')
+    .replace(/Coverage:\s*/i, '')
+    .replace(/check-ins/gi, 'reflections')
+    .replace(/Low signal presence/gi, 'Pressure or load showed up')
+    .replace(/High signal presence/gi, 'Steadiness showed up')
+    .replace(/Moderate signal presence/gi, 'This area appeared, but not strongly')
+    .replace(/Stabilizing signal pattern/gi, 'This area was settling')
+    .replace(/this stage/gi, 'this window')
+    .replace(/\.$/, '.');
+}
 
 export default function ReportDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [reportDisplay, setReportDisplay] = useState<ReportDisplay | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [meaningOpen, setMeaningOpen] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -90,6 +106,10 @@ export default function ReportDetailScreen() {
   }
 
   const { stage, stageLabel, coverage, coverageTotal, themeBlocks, primarySignals, calibrationChecks, summaryText } = reportDisplay;
+  const strongestSignal = primarySignals.find((signal) => !signal.toLowerCase().startsWith('coverage')) ?? primarySignals[0];
+  const repeatedSignals = primarySignals
+    .filter((signal) => !signal.toLowerCase().startsWith('coverage'))
+    .slice(0, 3);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -106,28 +126,76 @@ export default function ReportDetailScreen() {
       >
         {/* Report header */}
         <View style={styles.reportHeader}>
-          <Text style={styles.reportTitle}>{stageLabel}</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.reportTitle}>{stageLabel}</Text>
+            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.reflectionSummary} size={13} />
+          </View>
           <Text style={styles.reportDesc}>"{STAGE_DESCRIPTIONS[stage]}"</Text>
           <View style={styles.coverageRow}>
             <Text style={styles.coverageText}>
-              {coverage} of {coverageTotal} check-ins recorded
+              {coverage} of {coverageTotal} reflections included
             </Text>
           </View>
         </View>
 
         <View style={styles.divider} />
 
+        <View style={styles.valueIntro}>
+          <Text style={styles.sectionLabel}>Your reflection summary</Text>
+          <Text style={styles.valueIntroText}>
+            Based on your recent reflections, this is what Mirar noticed.
+          </Text>
+        </View>
+
+        {repeatedSignals.length > 0 && (
+          <View style={styles.noticeBlock}>
+            <Text style={styles.sectionLabel}>What kept showing up</Text>
+            <View style={styles.noticeCard}>
+              {repeatedSignals.map((signal) => (
+                <View key={signal} style={styles.noticeRow}>
+                  <View style={styles.noticeDot} />
+                  <Text style={styles.noticeText}>{softenReportLine(signal)}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {strongestSignal && (
+          <View style={styles.summaryBlock}>
+            <Text style={styles.sectionLabel}>Your strongest signal</Text>
+            <Text style={styles.summaryText}>{softenReportLine(strongestSignal)}</Text>
+          </View>
+        )}
+
+        <TouchableOpacity
+          style={styles.meaningCard}
+          onPress={() => setMeaningOpen((v) => !v)}
+          activeOpacity={0.75}
+          accessibilityRole="button"
+        >
+          <View style={styles.meaningHeader}>
+            <Text style={styles.meaningTitle}>What this may help you notice</Text>
+            <Text style={styles.meaningToggle}>{meaningOpen ? 'Close' : 'What does this mean?'}</Text>
+          </View>
+          {meaningOpen && (
+            <Text style={styles.meaningText}>
+              This does not mean anything is wrong. It simply gives language to something that may have been running quietly in the background.
+            </Text>
+          )}
+        </TouchableOpacity>
+
         {/* Summary */}
         {summaryText && (
           <View style={styles.summaryBlock}>
-            <Text style={styles.sectionLabel}>Summary</Text>
+            <Text style={styles.sectionLabel}>How to read this</Text>
             <Text style={styles.summaryText}>{summaryText}</Text>
           </View>
         )}
 
         {/* Theme blocks */}
         <View style={styles.themeSection}>
-          <Text style={styles.sectionLabel}>Signal Areas</Text>
+          <Text style={styles.sectionLabel}>What showed up</Text>
           <View style={styles.themeList}>
             {themeBlocks.map((block) => (
               <ThemeBlock key={block.code} block={block} />
@@ -138,7 +206,7 @@ export default function ReportDetailScreen() {
         {/* Primary signals */}
         {primarySignals.length > 0 && (
           <SignalList
-            title="Primary Signals"
+            title="Strongest signals"
             items={primarySignals}
             variant="primary"
           />
@@ -147,7 +215,7 @@ export default function ReportDetailScreen() {
         {/* Calibration checks */}
         {calibrationChecks.length > 0 && (
           <SignalList
-            title="Calibration Checks"
+            title="Gentle checks"
             items={calibrationChecks}
             variant="calibration"
           />
@@ -156,7 +224,7 @@ export default function ReportDetailScreen() {
         {/* Language disclaimer */}
         <View style={styles.disclaimer}>
           <Text style={styles.disclaimerText}>
-            This summary contains signal observations only. No interpretation, recommendations, or behavioral guidance is present.
+            Read this as a mirror, not a verdict. No recommendations or behavioral guidance are present.
           </Text>
         </View>
 
@@ -203,6 +271,10 @@ const styles = StyleSheet.create({
   reportHeader: {
     gap: SPACING.sm,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   reportTitle: {
     fontSize: FONT_SIZE['2xl'],
     color: COLORS.slate,
@@ -235,10 +307,74 @@ const styles = StyleSheet.create({
   summaryBlock: {
     gap: SPACING.xs,
   },
+  valueIntro: {
+    gap: SPACING.xs,
+  },
+  valueIntroText: {
+    fontSize: FONT_SIZE.base,
+    color: COLORS.slateMid,
+    lineHeight: 25,
+  },
+  noticeBlock: {
+    gap: SPACING.xs,
+  },
+  noticeCard: {
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    gap: SPACING.sm,
+  },
+  noticeRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: SPACING.sm,
+  },
+  noticeDot: {
+    width: 5,
+    height: 5,
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.slateMid,
+    marginTop: 9,
+  },
+  noticeText: {
+    flex: 1,
+    fontSize: FONT_SIZE.sm,
+    color: COLORS.slateMid,
+    lineHeight: 22,
+  },
   summaryText: {
     fontSize: FONT_SIZE.base,
     color: COLORS.slateMid,
     lineHeight: 26,
+  },
+  meaningCard: {
+    backgroundColor: COLORS.creamDark,
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    padding: SPACING.md,
+    gap: SPACING.xs,
+  },
+  meaningHeader: {
+    gap: SPACING.xs,
+  },
+  meaningTitle: {
+    fontSize: FONT_SIZE.base,
+    color: COLORS.slate,
+    fontWeight: '500',
+  },
+  meaningToggle: {
+    fontSize: FONT_SIZE.xs,
+    color: COLORS.slateLight,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  meaningText: {
+    fontSize: FONT_SIZE.sm,
+    color: COLORS.slateMid,
+    lineHeight: 22,
   },
   themeSection: {
     gap: SPACING.xs,

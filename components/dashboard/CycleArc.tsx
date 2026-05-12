@@ -8,16 +8,14 @@ interface CycleArcProps {
 }
 
 export function CycleArc({ currentDay, totalDays = 28 }: CycleArcProps) {
-  const completedDays = currentDay - 1;
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.label}>Cycle Progress</Text>
-        <Text style={styles.dayCount}>Day {currentDay} of {totalDays}</Text>
+        <Text style={styles.label}>Reflection pattern</Text>
+        <Text style={styles.dayCount}>Your pattern is forming</Text>
       </View>
 
-      {/* Day grid — 4 rows of 7 */}
+      {/* Internal cycle grid, presented as a soft reflection pattern. */}
       <View style={styles.grid}>
         {Array.from({ length: totalDays }, (_, i) => {
           const day = i + 1;
@@ -52,10 +50,10 @@ export function CycleArc({ currentDay, totalDays = 28 }: CycleArcProps) {
       {/* Stage legend */}
       <View style={styles.legend}>
         {[
-          { label: 'Awareness', bg: STAGE_COLORS.stage1Active },
-          { label: 'Realignment', bg: STAGE_COLORS.stage2Active },
-          { label: 'Action', bg: STAGE_COLORS.stage3Active },
-          { label: 'Recognition', bg: STAGE_COLORS.stage4Active },
+          { label: 'Notice', bg: STAGE_COLORS.stage1Active },
+          { label: 'Adjust', bg: STAGE_COLORS.stage2Active },
+          { label: 'Move', bg: STAGE_COLORS.stage3Active },
+          { label: 'Reflect', bg: STAGE_COLORS.stage4Active },
         ].map(({ label, bg }) => (
           <View key={label} style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: bg }]} />

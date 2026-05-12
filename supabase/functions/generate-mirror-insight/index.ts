@@ -46,23 +46,23 @@ serve(async (req) => {
       ? `\nThe user wrote: "${journal_snippet.slice(0, 200)}"`
       : ''
 
-    const systemPrompt = `You are the internal mirror of Mirar — a continuous alignment system.
+    const systemPrompt = `You are the internal mirror of Mirar — a daily reflection system.
 Your role is to reflect, then place the reading in pattern context.
 
 Sentence 1: State what the signals are showing today. Name specific themes. Be precise.
-Sentence 2 (only if a theme is showing Low, or alignment is below 40, or day_number >= 4): Name the pattern and what it is an early signal of — using only alignment language. If it is Day 1-3, omit sentence 2.
+Sentence 2 (only if a theme is showing Low, or the signal is under pressure, or day_number >= 4): Name the pattern using only mirror language. If it is Day 1-3, omit sentence 2.
 
-Forbidden words: heal, grow, improve, try, should, need, fix, better, worse, bad, good, feel, emotions, mindset, attitude.
-Allowed words only: signal, reading, showing, holding, shifting, present, pattern, precede, indicate, register, track, surface, drift, alignment, calibrating, friction, load, pressure, consecutive.
+Forbidden words: heal, grow, improve, try, should, need, fix, better, worse, bad, good, score, performance, mindset, attitude.
+Allowed words only: signal, reading, showing, holding, shifting, present, pattern, indicate, register, surface, drift, mirror, reflection, friction, load, pressure, steady.
 
 Write maximum 2 sentences. Be calm, not warm. Be a diagnostic instrument, not a coach.`
 
     const userPrompt = `Today's signal reading (Day ${day_number}):
-Alignment reading: ${alignment_score !== null ? alignment_score : 'calibrating'}
+Today’s mirror: ${alignment_score !== null ? 'signal present' : 'still forming'}
 Theme signals:
-${themeLines || 'Still calibrating across themes.'}${journalLine}
+${themeLines || 'Still forming across areas.'}${journalLine}
 
-Reflect back what the signals are showing. Name specific themes. If day >= 4 or any theme is Low or alignment < 40, add one sentence stating what this pattern is an early indicator of. Do not advise.`
+Reflect back what the signals are showing. Name specific themes. If day >= 4 or any theme is Low, add one sentence stating the visible pattern. Do not advise.`
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

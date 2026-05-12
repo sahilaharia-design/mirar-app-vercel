@@ -12,12 +12,12 @@ const corsHeaders = {
 }
 
 const THEME_NAMES: Record<string, string> = {
-  IAP: 'Inner Alignment & Purpose',
-  EWB: 'Energy & Well-being',
-  FAF: 'Focus & Flow',
-  RC:  'Relational Capital',
-  GAL: 'Growth & Learning',
-  RA:  'Resilience & Action',
+  IAP: 'Direction',
+  EWB: 'Energy',
+  FAF: 'Attention',
+  RC:  'Connection',
+  GAL: 'Growth',
+  RA:  'Movement',
 }
 
 const VALID_SIGNAL_TYPES = [
@@ -86,7 +86,7 @@ serve(async (req) => {
     const themeLines = (themeScores ?? [])
       .filter((t: any) => t.signal_count > 0)
       .sort((a: any, b: any) => (a.average_score ?? 0) - (b.average_score ?? 0))
-      .map((t: any) => `- ${THEME_NAMES[t.theme_code] ?? t.theme_code}: ${t.status} (avg ${t.average_score?.toFixed(1)})`)
+      .map((t: any) => `- ${THEME_NAMES[t.theme_code] ?? t.theme_code}: ${t.status}`)
       .join('\n')
 
     const alignmentTrend = (recentAlignments ?? []).length >= 3

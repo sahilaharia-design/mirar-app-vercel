@@ -14,7 +14,7 @@ export function WeeklySignalCard({ signalText, weekNumber }: WeeklySignalCardPro
 
   if (!signalText) return null;
 
-  const weekLabel = weekNumber ? `WEEK ${weekNumber}` : 'THIS WEEK';
+  const weekLabel = weekNumber ? `RECENT REFLECTIONS` : 'THIS WEEK';
 
   return (
     <Animated.View entering={FadeInDown.duration(500).delay(200)}>
@@ -26,7 +26,7 @@ export function WeeklySignalCard({ signalText, weekNumber }: WeeklySignalCardPro
         <View style={styles.labelRow}>
           <View style={[styles.dot, { backgroundColor: colors.accentTeal }]} />
           <Text style={[styles.label, { color: colors.slateLight }]}>
-            WEEKLY SIGNAL · {weekLabel}
+            YOUR PATTERN · {weekLabel}
           </Text>
         </View>
 
@@ -37,7 +37,7 @@ export function WeeklySignalCard({ signalText, weekNumber }: WeeklySignalCardPro
 
         {/* Subtle footer line */}
         <Text style={[styles.footer, { color: colors.slateXLight }]}>
-          Generated from your last 7 check-ins
+          Based on your recent reflections
         </Text>
       </View>
     </Animated.View>

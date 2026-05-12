@@ -5,6 +5,7 @@ import { ThemeCode, ThemeStatus } from '../../types/mirar';
 import { useColors } from '../../contexts/theme-context';
 import { FONT_SIZE, SPACING, RADIUS, STATUS_CONFIG, THEME_COLORS } from '../../lib/constants';
 import { buildSparklinePath, getThemeScoreColor } from '../../lib/svg-utils';
+import { InfoTooltipInline } from '../ui/InfoTooltip';
 
 interface ThemeDataPoint {
   day: number;
@@ -19,6 +20,7 @@ interface ThemeSignalRowProps {
   signalCount: number;
   history: ThemeDataPoint[]; // 7 data points
   previousStatus?: ThemeStatus | null;
+  helpText?: string;
   index?: number;
 }
 
@@ -133,8 +135,8 @@ function getDeltaLabel(
   };
 
   const diff = rank[currentStatus] - rank[previousStatus];
-  if (diff > 0) return { text: `↑ was ${previousStatus}`, color: '#5B8C5A' };
-  if (diff < 0) return { text: `↓ was ${previousStatus}`, color: '#C47058' };
+  if (diff > 0) return { text: 'showing more steadiness', color: '#5B8C5A' };
+  if (diff < 0) return { text: 'showing more pressure', color: '#C47058' };
   return null;
 }
 
@@ -147,6 +149,7 @@ export function ThemeSignalRow({
   signalCount,
   history,
   previousStatus,
+  helpText,
   index = 0,
 }: ThemeSignalRowProps) {
   const colors = useColors();
@@ -166,8 +169,11 @@ export function ThemeSignalRow({
           {/* Top row: theme name + status badge */}
           <View style={styles.topRow}>
             <View style={styles.nameBlock}>
-              <Text style={[styles.themeCode, { color: accentColor }]}>{code}</Text>
-              <Text style={[styles.themeName, { color: colors.slate }]}>{name}</Text>
+              <Text style={[styles.themeCode, { color: accentColor }]}>signal area</Text>
+              <View style={styles.themeNameRow}>
+                <Text style={[styles.themeName, { color: colors.slate }]}>{name}</Text>
+                {helpText ? <InfoTooltipInline helpText={helpText} size={12} /> : null}
+              </View>
             </View>
             <StatusBadge status={status} />
           </View>
@@ -177,13 +183,8 @@ export function ThemeSignalRow({
             <ThemeSparkline history={history} themeCode={code} />
 
             <View style={styles.statsBlock}>
-              {average !== null && (
-                <Text style={[styles.avgScore, { color: getThemeScoreColor(average) }]}>
-                  {average.toFixed(1)}
-                </Text>
-              )}
               <Text style={[styles.signalCount, { color: colors.slateXLight }]}>
-                {signalCount} signal{signalCount !== 1 ? 's' : ''}
+                {signalCount} reflection{signalCount !== 1 ? 's' : ''}
               </Text>
             </View>
           </View>
@@ -234,6 +235,11 @@ const styles = StyleSheet.create({
   themeName: {
     fontSize: FONT_SIZE.sm,
     fontWeight: '500',
+    flexShrink: 1,
+  },
+  themeNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   badge: {
     paddingHorizontal: 8,

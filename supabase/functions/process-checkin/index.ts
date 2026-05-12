@@ -172,9 +172,9 @@ serve(async (req) => {
             avg < 2.0 ? 'Stabilizing' :
             avg < 2.5 ? 'Forming' : 'Aligned'
           const names: Record<string, string> = {
-            IAP: 'Inner Alignment & Purpose', EWB: 'Energy & Well-being',
-            FAF: 'Focus & Flow', RC: 'Relational Capital',
-            GAL: 'Growth & Learning', RA: 'Resilience & Action',
+            IAP: 'Direction', EWB: 'Energy',
+            FAF: 'Attention', RC: 'Connection',
+            GAL: 'Growth', RA: 'Movement',
           }
           return { code, name: names[code] ?? code, status }
         })

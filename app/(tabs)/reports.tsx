@@ -5,6 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +16,10 @@ import { supabase } from '../../lib/supabase';
 import { ReportRow } from '../../types/mirar';
 import { ReportCard } from '../../components/reports/ReportCard';
 import { MirarLogo } from '../../components/ui/MirarLogo';
+import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
+import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 
 export default function ReportsScreen() {
   const { session } = useAuthStore();
@@ -23,6 +27,7 @@ export default function ReportsScreen() {
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [guideVisible, setGuideVisible] = useState(false);
 
   const loadReports = async () => {
     if (!activeCycle?.id) {
@@ -73,13 +78,26 @@ export default function ReportsScreen() {
             />
           }
         >
-          <Text style={styles.pageTitle}>Mirror Reports</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.pageTitle}>Reflection summaries</Text>
+            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.reflectionSummary} size={13} />
+          </View>
           <Text style={styles.pageDesc}>
-            Short reflections appear as your daily signals build.
+            Summaries help you see what repeated across your reflections. Read them as a mirror, not a verdict.
           </Text>
 
+          <View style={styles.valueCard}>
+            <Text style={styles.valueTitle}>What reports are for</Text>
+            <Text style={styles.valueText}>
+              Based on your recent reflections, Mirar looks for what kept showing up: where you felt steady, stretched, unclear, or pulled in a direction.
+            </Text>
+            <TouchableOpacity onPress={() => setGuideVisible(true)} activeOpacity={0.75} style={styles.guideLink}>
+              <Text style={styles.guideLinkText}>How this works</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Chapter Mirrors</Text>
+            <Text style={styles.sectionLabel}>Recent summaries</Text>
             {[1, 2, 3, 4].map((stage) => (
               <ReportCard
                 key={stage}
@@ -94,7 +112,7 @@ export default function ReportsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Full Cycle</Text>
+            <Text style={styles.sectionLabel}>Full pattern</Text>
             <ReportCard
               stage={0}
               report={getReport(0)}
@@ -107,13 +125,14 @@ export default function ReportsScreen() {
 
           <View style={styles.note}>
             <Text style={styles.noteText}>
-              Signal observations only. Mirar reflects — you interpret.
+              Reflection summaries only. Mirar reflects — you interpret.
             </Text>
           </View>
 
           <View style={{ height: SPACING.xl }} />
         </ScrollView>
       )}
+      <MirrorGuideModal visible={guideVisible} onClose={() => setGuideVisible(false)} />
     </SafeAreaView>
   );
 }
@@ -141,6 +160,10 @@ const styles = StyleSheet.create({
     paddingTop: SPACING.sm,
     gap: SPACING.lg,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   pageTitle: {
     fontSize: FONT_SIZE.xl,
     color: COLORS.slate,
@@ -152,6 +175,34 @@ const styles = StyleSheet.create({
     color: COLORS.slateLight,
     lineHeight: 22,
     marginTop: -SPACING.sm,
+  },
+  valueCard: {
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    padding: SPACING.md,
+    gap: SPACING.xs,
+  },
+  valueTitle: {
+    fontSize: FONT_SIZE.base,
+    color: COLORS.slate,
+    fontWeight: '500',
+  },
+  valueText: {
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 22,
+    color: COLORS.slateMid,
+  },
+  guideLink: {
+    alignSelf: 'flex-start',
+    paddingTop: SPACING.xs,
+  },
+  guideLinkText: {
+    fontSize: FONT_SIZE.sm,
+    color: COLORS.slate,
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
   section: {
     gap: SPACING.sm,

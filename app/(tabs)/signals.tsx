@@ -11,13 +11,18 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCycleStore } from '../../stores/cycle-store';
+import { useDevStore } from '../../stores/dev-store';
 import { ThemeSignalRow } from '../../components/dashboard/ThemeSignalRow';
 import { StageProgress } from '../../components/dashboard/StageProgress';
 import { CycleArc } from '../../components/dashboard/CycleArc';
 import { CoverageBar } from '../../components/dashboard/CoverageBar';
 import { MirarLogo } from '../../components/ui/MirarLogo';
+import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
+import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { ThemeScore, ThemeCode } from '../../types/mirar';
 import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES, THEME_ORDER } from '../../lib/constants';
+import { getStageFromDay } from '../../lib/scoring';
+import { GUIDANCE_TOOLTIPS, signalHelpForStatus } from '../../lib/guidance';
 import { useColors } from '../../contexts/theme-context';
 import { ThemeDetailSheet } from '../../components/dashboard/ThemeDetailSheet';
 
@@ -29,16 +34,16 @@ function getCrossThemeObservation(themeScores: ThemeScore[]): string | null {
   const aligned = themeScores.filter((t) => t.status === 'Aligned');
 
   if (underLoad.length >= 3) {
-    return `${underLoad.length} themes are carrying load simultaneously — this pattern often reflects broader internal pressure.`;
+    return `${underLoad.length} areas are carrying load at the same time. The pattern is worth holding gently.`;
   }
   if (underLoad.length === 2) {
-    return `${underLoad[0].name} and ${underLoad[1].name} are both reading low. These often move together.`;
+    return `${underLoad[0].name} and ${underLoad[1].name} are both showing pressure. These often move together.`;
   }
   if (aligned.length >= 4) {
-    return `${aligned.length} themes are tracking well. Your signals are broadly stable this stage.`;
+    return `${aligned.length} areas are showing steadiness in recent reflections.`;
   }
   if (aligned.length >= 2 && underLoad.length === 0) {
-    return `${aligned[0].name} and ${aligned[1].name} are both holding. No themes currently under load.`;
+    return `${aligned[0].name} and ${aligned[1].name} are both holding steady right now.`;
   }
   return null;
 }
@@ -60,9 +65,11 @@ export default function SignalsScreen() {
     loadActiveCycle,
     loadAlignmentHistory,
   } = useCycleStore();
+  const { simulatedDay } = useDevStore();
 
   const [refreshing, setRefreshing] = React.useState(false);
   const [selectedTheme, setSelectedTheme] = React.useState<ThemeCode | null>(null);
+  const [guideVisible, setGuideVisible] = React.useState(false);
 
   const load = async () => {
     if (session?.user?.id) {
@@ -91,15 +98,17 @@ export default function SignalsScreen() {
     );
   }
 
-  const currentStageOverview = stageOverviews.find((s) => s.stage === currentStage);
+  const effectiveDay = simulatedDay ?? currentDay;
+  const effectiveStage = simulatedDay ? getStageFromDay(simulatedDay) : currentStage;
+  const currentStageOverview = stageOverviews.find((s) => s.stage === effectiveStage);
   const currentStageCoverage = currentStageOverview?.coverage ?? 0;
   const crossThemeNote = currentStageOverview
     ? getCrossThemeObservation(currentStageOverview.themeScores)
     : null;
 
   // Build previous-stage theme statuses for delta labels
-  const prevStageOverview = currentStage > 1
-    ? stageOverviews.find((s) => s.stage === currentStage - 1)
+  const prevStageOverview = effectiveStage > 1
+    ? stageOverviews.find((s) => s.stage === effectiveStage - 1)
     : null;
   const prevThemeStatusMap: Record<string, string> = {};
   for (const ts of prevStageOverview?.themeScores ?? []) {
@@ -125,21 +134,44 @@ export default function SignalsScreen() {
         }
       >
         {/* ── Current reading block ──────────────────────────────────────── */}
+        <View style={[styles.guideCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
+          <View style={styles.guideHeaderRow}>
+            <Text style={[styles.guideTitle, { color: colors.slate }]}>
+              Signals are small reflections from your daily mirrors.
+            </Text>
+            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.signal} size={13} />
+          </View>
+          <Text style={[styles.guideText, { color: colors.slateMid }]}>
+            When they repeat, they start to show a pattern.
+          </Text>
+          {currentStageCoverage < 3 && (
+            <Text style={[styles.guideHint, { color: colors.slateLight }]}>
+              Your signals are still forming. A few more reflections will make this clearer.
+            </Text>
+          )}
+          <TouchableOpacity onPress={() => setGuideVisible(true)} activeOpacity={0.75} style={styles.guideLink}>
+            <Text style={[styles.guideLinkText, { color: colors.slate }]}>How this works</Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.section}>
-          <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Current Reading</Text>
+          <View style={styles.sectionLabelRow}>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>What’s showing up</Text>
+            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.whatsShowingUp} size={12} />
+          </View>
           <View style={[styles.stageSummaryCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             <View style={styles.stageSummaryHeader}>
               <Text style={[styles.stageSummaryTitle, { color: colors.slate }]}>
-                Chapter {currentStage} — {STAGES[currentStage - 1]?.label}
+                Recent reflections
               </Text>
               <Text style={[styles.stageSummaryDesc, { color: colors.slateLight }]}>
-                "{STAGES[currentStage - 1]?.description}"
+                "{STAGES[effectiveStage - 1]?.description}"
               </Text>
             </View>
             <CoverageBar
               coverage={currentStageCoverage}
               total={7}
-              label="Check-ins this stage"
+              label="Reflections in this window"
             />
           </View>
         </View>
@@ -147,7 +179,10 @@ export default function SignalsScreen() {
         {/* ── Theme signal rows with 7-day sparklines ────────────────────── */}
         {currentStageOverview && currentStageOverview.themeScores.length > 0 && (
           <View style={styles.section}>
-            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Signal Status · 7 days</Text>
+            <View style={styles.sectionLabelRow}>
+              <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Recent signals</Text>
+              <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.recentReflections} size={12} />
+            </View>
             <View style={styles.themeRows}>
               {THEME_ORDER.map((code, index) => {
                 const score = currentStageOverview.themeScores.find((s) => s.code === code);
@@ -172,6 +207,7 @@ export default function SignalsScreen() {
                       signalCount={score.signalCount}
                       history={history}
                       previousStatus={prevStatus}
+                      helpText={signalHelpForStatus(score.status)}
                       index={index}
                     />
                   </TouchableOpacity>
@@ -182,7 +218,7 @@ export default function SignalsScreen() {
             {/* Cross-theme observation */}
             {crossThemeNote && (
               <View style={[styles.crossThemeCard, { backgroundColor: colors.creamDark, borderColor: colors.border }]}>
-                <Text style={[styles.crossThemeLabel, { color: colors.slateLight }]}>Signal pattern</Text>
+                <Text style={[styles.crossThemeLabel, { color: colors.slateLight }]}>Your pattern</Text>
                 <Text style={[styles.crossThemeText, { color: colors.slateMid }]}>{crossThemeNote}</Text>
               </View>
             )}
@@ -191,12 +227,15 @@ export default function SignalsScreen() {
 
         {/* ── Signal history (stage progress) ───────────────────────────── */}
         <View style={styles.section}>
-          <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Signal History</Text>
+          <View style={styles.sectionLabelRow}>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Recent reflections</Text>
+            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.pattern} size={12} />
+          </View>
           <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             <StageProgress
               stages={stageOverviews}
-              currentStage={currentStage}
-              currentDay={currentDay}
+              currentStage={effectiveStage}
+              currentDay={effectiveDay}
             />
           </View>
         </View>
@@ -204,7 +243,7 @@ export default function SignalsScreen() {
         {/* ── Cycle arc ──────────────────────────────────────────────────── */}
         <View style={styles.section}>
           <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
-            <CycleArc currentDay={currentDay} />
+            <CycleArc currentDay={effectiveDay} />
           </View>
         </View>
 
@@ -215,11 +254,12 @@ export default function SignalsScreen() {
         visible={selectedTheme !== null}
         themeCode={selectedTheme}
         cycleNumber={activeCycle?.cycle_number ?? 1}
-        currentDay={currentDay}
+        currentDay={effectiveDay}
         stageOverviews={stageOverviews}
         themeHistories={themeHistories}
         onClose={() => setSelectedTheme(null)}
       />
+      <MirrorGuideModal visible={guideVisible} onClose={() => setGuideVisible(false)} />
     </SafeAreaView>
   );
 }
@@ -246,10 +286,47 @@ const styles = StyleSheet.create({
   section: {
     gap: SPACING.sm,
   },
+  sectionLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   sectionLabel: {
     fontSize: FONT_SIZE.xs,
     letterSpacing: 1,
     textTransform: 'uppercase',
+  },
+  guideCard: {
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    padding: SPACING.md,
+    gap: SPACING.xs,
+  },
+  guideHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  guideTitle: {
+    fontSize: FONT_SIZE.base,
+    fontWeight: '500',
+    lineHeight: 22,
+    flexShrink: 1,
+  },
+  guideText: {
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 21,
+  },
+  guideHint: {
+    fontSize: FONT_SIZE.xs,
+    lineHeight: 18,
+  },
+  guideLink: {
+    alignSelf: 'flex-start',
+    paddingTop: SPACING.xs,
+  },
+  guideLinkText: {
+    fontSize: FONT_SIZE.sm,
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
   stageSummaryCard: {
     borderRadius: RADIUS.lg,

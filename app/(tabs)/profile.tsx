@@ -18,6 +18,7 @@ import { useTheme } from '../../contexts/theme-context';
 import { supabase } from '../../lib/supabase';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
+import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { CycleArc } from '../../components/dashboard/CycleArc';
 import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES } from '../../lib/constants';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../../lib/i18n';
@@ -38,6 +39,7 @@ export default function ProfileScreen() {
   const [journals, setJournals] = useState<JournalEntry[]>([]);
   const [journalsLoading, setJournalsLoading] = useState(false);
   const [journalsExpanded, setJournalsExpanded] = useState(false);
+  const [guideVisible, setGuideVisible] = useState(false);
 
   useEffect(() => {
     const userId = session?.user?.id;
@@ -107,14 +109,32 @@ export default function ProfileScreen() {
           <View style={styles.idLabelRow}>
             <Text style={styles.idLabel}>{t('profile.mirar_id')}</Text>
             <InfoTooltipInline
-              helpText="Your privacy-preserving identifier. Your signal data is indexed to this ID — not your email or name."
+              helpText="Your Mirar ID helps separate your reflection history from your public identity inside the app."
               size={12}
             />
           </View>
           <Text style={styles.idValue} selectable>{user?.mirar_id ?? '—'}</Text>
           <Text style={styles.idNote}>
-            Your signal data belongs to this ID. It cannot be linked back to your email.
+            Your Mirar ID helps keep your reflection history separate inside the app.
           </Text>
+        </Animated.View>
+
+        {/* Mirror guide */}
+        <Animated.View entering={FadeInDown.duration(400).delay(85)} style={styles.section}>
+          <TouchableOpacity
+            style={styles.guideCard}
+            onPress={() => setGuideVisible(true)}
+            activeOpacity={0.78}
+            accessibilityRole="button"
+          >
+            <View style={styles.guideTextBlock}>
+              <Text style={styles.guideTitle}>The Mirror Guide</Text>
+              <Text style={styles.guideDesc}>
+                What signals mean, how patterns form, and how to read summaries.
+              </Text>
+            </View>
+            <Text style={styles.guideArrow}>Open</Text>
+          </TouchableOpacity>
         </Animated.View>
 
         {/* Cycle block */}
@@ -129,10 +149,10 @@ export default function ProfileScreen() {
           <View style={styles.card}>
             <Row label="Cycle" value={`#${activeCycle?.cycle_number ?? '—'}`} />
             <Row label="Started" value={cycleStartDate} />
-            <Row label="Current day" value={`Day ${currentDay}`} />
+            <Row label="Today" value="Daily mirror" />
             <Row
-              label="Chapter"
-              value={`Chapter ${currentStage} — ${stageName}`}
+              label="Current pattern"
+              value={stageName}
             />
           </View>
         </Animated.View>
@@ -168,8 +188,8 @@ export default function ProfileScreen() {
         <Animated.View entering={FadeInDown.duration(400).delay(330)} style={styles.section}>
           <Text style={styles.sectionLabel}>Settings</Text>
           <View style={styles.card}>
-            <SettingsRow label="Daily check-in reminder" value="8:00 AM" />
-            <SettingsRow label="Report notifications" value="On" />
+            <SettingsRow label="Daily mirror reminder" value="8:00 AM" />
+            <SettingsRow label="Summary notifications" value="On" />
             <TouchableOpacity
               style={[rowStyles.row, { justifyContent: 'space-between' }]}
               onPress={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}
@@ -191,7 +211,7 @@ export default function ProfileScreen() {
               onPress={() => setJournalsExpanded((v) => !v)}
               activeOpacity={0.7}
             >
-              <Text style={styles.sectionLabel}>Signal Notes</Text>
+              <Text style={styles.sectionLabel}>Reflection notes</Text>
               {journals.length > 0 && (
                 <Text style={styles.journalCount}>
                   {journals.length} note{journals.length !== 1 ? 's' : ''} · {journalsExpanded ? 'Hide' : 'Show'}
@@ -212,7 +232,7 @@ export default function ProfileScreen() {
                     style={styles.journalEntry}
                   >
                     <View style={styles.journalMeta}>
-                      <Text style={styles.journalDay}>Day {entry.dayNumber}</Text>
+                      <Text style={styles.journalDay}>Reflection {entry.dayNumber}</Text>
                       <Text style={styles.journalDate}>
                         {new Date(entry.submittedAt).toLocaleDateString(undefined, {
                           month: 'short',
@@ -230,7 +250,7 @@ export default function ProfileScreen() {
                 onPress={() => setJournalsExpanded(true)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.journalPreviewDay}>Day {journals[0].dayNumber}</Text>
+                <Text style={styles.journalPreviewDay}>Reflection {journals[0].dayNumber}</Text>
                 <Text style={styles.journalPreviewText} numberOfLines={2}>
                   {journals[0].text}
                 </Text>
@@ -260,6 +280,7 @@ export default function ProfileScreen() {
 
         <View style={{ height: SPACING.xl }} />
       </ScrollView>
+      <MirrorGuideModal visible={guideVisible} onClose={() => setGuideVisible(false)} />
     </SafeAreaView>
   );
 }
@@ -334,6 +355,38 @@ const styles = StyleSheet.create({
   },
   section: {
     gap: SPACING.sm,
+  },
+  guideCard: {
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: SPACING.md,
+  },
+  guideTextBlock: {
+    flex: 1,
+    gap: 4,
+  },
+  guideTitle: {
+    fontSize: FONT_SIZE.base,
+    color: COLORS.slate,
+    fontWeight: '500',
+  },
+  guideDesc: {
+    fontSize: FONT_SIZE.sm,
+    color: COLORS.slateLight,
+    lineHeight: 20,
+  },
+  guideArrow: {
+    fontSize: FONT_SIZE.xs,
+    color: COLORS.slateMid,
+    fontWeight: '600',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
   },
   sectionLabelRow: {
     flexDirection: 'row',

@@ -11,11 +11,11 @@ interface ReportCardProps {
 }
 
 const CHAPTER_LABELS: Record<number, string> = {
-  1: 'First Signals',
-  2: 'Patterns Emerging',
-  3: 'Movement Noticed',
-  4: 'Mirror Deepening',
-  0: 'Full Cycle Mirror',
+  1: 'First reflections',
+  2: 'Pattern forming',
+  3: 'Movement noticed',
+  4: 'Reflection summary',
+  0: 'Full pattern',
 };
 
 export function ReportCard({ stage, report, onPress }: ReportCardProps) {
@@ -37,7 +37,7 @@ export function ReportCard({ stage, report, onPress }: ReportCardProps) {
           </Text>
           {report?.generated_at && (
             <Text style={styles.generatedAt}>
-              Generated {new Date(report.generated_at).toLocaleDateString()}
+              Ready {new Date(report.generated_at).toLocaleDateString()}
             </Text>
           )}
         </View>

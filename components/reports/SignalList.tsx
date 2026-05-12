@@ -11,6 +11,16 @@ interface SignalListProps {
 export function SignalList({ title, items, variant = 'primary' }: SignalListProps) {
   if (items.length === 0) return null;
 
+  const softenItem = (item: string) =>
+    item
+      .replace(/\s+\((IAP|EWB|FAF|RC|GAL|RA)\)/g, '')
+      .replace(/Low signals/gi, 'Pressure signals')
+      .replace(/High signals/gi, 'Steady signals')
+      .replace(/Low signal/gi, 'Pressure signal')
+      .replace(/High signal/gi, 'Steady signal')
+      .replace(/this stage/gi, 'this window')
+      .replace(/calibration/gi, 'gentle check');
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -18,7 +28,7 @@ export function SignalList({ title, items, variant = 'primary' }: SignalListProp
         {items.map((item, i) => (
           <View key={i} style={styles.item}>
             <View style={[styles.bullet, variant === 'calibration' && styles.bulletCalibration]} />
-            <Text style={styles.itemText}>{item}</Text>
+            <Text style={styles.itemText}>{softenItem(item)}</Text>
           </View>
         ))}
       </View>

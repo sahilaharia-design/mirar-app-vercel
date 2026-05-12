@@ -2,11 +2,11 @@
  * JournalExpander — V3 · Linen & Brass
  *
  * Step 2 of the check-in flow. Full-screen layout:
- * ─ Header strip: Day N / 28  ·  Captured · HH:MM
- * ─ Echoed answer (serif italic, ink, 22px) with brass theme badges
- * ─ "A line, if you have one" textarea (paper bg, ruleLight border)
+ * ─ Header strip: Today's mirror · Captured · HH:MM
+ * ─ Echoed answer (serif italic, ink, 22px) with simple captured label
+ * ─ Optional private note textarea (paper bg, ruleLight border)
  * ─ "Held privately" / char-count footer metadata
- * ─ Footer: Skip pill  +  "Record signal →" pill
+ * ─ Footer: Skip pill  +  "Record today's mirror" pill
  *
  * Light-mode only — uses COLORS directly, no useColors().
  */
@@ -34,7 +34,6 @@ import {
   FONTS,
   FONT_SIZE,
   SPACING,
-  CYCLE_DAYS,
 } from '../../lib/constants';
 import {
   V3_SETTLE_DURATION,
@@ -79,15 +78,6 @@ function formatNow(): string {
   return `${h}:${m}`;
 }
 
-function levelLabel(level: string | undefined): string {
-  if (!level) return '';
-  const l = level.toLowerCase();
-  if (l === 'high') return 'high';
-  if (l === 'medium' || l === 'mid') return 'mid';
-  if (l === 'low') return 'low';
-  return l;
-}
-
 // ─── Animated section wrapper ─────────────────────────────────────────────────
 
 function FadeSlide({
@@ -127,8 +117,8 @@ export function JournalExpander({
   theme1Level,
   theme2Code,
   theme2Level,
-  dayNumber = 1,
-  totalDays = CYCLE_DAYS,
+  dayNumber: _dayNumber = 1,
+  totalDays: _totalDays,
   capturedTime,
   value,
   onChangeText,
@@ -142,16 +132,6 @@ export function JournalExpander({
   const reducedMotion = useRef(false);
   const timeLabel = capturedTime ?? formatNow();
   const charMax = 280;
-
-  // ─── Theme badge string ───────────────────────────────────────────────────
-  const badgeParts: string[] = [];
-  if (theme1Code && theme1Level) {
-    badgeParts.push(`${theme1Code} · ${levelLabel(theme1Level)}`);
-  }
-  if (theme2Code && theme2Level) {
-    badgeParts.push(`${theme2Code} · ${levelLabel(theme2Level)}`);
-  }
-  const badgeText = badgeParts.join('  ·  ');
 
   // ─── Accessibility: reduce motion ─────────────────────────────────────────
   useEffect(() => {
@@ -182,9 +162,7 @@ export function JournalExpander({
         <FadeSlide delayMs={stagger(0)} reducedMotion={reducedMotion.current}>
           <View style={styles.headerStrip}>
             <Text style={styles.capsLabel}>
-              {'Day '}
-              <Text style={styles.capsLabelInk}>{dayNumber}</Text>
-              {` / ${totalDays}`}
+              <Text style={styles.capsLabelInk}>Today’s mirror</Text>
             </Text>
             <Text style={styles.capsLabel}>Captured · {timeLabel}</Text>
           </View>
@@ -198,9 +176,7 @@ export function JournalExpander({
               <Text style={styles.echoText}>
                 "{selectedOptionText}"
               </Text>
-              {badgeText ? (
-                <Text style={styles.themeBadge}>{badgeText.toUpperCase()}</Text>
-              ) : null}
+              <Text style={styles.themeBadge}>ANSWER CAPTURED</Text>
             </View>
           </FadeSlide>
         ) : null}
@@ -208,11 +184,12 @@ export function JournalExpander({
         {/* ── Journal input ─────────────────────────────────────────────── */}
         <FadeSlide delayMs={stagger(2)} reducedMotion={reducedMotion.current}>
           <View style={styles.inputSection}>
-            <Text style={styles.inputLabel}>A LINE, IF YOU HAVE ONE</Text>
+            <Text style={styles.inputLabel}>Add a private line, only if you want.</Text>
+            <Text style={styles.inputHelper}>This is optional. Your answer is enough.</Text>
             <View style={styles.inputCard}>
               <TextInput
                 style={styles.input}
-                placeholder="Write freely. Not scored."
+                placeholder="Add a sentence if it helps. Your answer is enough."
                 placeholderTextColor={COLORS.slateXLight}
                 multiline
                 textAlignVertical="top"
@@ -261,7 +238,7 @@ export function JournalExpander({
             accessibilityRole="button"
           >
             <Text style={styles.recordLabel}>
-              {isSubmitting ? 'Recording…' : 'Record signal →'}
+              {isSubmitting ? 'Recording…' : 'Record today’s mirror'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -334,10 +311,17 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontFamily: FONTS.bodyMedium,
-    fontSize: 10,
-    letterSpacing: 1.2,
+    fontSize: FONT_SIZE.base,
+    letterSpacing: 0,
+    color: COLORS.slate,
+  },
+  inputHelper: {
+    fontFamily: FONTS.body,
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 20,
     color: COLORS.slateLight,
-    marginBottom: 8,
+    marginTop: 6,
+    marginBottom: 12,
   },
   inputCard: {
     backgroundColor: COLORS.paper,

@@ -74,10 +74,10 @@ Deno.serve(async (req) => {
       .select('token')
       .eq('user_id', user_id);
 
-    const stageLabel = stage === 0 ? '28-Day Alignment Mirror' : `Stage ${stage} Alignment Summary`;
+    const stageLabel = stage === 0 ? 'full reflection summary' : 'reflection summary';
     const notifBody = stage === 0
-      ? 'Your 28-day Alignment Mirror is ready.'
-      : `Your Stage ${stage} Alignment Summary is ready to view.`;
+      ? 'Your full reflection summary is ready.'
+      : 'A new reflection summary is ready to view.';
 
     // Push notifications
     const pushResults = await Promise.all(
@@ -94,7 +94,7 @@ Deno.serve(async (req) => {
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #4A4A55;">
           <p style="font-size: 16px;">${notifBody}</p>
           <p style="font-size: 13px; color: #9494A0;">
-            Open the Mirar app to view your ${stageLabel}.
+            Open Mirar to view your ${stageLabel}. Read it as a mirror, not a verdict.
           </p>
           <hr style="border: none; border-top: 1px solid #E0DDD8; margin: 24px 0;" />
           <p style="font-size: 11px; color: #C4C4CC;">

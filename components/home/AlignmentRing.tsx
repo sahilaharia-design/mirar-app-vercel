@@ -151,10 +151,10 @@ export function AlignmentRing({ score, status, trend, size = RING_SIZE }: Alignm
             </>
           ) : (
             <>
-              <Text style={[styles.score, { color: colors.slate }]}>{score}</Text>
               <Text style={[styles.statusLabel, { color }]}>
                 {t(STATUS_I18N_KEY[status] || 'status.calibrating')}
               </Text>
+              <Text style={[styles.score, { color: colors.slateLight }]}>{score}</Text>
               {trendSymbol && (
                 <Text style={[styles.trend, { color }]}>{trendSymbol}</Text>
               )}
@@ -198,10 +198,10 @@ export function AlignmentRing({ score, status, trend, size = RING_SIZE }: Alignm
           </Text>
         ) : (
           <>
-            <Text style={[styles.score, { color: colors.slate }]}>{score}</Text>
             <Text style={[styles.statusLabel, { color }]}>
               {t(STATUS_I18N_KEY[status] || 'status.calibrating')}
             </Text>
+            <Text style={[styles.score, { color: colors.slateLight }]}>{score}</Text>
             {trendSymbol && (
               <Text style={[styles.trend, { color }]}>{trendSymbol}</Text>
             )}
@@ -235,15 +235,15 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   score: {
-    fontSize: 48,
-    fontWeight: '200',
-    lineHeight: 56,
-    letterSpacing: -1.5,
-  },
-  statusLabel: {
     fontSize: FONT_SIZE.sm,
     fontWeight: '500',
-    letterSpacing: 0.5,
+    lineHeight: 18,
+    letterSpacing: 0.6,
+  },
+  statusLabel: {
+    fontSize: FONT_SIZE.lg,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
   trend: {
     fontSize: FONT_SIZE.base,

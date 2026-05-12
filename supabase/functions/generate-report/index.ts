@@ -12,22 +12,22 @@ const corsHeaders = {
 };
 
 const THEME_NAMES: Record<string, string> = {
-  IAP: 'Inner Alignment & Purpose',
-  EWB: 'Energy & Well-being',
-  FAF: 'Focus & Flow',
-  RC: 'Relational Capital',
-  GAL: 'Growth & Learning',
-  RA: 'Resilience & Action',
+  IAP: 'Direction',
+  EWB: 'Energy',
+  FAF: 'Attention',
+  RC: 'Connection',
+  GAL: 'Growth',
+  RA: 'Movement',
 };
 
 const THEME_ORDER = ['IAP', 'EWB', 'FAF', 'RC', 'GAL', 'RA'];
 
 const STAGE_LABELS: Record<number, string> = {
-  1: 'Awareness',
-  2: 'Realignment',
-  3: 'Intentional Action',
-  4: 'Recognition',
-  0: 'Full Cycle Mirror',
+  1: 'First reflections',
+  2: 'Pattern forming',
+  3: 'Movement noticed',
+  4: 'Reflection summary',
+  0: 'Full pattern',
 };
 
 const STAGE_DESCS: Record<number, string> = {
@@ -35,31 +35,31 @@ const STAGE_DESCS: Record<number, string> = {
   2: 'Where adjustment signals appeared',
   3: 'Where movement occurred',
   4: 'What remained visible by the end of the cycle',
-  0: 'Full cycle signal summary',
+  0: 'Full pattern summary',
 };
 
 // ─── Observational summary lines — NEVER interpretive ────────────────────────
 function getSummaryLine(code: string, status: string): string {
   const name = THEME_NAMES[code] ?? code;
   const map: Record<string, string> = {
-    Aligned: `${name} (${code}) signals appeared consistently across this stage.`,
-    Forming: `${name} (${code}) signals appeared with moderate regularity.`,
-    Stabilizing: `${name} (${code}) signals appeared intermittently.`,
-    'Under Load': `${name} (${code}) signals registered at low levels throughout this stage.`,
-    'No Reading': `${name} (${code}): coverage insufficient for a reading.`,
+    Aligned: `${name} appeared steadily across this reflection window.`,
+    Forming: `${name} appeared with moderate regularity.`,
+    Stabilizing: `${name} appeared intermittently.`,
+    'Under Load': `${name} showed pressure across this reflection window.`,
+    'No Reading': `${name}: not enough reflections yet.`,
   };
-  return map[status] ?? `${name} (${code}) signals were recorded.`;
+  return map[status] ?? `${name} was visible in the reflections.`;
 }
 
 function buildPrimarySignals(scores: any[], coverage: number, total: number): string[] {
-  const lines = [`Coverage: ${coverage} of ${total} check-ins recorded.`];
+  const lines = [`${coverage} of ${total} reflections included.`];
   const sorted = [...scores].filter((s) => s.signal_count > 0).sort((a, b) => (b.average_score ?? 0) - (a.average_score ?? 0));
   for (const s of sorted.slice(0, 3)) {
     const pres =
-      s.status === 'Aligned' ? 'High signal presence' :
-      s.status === 'Forming' ? 'Moderate signal presence' :
-      s.status === 'Stabilizing' ? 'Stabilizing signal pattern' : 'Low signal presence';
-    lines.push(`${THEME_NAMES[s.theme_code]} (${s.theme_code}) — ${pres}.`);
+      s.status === 'Aligned' ? 'steady signal presence' :
+      s.status === 'Forming' ? 'moderate signal presence' :
+      s.status === 'Stabilizing' ? 'settling signal pattern' : 'pressure present';
+    lines.push(`${THEME_NAMES[s.theme_code]} — ${pres}.`);
   }
   return lines;
 }
@@ -70,43 +70,43 @@ function buildCalibrationChecks(scores: any[]): string[] {
     if (s.signal_count === 0) continue;
     const total = s.low_count + s.medium_count + s.high_count;
     if (total === 0) continue;
-    if (s.low_count / total > 0.6) checks.push(`${THEME_NAMES[s.theme_code]} (${s.theme_code}) — Low signals dominant.`);
-    else if (s.high_count / total > 0.6) checks.push(`${THEME_NAMES[s.theme_code]} (${s.theme_code}) — High signals dominant.`);
-    else if (s.low_count > 0 && s.high_count > 0) checks.push(`${THEME_NAMES[s.theme_code]} (${s.theme_code}) — Mixed signal levels observed.`);
+    if (s.low_count / total > 0.6) checks.push(`${THEME_NAMES[s.theme_code]} — pressure appeared repeatedly.`);
+    else if (s.high_count / total > 0.6) checks.push(`${THEME_NAMES[s.theme_code]} — steadiness appeared repeatedly.`);
+    else if (s.low_count > 0 && s.high_count > 0) checks.push(`${THEME_NAMES[s.theme_code]} — mixed signals appeared.`);
   }
-  if (checks.length === 0) checks.push('Signal distribution was consistent across themes.');
+  if (checks.length === 0) checks.push('The reflections were consistent across areas.');
   return checks;
 }
 
 function buildFullReportText(stage: number, coverage: number, total: number, scores: any[], mirarid: string): string {
   const lines: string[] = [];
-  lines.push(`MIRAR ALIGNMENT SUMMARY — ${STAGE_LABELS[stage]?.toUpperCase()}`);
+  lines.push(`MIRAR REFLECTION SUMMARY — ${STAGE_LABELS[stage]?.toUpperCase()}`);
   lines.push(`Mirar ID: ${mirarid}`);
   lines.push('');
-  lines.push(`Stage: ${STAGE_LABELS[stage]}`);
+  lines.push(`Window: ${STAGE_LABELS[stage]}`);
   lines.push(`"${STAGE_DESCS[stage]}"`);
   lines.push('');
-  lines.push(`Coverage: ${coverage} of ${total} check-ins recorded.`);
+  lines.push(`${coverage} of ${total} reflections included.`);
   lines.push('');
   lines.push('─'.repeat(30));
-  lines.push('THEME SIGNAL SUMMARY');
+  lines.push('WHAT SHOWED UP');
   lines.push('─'.repeat(30));
   for (const code of THEME_ORDER) {
     const s = scores.find((sc) => sc.theme_code === code);
     if (!s) continue;
     lines.push('');
-    lines.push(`${THEME_NAMES[code]} (${code})`);
-    lines.push(`Status: ${s.status}${s.average_score !== null ? ` (avg: ${Number(s.average_score).toFixed(2)})` : ''}`);
+    lines.push(`${THEME_NAMES[code]}`);
+    lines.push(`Reading: ${s.status}`);
     lines.push(getSummaryLine(code, s.status));
   }
   lines.push('');
   lines.push('─'.repeat(30));
-  lines.push('PRIMARY SIGNALS');
+  lines.push('STRONGEST SIGNALS');
   lines.push('─'.repeat(30));
   for (const sig of buildPrimarySignals(scores, coverage, total)) lines.push(`• ${sig}`);
   lines.push('');
   lines.push('─'.repeat(30));
-  lines.push('CALIBRATION CHECKS');
+  lines.push('GENTLE CHECKS');
   lines.push('─'.repeat(30));
   for (const cal of buildCalibrationChecks(scores)) lines.push(`• ${cal}`);
   return lines.join('\n');
@@ -163,7 +163,7 @@ Deno.serve(async (req) => {
     const mirarid = userRow?.mirar_id ?? user_id;
     const primarySignals = buildPrimarySignals(scores ?? [], coverage, total).join('\n');
     const calibrationChecks = buildCalibrationChecks(scores ?? []).join('\n');
-    const summaryText = `${STAGE_LABELS[stage]} signal summary. Coverage: ${coverage}/${total}. ${(scores ?? []).filter((s) => s.status === 'Aligned').length} themes Aligned.`;
+    const summaryText = `${STAGE_LABELS[stage]} reflection summary. ${coverage}/${total} reflections included. ${(scores ?? []).filter((s) => s.status === 'Aligned').length} areas showed steadiness.`;
     const fullReportText = buildFullReportText(stage, coverage, total, scores ?? [], mirarid);
 
     // Upsert report

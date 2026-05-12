@@ -11,17 +11,17 @@ export default {
   common: {
     day: 'Day {{n}}',
     cycle: 'Cycle {{n}}',
-    calibrating: 'Calibrating',
-    calibrating_subtext: '3 check-ins needed',
-    your_alignment_today: 'Your alignment reading',
-    your_signals: 'Your Signals',
+    calibrating: 'Still forming',
+    calibrating_subtext: 'A few reflections help the pattern appear',
+    your_alignment_today: "Today's mirror",
+    your_signals: "What's been showing up",
     record_checkin: 'Record check-in',
-    start_checkin: 'Begin your check-in',
+    start_checkin: "Start today's mirror",
     back_to_today: 'Back to today',
     checkin_recorded: 'Check-in recorded',
     recorded: 'Recorded',
     loading: 'Loading...',
-    signal_ready: 'Your daily signal is ready.',
+    signal_ready: "Today's mirror is ready.",
     chapter_label: 'Chapter {{n}}',
     day_label: 'Day {{day}}',
   },
@@ -33,7 +33,7 @@ export default {
     stabilizing: 'Stabilizing',
     under_load: 'Under Load',
     no_reading: 'No Reading',
-    calibrating: 'Calibrating',
+    calibrating: 'Still forming',
   },
 
   // ─── Stage Labels (internal — not shown as "Stage N" to user) ────────────────
@@ -70,15 +70,15 @@ export default {
 
   // ─── Insights (Mirror Observations) ───────────────────────────────────────────
   insights: {
-    mirror_notice: 'Your mirror notices',
-    first_day: 'First signal recorded. Mirar begins pattern detection after 3–5 consecutive check-ins.',
-    second_day: 'Two signals in. No pattern yet — pattern detection requires at least 3 consecutive days.',
-    third_day: 'Day 3 registered. Early pattern window opening. Keep the streak to establish baseline.',
-    calibrating_mirror: 'Signal data is building. Pattern detection requires 3–5 consecutive readings.',
-    under_load: 'Some of your signals are showing pressure. The mirror is holding space — no action needed yet.',
-    strong_alignment: 'Your signals are showing strong internal alignment across multiple themes right now.',
-    forming_patterns: 'Patterns are starting to form across your themes. Your mirror is beginning to take shape.',
-    signals_building: 'Your signals are active and building. The mirror gets more precise with each check-in.',
+    mirror_notice: 'A small signal',
+    first_day: 'Your first reflection is here. Mirar begins noticing patterns after a few daily pauses.',
+    second_day: 'Two reflections in. The pattern is still forming.',
+    third_day: 'A small pattern window is opening. Keep reading this gently.',
+    calibrating_mirror: 'Your mirror is still forming. Each reflection adds a little more shape.',
+    under_load: 'Some signals are showing pressure. Read this as a mirror, not a verdict.',
+    strong_alignment: 'Several recent reflections are showing steadiness.',
+    forming_patterns: 'A pattern is starting to show across recent reflections.',
+    signals_building: 'Your recent reflections are beginning to take shape.',
   },
 
   // ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -95,7 +95,7 @@ export default {
     open_email: 'Open email app',
     try_again: 'Try a different email',
     disclaimer: 'No password needed. One tap to sign in.',
-    cta_label: 'Begin your alignment reading',
+    cta_label: 'Begin your daily mirror',
     privacy_note: 'Your email is used only for delivery. It never appears in your signal data.',
     privacy_badge: 'No passwords. No tracking. Your signal belongs to you.',
     beta_tag: 'Private Beta · Cycle 1',
@@ -119,7 +119,7 @@ export default {
     slide4_title: 'A mirror. Not a mentor.',
     slide4_body: 'After each check-in, you get one short reflection. Not advice — recognition.',
     slide5_title: 'Your signal belongs to you.',
-    slide5_body: 'Identified only by your Mirar ID. Signal data is never shared.',
+    slide5_body: 'Your Mirar ID helps keep your reflection history separate inside the app.',
     begin: 'Start',
     beginning: 'Setting up...',
     continue: 'Continue',
@@ -148,8 +148,8 @@ export default {
   // ─── Reports ─────────────────────────────────────────────────────────────────
   reports: {
     title: 'Mirror',
-    no_reports: 'Mirror readings appear as your signal data builds.',
-    locked: 'Building...',
+    no_reports: 'Reflection summaries appear after a few daily pauses.',
+    locked: 'Still forming',
     coverage: '{{n}} of 7 days',
     chapter_label: 'Chapter {{n}} · {{label}}',
   },
@@ -158,8 +158,8 @@ export default {
   landing: {
     // Hero
     hero_title: 'Your internal alignment,\nmade visible.',
-    hero_sub: 'A daily mirror for your inner state.\n2–3 minutes. Continuous. For life.',
-    hero_cta: 'Begin your daily reading',
+    hero_sub: 'A daily mirror for your inner state.\nLess than 2 minutes. Simple. Ongoing.',
+    hero_cta: 'Start your daily mirror',
     hero_badge: 'No password · No tracking · Private Beta',
 
     // Recognition
@@ -202,10 +202,10 @@ export default {
 
     // Privacy
     privacy_heading: 'YOUR SIGNAL IS YOURS.',
-    privacy_body: 'You are your Mirar ID. Your email is never stored in your signal data.\nNo passwords. No tracking. Signal data belongs to you alone.',
+    privacy_body: 'Your Mirar ID helps separate your reflection history from your public identity inside the app.\nNo passwords. Your signal belongs to you.',
 
     // Final CTA
     cta_heading: 'START NOTICING.',
-    cta_badge: 'Private Beta · 2–3 minutes daily · Free',
+    cta_badge: 'Private Beta · Less than 2 minutes daily · Free',
   },
 } as const;

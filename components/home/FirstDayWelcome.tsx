@@ -14,10 +14,10 @@ export function FirstDayWelcome() {
     >
       <View style={[styles.dot, { backgroundColor: colors.slateXLight }]} />
       <Text style={[styles.heading, { color: colors.slate }]}>
-        Day 1. Your first signal is live.
+        Your first mirror is ready.
       </Text>
       <Text style={[styles.body, { color: colors.slateMid }]}>
-        Mirar reads patterns, not moments. One check-in establishes a data point. Consistent check-ins over 7–14 days reveal the drift you cannot see in real time.
+        Mirar reads patterns, not moments. A few daily pauses help what has been shifting become easier to notice.
       </Text>
       <View style={[styles.arrow, { borderTopColor: colors.slateXLight }]} />
     </Animated.View>

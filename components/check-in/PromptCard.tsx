@@ -6,7 +6,6 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import { useTranslation } from 'react-i18next';
 import { COLORS, FONTS, CYCLE_DAYS } from '../../lib/constants';
 import {
   V3_SETTLE_EASING,
@@ -37,7 +36,6 @@ export function PromptCard({
   greeting,
   timeLabel,
 }: PromptCardProps) {
-  const { t } = useTranslation();
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -103,24 +101,13 @@ export function PromptCard({
     transform: [{ scaleX: underlineScale.value }],
   }));
 
-  // Split "Day 14" so the numeric portion can carry the ink accent
-  // while the label stays in the caps slateLight tone. Works across locales
-  // because {{n}} is always rendered as digits.
-  const dayLabel = t('common.day', { n: dayNumber });
-  const match = dayLabel.match(/^(.*?)(\d+)(.*)$/);
-  const dayPrefix = match ? match[1] : `${dayLabel} `;
-  const dayNum = match ? match[2] : String(dayNumber);
-  const daySuffix = match ? match[3] : '';
+  const todayLabel = 'Today';
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.strip, stripStyle]}>
         <Text style={styles.caps}>
-          <Text style={styles.capsLight}>{dayPrefix}</Text>
-          <Text style={styles.capsInk}>{dayNum}</Text>
-          <Text style={styles.capsLight}>
-            {daySuffix} / {totalDays}
-          </Text>
+          <Text style={styles.capsInk}>{todayLabel}</Text>
         </Text>
         {timeLabel ? <Text style={styles.caps}>{timeLabel}</Text> : <View />}
       </Animated.View>
@@ -131,6 +118,7 @@ export function PromptCard({
       ) : null}
 
       <Animated.View style={[styles.questionWrap, questionStyle]}>
+        <Text style={styles.helperText}>Choose what feels closest. There is no right answer.</Text>
         <Text style={styles.question} accessibilityRole="header">
           {promptText}
         </Text>
@@ -179,6 +167,13 @@ const styles = StyleSheet.create({
   questionWrap: {
     marginTop: 28,
     marginBottom: 24,
+  },
+  helperText: {
+    fontFamily: FONTS.body,
+    fontSize: 13,
+    lineHeight: 19,
+    color: COLORS.slateLight,
+    marginBottom: 14,
   },
   question: {
     fontFamily: FONTS.display,

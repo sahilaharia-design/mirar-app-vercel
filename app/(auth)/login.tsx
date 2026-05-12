@@ -295,12 +295,11 @@ function WebLanding({
 
           {/* Theme chips — what Mirar tracks */}
           <View style={webStyles.themesNote}>
-            <Text style={webStyles.themesNoteLabel}>What Mirar reads inside you</Text>
+            <Text style={webStyles.themesNoteLabel}>What Mirar gently notices</Text>
             <View style={webStyles.themesGrid}>
               {THEME_ORDER.map((code) => (
                 <View key={code} style={webStyles.themeChip}>
                   <View style={[webStyles.themeDot, { backgroundColor: THEME_COLORS[code].light }]} />
-                  <Text style={webStyles.themeCode}>{code}</Text>
                   <Text style={webStyles.themeName}>{THEMES[code].name}</Text>
                 </View>
               ))}

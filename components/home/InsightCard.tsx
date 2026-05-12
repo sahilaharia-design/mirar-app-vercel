@@ -19,19 +19,19 @@ function buildInsight(
   alignmentScore: number | null,
 ): string {
   if (currentDay <= 1) {
-    return 'First signal recorded. Mirar begins pattern detection after 3–5 consecutive check-ins.';
+    return 'Your first reflection is here. Mirar begins noticing patterns after a few daily pauses.';
   }
 
   if (currentDay === 2) {
-    return 'Two signals in. No pattern yet — pattern detection requires at least 3 consecutive days.';
+    return 'Two reflections in. The pattern is still forming.';
   }
 
   if (currentDay === 3) {
-    return 'Day 3 registered. Early pattern window opening. Keep the streak to establish baseline.';
+    return 'A small pattern window is opening. Read this gently.';
   }
 
   if (themeScores.length === 0 || alignmentScore === null) {
-    return 'Signal data is building. Pattern detection requires 3–5 consecutive readings.';
+    return 'Your mirror is still forming. Each reflection adds a little more shape.';
   }
 
   // Find specific themes by status
@@ -44,32 +44,32 @@ function buildInsight(
 
   if (underLoad.length >= 2) {
     const names = underLoad.slice(0, 2).map((t) => themeName(t.code)).join(' and ');
-    return `${names} are showing strain in your signals right now. The mirror is holding this.`;
+    return `${names} are showing pressure in recent reflections. Read this as a mirror, not a verdict.`;
   }
 
   if (underLoad.length === 1) {
-    return `${themeName(underLoad[0].code)} is carrying some weight in your signals. Worth noticing.`;
+    return `${themeName(underLoad[0].code)} is carrying some weight in recent reflections.`;
   }
 
   if (aligned.length >= 4) {
     const names = aligned.slice(0, 2).map((t) => themeName(t.code)).join(' and ');
-    return `${names} — among others — are showing solid alignment in recent signals.`;
+    return `${names} — among others — are showing steadiness in recent reflections.`;
   }
 
   if (forming.length >= 3) {
     const names = forming.slice(0, 2).map((t) => themeName(t.code)).join(' and ');
-    return `${names} are forming patterns. Your signals are building momentum.`;
+    return `${names} are starting to form a pattern.`;
   }
 
   if (noReading.length >= 4) {
-    return `${noReading.length} themes are still building signal. Each check-in adds definition to your mirror.`;
+    return `${noReading.length} areas are still forming. Each daily pause adds definition to your mirror.`;
   }
 
   if (aligned.length === 1) {
-    return `${themeName(aligned[0].code)} is your steadiest signal right now.`;
+    return `${themeName(aligned[0].code)} is the steadiest signal right now.`;
   }
 
-  return `Your signals are active across ${themeScores.length - noReading.length} themes. The mirror is reading.`;
+  return `Your recent reflections are active across ${themeScores.length - noReading.length} areas. The mirror is still forming.`;
 }
 
 export function InsightCard({ currentDay, rollingThemeScores, alignmentScore, mirrorText }: InsightCardProps) {
@@ -88,7 +88,7 @@ export function InsightCard({ currentDay, rollingThemeScores, alignmentScore, mi
         <View style={[styles.mirrorDot, { backgroundColor: colors.gradientStart }]} />
         <View style={styles.content}>
           <Text style={[styles.label, { color: colors.slateLight }]}>
-            {mirrorText ? 'Mirror · Today' : 'Mirror observes'}
+            {mirrorText ? 'Today’s reflection' : 'A small signal'}
           </Text>
           <Text style={[styles.insightText, { color: colors.slate }]}>
             {insight}

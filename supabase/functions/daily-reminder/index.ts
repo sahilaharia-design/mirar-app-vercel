@@ -72,7 +72,7 @@ Deno.serve(async (_req) => {
         continue;
       }
 
-      const body = `Day ${dayNumber} is waiting.`;
+      const body = `Your mirror is ready today. Takes less than 2 minutes.`;
 
       await Promise.all(
         tokens.map((t: any) => sendExpoPush(t.token, 'Mirar', body))

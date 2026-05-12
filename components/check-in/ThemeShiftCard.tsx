@@ -13,9 +13,9 @@ interface ThemeShiftCardProps {
 }
 
 const LEVEL_CONFIG: Record<SignalLevel, { label: string; bar: number }> = {
-  Low:    { label: 'Low signal',    bar: 0.28 },
-  Medium: { label: 'Mid signal',    bar: 0.58 },
-  High:   { label: 'High signal',   bar: 0.92 },
+  Low:    { label: 'present',    bar: 0.28 },
+  Medium: { label: 'visible',    bar: 0.58 },
+  High:   { label: 'strongly visible',   bar: 0.92 },
 };
 
 export function ThemeShiftCard({ themeCode, themeName, signalLevel, isSecondary = false, shortDescription }: ThemeShiftCardProps) {
@@ -37,7 +37,7 @@ export function ThemeShiftCard({ themeCode, themeName, signalLevel, isSecondary 
 
       <View style={styles.body}>
         <View style={styles.topRow}>
-          <Text style={[styles.code, { color: accentColor }]}>{themeCode}</Text>
+          <Text style={[styles.code, { color: accentColor }]}>area touched</Text>
           <Text style={[styles.level, { color: colors.slateMid }]}>{levelCfg.label}</Text>
         </View>
         <Text style={[styles.name, { color: colors.slate }]}>{themeName}</Text>

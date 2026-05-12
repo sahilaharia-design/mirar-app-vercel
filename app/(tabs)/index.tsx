@@ -14,6 +14,7 @@ import { router } from 'expo-router';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCheckInStore } from '../../stores/checkin-store';
 import { useCycleStore } from '../../stores/cycle-store';
+import { useDevStore } from '../../stores/dev-store';
 import { PromptCard } from '../../components/check-in/PromptCard';
 import { OptionSelector } from '../../components/check-in/OptionSelector';
 import { JournalExpander } from '../../components/check-in/JournalExpander';
@@ -26,11 +27,13 @@ import { InsightCard } from '../../components/home/InsightCard';
 import { WeeklySignalCard } from '../../components/home/WeeklySignalCard';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
+import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { useTranslation } from 'react-i18next';
 import { useColors } from '../../contexts/theme-context';
-import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES } from '../../lib/constants';
+import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { getAlignmentStatus } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
+import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 import { ThemeCode } from '../../types/mirar';
 
 // ─── Check-in Flow (modal-style within the tab) ───────────────────────────────
@@ -171,11 +174,9 @@ function ContextLine({
   contextMessage: string | null;
 }) {
   const colors = useColors();
-  const stageName = STAGES[getStageFromDay(currentDay) - 1]?.label ?? '';
-
   // If context_message is available from server, use it; else build a simple one
   const displayText = contextMessage
-    ?? `Day ${currentDay} · Chapter ${getStageFromDay(currentDay)}: ${stageName}${streakLength >= 2 ? ` · ${streakLength} days` : ''}`;
+    ?? `Today's mirror${streakLength >= 2 ? ` · ${streakLength} recent reflections` : ''}`;
 
   return (
     <Animated.View entering={FadeIn.duration(400).delay(100)}>
@@ -213,12 +214,13 @@ export default function TodayScreen() {
     loadAlignmentHistory,
   } = useCycleStore();
   const { isCompleted, completedAt, loadTodayQuestion, question } = useCheckInStore();
+  const { simulatedDay, setSimulatedDay, resetSimulatedDay } = useDevStore();
 
   const [refreshing, setRefreshing] = useState(false);
   const [showCheckin, setShowCheckin] = useState(false);
-  const [simDay, setSimDay] = useState<number | null>(null);
+  const [guideVisible, setGuideVisible] = useState(false);
 
-  const effectiveDay = simDay ?? currentDay;
+  const effectiveDay = simulatedDay ?? currentDay;
 
   const load = useCallback(async () => {
     if (!session?.user?.id) return;
@@ -227,11 +229,17 @@ export default function TodayScreen() {
     loadAlignmentHistory(session.user.id, 14);
     const cycle = useCycleStore.getState().activeCycle;
     if (cycle) {
-      await loadTodayQuestion(cycle.id, cycle.start_date);
+      if (__DEV__ && simulatedDay) {
+        const fakeStart = new Date();
+        fakeStart.setDate(fakeStart.getDate() - simulatedDay + 1);
+        await loadTodayQuestion(cycle.id, fakeStart.toISOString().split('T')[0]);
+      } else {
+        await loadTodayQuestion(cycle.id, cycle.start_date);
+      }
     } else {
       router.replace('/(auth)/onboarding');
     }
-  }, [session?.user?.id]);
+  }, [session?.user?.id, simulatedDay]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -243,9 +251,9 @@ export default function TodayScreen() {
 
   // Day simulation for testing
   const handleSimulateNextDay = async () => {
-    const nextDay = (simDay ?? currentDay) + 1;
+    const nextDay = (simulatedDay ?? currentDay) + 1;
     if (nextDay > 28) return;
-    setSimDay(nextDay);
+    setSimulatedDay(nextDay);
     const cycle = useCycleStore.getState().activeCycle;
     if (cycle) {
       const fakeStart = new Date();
@@ -255,7 +263,7 @@ export default function TodayScreen() {
   };
 
   const handleResetSim = async () => {
-    setSimDay(null);
+    resetSimulatedDay();
     await load();
   };
 
@@ -296,7 +304,7 @@ export default function TodayScreen() {
             <Text style={[styles.backLink, { color: colors.slateMid }]}>← Today</Text>
           </TouchableOpacity>
           <Text style={[styles.dayChip, { color: colors.slateLight }]}>
-            {t('common.day', { n: effectiveDay })}
+            Daily pause
           </Text>
         </View>
         <CheckInFlow onDone={() => setShowCheckin(false)} />
@@ -309,9 +317,9 @@ export default function TodayScreen() {
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
         <MirarLogo size="sm" />
-        {simDay !== null && (
+        {simulatedDay !== null && (
           <Text style={[styles.dayChip, { color: colors.slateLight }]}>
-            Day {effectiveDay} (simulated)
+            Simulated reflection {effectiveDay}
           </Text>
         )}
       </Animated.View>
@@ -336,7 +344,49 @@ export default function TodayScreen() {
           contextMessage={contextMessage}
         />
 
-        {/* 2. Alignment ring — primary signal display */}
+        <Animated.View entering={FadeInDown.duration(400).delay(120)} style={[
+          styles.guidanceCard,
+          { backgroundColor: colors.white, borderColor: colors.borderLight },
+        ]}>
+          <View style={styles.guidanceTitleRow}>
+            <Text style={[styles.guidanceTitle, { color: colors.slate }]}>
+              Today’s mirror is ready.
+            </Text>
+            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.todaysMirror} size={13} />
+          </View>
+          <Text style={[styles.guidanceText, { color: colors.slateMid }]}>
+            One question. One answer. One small signal.
+          </Text>
+          <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
+            Choose what feels closest. There is no right answer.
+          </Text>
+          {alignmentHistory.length < 3 && (
+            <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
+              Your pattern will appear after a few reflections.
+            </Text>
+          )}
+          <TouchableOpacity
+            onPress={() => setGuideVisible(true)}
+            activeOpacity={0.75}
+            accessibilityRole="button"
+            style={styles.guideLink}
+          >
+            <Text style={[styles.guideLinkText, { color: colors.slate }]}>
+              How Mirar works
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* 2. Today's check-in card — primary action */}
+        <TodayCheckinCard
+          dayNumber={effectiveDay}
+          promptPreview={question?.prompt_text ?? t('common.signal_ready')}
+          isCompleted={isCompleted}
+          completedAt={completedAt}
+          onPress={() => setShowCheckin(true)}
+        />
+
+        {/* 3. Alignment ring — primary signal display */}
         {effectiveDay === 1 && !isCompleted && score === null ? (
           <FirstDayWelcome />
         ) : (
@@ -347,42 +397,33 @@ export default function TodayScreen() {
                 {t('common.your_alignment_today')}
               </Text>
               <InfoTooltipInline
-                helpText={t('tooltips.alignment_ring')}
+                helpText={GUIDANCE_TOOLTIPS.signal}
                 size={13}
               />
             </View>
           </View>
         )}
 
-        {/* 3. 14-day sparkline — trend context, moved up from bottom */}
+        {/* 4. 14-day sparkline — trend context */}
         {alignmentHistory.length >= 2 && (
           <Animated.View entering={FadeInDown.duration(400).delay(200)} style={[styles.sparklineCard, {
             backgroundColor: colors.white,
             borderColor: colors.borderLight,
           }]}>
             <Text style={[styles.sparklineCardLabel, { color: colors.slateLight }]}>
-              14-DAY SIGNAL
+            RECENT PATTERN
             </Text>
             <AlignmentSparkline history={alignmentHistory} width={160} height={28} />
           </Animated.View>
         )}
 
-        {/* 4. Weekly signal card — surfaces AI-generated weekly insight */}
+        {/* 5. Weekly signal card — surfaces generated weekly insight */}
         {latestSignalText && (
           <WeeklySignalCard
             signalText={latestSignalText}
             weekNumber={weekNumber}
           />
         )}
-
-        {/* 5. Today's check-in card — primary action */}
-        <TodayCheckinCard
-          dayNumber={effectiveDay}
-          promptPreview={question?.prompt_text ?? t('common.signal_ready')}
-          isCompleted={isCompleted}
-          completedAt={completedAt}
-          onPress={() => setShowCheckin(true)}
-        />
 
         {/* 6. Theme signal grid — 6 mini status cards */}
         {themeScoresForGrid.length > 0 && (
@@ -417,7 +458,7 @@ export default function TodayScreen() {
                   Next Day →
                 </Text>
               </TouchableOpacity>
-              {simDay !== null && (
+              {simulatedDay !== null && (
                 <TouchableOpacity
                   style={[styles.devButton, { backgroundColor: colors.creamDark, borderColor: colors.border }]}
                   onPress={handleResetSim}
@@ -433,6 +474,8 @@ export default function TodayScreen() {
 
         <View style={{ height: 40 }} />
       </ScrollView>
+
+      <MirrorGuideModal visible={guideVisible} onClose={() => setGuideVisible(false)} />
     </SafeAreaView>
   );
 }
@@ -471,6 +514,38 @@ const styles = StyleSheet.create({
   ringLabel: {
     fontSize: FONT_SIZE.sm,
     letterSpacing: 0.3,
+  },
+  guidanceCard: {
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    padding: SPACING.md,
+    gap: SPACING.xs,
+  },
+  guidanceTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  guidanceTitle: {
+    fontSize: FONT_SIZE.lg,
+    fontWeight: '400',
+    flexShrink: 1,
+  },
+  guidanceText: {
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 22,
+  },
+  guidanceHint: {
+    fontSize: FONT_SIZE.xs,
+    lineHeight: 18,
+  },
+  guideLink: {
+    alignSelf: 'flex-start',
+    paddingTop: SPACING.xs,
+  },
+  guideLinkText: {
+    fontSize: FONT_SIZE.sm,
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
   divider: { height: 1 },
   dayChip: {

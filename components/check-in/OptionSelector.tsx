@@ -14,7 +14,7 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import { OptionRow, SignalLevel } from '../../types/mirar';
+import { OptionRow } from '../../types/mirar';
 import { COLORS, FONTS } from '../../lib/constants';
 import {
   SPRING_GENTLE,
@@ -31,12 +31,6 @@ interface OptionSelectorProps {
   onSelect: (optionId: string) => void;
   disabled?: boolean;
 }
-
-const LEVEL_BADGE: Record<SignalLevel, string> = {
-  High: 'HIGH',
-  Medium: 'MID',
-  Low: 'LOW',
-};
 
 export function OptionSelector({
   options,
@@ -114,8 +108,6 @@ function OptionItem({ option, isSelected, onSelect, disabled, index }: OptionIte
     transform: [{ translateY: translateY.value }, { scale: scale.value }],
   }));
 
-  const levelLabel = LEVEL_BADGE[option.theme_1_level];
-
   return (
     <Animated.View style={animatedStyle}>
       <Pressable
@@ -125,7 +117,7 @@ function OptionItem({ option, isSelected, onSelect, disabled, index }: OptionIte
         disabled={disabled}
         accessibilityRole="radio"
         accessibilityState={{ selected: isSelected, disabled }}
-        accessibilityLabel={`${option.option_text}, ${levelLabel}`}
+        accessibilityLabel={option.option_text}
         style={[
           styles.option,
           { borderColor: isSelected ? COLORS.slate : COLORS.ruleLight },
@@ -149,14 +141,6 @@ function OptionItem({ option, isSelected, onSelect, disabled, index }: OptionIte
           ]}
         >
           {option.option_text}
-        </Text>
-        <Text
-          style={[
-            styles.levelBadge,
-            { color: isSelected ? COLORS.brass : COLORS.slateXLight },
-          ]}
-        >
-          {levelLabel}
         </Text>
       </Pressable>
     </Animated.View>
@@ -213,11 +197,5 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 15,
     lineHeight: 21, // 15 × 1.4
-  },
-  levelBadge: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 9,
-    letterSpacing: 1.5,
-    textTransform: 'uppercase',
   },
 });

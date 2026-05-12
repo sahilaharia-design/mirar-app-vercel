@@ -259,7 +259,7 @@ export const THEME_COLORS: Record<ThemeCode, { light: string; dark: string }> = 
 
 // ─── Notification Copy ────────────────────────────────────────────────────────
 export const NOTIFICATION_COPY = {
-  dailyReminder: (day: number) => `Day ${day} is waiting.`,
-  stageReady: (stage: number) => `Your Chapter ${stage} Alignment Mirror is ready to view.`,
-  cycleComplete: 'Your full cycle Alignment Mirror is ready.',
+  dailyReminder: (_day: number) => `Your mirror is ready today. Takes less than 2 minutes.`,
+  stageReady: (_stage: number) => `A new reflection summary is ready.`,
+  cycleComplete: 'Your full pattern summary is ready.',
 } as const;

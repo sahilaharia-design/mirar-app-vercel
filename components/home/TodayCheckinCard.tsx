@@ -41,7 +41,7 @@ export function TodayCheckinCard({
           </Text>
         </View>
         <Text style={[styles.dayLabel, { color: colors.slateLight }]}>
-          {t('common.day', { n: dayNumber })}
+          Today's mirror
         </Text>
         {completedAt && (
           <Text style={[styles.time, { color: colors.slateXLight }]}>
@@ -65,7 +65,7 @@ export function TodayCheckinCard({
       >
         <View style={styles.topRow}>
           <Text style={[styles.dayLabel, { color: colors.slateLight }]}>
-            {t('common.day', { n: dayNumber })}
+            Daily pause
           </Text>
           <InfoTooltipInline
             helpText={t('tooltips.checkin_card')}

@@ -19,28 +19,28 @@ function buildContextMessage(cycleDay: number, cycleNumber: number, streakLength
     cycleDay <= 14 ? 2 :
     cycleDay <= 21 ? 3 : 4
 
-  const stageLabel = ['Awareness', 'Realignment', 'Intentional Action', 'Reflection'][stage - 1]
+  const stageLabel = ['Notice', 'Adjust', 'Move', 'Reflect'][stage - 1]
 
-  if (cycleDay === 1 && cycleNumber === 1) return 'Day 1. Your signal baseline is forming.'
-  if (cycleDay === 1) return `Day 1 of Cycle ${cycleNumber}. A new reading begins.`
-  if (cycleDay === 7)  return `Day 7. Your first week of signals is complete.`
-  if (cycleDay === 14) return `Day 14. The pattern depth is increasing.`
-  if (cycleDay === 21) return `Day 21. Three weeks of signal data on record.`
-  if (cycleDay === 28) return `Day 28. This cycle's signal is complete.`
+  if (cycleDay === 1 && cycleNumber === 1) return 'Your first mirror is forming.'
+  if (cycleDay === 1) return `A new mirror begins.`
+  if (cycleDay === 7)  return `A first pattern is ready to notice.`
+  if (cycleDay === 14) return `Your recent reflections are beginning to hold a shape.`
+  if (cycleDay === 21) return `Three weeks of reflections are now visible.`
+  if (cycleDay === 28) return `This reflection pattern is complete.`
 
   const stageStart = (stage - 1) * 7 + 1
   const dayInStage = cycleDay - stageStart + 1
 
   if (streakLength >= 7) {
-    return `Day ${cycleDay} · Chapter ${stage}: ${stageLabel}. ${streakLength} days consecutive.`
+    return `${stageLabel}. ${streakLength} recent reflections in a row.`
   }
   if (streakLength >= 3) {
-    return `Day ${cycleDay} · Chapter ${stage}: ${stageLabel}. Day ${dayInStage} of this stage.`
+    return `${stageLabel}. Your recent reflections are holding a thread.`
   }
   if (dayInStage === 1) {
-    return `Day ${cycleDay}. Chapter ${stage}: ${stageLabel} begins.`
+    return `${stageLabel} begins.`
   }
-  return `Day ${cycleDay} · Chapter ${stage}: ${stageLabel}.`
+  return `Today’s mirror · ${stageLabel}.`
 }
 
 // Compute consecutive-day streak from a sorted (DESC) list of ISO date strings.

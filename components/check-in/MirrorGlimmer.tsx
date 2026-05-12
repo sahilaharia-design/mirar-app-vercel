@@ -94,7 +94,7 @@ export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: Mirro
             entering={FadeIn.duration(600).delay(300)}
             style={[styles.mirrorLabel, { color: colors.slateLight }]}
           >
-            Mirror Signal · Day {dayNumber}
+            Mirror signal · Reflection {dayNumber}
           </Animated.Text>
           <Animated.Text
             entering={FadeIn.duration(900).delay(600)}

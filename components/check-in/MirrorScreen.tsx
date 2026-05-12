@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TouchableOpacity,
   StyleSheet,
   AccessibilityInfo,
   LayoutChangeEvent,
@@ -21,7 +22,6 @@ import { ThemeShiftCard } from './ThemeShiftCard';
 import {
   COLORS,
   FONTS,
-  CYCLE_DAYS,
   getAlignmentStatus,
   THEMES,
 } from '../../lib/constants';
@@ -38,6 +38,8 @@ import {
   V3_REDUCED_FADE_DURATION,
 } from '../../lib/animations';
 import { supabase } from '../../lib/supabase';
+import { mirrorSignalLabel, signalHelpForStatus } from '../../lib/guidance';
+import { InfoTooltipInline } from '../ui/InfoTooltip';
 import { ThemeCode, SignalLevel } from '../../types/mirar';
 
 // Declared at module level — must not be inside a component to avoid re-creation on every render
@@ -79,7 +81,7 @@ function deltaLabel(before: number | null, after: number | null): string {
   if (after === null || before === null) return '';
   const d = after - before;
   if (Math.abs(d) <= 2) return '— steady';
-  return d > 0 ? `Δ +${Math.round(d)}` : `Δ ${Math.round(d)} · drifting`;
+  return d > 0 ? `shifted +${Math.round(d)}` : `shifted ${Math.round(d)}`;
 }
 
 function deltaColor(before: number | null, after: number | null): string {
@@ -104,7 +106,7 @@ function buildFallbackMirror(
   };
   const status = score !== null ? getAlignmentStatus(score) : null;
   const statusLine = status ? `Alignment registered at ${status.toLowerCase()} today.` : '';
-  return `${t1Name} registered ${levelMap[l1]}. ${t2Name} registered ${levelMap[l2]}. ${statusLine}`.trim();
+  return `${t1Name} and ${t2Name} were visible in today’s reflection. ${statusLine}`.trim();
 }
 
 // ── ThresholdBar ──────────────────────────────────────────────────────────────
@@ -164,7 +166,7 @@ function ThresholdBar({
       </View>
       {/* Zone labels */}
       <View style={styles.barLabels}>
-        {['Under load', 'Stabilizing', 'Forming', 'Aligned'].map((l) => (
+        {['Under load', 'Settling', 'Forming', 'Steady'].map((l) => (
           <Text key={l} style={styles.barLabel}>{l}</Text>
         ))}
       </View>
@@ -260,9 +262,9 @@ function DaySignature({
 function MirrorCard({ text, isLoading }: { text: string | null; isLoading: boolean }) {
   return (
     <View style={styles.mirrorCard}>
-      <Text style={styles.mirrorLabel}>Mirror · today</Text>
+      <Text style={styles.mirrorLabel}>Today’s reflection</Text>
       {isLoading ? (
-        <Text style={styles.mirrorCalibrating}>Calibrating signal synthesis…</Text>
+          <Text style={styles.mirrorCalibrating}>Letting the reflection settle…</Text>
       ) : (
         <Text style={styles.mirrorText}>{text}</Text>
       )}
@@ -286,6 +288,7 @@ export function MirrorScreen({
   const [reduceMotion, setReduceMotion] = useState(false);
   const [mirrorText, setMirrorText] = useState<string | null>(null);
   const [mirrorLoading, setMirrorLoading] = useState(true);
+  const [howToReadOpen, setHowToReadOpen] = useState(false);
   // 14-day history: index 0 = 13 days ago, index 13 = today
   const [history14, setHistory14] = useState<(number | null)[]>(Array(14).fill(null));
 
@@ -394,6 +397,7 @@ export function MirrorScreen({
 
   // ── Derived display values ────────────────────────────────────────────────
   const status = getAlignmentStatus(alignmentScore);
+  const signalLabel = mirrorSignalLabel(status);
   const dLabel = deltaLabel(scoreBefore, alignmentScore);
   const dColor = deltaColor(scoreBefore, alignmentScore);
 
@@ -406,9 +410,7 @@ export function MirrorScreen({
       {/* ── Top strip ───────────────────────────────────────────────────── */}
       <Animated.View style={[styles.strip, s0Style]}>
         <Text style={styles.caps}>
-          <Text style={styles.capsLight}>Day </Text>
-          <Text style={styles.capsInk}>{dayNumber}</Text>
-          <Text style={styles.capsLight}> / {CYCLE_DAYS}</Text>
+          <Text style={styles.capsInk}>Today’s mirror</Text>
           {cycleNumber > 1 && <Text style={styles.capsLight}> · Cycle {cycleNumber}</Text>}
         </Text>
         <Text style={styles.caps}>Recorded</Text>
@@ -417,18 +419,38 @@ export function MirrorScreen({
 
       {/* ── Hero: score + status + delta ────────────────────────────────── */}
       <Animated.View style={[styles.heroBlock, s1Style]}>
-        <Text style={styles.heroMeta}>Today's reading</Text>
+        <View style={styles.heroMetaRow}>
+          <Text style={styles.heroMeta}>Your signal today</Text>
+          <InfoTooltipInline helpText={signalHelpForStatus(signalLabel)} size={13} />
+        </View>
         <View style={styles.heroRow}>
-          <Text style={styles.heroScore} accessibilityRole="text">
-            {alignmentScore ?? '—'}
-          </Text>
           <View style={styles.heroMeta2}>
-            <Text style={styles.heroStatus}>{status}</Text>
+            <Text style={styles.heroStatus}>{signalLabel}</Text>
             {dLabel ? (
               <Text style={[styles.heroDelta, { color: dColor }]}>{dLabel}</Text>
             ) : null}
           </View>
+          <Text style={styles.heroScore} accessibilityRole="text">
+            {alignmentScore !== null ? `${alignmentScore}` : '—'}
+          </Text>
         </View>
+        <Text style={styles.heroNote}>Signals are small mirrors, not scores. Read this as a reflection of today’s answer, not a verdict.</Text>
+        <TouchableOpacity
+          style={styles.howReadCard}
+          onPress={() => setHowToReadOpen((v) => !v)}
+          activeOpacity={0.75}
+          accessibilityRole="button"
+        >
+          <View style={styles.howReadHeader}>
+            <Text style={styles.howReadTitle}>How to read this</Text>
+            <Text style={styles.howReadToggle}>{howToReadOpen ? 'Close' : 'Open'}</Text>
+          </View>
+          {howToReadOpen && (
+            <Text style={styles.howReadBody}>
+              This signal reflects what your answer pointed toward today. It is not advice, diagnosis, or judgment.
+            </Text>
+          )}
+        </TouchableOpacity>
         <Animated.View style={[styles.underline, underlineStyle]} />
       </Animated.View>
 
@@ -450,7 +472,7 @@ export function MirrorScreen({
       {/* ── Themes read today ────────────────────────────────────────────── */}
       <Animated.View style={s4Style}>
         <View style={styles.themeSection}>
-          <Text style={styles.caps}>Themes read today</Text>
+          <Text style={styles.caps}>What today touched</Text>
           <View style={styles.themeCards}>
             <ThemeShiftCard
               themeCode={theme1Code}
@@ -471,7 +493,7 @@ export function MirrorScreen({
 
       {/* ── Footer: "Tomorrow at dawn" + Close ──────────────────────────── */}
       <Animated.View style={[styles.footer, s5Style]}>
-        <Text style={styles.caps}>Tomorrow at dawn</Text>
+        <Text style={styles.caps}>Return when you’re ready</Text>
         <Pressable
           onPress={onDone}
           accessibilityRole="button"
@@ -532,24 +554,30 @@ const styles = StyleSheet.create({
     color: COLORS.slateLight,
     marginBottom: 6,
   },
+  heroMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
   heroRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: 14,
   },
   heroScore: {
-    fontFamily: FONTS.display,
-    fontSize: 72,
-    lineHeight: 72,
-    letterSpacing: -2,
-    color: COLORS.ink,
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 13,
+    lineHeight: 18,
+    letterSpacing: 1.4,
+    color: COLORS.slateLight,
   },
   heroMeta2: {
     gap: 4,
   },
   heroStatus: {
     fontFamily: FONTS.displayItalic,
-    fontSize: 22,
+    fontSize: 34,
+    lineHeight: 38,
     letterSpacing: -0.2,
     color: COLORS.ink,
   },
@@ -558,6 +586,48 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2,
     textTransform: 'uppercase',
+  },
+  heroNote: {
+    marginTop: 12,
+    fontFamily: FONTS.body,
+    fontSize: 13,
+    lineHeight: 20,
+    color: COLORS.slateMid,
+    maxWidth: 300,
+  },
+  howReadCard: {
+    marginTop: 14,
+    borderWidth: 1,
+    borderColor: COLORS.ruleLight,
+    borderRadius: 10,
+    padding: 12,
+    backgroundColor: COLORS.paper,
+    maxWidth: 340,
+  },
+  howReadHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+  },
+  howReadTitle: {
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 12,
+    color: COLORS.ink,
+  },
+  howReadToggle: {
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 10,
+    color: COLORS.slateLight,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  howReadBody: {
+    marginTop: 10,
+    fontFamily: FONTS.body,
+    fontSize: 13,
+    lineHeight: 20,
+    color: COLORS.slateMid,
   },
   underline: {
     marginTop: 12,
