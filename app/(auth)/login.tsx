@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -9,27 +9,82 @@ import {
   Platform,
   ActivityIndicator,
   ScrollView,
+  Image,
+  useWindowDimensions,
 } from 'react-native';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Circle, Path } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
-import { MirarLogo } from '../../components/ui/MirarLogo';
 import { LanguagePicker } from '../../components/ui/LanguagePicker';
-import {
-  COLORS,
-  FONT_SIZE,
-  SPACING,
-  RADIUS,
-  THEMES,
-  THEME_ORDER,
-  THEME_COLORS,
-} from '../../lib/constants';
+import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
-const MAX_W = 640;
+const MAX_WIDE = 1180;
+const MAX_TEXT = 720;
+const MARK = require('../../assets/brand/mirar-mark.png');
+const WORDMARK = require('../../assets/brand/mirar-wordmark.png');
+const FULL_LOGO = require('../../assets/brand/mirar-logo-full.png');
+const TAGLINE = require('../../assets/brand/mirar-tagline.png');
 
-// ─── Shared CTA Form ──────────────────────────────────────────────────────────
+const PROCESS = [
+  ['Start today’s mirror', 'A single question opens the check-in.'],
+  ['Choose what feels closest', 'No blank page. No need to explain everything.'],
+  ['Receive one signal', 'Mirar reflects what may be showing up.'],
+  ['Return tomorrow', 'Repeated signals begin to form a pattern.'],
+];
+
+const SIGNAL_AREAS = [
+  ['Direction', 'Where your life seems to be pulling you.', '#8C7DB1'],
+  ['Energy', 'What is quietly draining or restoring you.', '#C98B55'],
+  ['Attention', 'Where your mind keeps returning.', '#6F93B8'],
+  ['Connection', 'What you are emotionally available for.', '#7FA47B'],
+  ['Growth', 'What you are outgrowing or becoming.', '#B9A05D'],
+  ['Movement', 'What action is asking to happen.', '#BE7868'],
+];
+
+const PREVIEWS = [
+  {
+    title: 'Today’s Mirror',
+    copy: 'One question. One answer. One small signal.',
+    meta: 'What feels closest today?',
+    lines: ['clear', 'scattered', 'heavy', 'uncertain'],
+    signal: 'Still forming',
+  },
+  {
+    title: 'Signals',
+    copy: 'See what keeps repeating across Direction, Energy, Attention, Connection, Growth, and Movement.',
+    meta: 'What’s been showing up',
+    lines: ['Direction · Forming', 'Energy · Under Load', 'Connection · Steady'],
+    signal: 'Recent reflections',
+  },
+  {
+    title: 'Reflection Summary',
+    copy: 'A weekly mirror of what showed up — not a verdict on who you are.',
+    meta: 'Based on your recent reflections',
+    lines: ['Energy was present, but stretched.', 'Clarity appeared in moments.', 'Movement was there, but scattered.'],
+    signal: 'Mirror, not verdict',
+  },
+];
+
+function isCompact(width: number) {
+  return width < 760;
+}
+
+function BrandLogo({ size = 'header' }: { size?: 'header' | 'footer' }) {
+  return (
+    <View style={styles.logoWrap}>
+      <Image
+        source={WORDMARK}
+        style={size === 'header' ? styles.wordmarkHeader : styles.wordmarkFooter}
+        resizeMode="contain"
+        accessibilityLabel="Mirar"
+      />
+    </View>
+  );
+}
+
 function CTAForm({
   email,
   setEmail,
@@ -38,7 +93,7 @@ function CTAForm({
   error,
   onSubmit,
   isLoading,
-  inline = false,
+  compact,
 }: {
   email: string;
   setEmail: (v: string) => void;
@@ -47,309 +102,164 @@ function CTAForm({
   error: string | null;
   onSubmit: () => void;
   isLoading: boolean;
-  inline?: boolean;
+  compact: boolean;
 }) {
   const { t } = useTranslation();
 
   if (sent) {
     return (
-      <View style={formStyles.sentContainer}>
-        <View style={[formStyles.sentDot, { backgroundColor: COLORS.aligned }]} />
-        <Text style={formStyles.sentTitle}>{t('auth.check_email')}</Text>
-        <Text style={formStyles.sentBody}>{t('auth.link_sent', { email })}</Text>
-        <Text style={formStyles.sentNote}>{t('auth.link_validity')}</Text>
+      <View style={styles.sentPanel}>
+        <View style={styles.sentDot} />
+        <Text style={styles.sentTitle}>{t('auth.check_email')}</Text>
+        <Text style={styles.sentBody}>{t('auth.link_sent', { email })}</Text>
+        <Text style={styles.sentNote}>{t('auth.link_validity')}</Text>
         <TouchableOpacity onPress={() => setSent(false)} activeOpacity={0.7}>
-          <Text style={formStyles.resendText}>{t('auth.try_again')}</Text>
+          <Text style={styles.resendText}>{t('auth.try_again')}</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
-  if (inline) {
-    return (
-      <View style={formStyles.inlineWrap}>
-        <View style={formStyles.inlineRow}>
-          <TextInput
-            style={[formStyles.inlineInput, error ? formStyles.inputError : null]}
-            placeholder={t('auth.email_placeholder')}
-            placeholderTextColor={COLORS.slateXLight}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            value={email}
-            onChangeText={setEmail}
-            onSubmitEditing={onSubmit}
-            returnKeyType="send"
-          />
-          <TouchableOpacity
-            style={[formStyles.inlineButton, (!email.trim() || isLoading) && formStyles.buttonDisabled]}
-            onPress={onSubmit}
-            disabled={!email.trim() || isLoading}
-            activeOpacity={0.8}
-          >
-            {isLoading ? (
-              <ActivityIndicator color={COLORS.creamLight} size="small" />
-            ) : (
-              <Text style={formStyles.buttonText}>{t('landing.hero_cta')}</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-        {error ? <Text style={formStyles.errorText}>{error}</Text> : null}
-        <Text style={formStyles.badgeText}>{t('landing.hero_badge')}</Text>
-      </View>
-    );
-  }
-
   return (
-    <View style={formStyles.stackedWrap}>
-      <TextInput
-        style={[formStyles.stackedInput, error ? formStyles.inputError : null]}
-        placeholder={t('auth.email_placeholder')}
-        placeholderTextColor={COLORS.slateXLight}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoComplete="email"
-        value={email}
-        onChangeText={setEmail}
-        onSubmitEditing={onSubmit}
-        returnKeyType="send"
-      />
-      {error ? <Text style={formStyles.errorText}>{error}</Text> : null}
-      <TouchableOpacity
-        style={[formStyles.stackedButton, (!email.trim() || isLoading) && formStyles.buttonDisabled]}
-        onPress={onSubmit}
-        disabled={!email.trim() || isLoading}
-        activeOpacity={0.8}
-      >
-        {isLoading ? (
-          <ActivityIndicator color={COLORS.creamLight} size="small" />
-        ) : (
-          <Text style={formStyles.buttonText}>{t('landing.hero_cta')}</Text>
-        )}
-      </TouchableOpacity>
-      <Text style={formStyles.badgeText}>{t('landing.hero_badge')}</Text>
+    <View style={styles.formWrap}>
+      <View style={[styles.formRow, compact && styles.formRowCompact]}>
+        <TextInput
+          style={[styles.emailInput, error && styles.inputError]}
+          placeholder={t('auth.email_placeholder')}
+          placeholderTextColor="#8F887F"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoComplete="email"
+          value={email}
+          onChangeText={setEmail}
+          onSubmitEditing={onSubmit}
+          returnKeyType="send"
+        />
+        <TouchableOpacity
+          style={[styles.primaryButton, isLoading && styles.buttonDisabled]}
+          onPress={onSubmit}
+          disabled={isLoading}
+          activeOpacity={0.86}
+        >
+          {isLoading ? (
+            <ActivityIndicator color="#FBF8F1" size="small" />
+          ) : (
+            <Text style={styles.primaryButtonText}>Start your daily mirror</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <Text style={styles.microcopy}>Private beta · Less than 2 minutes · Free to begin</Text>
     </View>
   );
 }
 
-// ─── Web Landing ──────────────────────────────────────────────────────────────
-function WebLanding({
-  email,
-  setEmail,
-  sent,
-  setSent,
-  error,
-  onSubmit,
-  isLoading,
-}: {
-  email: string;
-  setEmail: (v: string) => void;
-  sent: boolean;
-  setSent: (v: boolean) => void;
-  error: string | null;
-  onSubmit: () => void;
-  isLoading: boolean;
-}) {
-  const { t } = useTranslation();
-
+function Header({ onCtaPress, compact }: { onCtaPress: () => void; compact: boolean }) {
   return (
-    <ScrollView
-      style={webStyles.scroll}
-      contentContainerStyle={webStyles.container}
-      showsVerticalScrollIndicator={false}
-    >
-
-      {/* ── Section 1: Hero ─────────────────────────────────────── */}
-      <LinearGradient
-        colors={[COLORS.cream, COLORS.warmGlow, COLORS.cream]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={webStyles.heroSection}
-      >
-        <View style={webStyles.inner}>
-          <Animated.View entering={FadeIn.duration(500)} style={webStyles.heroTopRow}>
-            <MirarLogo size="lg" />
-            <LanguagePicker variant="inline" />
-          </Animated.View>
-          <Animated.Text entering={FadeInDown.duration(500).delay(150)} style={webStyles.heroTitle}>
-            {t('landing.hero_title')}
-          </Animated.Text>
-          <Animated.Text entering={FadeInDown.duration(500).delay(280)} style={webStyles.heroSub}>
-            {t('landing.hero_sub')}
-          </Animated.Text>
-          <Animated.View entering={FadeInDown.duration(500).delay(400)}>
-            <CTAForm
-              email={email}
-              setEmail={setEmail}
-              sent={sent}
-              setSent={setSent}
-              error={error}
-              onSubmit={onSubmit}
-              isLoading={isLoading}
-              inline
-            />
-          </Animated.View>
-        </View>
-      </LinearGradient>
-
-      {/* ── Section 2: Recognition ──────────────────────────────── */}
-      <View style={webStyles.recognitionSection}>
-        <View style={webStyles.inner}>
-          <Text style={webStyles.recognitionHeading}>{t('landing.recognition_heading')}</Text>
-          <Text style={webStyles.recognitionSub}>{t('landing.recognition_sub')}</Text>
-          <View style={webStyles.recognitionLines}>
-            {([
-              t('landing.recognition_1'),
-              t('landing.recognition_2'),
-              t('landing.recognition_3'),
-            ] as string[]).map((line, i) => (
-              <Animated.View
-                key={i}
-                entering={FadeInUp.duration(400).delay(i * 100)}
-                style={webStyles.recognitionLine}
-              >
-                <View style={webStyles.recognitionDash} />
-                <Text style={webStyles.recognitionLineText}>{line}</Text>
-              </Animated.View>
-            ))}
-          </View>
-          <Text style={webStyles.recognitionCta}>{t('landing.recognition_cta')}</Text>
+    <Animated.View entering={FadeIn.duration(450)} style={styles.headerShell}>
+      <View style={styles.header}>
+        <BrandLogo />
+        <View style={styles.headerRight}>
+          {!compact && <LanguagePicker variant="inline" />}
+          <TouchableOpacity onPress={onCtaPress} activeOpacity={0.84} style={styles.headerCta}>
+            <Text style={styles.headerCtaText}>Start your mirror</Text>
+          </TouchableOpacity>
         </View>
       </View>
-
-      {/* ── Section 3: What Alignment Feels Like ────────────────── */}
-      <View style={webStyles.feelsSection}>
-        <View style={webStyles.inner}>
-          <Text style={webStyles.sectionHeading}>{t('landing.feels_like_heading')}</Text>
-          <View style={webStyles.feelsList}>
-            {([
-              t('landing.feels_like_1'),
-              t('landing.feels_like_2'),
-              t('landing.feels_like_3'),
-              t('landing.feels_like_4'),
-              t('landing.feels_like_5'),
-            ] as string[]).map((item, i) => (
-              <Animated.View
-                key={i}
-                entering={FadeInUp.duration(350).delay(i * 80)}
-                style={webStyles.feelsItem}
-              >
-                <View style={webStyles.feelsDot} />
-                <Text style={webStyles.feelsText}>{item}</Text>
-              </Animated.View>
-            ))}
-          </View>
-        </View>
-      </View>
-
-      {/* ── Section 4: Alignment Compounds ──────────────────────── */}
-      <LinearGradient
-        colors={[COLORS.slate, '#3A3A45']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={webStyles.compoundsSection}
-      >
-        <View style={webStyles.inner}>
-          <Text style={webStyles.compoundsHeading}>{t('landing.compounds_heading')}</Text>
-          <View style={webStyles.compoundsRows}>
-            {([
-              { time: t('landing.compounds_1_time'), body: t('landing.compounds_1_body') },
-              { time: t('landing.compounds_2_time'), body: t('landing.compounds_2_body') },
-              { time: t('landing.compounds_3_time'), body: t('landing.compounds_3_body') },
-              { time: t('landing.compounds_4_time'), body: t('landing.compounds_4_body') },
-            ] as const).map((row, i) => (
-              <Animated.View
-                key={i}
-                entering={FadeInUp.duration(400).delay(i * 80)}
-                style={webStyles.compoundsRow}
-              >
-                <Text style={webStyles.compoundsTime}>{row.time}</Text>
-                <Text style={webStyles.compoundsBody}>{row.body}</Text>
-              </Animated.View>
-            ))}
-          </View>
-        </View>
-      </LinearGradient>
-
-      {/* ── Section 5: How Mirar Works ───────────────────────────── */}
-      <View style={webStyles.howSection}>
-        <View style={webStyles.inner}>
-          <Text style={webStyles.sectionHeading}>{t('landing.how_heading')}</Text>
-          <View style={webStyles.howRows}>
-            {([
-              { label: t('landing.how_day_label'), body: t('landing.how_day_body') },
-              { label: t('landing.how_week_label'), body: t('landing.how_week_body') },
-              { label: t('landing.how_cycle_label'), body: t('landing.how_cycle_body') },
-              { label: t('landing.how_lifetime_label'), body: t('landing.how_lifetime_body') },
-            ] as const).map((row, i) => (
-              <Animated.View
-                key={i}
-                entering={FadeInUp.duration(350).delay(i * 70)}
-                style={webStyles.howRow}
-              >
-                <Text style={webStyles.howLabel}>{row.label}</Text>
-                <Text style={webStyles.howBody}>{row.body}</Text>
-              </Animated.View>
-            ))}
-          </View>
-
-          {/* Theme chips — what Mirar tracks */}
-          <View style={webStyles.themesNote}>
-            <Text style={webStyles.themesNoteLabel}>What Mirar gently notices</Text>
-            <View style={webStyles.themesGrid}>
-              {THEME_ORDER.map((code) => (
-                <View key={code} style={webStyles.themeChip}>
-                  <View style={[webStyles.themeDot, { backgroundColor: THEME_COLORS[code].light }]} />
-                  <Text style={webStyles.themeName}>{THEMES[code].name}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        </View>
-      </View>
-
-      {/* ── Section 6: Privacy ──────────────────────────────────── */}
-      <View style={webStyles.privacySection}>
-        <View style={webStyles.inner}>
-          <Text style={webStyles.sectionHeading}>{t('landing.privacy_heading')}</Text>
-          <Text style={webStyles.privacyBody}>{t('landing.privacy_body')}</Text>
-          <View style={webStyles.privacyBadgeRow}>
-            {(['No password', 'No tracking', 'Signal is yours'] as const).map((badge) => (
-              <View key={badge} style={webStyles.privacyBadge}>
-                <Text style={webStyles.privacyBadgeText}>{badge}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-      </View>
-
-      {/* ── Section 7: Final CTA ────────────────────────────────── */}
-      <View style={webStyles.ctaSection}>
-        <View style={webStyles.inner}>
-          <Text style={webStyles.ctaHeading}>{t('landing.cta_heading')}</Text>
-          <CTAForm
-            email={email}
-            setEmail={setEmail}
-            sent={sent}
-            setSent={setSent}
-            error={error}
-            onSubmit={onSubmit}
-            isLoading={isLoading}
-            inline
-          />
-          <Text style={webStyles.ctaBadge}>{t('landing.cta_badge')}</Text>
-        </View>
-      </View>
-
-      <View style={webStyles.footer}>
-        <Text style={webStyles.footerText}>Mirar · Private Beta</Text>
-      </View>
-    </ScrollView>
+    </Animated.View>
   );
 }
 
-// ─── Mobile Landing ───────────────────────────────────────────────────────────
-function MobileLanding({
+function HeroPreview({ compact }: { compact: boolean }) {
+  return (
+    <Animated.View entering={FadeInUp.duration(800).delay(220)} style={[styles.heroPreview, compact && styles.heroPreviewCompact]}>
+      <View style={[styles.mirrorOrb, compact && styles.mirrorOrbCompact]}>
+        <View style={styles.orbGlowLarge} />
+        <View style={styles.orbGlowPeach} />
+        <View style={styles.orbGlowBlue} />
+        <LinearGradient
+          colors={['rgba(255,255,255,0.86)', 'rgba(226,233,232,0.58)', 'rgba(239,197,162,0.46)']}
+          locations={[0, 0.52, 1]}
+          start={{ x: 0.18, y: 0.05 }}
+          end={{ x: 0.86, y: 1 }}
+          style={styles.orbGlass}
+        >
+          <LinearGradient
+            colors={['rgba(203,202,235,0.88)', 'rgba(197,224,224,0.62)', 'rgba(246,180,139,0.82)']}
+            locations={[0, 0.54, 1]}
+            start={{ x: 0.28, y: 0.05 }}
+            end={{ x: 0.72, y: 1 }}
+            style={styles.orbCore}
+          />
+          <Image source={MARK} style={styles.orbMark} resizeMode="contain" />
+        </LinearGradient>
+        <Svg style={styles.orbRings} viewBox="0 0 420 520">
+          <Circle cx="206" cy="255" r="176" stroke="rgba(67,70,80,0.16)" strokeWidth="1" fill="none" />
+          <Path d="M96 386 C168 334 263 320 346 266" stroke="rgba(67,70,80,0.24)" strokeWidth="1.2" fill="none" />
+          <Path d="M98 132 C162 72 282 64 344 148" stroke="rgba(255,255,255,0.46)" strokeWidth="1.4" fill="none" />
+        </Svg>
+        <View style={styles.orbSheen} />
+        <View style={[styles.orbSignalCluster, compact && styles.orbSignalClusterCompact]}>
+          {['Direction', 'Energy', 'Attention'].map((chip, index) => (
+            <View key={chip} style={[styles.orbSignalChip, index === 1 && styles.orbSignalChipWarm]}>
+              <View style={[styles.orbSignalDot, index === 1 && styles.orbSignalDotWarm]} />
+              <Text style={styles.orbSignalText}>{chip}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      <View style={[styles.previewCard, compact && styles.previewCardCompact]}>
+        <View style={styles.previewTopRow}>
+          <Text style={styles.previewOverline}>Today’s mirror</Text>
+          <View style={styles.statusChip}>
+            <View style={styles.statusDot} />
+            <Text style={styles.statusChipText}>Still forming</Text>
+          </View>
+        </View>
+        <Text style={[styles.previewQuestion, compact && styles.previewQuestionCompact]}>What feels closest today?</Text>
+        <View style={styles.previewOptions}>
+          {['Clear', 'Scattered', 'Heavy', 'Uncertain'].map((option, index) => (
+            <View key={option} style={[styles.previewOption, compact && styles.previewOptionCompact, index === 1 && styles.previewOptionActive]}>
+              <Text style={[styles.previewOptionText, index === 1 && styles.previewOptionTextActive]}>{option}</Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.signalStrip}>
+          <View style={styles.signalDot} />
+          <Text style={styles.signalText}>Energy is present, but direction feels spread out.</Text>
+        </View>
+      </View>
+    </Animated.View>
+  );
+}
+
+function SectionLabel({ children, inverse = false }: { children: React.ReactNode; inverse?: boolean }) {
+  return <Text style={[styles.sectionLabel, inverse && styles.sectionLabelInverse]}>{children}</Text>;
+}
+
+function ProductPreviewCard({ preview, index }: { preview: typeof PREVIEWS[number]; index: number }) {
+  return (
+    <Animated.View entering={FadeInUp.duration(500).delay(index * 80)} style={styles.productPreviewCard}>
+      <Text style={styles.productPreviewTitle}>{preview.title}</Text>
+      <Text style={styles.productPreviewCopy}>{preview.copy}</Text>
+      <View style={styles.mockSurface}>
+        <Text style={styles.mockMeta}>{preview.meta}</Text>
+        {preview.lines.map((line, i) => (
+          <View key={line} style={styles.mockLineRow}>
+            <View style={[styles.mockLineDot, { opacity: 1 - i * 0.16 }]} />
+            <Text style={styles.mockLineText}>{line}</Text>
+          </View>
+        ))}
+        <View style={styles.mockSignal}>
+          <Text style={styles.mockSignalText}>{preview.signal}</Text>
+        </View>
+      </View>
+    </Animated.View>
+  );
+}
+
+function LandingPage({
   email,
   setEmail,
   sent,
@@ -366,88 +276,204 @@ function MobileLanding({
   onSubmit: () => void;
   isLoading: boolean;
 }) {
-  const { t } = useTranslation();
+  const { width } = useWindowDimensions();
+  const compact = isCompact(width);
+  const scrollRef = useRef<ScrollView>(null);
+  const ctaProps = { email, setEmail, sent, setSent, error, onSubmit, isLoading, compact };
+
+  const scrollToTop = () => scrollRef.current?.scrollTo({ y: 0, animated: true });
+  const heroCopy = (
+    <View style={styles.heroCopy}>
+      <Animated.Image
+        entering={FadeInDown.duration(580).delay(40)}
+        source={TAGLINE}
+        style={[styles.heroTagline, compact && styles.heroTaglineCompact]}
+        resizeMode="contain"
+      />
+      <Animated.Text entering={FadeInDown.duration(580).delay(80)} style={[styles.heroTitle, compact && styles.heroTitleCompact]}>
+        Notice what’s off before it becomes your life.
+      </Animated.Text>
+      <Animated.Text entering={FadeInDown.duration(580).delay(160)} style={[styles.heroSub, compact && styles.heroSubCompact]}>
+        Mirar is a 2-minute daily check-in for emotional and mental hygiene — one question a day to help you see what your inner life keeps trying to tell you.
+      </Animated.Text>
+      <Animated.View entering={FadeInDown.duration(580).delay(240)}>
+        <CTAForm {...ctaProps} />
+        <Text style={styles.heroMicro}>No journaling. No tracking. No advice. Just one honest signal a day.</Text>
+      </Animated.View>
+    </View>
+  );
 
   return (
-    <SafeAreaView style={mobileStyles.safe}>
-      <KeyboardAvoidingView
-        style={mobileStyles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+    <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView
-          contentContainerStyle={mobileStyles.container}
+          ref={scrollRef}
+          style={styles.scroll}
+          contentContainerStyle={styles.page}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Hero */}
-          <LinearGradient
-            colors={[COLORS.cream, COLORS.warmGlow, COLORS.cream]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={mobileStyles.heroGradient}
-          >
-            <Animated.View entering={FadeIn.duration(600)} style={mobileStyles.heroContent}>
-              <View style={mobileStyles.heroTopRow}>
-                <MirarLogo size="lg" />
-                <LanguagePicker variant="inline" />
-              </View>
-              <Animated.Text entering={FadeInDown.duration(500).delay(200)} style={mobileStyles.tagline}>
-                {t('landing.recognition_heading')}
-              </Animated.Text>
-              <Animated.Text entering={FadeInDown.duration(500).delay(350)} style={mobileStyles.heroSub}>
-                {t('landing.recognition_sub')}
-              </Animated.Text>
-            </Animated.View>
-          </LinearGradient>
+          <Header onCtaPress={scrollToTop} compact={compact} />
 
-          {/* Recognition lines */}
-          <View style={mobileStyles.recognitionSection}>
-            {([
-              t('landing.recognition_1'),
-              t('landing.recognition_2'),
-              t('landing.recognition_3'),
-            ] as string[]).map((line, i) => (
-              <Animated.View
-                key={i}
-                entering={FadeInUp.duration(400).delay(400 + i * 100)}
-                style={mobileStyles.recognitionLine}
-              >
-                <View style={mobileStyles.recognitionDash} />
-                <Text style={mobileStyles.recognitionText}>{line}</Text>
-              </Animated.View>
-            ))}
-            <Animated.Text
-              entering={FadeInUp.duration(400).delay(750)}
-              style={mobileStyles.recognitionCta}
-            >
-              {t('landing.recognition_cta')}
-            </Animated.Text>
+          <View style={[styles.hero, compact && styles.heroCompact]}>
+            <View style={[styles.heroAuraTop, compact && styles.heroAuraHidden]} />
+            <View style={[styles.heroAuraBottom, compact && styles.heroAuraHidden]} />
+            {compact ? (
+              <>
+                <HeroPreview compact={compact} />
+                {heroCopy}
+              </>
+            ) : (
+              <>
+                {heroCopy}
+                <HeroPreview compact={compact} />
+              </>
+            )}
           </View>
 
-          {/* CTA */}
-          <Animated.View entering={FadeInUp.duration(500).delay(900)} style={mobileStyles.ctaSection}>
-            <CTAForm
-              email={email}
-              setEmail={setEmail}
-              sent={sent}
-              setSent={setSent}
-              error={error}
-              onSubmit={onSubmit}
-              isLoading={isLoading}
-              inline={false}
-            />
-          </Animated.View>
+          <View style={styles.quietGap}>
+            <View style={styles.sectionInnerNarrow}>
+              <SectionLabel>THE QUIET GAP</SectionLabel>
+              <Text style={styles.editorialHeading}>We check everything except ourselves.</Text>
+              <Text style={styles.editorialBody}>
+                Your calendar knows where you need to be.{'\n'}Your phone knows how much you moved.{'\n'}Your apps know what you clicked.
+              </Text>
+              <Text style={styles.editorialBody}>
+                But the quieter signals — your energy, attention, direction, and connection — often go unseen until they become impossible to ignore.
+              </Text>
+              <Text style={styles.editorialLead}>Mirar gives those signals a place to show up.</Text>
+              <View style={[styles.signalWords, compact && styles.signalWordsCompact]}>
+                {['calendar', 'steps', 'sleep', 'messages', 'money', 'work'].map((item) => (
+                  <Text key={item} style={styles.fadingWord}>{item}</Text>
+                ))}
+                {['direction', 'energy', 'attention', 'connection'].map((item) => (
+                  <Text key={item} style={styles.clearWord}>{item}</Text>
+                ))}
+              </View>
+            </View>
+          </View>
 
-          <Animated.View entering={FadeIn.duration(400).delay(1100)} style={mobileStyles.versionRow}>
-            <Text style={mobileStyles.versionText}>Mirar · Private Beta</Text>
-          </Animated.View>
+          <View style={[styles.whatItIs, compact && styles.stackSection]}>
+            <View style={styles.statementColumn}>
+              <SectionLabel>WHAT IT IS</SectionLabel>
+              <Text style={styles.sectionTitle}>A mirror, not another system to manage.</Text>
+              <Text style={styles.bodyText}>
+                Mirar is not therapy.{'\n'}Not journaling.{'\n'}Not meditation.{'\n'}Not productivity.
+              </Text>
+              <Text style={styles.bodyText}>It is a small daily ritual that helps you notice what is forming inside your life.</Text>
+            </View>
+            <View style={styles.mirrorStatement}>
+              <Image source={MARK} style={styles.statementMark} resizeMode="contain" />
+              <Text style={styles.statementLine}>One question.</Text>
+              <Text style={styles.statementLine}>One answer.</Text>
+              <Text style={styles.statementLine}>One small signal.</Text>
+              <Text style={styles.statementFinal}>A clearer pattern over time.</Text>
+            </View>
+          </View>
+
+          <View style={styles.howItWorks}>
+            <View style={styles.sectionInnerWide}>
+              <SectionLabel>HOW IT WORKS</SectionLabel>
+              <Text style={styles.sectionTitle}>One question. One signal. A clearer pattern over time.</Text>
+              <View style={[styles.processGrid, compact && styles.singleColumn]}>
+                {PROCESS.map(([title, copy], index) => (
+                  <Animated.View key={title} entering={FadeInUp.duration(500).delay(index * 70)} style={styles.processCard}>
+                    <Text style={styles.processNumber}>{String(index + 1).padStart(2, '0')}</Text>
+                    <Text style={styles.processTitle}>{title}</Text>
+                    <Text style={styles.processCopy}>{copy}</Text>
+                  </Animated.View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.insideMirar}>
+            <View style={styles.sectionInnerWide}>
+              <SectionLabel>INSIDE MIRAR</SectionLabel>
+              <Text style={styles.sectionTitle}>Small reflections become visible patterns.</Text>
+              <View style={[styles.previewGrid, compact && styles.singleColumn]}>
+                {PREVIEWS.map((preview, index) => (
+                  <ProductPreviewCard key={preview.title} preview={preview} index={index} />
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.signalAreas}>
+            <View style={styles.sectionInnerWide}>
+              <SectionLabel>SIGNAL AREAS</SectionLabel>
+              <Text style={styles.sectionTitle}>What your mirror learns to notice.</Text>
+              <View style={[styles.signalGrid, compact && styles.signalGridCompact]}>
+                {SIGNAL_AREAS.map(([title, copy, color]) => (
+                  <View key={title} style={[styles.signalAreaCard, compact && styles.signalAreaCardCompact]}>
+                    <View style={[styles.areaDot, { backgroundColor: color }]} />
+                    <Text style={styles.areaTitle}>{title}</Text>
+                    <Text style={styles.areaCopy}>{copy}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.compounding}>
+            <View style={styles.sectionInnerWide}>
+              <SectionLabel>WHY DAILY</SectionLabel>
+              <Text style={styles.sectionTitle}>The first check-in may feel small. That is the point.</Text>
+              <Text style={styles.compoundingBody}>
+                One answer does not define you. A few answers begin to form a signal. Repeated signals reveal a pattern. Patterns help you notice what your life has been trying to say quietly.
+              </Text>
+              <View style={[styles.timeline, compact && styles.timelineCompact]}>
+                {[
+                  ['Day 1', 'one dot'],
+                  ['Day 4', 'a faint line'],
+                  ['Day 9', 'a pattern forming'],
+                  ['Day 21', 'a clearer mirror'],
+                ].map(([day, label], index) => (
+                  <View key={day} style={styles.timelineItem}>
+                    <View style={[styles.timelineDot, index > 0 && styles.timelineDotActive]} />
+                    <Text style={styles.timelineDay}>{day}</Text>
+                    <Text style={styles.timelineLabel}>{label}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <LinearGradient colors={['#2F323A', '#26282F']} style={styles.privacy}>
+            <View style={styles.sectionInnerWide}>
+              <SectionLabel inverse>PRIVATE BY DESIGN</SectionLabel>
+              <Text style={styles.privacyTitle}>Your inner life should not become content.</Text>
+              <Text style={styles.privacyBody}>
+                Mirar is private by design.{'\n'}No public profile.{'\n'}No social feed.{'\n'}No pressure to share.{'\n'}No need to perform clarity.
+              </Text>
+              <Text style={styles.privacyLead}>Just a quiet place to return to yourself.</Text>
+              <View style={styles.trustPills}>
+                {['Private beta', 'Less than 2 minutes', 'No social feed', 'No performance', 'Mirror, not verdict'].map((pill) => (
+                  <View key={pill} style={styles.trustPill}>
+                    <Text style={styles.trustPillText}>{pill}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </LinearGradient>
+
+          <View style={styles.finalCta}>
+            <Image source={FULL_LOGO} style={styles.finalLogo} resizeMode="contain" />
+            <Text style={styles.finalTitle}>You do not need to fix your life today.</Text>
+            <Text style={styles.finalSub}>Just notice what is true.</Text>
+            <CTAForm {...ctaProps} />
+          </View>
+
+          <View style={styles.footer}>
+            <BrandLogo size="footer" />
+            <Text style={styles.footerText}>Private beta · © 2026 Mirar</Text>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-// ─── Root Screen ──────────────────────────────────────────────────────────────
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
@@ -465,151 +491,905 @@ export default function LoginScreen() {
     }
   };
 
-  const formProps = { email, setEmail, sent, setSent, error, onSubmit: handleSubmit, isLoading };
-
-  if (Platform.OS === 'web') {
-    return <WebLanding {...formProps} />;
-  }
-  return <MobileLanding {...formProps} />;
+  return (
+    <LandingPage
+      email={email}
+      setEmail={setEmail}
+      sent={sent}
+      setSent={setSent}
+      error={error}
+      onSubmit={handleSubmit}
+      isLoading={isLoading}
+    />
+  );
 }
 
-// ─── Shared Form Styles ───────────────────────────────────────────────────────
-const formStyles = StyleSheet.create({
-  inlineWrap: { gap: SPACING.sm, marginTop: SPACING.lg },
-  inlineRow: { flexDirection: 'row', gap: SPACING.sm, alignItems: 'center' },
-  inlineInput: {
+const styles = StyleSheet.create({
+  safe: {
     flex: 1,
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: 14,
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
+    backgroundColor: '#F5EFE4',
   },
-  inlineButton: {
-    backgroundColor: COLORS.slate,
-    borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.lg,
-    paddingVertical: 14,
-    alignItems: 'center',
-    flexShrink: 0,
-  },
-  stackedWrap: { gap: SPACING.md },
-  stackedInput: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: 14,
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-  },
-  stackedButton: {
-    backgroundColor: COLORS.slate,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
-  },
-  inputError: { borderColor: COLORS.underLoad },
-  errorText: { fontSize: FONT_SIZE.sm, color: COLORS.underLoad },
-  buttonText: { color: COLORS.creamLight, fontSize: FONT_SIZE.base, fontWeight: '500', letterSpacing: 0.3 },
-  buttonDisabled: { opacity: 0.4 },
-  badgeText: { fontSize: FONT_SIZE.xs, color: COLORS.slateLight, textAlign: 'center' },
-  sentContainer: { gap: SPACING.sm, marginTop: SPACING.lg },
-  sentDot: { width: 10, height: 10, borderRadius: 5 },
-  sentTitle: { fontSize: FONT_SIZE.xl, color: COLORS.slate, fontWeight: '300' },
-  sentBody: { fontSize: FONT_SIZE.base, color: COLORS.slateMid, lineHeight: 24 },
-  sentNote: { fontSize: FONT_SIZE.sm, color: COLORS.slateLight },
-  resendText: { fontSize: FONT_SIZE.sm, color: COLORS.slateMid, textDecorationLine: 'underline', marginTop: SPACING.sm },
-});
-
-// ─── Web Styles ───────────────────────────────────────────────────────────────
-const webStyles = StyleSheet.create({
-  scroll: { flex: 1, backgroundColor: COLORS.cream },
-  container: { flexGrow: 1 },
-  inner: { maxWidth: MAX_W, alignSelf: 'center', width: '100%', paddingHorizontal: SPACING.lg },
-
-  // Hero
-  heroSection: { paddingVertical: SPACING['3xl'] },
-  heroTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: SPACING['2xl'] },
-  heroTitle: { fontSize: 42, color: COLORS.slate, fontWeight: '300', letterSpacing: -1, lineHeight: 52 },
-  heroSub: { fontSize: FONT_SIZE.md, color: COLORS.slateMid, lineHeight: 28, marginTop: SPACING.md },
-
-  // Recognition
-  recognitionSection: { backgroundColor: COLORS.creamDark, paddingVertical: SPACING['2xl'] },
-  recognitionHeading: { fontSize: FONT_SIZE.md, color: COLORS.slate, fontWeight: '500', letterSpacing: -0.2, marginBottom: SPACING.xs },
-  recognitionSub: { fontSize: FONT_SIZE.lg, color: COLORS.slateMid, fontWeight: '300', marginBottom: SPACING.xl, fontStyle: 'italic' },
-  recognitionLines: { gap: SPACING.md },
-  recognitionLine: { flexDirection: 'row', alignItems: 'flex-start', gap: SPACING.md },
-  recognitionDash: { width: 16, height: 1, backgroundColor: COLORS.slateLight, marginTop: 11, flexShrink: 0 },
-  recognitionLineText: { flex: 1, fontSize: FONT_SIZE.base, color: COLORS.slateMid, lineHeight: 24 },
-  recognitionCta: { marginTop: SPACING.xl, fontSize: FONT_SIZE.base, color: COLORS.slate, fontWeight: '500' },
-
-  // Feels like
-  feelsSection: { backgroundColor: COLORS.cream, paddingVertical: SPACING['2xl'] },
-  sectionHeading: { fontSize: FONT_SIZE.xs, color: COLORS.slateLight, letterSpacing: 2, textTransform: 'uppercase', marginBottom: SPACING.lg },
-  feelsList: { gap: SPACING.md },
-  feelsItem: { flexDirection: 'row', alignItems: 'center', gap: SPACING.md },
-  feelsDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.accentTeal, flexShrink: 0 },
-  feelsText: { fontSize: FONT_SIZE.md, color: COLORS.slate, fontWeight: '300', flex: 1 },
-
-  // Compounds
-  compoundsSection: { paddingVertical: SPACING['2xl'] },
-  compoundsHeading: { fontSize: FONT_SIZE.xs, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: SPACING.xl },
-  compoundsRows: { gap: SPACING.lg },
-  compoundsRow: { flexDirection: 'row', gap: SPACING.lg, alignItems: 'flex-start' },
-  compoundsTime: { fontSize: FONT_SIZE.sm, color: 'rgba(255,255,255,0.5)', fontWeight: '500', width: 120, flexShrink: 0, paddingTop: 2 },
-  compoundsBody: { flex: 1, fontSize: FONT_SIZE.md, color: COLORS.creamLight, fontWeight: '300' },
-
-  // How it works
-  howSection: { backgroundColor: COLORS.creamDark, paddingVertical: SPACING['2xl'] },
-  howRows: { gap: SPACING.md, marginBottom: SPACING['2xl'] },
-  howRow: { flexDirection: 'row', alignItems: 'flex-start', gap: SPACING.lg },
-  howLabel: { fontSize: FONT_SIZE.sm, color: COLORS.slateLight, fontWeight: '500', width: 120, flexShrink: 0, paddingTop: 2 },
-  howBody: { flex: 1, fontSize: FONT_SIZE.md, color: COLORS.slate, fontWeight: '300' },
-  themesNote: { borderTopWidth: 1, borderTopColor: COLORS.border, paddingTop: SPACING.lg, gap: SPACING.md },
-  themesNoteLabel: { fontSize: FONT_SIZE.xs, color: COLORS.slateXLight, letterSpacing: 1, textTransform: 'uppercase' },
-  themesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm },
-  themeChip: { flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, backgroundColor: COLORS.white, borderRadius: RADIUS.full, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm, borderWidth: 1, borderColor: COLORS.borderLight },
-  themeDot: { width: 7, height: 7, borderRadius: 4 },
-  themeCode: { fontSize: FONT_SIZE.xs, color: COLORS.slateLight, fontWeight: '600', letterSpacing: 0.8 },
-  themeName: { fontSize: FONT_SIZE.sm, color: COLORS.slateMid },
-
-  // Privacy
-  privacySection: { backgroundColor: COLORS.cream, paddingVertical: SPACING['2xl'] },
-  privacyBody: { fontSize: FONT_SIZE.base, color: COLORS.slateMid, lineHeight: 26, marginBottom: SPACING.lg },
-  privacyBadgeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm },
-  privacyBadge: { backgroundColor: COLORS.creamDark, borderRadius: RADIUS.full, paddingHorizontal: SPACING.md, paddingVertical: SPACING.xs, borderWidth: 1, borderColor: COLORS.border },
-  privacyBadgeText: { fontSize: FONT_SIZE.xs, color: COLORS.slateLight, letterSpacing: 0.5 },
-
-  // Final CTA
-  ctaSection: { backgroundColor: COLORS.creamDark, paddingVertical: SPACING['2xl'] },
-  ctaHeading: { fontSize: FONT_SIZE['2xl'], color: COLORS.slate, fontWeight: '300', letterSpacing: -0.5, marginBottom: SPACING.sm },
-  ctaBadge: { fontSize: FONT_SIZE.xs, color: COLORS.slateXLight, textAlign: 'center', marginTop: SPACING.md, letterSpacing: 0.5 },
-
-  footer: { paddingVertical: SPACING.lg, alignItems: 'center' },
-  footerText: { fontSize: FONT_SIZE.xs, color: COLORS.slateXLight, letterSpacing: 1, textTransform: 'uppercase' },
-});
-
-// ─── Mobile Styles ────────────────────────────────────────────────────────────
-const mobileStyles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
   flex: { flex: 1 },
-  container: { flexGrow: 1, paddingBottom: SPACING.xl },
-  heroGradient: { paddingHorizontal: SPACING.lg, paddingTop: SPACING['3xl'], paddingBottom: SPACING['2xl'] },
-  heroContent: { alignItems: 'flex-start', gap: SPACING.sm },
-  heroTopRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' },
-  tagline: { fontSize: FONT_SIZE['2xl'], color: COLORS.slate, fontWeight: '500', letterSpacing: -0.5, lineHeight: 34, marginTop: SPACING.md },
-  heroSub: { fontSize: FONT_SIZE.lg, color: COLORS.slateMid, fontWeight: '300', lineHeight: 28, fontStyle: 'italic' },
-  recognitionSection: { paddingHorizontal: SPACING.lg, paddingTop: SPACING['2xl'], gap: SPACING.md, marginBottom: SPACING.lg },
-  recognitionLine: { flexDirection: 'row', alignItems: 'flex-start', gap: SPACING.md },
-  recognitionDash: { width: 14, height: 1, backgroundColor: COLORS.slateLight, marginTop: 11, flexShrink: 0 },
-  recognitionText: { flex: 1, fontSize: FONT_SIZE.base, color: COLORS.slateMid, lineHeight: 24 },
-  recognitionCta: { fontSize: FONT_SIZE.base, color: COLORS.slate, fontWeight: '500', marginTop: SPACING.sm },
-  ctaSection: { paddingHorizontal: SPACING.lg },
-  versionRow: { marginTop: SPACING['2xl'], alignItems: 'center' },
-  versionText: { fontSize: 10, color: COLORS.slateXLight, letterSpacing: 1, textTransform: 'uppercase' },
+  scroll: { flex: 1, backgroundColor: '#F5EFE4' },
+  page: {
+    flexGrow: 1,
+  },
+  headerShell: {
+    paddingHorizontal: SPACING.xl,
+    paddingTop: SPACING.lg,
+    backgroundColor: '#F5EFE4',
+  },
+  header: {
+    width: '100%',
+    maxWidth: MAX_WIDE,
+    alignSelf: 'center',
+    minHeight: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: SPACING.md,
+  },
+  logoWrap: {
+    justifyContent: 'center',
+  },
+  wordmarkHeader: {
+    width: 150,
+    height: 46,
+  },
+  wordmarkFooter: {
+    width: 112,
+    height: 34,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.md,
+  },
+  headerCta: {
+    backgroundColor: '#24252A',
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    shadowColor: '#24252A',
+    shadowOpacity: 0.16,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+  },
+  headerCtaText: {
+    color: '#FBF8F1',
+    fontSize: FONT_SIZE.sm,
+    fontWeight: '600',
+  },
+  hero: {
+    maxWidth: MAX_WIDE,
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: SPACING.xl,
+    paddingTop: 64,
+    paddingBottom: 110,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 64,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  heroCompact: {
+    paddingHorizontal: SPACING.lg,
+    paddingTop: 24,
+    paddingBottom: 78,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    gap: 28,
+  },
+  heroAuraTop: {
+    position: 'absolute',
+    top: 18,
+    right: -80,
+    width: 390,
+    height: 390,
+    borderRadius: 195,
+    backgroundColor: 'rgba(190,206,232,0.28)',
+  },
+  heroAuraBottom: {
+    position: 'absolute',
+    bottom: 20,
+    left: -100,
+    width: 440,
+    height: 280,
+    borderRadius: 220,
+    backgroundColor: 'rgba(239,188,142,0.22)',
+  },
+  heroAuraHidden: {
+    display: 'none',
+  },
+  heroCopy: {
+    flex: 1,
+    maxWidth: 660,
+    zIndex: 2,
+  },
+  heroTagline: {
+    width: 250,
+    height: 34,
+    marginBottom: SPACING.lg,
+    opacity: 0.54,
+    alignSelf: 'flex-start',
+  },
+  heroTaglineCompact: {
+    width: 188,
+    height: 24,
+    marginBottom: SPACING.md,
+  },
+  heroTitle: {
+    fontSize: 78,
+    lineHeight: 80,
+    letterSpacing: -2,
+    color: '#202126',
+    fontWeight: '300',
+  },
+  heroTitleCompact: {
+    fontSize: 41,
+    lineHeight: 45,
+    letterSpacing: -0.7,
+  },
+  heroSub: {
+    marginTop: SPACING.lg,
+    maxWidth: 620,
+    fontSize: 21,
+    lineHeight: 34,
+    color: '#5A5753',
+    fontWeight: '300',
+  },
+  heroSubCompact: {
+    fontSize: 16,
+    lineHeight: 26,
+  },
+  heroMicro: {
+    marginTop: SPACING.md,
+    color: '#706B64',
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 20,
+  },
+  formWrap: {
+    marginTop: SPACING.xl,
+    maxWidth: 650,
+    gap: SPACING.sm,
+  },
+  formRow: {
+    flexDirection: 'row',
+    gap: SPACING.sm,
+  },
+  formRowCompact: {
+    flexDirection: 'column',
+  },
+  emailInput: {
+    flex: 1,
+    minHeight: 58,
+    backgroundColor: 'rgba(255,252,245,0.86)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(54,50,46,0.14)',
+    paddingHorizontal: 20,
+    color: '#24252A',
+    fontSize: FONT_SIZE.base,
+    shadowColor: '#5B5044',
+    shadowOpacity: 0.06,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+  },
+  primaryButton: {
+    minHeight: 58,
+    borderRadius: 16,
+    backgroundColor: '#202126',
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#24252A',
+    shadowOpacity: 0.22,
+    shadowRadius: 22,
+    shadowOffset: { width: 0, height: 12 },
+  },
+  primaryButtonText: {
+    color: '#FBF8F1',
+    fontSize: FONT_SIZE.base,
+    fontWeight: '600',
+  },
+  buttonDisabled: { opacity: 0.78 },
+  inputError: { borderColor: COLORS.underLoad },
+  errorText: { color: COLORS.underLoad, fontSize: FONT_SIZE.sm },
+  microcopy: { color: '#8B8780', fontSize: FONT_SIZE.xs, letterSpacing: 0.4 },
+  sentPanel: {
+    marginTop: SPACING.xl,
+    backgroundColor: '#FBF8F1',
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(39,38,37,0.12)',
+    padding: SPACING.lg,
+    gap: SPACING.sm,
+  },
+  sentDot: { width: 9, height: 9, borderRadius: 5, backgroundColor: '#7FA47B' },
+  sentTitle: { color: '#272625', fontSize: FONT_SIZE.xl, fontWeight: '400' },
+  sentBody: { color: '#5F5A53', fontSize: FONT_SIZE.base, lineHeight: 24 },
+  sentNote: { color: '#8B8780', fontSize: FONT_SIZE.sm },
+  resendText: { color: '#272625', fontSize: FONT_SIZE.sm, textDecorationLine: 'underline' },
+  heroPreview: {
+    flex: 0.86,
+    minHeight: 610,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    zIndex: 1,
+  },
+  heroPreviewCompact: {
+    minHeight: 500,
+  },
+  mirrorOrb: {
+    width: 430,
+    height: 550,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  mirrorOrbCompact: {
+    width: 316,
+    height: 390,
+    alignSelf: 'center',
+    transform: [{ translateY: -54 }],
+  },
+  orbGlowLarge: {
+    position: 'absolute',
+    width: '92%',
+    height: '78%',
+    borderRadius: 240,
+    backgroundColor: 'rgba(202,207,228,0.26)',
+    transform: [{ rotate: '-8deg' }],
+  },
+  orbGlowPeach: {
+    position: 'absolute',
+    bottom: 54,
+    width: '76%',
+    height: '42%',
+    borderRadius: 190,
+    backgroundColor: 'rgba(239,177,132,0.34)',
+  },
+  orbGlowBlue: {
+    position: 'absolute',
+    top: 58,
+    right: 28,
+    width: '62%',
+    height: '34%',
+    borderRadius: 150,
+    backgroundColor: 'rgba(166,190,226,0.34)',
+  },
+  orbGlass: {
+    width: '76%',
+    height: '82%',
+    borderRadius: 220,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(70,70,78,0.16)',
+    shadowColor: '#6A6470',
+    shadowOpacity: 0.2,
+    shadowRadius: 42,
+    shadowOffset: { width: 0, height: 30 },
+    transform: [{ rotate: '-7deg' }],
+  },
+  orbCore: {
+    width: '48%',
+    height: '56%',
+    borderRadius: 130,
+    opacity: 0.92,
+    transform: [{ rotate: '14deg' }],
+  },
+  orbMark: {
+    position: 'absolute',
+    width: '56%',
+    height: '68%',
+    opacity: 0.24,
+    transform: [{ rotate: '7deg' }],
+  },
+  orbRings: {
+    position: 'absolute',
+    width: '96%',
+    height: '96%',
+  },
+  orbSheen: {
+    position: 'absolute',
+    top: 72,
+    left: 88,
+    width: 170,
+    height: 72,
+    borderRadius: 90,
+    backgroundColor: 'rgba(255,255,255,0.28)',
+    transform: [{ rotate: '-24deg' }],
+  },
+  orbSignalCluster: {
+    position: 'absolute',
+    right: -2,
+    top: 92,
+    gap: SPACING.sm,
+    zIndex: 6,
+  },
+  orbSignalClusterCompact: {
+    top: 92,
+    right: 0,
+    opacity: 0.84,
+  },
+  orbSignalChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    alignSelf: 'flex-start',
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: 'rgba(50,50,58,0.10)',
+    backgroundColor: 'rgba(255,252,245,0.72)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    shadowColor: '#504A44',
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+  },
+  orbSignalChipWarm: {
+    marginLeft: 22,
+  },
+  orbSignalDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#8C7DB1',
+  },
+  orbSignalDotWarm: {
+    backgroundColor: '#C98B55',
+  },
+  orbSignalText: {
+    color: '#4D4A4F',
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
+  previewCard: {
+    position: 'absolute',
+    bottom: 18,
+    left: -2,
+    width: 372,
+    maxWidth: '92%',
+    backgroundColor: 'rgba(255,252,245,0.92)',
+    borderWidth: 1,
+    borderColor: 'rgba(54,50,46,0.12)',
+    borderRadius: 26,
+    padding: SPACING.lg,
+    shadowColor: '#47413A',
+    shadowOpacity: 0.16,
+    shadowRadius: 34,
+    shadowOffset: { width: 0, height: 22 },
+    zIndex: 8,
+  },
+  previewCardCompact: {
+    left: 0,
+    right: 0,
+    bottom: -4,
+    width: '100%',
+    maxWidth: 334,
+    alignSelf: 'center',
+    padding: SPACING.md,
+  },
+  previewTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: SPACING.sm,
+  },
+  previewOverline: {
+    color: '#8B8780',
+    fontSize: 10,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+  statusChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(226,233,232,0.7)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#7FA47B',
+  },
+  statusChipText: {
+    color: '#4D5A50',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.4,
+  },
+  previewQuestion: {
+    color: '#202126',
+    fontSize: 29,
+    lineHeight: 34,
+    marginTop: SPACING.md,
+    fontWeight: '300',
+  },
+  previewQuestionCompact: {
+    fontSize: 25,
+    lineHeight: 30,
+  },
+  previewOptions: {
+    marginTop: SPACING.lg,
+    gap: SPACING.sm,
+  },
+  previewOption: {
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(39,38,37,0.10)',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    backgroundColor: 'rgba(244,239,230,0.66)',
+  },
+  previewOptionCompact: {
+    paddingVertical: 10,
+  },
+  previewOptionActive: {
+    backgroundColor: '#24252A',
+    borderColor: '#24252A',
+  },
+  previewOptionText: {
+    color: '#5F5A53',
+    fontSize: FONT_SIZE.sm,
+  },
+  previewOptionTextActive: {
+    color: '#FBF8F1',
+  },
+  signalStrip: {
+    marginTop: SPACING.lg,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: SPACING.sm,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(39,38,37,0.10)',
+    paddingTop: SPACING.md,
+  },
+  signalDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#B88B78',
+    marginTop: 6,
+  },
+  signalText: {
+    flex: 1,
+    color: '#5F5A53',
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 21,
+  },
+  quietGap: {
+    backgroundColor: '#FBF8F1',
+    paddingVertical: 104,
+    paddingHorizontal: SPACING.lg,
+  },
+  sectionInnerNarrow: {
+    maxWidth: MAX_TEXT,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  sectionInnerWide: {
+    maxWidth: MAX_WIDE,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  sectionLabel: {
+    color: '#8B8780',
+    fontSize: 11,
+    letterSpacing: 2.2,
+    textTransform: 'uppercase',
+    marginBottom: SPACING.lg,
+    fontWeight: '600',
+  },
+  sectionLabelInverse: {
+    color: 'rgba(251,248,241,0.56)',
+  },
+  editorialHeading: {
+    color: '#272625',
+    fontSize: 48,
+    lineHeight: 54,
+    letterSpacing: -1,
+    fontWeight: '300',
+    marginBottom: SPACING.xl,
+  },
+  editorialBody: {
+    color: '#5F5A53',
+    fontSize: 20,
+    lineHeight: 34,
+    fontWeight: '300',
+    marginBottom: SPACING.lg,
+  },
+  editorialLead: {
+    color: '#272625',
+    fontSize: 21,
+    lineHeight: 32,
+    fontWeight: '500',
+    marginTop: SPACING.md,
+  },
+  signalWords: {
+    marginTop: SPACING['2xl'],
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SPACING.sm,
+  },
+  signalWordsCompact: {
+    marginTop: SPACING.xl,
+  },
+  fadingWord: {
+    color: '#B5AEA4',
+    fontSize: FONT_SIZE.sm,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: RADIUS.full,
+    backgroundColor: '#F4EFE6',
+  },
+  clearWord: {
+    color: '#272625',
+    fontSize: FONT_SIZE.sm,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: RADIUS.full,
+    backgroundColor: '#E7E2D7',
+  },
+  whatItIs: {
+    maxWidth: MAX_WIDE,
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: 110,
+    flexDirection: 'row',
+    gap: 72,
+    alignItems: 'center',
+  },
+  stackSection: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    gap: SPACING.xl,
+  },
+  statementColumn: {
+    flex: 1,
+  },
+  sectionTitle: {
+    color: '#272625',
+    fontSize: 44,
+    lineHeight: 50,
+    letterSpacing: -1,
+    fontWeight: '300',
+    maxWidth: 780,
+    marginBottom: SPACING.xl,
+  },
+  bodyText: {
+    color: '#5F5A53',
+    fontSize: 18,
+    lineHeight: 31,
+    fontWeight: '300',
+    marginBottom: SPACING.lg,
+  },
+  mirrorStatement: {
+    flex: 0.82,
+    backgroundColor: '#FBF8F1',
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: 'rgba(39,38,37,0.10)',
+    padding: SPACING.xl,
+    minHeight: 420,
+    justifyContent: 'center',
+  },
+  statementMark: {
+    width: 84,
+    height: 118,
+    marginBottom: SPACING.xl,
+  },
+  statementLine: {
+    color: '#272625',
+    fontSize: 30,
+    lineHeight: 40,
+    fontWeight: '300',
+  },
+  statementFinal: {
+    color: '#8B8780',
+    fontSize: 18,
+    lineHeight: 28,
+    marginTop: SPACING.lg,
+  },
+  howItWorks: {
+    backgroundColor: '#F0E9DD',
+    paddingVertical: 104,
+    paddingHorizontal: SPACING.lg,
+  },
+  processGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SPACING.md,
+  },
+  singleColumn: {
+    flexDirection: 'column',
+  },
+  processCard: {
+    flex: 1,
+    minWidth: 240,
+    backgroundColor: '#FBF8F1',
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(39,38,37,0.10)',
+    padding: SPACING.lg,
+  },
+  processNumber: {
+    color: '#B88B78',
+    fontSize: 12,
+    letterSpacing: 1.4,
+    fontWeight: '700',
+    marginBottom: SPACING.xl,
+  },
+  processTitle: {
+    color: '#272625',
+    fontSize: 20,
+    lineHeight: 25,
+    fontWeight: '500',
+    marginBottom: SPACING.sm,
+  },
+  processCopy: {
+    color: '#6C655E',
+    fontSize: FONT_SIZE.base,
+    lineHeight: 23,
+  },
+  insideMirar: {
+    backgroundColor: '#F4EFE6',
+    paddingVertical: 112,
+    paddingHorizontal: SPACING.lg,
+  },
+  previewGrid: {
+    flexDirection: 'row',
+    gap: SPACING.md,
+  },
+  productPreviewCard: {
+    flex: 1,
+    minWidth: 270,
+    backgroundColor: '#FBF8F1',
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(39,38,37,0.10)',
+    padding: SPACING.lg,
+  },
+  productPreviewTitle: {
+    color: '#272625',
+    fontSize: 22,
+    fontWeight: '400',
+    marginBottom: SPACING.sm,
+  },
+  productPreviewCopy: {
+    color: '#6C655E',
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 22,
+    minHeight: 64,
+  },
+  mockSurface: {
+    marginTop: SPACING.lg,
+    backgroundColor: '#F4EFE6',
+    borderRadius: 18,
+    padding: SPACING.md,
+    gap: SPACING.sm,
+  },
+  mockMeta: {
+    color: '#8B8780',
+    fontSize: 10,
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+    marginBottom: SPACING.xs,
+  },
+  mockLineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+  },
+  mockLineDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#8C7DB1',
+  },
+  mockLineText: {
+    color: '#5F5A53',
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 21,
+  },
+  mockSignal: {
+    alignSelf: 'flex-start',
+    marginTop: SPACING.sm,
+    backgroundColor: '#272625',
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  mockSignalText: {
+    color: '#FBF8F1',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  signalAreas: {
+    backgroundColor: '#FBF8F1',
+    paddingVertical: 104,
+    paddingHorizontal: SPACING.lg,
+  },
+  signalGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SPACING.md,
+  },
+  signalGridCompact: {
+    flexDirection: 'column',
+    flexWrap: 'nowrap',
+    gap: SPACING.lg,
+  },
+  signalAreaCard: {
+    flexGrow: 1,
+    flexBasis: 330,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(39,38,37,0.12)',
+    paddingTop: SPACING.lg,
+    paddingBottom: SPACING.lg,
+  },
+  signalAreaCardCompact: {
+    flexBasis: 'auto',
+    paddingBottom: SPACING.md,
+  },
+  areaDot: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+    marginBottom: SPACING.md,
+  },
+  areaTitle: {
+    color: '#272625',
+    fontSize: 22,
+    fontWeight: '400',
+    marginBottom: SPACING.sm,
+  },
+  areaCopy: {
+    color: '#6C655E',
+    fontSize: FONT_SIZE.base,
+    lineHeight: 24,
+    maxWidth: 300,
+  },
+  compounding: {
+    backgroundColor: '#F4EFE6',
+    paddingVertical: 112,
+    paddingHorizontal: SPACING.lg,
+  },
+  compoundingBody: {
+    color: '#5F5A53',
+    fontSize: 19,
+    lineHeight: 32,
+    maxWidth: 760,
+    fontWeight: '300',
+  },
+  timeline: {
+    marginTop: SPACING['2xl'],
+    flexDirection: 'row',
+    gap: SPACING.lg,
+    alignItems: 'flex-start',
+  },
+  timelineCompact: {
+    flexDirection: 'column',
+  },
+  timelineItem: {
+    flex: 1,
+    gap: SPACING.sm,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(39,38,37,0.14)',
+    paddingTop: SPACING.lg,
+  },
+  timelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#C9C4D8',
+  },
+  timelineDotActive: {
+    backgroundColor: '#272625',
+  },
+  timelineDay: {
+    color: '#272625',
+    fontSize: FONT_SIZE.base,
+    fontWeight: '600',
+  },
+  timelineLabel: {
+    color: '#8B8780',
+    fontSize: FONT_SIZE.sm,
+  },
+  privacy: {
+    paddingVertical: 112,
+    paddingHorizontal: SPACING.lg,
+  },
+  privacyTitle: {
+    color: '#FBF8F1',
+    fontSize: 48,
+    lineHeight: 54,
+    letterSpacing: -1,
+    fontWeight: '300',
+    maxWidth: 760,
+    marginBottom: SPACING.xl,
+  },
+  privacyBody: {
+    color: 'rgba(251,248,241,0.78)',
+    fontSize: 20,
+    lineHeight: 34,
+    fontWeight: '300',
+  },
+  privacyLead: {
+    color: '#FBF8F1',
+    fontSize: 21,
+    lineHeight: 30,
+    marginTop: SPACING.lg,
+    fontWeight: '500',
+  },
+  trustPills: {
+    marginTop: SPACING['2xl'],
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SPACING.sm,
+  },
+  trustPill: {
+    borderRadius: RADIUS.full,
+    borderWidth: 1,
+    borderColor: 'rgba(251,248,241,0.18)',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+  },
+  trustPillText: {
+    color: 'rgba(251,248,241,0.72)',
+    fontSize: FONT_SIZE.xs,
+    letterSpacing: 0.5,
+  },
+  finalCta: {
+    backgroundColor: '#FBF8F1',
+    paddingVertical: 112,
+    paddingHorizontal: SPACING.lg,
+    alignItems: 'center',
+  },
+  finalLogo: {
+    width: 190,
+    height: 90,
+    marginBottom: SPACING.xl,
+  },
+  finalTitle: {
+    color: '#272625',
+    fontSize: 50,
+    lineHeight: 56,
+    letterSpacing: -1.2,
+    fontWeight: '300',
+    textAlign: 'center',
+    maxWidth: 780,
+  },
+  finalSub: {
+    color: '#5F5A53',
+    fontSize: 22,
+    lineHeight: 32,
+    fontWeight: '300',
+    textAlign: 'center',
+    marginTop: SPACING.md,
+  },
+  footer: {
+    backgroundColor: '#F4EFE6',
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.xl,
+    alignItems: 'center',
+    gap: SPACING.sm,
+  },
+  footerText: {
+    color: '#8B8780',
+    fontSize: FONT_SIZE.xs,
+    letterSpacing: 0.8,
+  },
 });
