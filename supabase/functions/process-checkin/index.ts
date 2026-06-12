@@ -46,6 +46,50 @@ serve(async (req) => {
       )
     }
 
+    // 1b. Signal engine: persist structured signals for this reflection
+    // (two rows — one per mapped theme on the chosen option)
+    const { data: chosenOption } = await supabase
+      .from('options')
+      .select('theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points')
+      .eq('id', option_id)
+      .maybeSingle()
+
+    if (chosenOption) {
+      const { data: responseRow } = await supabase
+        .from('responses')
+        .select('id')
+        .eq('user_id', user_id)
+        .eq('cycle_id', cycle_id)
+        .eq('day_number', day_number)
+        .maybeSingle()
+
+      if (responseRow) {
+        const signalDate = new Date().toISOString().split('T')[0]
+        await supabase.from('structured_signals').upsert([
+          {
+            user_id,
+            cycle_id,
+            response_id: responseRow.id,
+            day_number,
+            signal_date: signalDate,
+            theme_code: chosenOption.theme_1_code,
+            level: chosenOption.theme_1_level,
+            points: chosenOption.theme_1_points,
+          },
+          {
+            user_id,
+            cycle_id,
+            response_id: responseRow.id,
+            day_number,
+            signal_date: signalDate,
+            theme_code: chosenOption.theme_2_code,
+            level: chosenOption.theme_2_level,
+            points: chosenOption.theme_2_points,
+          },
+        ], { onConflict: 'user_id,response_id,theme_code' })
+      }
+    }
+
     // 2. Get all responses from last 7 days for rolling window
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)

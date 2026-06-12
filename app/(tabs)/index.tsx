@@ -25,6 +25,7 @@ import { ThemeSignalsGrid } from '../../components/home/ThemeSignalMiniCard';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
 import { InsightCard } from '../../components/home/InsightCard';
 import { WeeklySignalCard } from '../../components/home/WeeklySignalCard';
+import { AwarenessCard } from '../../components/home/AwarenessCard';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
@@ -153,7 +154,7 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
           activeOpacity={0.85}
         >
           <Text style={[styles.submitButtonText, { color: COLORS.cream }]}>
-            Continue →
+            {t('onboarding.continue')} →
           </Text>
         </TouchableOpacity>
       </View>
@@ -173,10 +174,13 @@ function ContextLine({
   streakLength: number;
   contextMessage: string | null;
 }) {
+  const { t } = useTranslation();
   const colors = useColors();
   // If context_message is available from server, use it; else build a simple one
   const displayText = contextMessage
-    ?? `Today's mirror${streakLength >= 2 ? ` · ${streakLength} recent reflections` : ''}`;
+    ?? (streakLength >= 2
+      ? t('today.context_with_count', { count: streakLength })
+      : t('common.your_alignment_today'));
 
   return (
     <Animated.View entering={FadeIn.duration(400).delay(100)}>
@@ -210,6 +214,7 @@ export default function TodayScreen() {
     streakLength,
     contextMessage,
     latestSignalText,
+    patternReading,
     loadActiveCycle,
     loadAlignmentHistory,
   } = useCycleStore();
@@ -301,10 +306,10 @@ export default function TodayScreen() {
       <SafeAreaView style={[styles.safe, { backgroundColor: COLORS.paper }]}>
         <View style={[styles.header, { borderBottomColor: COLORS.ruleLight }]}>
           <TouchableOpacity onPress={() => setShowCheckin(false)}>
-            <Text style={[styles.backLink, { color: colors.slateMid }]}>← Today</Text>
+            <Text style={[styles.backLink, { color: colors.slateMid }]}>← {t('nav.today')}</Text>
           </TouchableOpacity>
           <Text style={[styles.dayChip, { color: colors.slateLight }]}>
-            Daily pause
+            {t('today.daily_pause')}
           </Text>
         </View>
         <CheckInFlow onDone={() => setShowCheckin(false)} />
@@ -350,19 +355,19 @@ export default function TodayScreen() {
         ]}>
           <View style={styles.guidanceTitleRow}>
             <Text style={[styles.guidanceTitle, { color: colors.slate }]}>
-              Today’s mirror is ready.
+              {t('today.ready_title')}
             </Text>
             <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.todaysMirror} size={13} />
           </View>
           <Text style={[styles.guidanceText, { color: colors.slateMid }]}>
-            One question. One answer. One small signal.
+            {t('today.ready_sub')}
           </Text>
           <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
-            Choose what feels closest. There is no right answer.
+            {t('today.ready_hint')}
           </Text>
           {alignmentHistory.length < 3 && (
             <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
-              Your pattern will appear after a few reflections.
+              {t('today.pattern_hint')}
             </Text>
           )}
           <TouchableOpacity
@@ -372,7 +377,7 @@ export default function TodayScreen() {
             style={styles.guideLink}
           >
             <Text style={[styles.guideLinkText, { color: colors.slate }]}>
-              How Mirar works
+              {t('today.how_link')}
             </Text>
           </TouchableOpacity>
         </Animated.View>
@@ -411,13 +416,18 @@ export default function TodayScreen() {
             borderColor: colors.borderLight,
           }]}>
             <Text style={[styles.sparklineCardLabel, { color: colors.slateLight }]}>
-            RECENT PATTERN
+              {t('today.recent_pattern')}
             </Text>
             <AlignmentSparkline history={alignmentHistory} width={160} height={28} />
           </Animated.View>
         )}
 
-        {/* 5. Weekly signal card — surfaces generated weekly insight */}
+        {/* 5. Awareness — what deserves attention, what's changing, what's holding */}
+        {patternReading && effectiveDay > 1 && (
+          <AwarenessCard reading={patternReading} />
+        )}
+
+        {/* 5b. Weekly signal card — surfaces generated weekly insight */}
         {latestSignalText && (
           <WeeklySignalCard
             signalText={latestSignalText}

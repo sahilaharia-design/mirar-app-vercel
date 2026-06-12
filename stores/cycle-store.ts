@@ -12,6 +12,7 @@ import {
   computeStreak,
 } from '../lib/scoring';
 import { STAGES, THEME_ORDER, THEMES } from '../lib/constants';
+import { computePatternReading, PatternReading } from '../lib/patterns';
 
 interface CycleStore {
   activeCycle: CycleRow | null;
@@ -27,6 +28,9 @@ interface CycleStore {
   contextMessage: string | null;
   latestSignalText: string | null;
   themeHistories: Record<ThemeCode, { day: number; average: number | null }[]> | null;
+
+  // ── Pattern engine output: signals → patterns → awareness ─────────────────
+  patternReading: PatternReading | null;
 
   isLoading: boolean;
 
@@ -50,6 +54,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
   contextMessage: null,
   latestSignalText: null,
   themeHistories: null,
+  patternReading: null,
 
   isLoading: false,
 
@@ -163,6 +168,9 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
     // Streak from responses
     const streakLength = computeStreak(responses ?? [], currentDay);
 
+    // Pattern engine: signals → patterns → awareness
+    const patternReading = computePatternReading(responses ?? [], optionsMap, currentDay);
+
     set({
       activeCycle: cycle,
       currentDay,
@@ -171,6 +179,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       rollingThemeScores,
       themeHistories,
       streakLength,
+      patternReading,
       isLoading: false,
     });
 

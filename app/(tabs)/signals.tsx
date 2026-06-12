@@ -25,6 +25,7 @@ import { getStageFromDay } from '../../lib/scoring';
 import { GUIDANCE_TOOLTIPS, signalHelpForStatus } from '../../lib/guidance';
 import { useColors } from '../../contexts/theme-context';
 import { ThemeDetailSheet } from '../../components/dashboard/ThemeDetailSheet';
+import { PatternsPanel } from '../../components/dashboard/PatternsPanel';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -61,6 +62,7 @@ export default function SignalsScreen() {
     alignmentHistory,
     rollingThemeScores,
     themeHistories,
+    patternReading,
     isLoading,
     loadActiveCycle,
     loadAlignmentHistory,
@@ -133,6 +135,9 @@ export default function SignalsScreen() {
           />
         }
       >
+        {/* ── Patterns: what repeats, changes, builds, holds ─────────────── */}
+        {patternReading && <PatternsPanel reading={patternReading} />}
+
         {/* ── Current reading block ──────────────────────────────────────── */}
         <View style={[styles.guideCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
           <View style={styles.guideHeaderRow}>

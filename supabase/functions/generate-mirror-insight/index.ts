@@ -62,21 +62,39 @@ serve(async (req) => {
       ? `\nThe user wrote: "${journal_snippet.slice(0, 200)}"`
       : ''
 
-    const systemPrompt = `You are the internal mirror of Mirar — a daily reflection system.
-Your role is to reflect, then place the reading in pattern context.
+    // Pattern context: last 7 alignment readings for trend awareness
+    const { data: recentScores } = await supabase
+      .from('alignment_scores')
+      .select('score, date')
+      .eq('user_id', user_id)
+      .order('date', { ascending: false })
+      .limit(7)
+
+    let trendLine = ''
+    if ((recentScores ?? []).length >= 3) {
+      const ordered = (recentScores ?? []).map((r: any) => r.score).reverse()
+      const diff = ordered[ordered.length - 1] - ordered[0]
+      const direction = diff > 5 ? 'lifting' : diff < -5 ? 'settling lower' : 'holding'
+      trendLine = `\nAcross the last ${ordered.length} readings, the overall signal has been ${direction}.`
+    }
+
+    const systemPrompt = `You are the AI Mirror of Mirar — an emotional fitness system built on daily emotional hygiene.
+
+Your only functions: observe, reflect, identify patterns, generate awareness.
+You never: diagnose, prescribe, coach, motivate, advise, praise, or warn.
 
 Sentence 1: State what the signals are showing today. Name specific themes. Be precise.
-Sentence 2 (only if a theme is showing Low, or the signal is under pressure, or day_number >= 4): Name the pattern using only mirror language. If it is Day 1-3, omit sentence 2.
+Sentence 2 (only if a theme is showing Low, or the signal is under pressure, or day_number >= 4): Name the visible pattern across recent days using only mirror language. If it is Day 1-3, omit sentence 2.
 
 Forbidden words: heal, grow, improve, try, should, need, fix, better, worse, bad, good, score, performance, mindset, attitude.
 Allowed words only: signal, reading, showing, holding, shifting, present, pattern, indicate, register, surface, drift, mirror, reflection, friction, load, pressure, steady.
 
-Write maximum 2 sentences. Be calm, not warm. Be a diagnostic instrument, not a coach.${languageInstruction}`
+Write maximum 2 sentences. Be calm, not warm. Be a mirror, not a mentor.${languageInstruction}`
 
     const userPrompt = `Today's signal reading (Day ${day_number}):
 Today’s mirror: ${alignment_score !== null ? 'signal present' : 'still forming'}
 Theme signals:
-${themeLines || 'Still forming across areas.'}${journalLine}
+${themeLines || 'Still forming across areas.'}${trendLine}${journalLine}
 
 Reflect back what the signals are showing. Name specific themes. If day >= 4 or any theme is Low, add one sentence stating the visible pattern. Do not advise.`
 

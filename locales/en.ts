@@ -81,6 +81,39 @@ export default {
     signals_building: 'Your recent reflections are beginning to take shape.',
   },
 
+  // ─── Today screen ─────────────────────────────────────────────────────────────
+  today: {
+    ready_title: "Today's mirror is ready.",
+    ready_sub: 'One question. One answer. One small signal.',
+    ready_hint: 'Choose what feels closest. There is no right answer.',
+    pattern_hint: 'Your pattern will appear after a few reflections.',
+    how_link: 'How Mirar works',
+    daily_pause: 'Daily pause',
+    recent_pattern: 'Recent pattern',
+    context_with_count: "Today's mirror · {{count}} recent reflections",
+  },
+
+  // ─── Awareness (pattern engine output) ─────────────────────────────────────────
+  awareness: {
+    title: "Today's awareness",
+    patterns_title: 'Your patterns',
+    attention_label: 'Worth your attention',
+    changing_label: 'What is changing',
+    holding_label: 'What is holding',
+    repeats_label: 'What repeats',
+    building_label: 'What is building',
+    tone_steady: 'Your recent signals are holding steady.',
+    tone_mixed: 'Your signals are mixed this week — some areas steady, some stretched.',
+    tone_under_pressure: 'Several of your signals are carrying load right now.',
+    tone_forming: 'Your pattern is still forming. {{count}} reflections so far — it sharpens with each one.',
+    recurring_tension: '{{theme}} has shown pressure repeatedly. It may be what you are carrying.',
+    shift_down: '{{theme}} has shifted downward this week.',
+    shift_up: '{{theme}} has been lifting this week.',
+    growth: '{{theme}} is building steadily.',
+    steady: '{{theme}} is holding steady — a quiet strength.',
+    forming: 'Still forming.',
+  },
+
   // ─── Auth ─────────────────────────────────────────────────────────────────────
   auth: {
     title: 'Mirar',
@@ -110,12 +143,12 @@ export default {
   // ─── Onboarding ───────────────────────────────────────────────────────────────
   onboarding: {
     language_prompt: 'Choose your language',
-    slide1_title: 'Mirar asks one simple question each day.',
-    slide1_body: 'No pressure. No program to complete. Daily hygiene for your inner state — like brushing your teeth.',
-    slide2_title: 'It helps you notice what is shifting inside you.',
-    slide2_body: 'Your answers create signals over time: where things feel steady, stretched, unclear, or quietly opening.',
-    slide3_title: 'Takes less than 2 minutes.',
-    slide3_body: 'Choose what feels closest. Mirar reflects one short signal back — and the daily habit builds emotional fitness.',
+    slide1_title: 'You take care of your body. What about your inner world?',
+    slide1_body: 'Emotional fitness works like physical fitness — built through small daily practice, not big occasional effort.',
+    slide2_title: 'Emotional hygiene: two minutes a day.',
+    slide2_body: 'One question. One honest answer. Mirar turns your answers into signals and patterns — and shows you what is shifting inside before you would notice it yourself.',
+    slide3_title: 'A mirror, not a mentor.',
+    slide3_body: 'No advice. No grades. No program to finish. You return because you keep learning something true about yourself.',
     slide4_title: 'A mirror. Not a mentor.',
     slide4_body: 'After each check-in, you get one short reflection. Not advice — recognition.',
     slide5_title: 'Your signal belongs to you.',
@@ -157,9 +190,9 @@ export default {
   // ─── Landing Page (web) ───────────────────────────────────────────────────
   landing: {
     // Hero
-    hero_title: 'Your internal alignment,\nmade visible.',
-    hero_sub: 'Daily emotional hygiene for your inner state.\nTwo minutes a day — like brushing your teeth, but for your mind.',
-    hero_cta: 'Start your daily mirror',
+    hero_title: 'Emotional fitness starts\nwith emotional hygiene.',
+    hero_sub: 'You care for your body every day. Mirar is the two-minute daily practice for your inner world — an AI mirror that turns reflection into signals, patterns, and awareness.',
+    hero_cta: 'Start building emotional fitness',
     hero_badge: 'No password · No tracking · Private Beta',
 
     // Recognition
@@ -171,12 +204,12 @@ export default {
     recognition_cta: 'That\'s what Mirar is for — a two-minute daily reading that catches drift early.',
 
     // What alignment feels like
-    feels_like_heading: 'THIS IS WHAT ALIGNMENT FEELS LIKE.',
-    feels_like_1: 'You trust quieter signals.',
-    feels_like_2: 'Energy returns without forcing productivity.',
-    feels_like_3: 'Conversations become clearer.',
-    feels_like_4: 'Boundaries feel natural.',
-    feels_like_5: 'You stop postponing decisions you already know.',
+    feels_like_heading: 'WHAT EMOTIONAL FITNESS GIVES YOU.',
+    feels_like_1: 'You understand yourself better.',
+    feels_like_2: 'You recognize your recurring patterns.',
+    feels_like_3: 'Overwhelm shows up less — and settles faster.',
+    feels_like_4: 'Relationships get clearer.',
+    feels_like_5: 'Decisions come easier. You already know.',
 
     // How alignment compounds
     compounds_heading: 'EMOTIONAL FITNESS COMPOUNDS.',
@@ -193,19 +226,19 @@ export default {
     how_heading: 'HOW MIRAR WORKS.',
     how_day_label: 'Each day',
     how_day_body: 'one reflection.',
-    how_week_label: 'Each week',
-    how_week_body: 'one signal.',
-    how_cycle_label: 'Each cycle',
-    how_cycle_body: 'one mirror.',
-    how_lifetime_label: 'Over time',
-    how_lifetime_body: 'a map of who you are becoming.',
+    how_week_label: 'Reflections',
+    how_week_body: 'become signals.',
+    how_cycle_label: 'Signals',
+    how_cycle_body: 'become patterns.',
+    how_lifetime_label: 'Patterns',
+    how_lifetime_body: 'become awareness — of who you are becoming.',
 
     // Privacy
     privacy_heading: 'YOUR SIGNAL IS YOURS.',
     privacy_body: 'Your Mirar ID helps separate your reflection history from your public identity inside the app.\nNo passwords. Your signal belongs to you.',
 
     // Final CTA
-    cta_heading: 'START NOTICING.',
+    cta_heading: 'START BUILDING EMOTIONAL FITNESS.',
     cta_badge: 'Private Beta · Less than 2 minutes daily · Free',
   },
 } as const;
