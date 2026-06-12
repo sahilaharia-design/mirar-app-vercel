@@ -74,11 +74,19 @@ serve(async (req) => {
       .order('date', { ascending: false })
       .limit(7)
 
+    // Language preference — weekly signal text is generated in the user's language
+    const { data: userRow } = await supabase
+      .from('users')
+      .select('language')
+      .eq('id', user_id)
+      .maybeSingle()
+    const language = userRow?.language ?? 'en'
+
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
       // Fallback: deterministic signal without LLM
       return await generateDeterministicSignal(
-        supabase, user_id, cycle_id, cycle_number ?? 1, week_number ?? 1, themeScores ?? []
+        supabase, user_id, cycle_id, cycle_number ?? 1, week_number ?? 1, themeScores ?? [], language
       )
     }
 
@@ -111,7 +119,10 @@ Rules for display_text:
 - Not celebratory, not alarming — just observational
 - Calm and precise
 
-Valid signal_type values: ${VALID_SIGNAL_TYPES.join(', ')}`
+Valid signal_type values: ${VALID_SIGNAL_TYPES.join(', ')}${
+      language === 'en' ? '' :
+      `\n\nWrite display_text in ${language === 'hi' ? 'natural everyday Hindi (Devanagari script)' : 'natural everyday Gujarati (Gujarati script)'}. signal_type stays in English.`
+    }`
 
     const userPrompt = `Week ${week_number ?? 1} of Cycle ${cycle_number ?? 1}:
 
@@ -138,7 +149,7 @@ Identify the single most significant signal pattern from this week. Return JSON 
     })
 
     let signalType = 'signals_mixed'
-    let displayText = 'Your signals showed a pattern this week.'
+    let displayText = FALLBACK_TEXT[language] ?? FALLBACK_TEXT.en
 
     if (response.ok) {
       const result = await response.json()
@@ -170,6 +181,51 @@ Identify the single most significant signal pattern from this week. Return JSON 
   }
 })
 
+// ── Localized fallback strings (used when LLM is unavailable or fails) ───────
+const FALLBACK_TEXT: Record<string, string> = {
+  en: 'Your signals showed a pattern this week.',
+  hi: 'इस हफ़्ते आपके संकेतों में एक पैटर्न दिखा।',
+  gu: 'આ અઠવાડિયે તમારા સંકેતોમાં એક પેટર્ન દેખાઈ.',
+}
+
+const DETERMINISTIC_TEXT: Record<string, Record<string, string>> = {
+  multiple_low: {
+    en: 'Multiple themes held low this week. The pattern is visible.',
+    hi: 'इस हफ़्ते कई क्षेत्रों के संकेत धीमे रहे। पैटर्न दिखाई दे रहा है।',
+    gu: 'આ અઠવાડિયે ઘણા ક્ષેત્રોના સંકેત ધીમા રહ્યા. પેટર્ન દેખાય છે.',
+  },
+  energy_low: {
+    en: 'Energy signals held low this week.',
+    hi: 'इस हफ़्ते ऊर्जा के संकेत धीमे रहे।',
+    gu: 'આ અઠવાડિયે ઊર્જાના સંકેત ધીમા રહ્યા.',
+  },
+  steady: {
+    en: 'Your signals held steadily this week.',
+    hi: 'इस हफ़्ते आपके संकेत स्थिर रहे।',
+    gu: 'આ અઠવાડિયે તમારા સંકેત સ્થિર રહ્યા.',
+  },
+  forming: {
+    en: 'Your signals are still forming a pattern.',
+    hi: 'आपके संकेत अभी पैटर्न बना रहे हैं।',
+    gu: 'તમારા સંકેત હજી પેટર્ન બનાવી રહ્યા છે.',
+  },
+  focus_variable: {
+    en: 'Focus signals showed variability this week.',
+    hi: 'इस हफ़्ते ध्यान के संकेतों में उतार-चढ़ाव रहा।',
+    gu: 'આ અઠવાડિયે ધ્યાનના સંકેતોમાં વધઘટ રહી.',
+  },
+  relational_friction: {
+    en: 'Relational signals held low this week.',
+    hi: 'इस हफ़्ते रिश्तों के संकेत धीमे रहे।',
+    gu: 'આ અઠવાડિયે સંબંધોના સંકેત ધીમા રહ્યા.',
+  },
+  resilience_holding: {
+    en: 'Resilience signals held stable this week.',
+    hi: 'इस हफ़्ते सहनशीलता के संकेत स्थिर रहे।',
+    gu: 'આ અઠવાડિયે સ્થિતિસ્થાપકતાના સંકેત સ્થિર રહ્યા.',
+  },
+}
+
 // ── Deterministic fallback (no LLM) ──────────────────────────────────────────
 async function generateDeterministicSignal(
   supabase: any,
@@ -177,35 +233,39 @@ async function generateDeterministicSignal(
   cycle_id: string,
   cycle_number: number,
   week_number: number,
-  themeScores: any[]
+  themeScores: any[],
+  language: string = 'en'
 ) {
   const underLoad = themeScores.filter((t: any) => t.status === 'Under Load')
   const aligned   = themeScores.filter((t: any) => t.status === 'Aligned')
 
+  const pick = (key: string) =>
+    DETERMINISTIC_TEXT[key]?.[language] ?? DETERMINISTIC_TEXT[key]?.en
+
   let signalType = 'signals_mixed'
-  let displayText = 'Your signals showed a pattern this week.'
+  let displayText = FALLBACK_TEXT[language] ?? FALLBACK_TEXT.en
 
   if (underLoad.length >= 3) {
     signalType = 'energy_low'
-    displayText = 'Multiple themes held low this week. The pattern is visible.'
+    displayText = pick('multiple_low')
   } else if (underLoad.length === 1 && underLoad[0]?.theme_code === 'EWB') {
     signalType = 'energy_low'
-    displayText = 'Energy signals held low this week.'
+    displayText = pick('energy_low')
   } else if (aligned.length >= 4) {
     signalType = 'decision_clarity_increasing'
-    displayText = 'Your signals held steadily this week.'
+    displayText = pick('steady')
   } else if (aligned.length === 0 && underLoad.length === 0) {
     signalType = 'signals_mixed'
-    displayText = 'Your signals are still forming a pattern.'
+    displayText = pick('forming')
   } else if (underLoad.some((t: any) => t.theme_code === 'FAF')) {
     signalType = 'focus_variable'
-    displayText = 'Focus signals showed variability this week.'
+    displayText = pick('focus_variable')
   } else if (underLoad.some((t: any) => t.theme_code === 'RC')) {
     signalType = 'relational_friction'
-    displayText = 'Relational signals held low this week.'
+    displayText = pick('relational_friction')
   } else if (aligned.some((t: any) => t.theme_code === 'RA')) {
     signalType = 'resilience_holding'
-    displayText = 'Resilience signals held stable this week.'
+    displayText = pick('resilience_holding')
   }
 
   const corsHeaders = {

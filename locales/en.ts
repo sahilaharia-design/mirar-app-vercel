@@ -85,7 +85,7 @@ export default {
   auth: {
     title: 'Mirar',
     tagline: 'Your internal alignment, made visible.',
-    subtitle: 'A daily mirror for your emotional and mental state — not advice, not therapy, just an honest reading of where you are.',
+    subtitle: 'Daily emotional hygiene for your mind — a two-minute reading of your inner state. Not advice, not therapy. Just an honest mirror, every day.',
     email_placeholder: 'Your email address',
     send_link: 'Send sign-in link',
     sending: 'Sending...',
@@ -99,8 +99,8 @@ export default {
     privacy_note: 'Your email is used only for delivery. It never appears in your signal data.',
     privacy_badge: 'No passwords. No tracking. Your signal belongs to you.',
     beta_tag: 'Private Beta · Cycle 1',
-    feature_1_title: 'Read your internal signals daily',
-    feature_1_desc: 'One question per day. 2-3 minutes. A mirror that reads what you cannot see yourself.',
+    feature_1_title: 'A daily habit, like brushing your teeth',
+    feature_1_desc: 'One question a day. Two minutes. Small daily upkeep that keeps drift from quietly building.',
     feature_2_title: 'Six dimensions of alignment',
     feature_2_desc: 'Purpose, energy, focus, relationships, growth, and resilience — tracked continuously.',
     feature_3_title: 'See patterns before they become problems',
@@ -111,11 +111,11 @@ export default {
   onboarding: {
     language_prompt: 'Choose your language',
     slide1_title: 'Mirar asks one simple question each day.',
-    slide1_body: 'No journaling pressure. No program to complete. Just a daily mirror for what is here.',
+    slide1_body: 'No pressure. No program to complete. Daily hygiene for your inner state — like brushing your teeth.',
     slide2_title: 'It helps you notice what is shifting inside you.',
     slide2_body: 'Your answers create signals over time: where things feel steady, stretched, unclear, or quietly opening.',
     slide3_title: 'Takes less than 2 minutes.',
-    slide3_body: 'Choose what feels closest. Mirar reflects one short signal back to you.',
+    slide3_body: 'Choose what feels closest. Mirar reflects one short signal back — and the daily habit builds emotional fitness.',
     slide4_title: 'A mirror. Not a mentor.',
     slide4_body: 'After each check-in, you get one short reflection. Not advice — recognition.',
     slide5_title: 'Your signal belongs to you.',
@@ -158,7 +158,7 @@ export default {
   landing: {
     // Hero
     hero_title: 'Your internal alignment,\nmade visible.',
-    hero_sub: 'A daily mirror for your inner state.\nLess than 2 minutes. Simple. Ongoing.',
+    hero_sub: 'Daily emotional hygiene for your inner state.\nTwo minutes a day — like brushing your teeth, but for your mind.',
     hero_cta: 'Start your daily mirror',
     hero_badge: 'No password · No tracking · Private Beta',
 
@@ -168,7 +168,7 @@ export default {
     recognition_1: 'Decisions take longer than they should.',
     recognition_2: 'You move forward. But not with clarity.',
     recognition_3: 'You know something has shifted.\nYou\'re just not sure when.',
-    recognition_cta: 'That\'s what Mirar is for.',
+    recognition_cta: 'That\'s what Mirar is for — a two-minute daily reading that catches drift early.',
 
     // What alignment feels like
     feels_like_heading: 'THIS IS WHAT ALIGNMENT FEELS LIKE.',
@@ -179,7 +179,7 @@ export default {
     feels_like_5: 'You stop postponing decisions you already know.',
 
     // How alignment compounds
-    compounds_heading: 'ALIGNMENT COMPOUNDS.',
+    compounds_heading: 'EMOTIONAL FITNESS COMPOUNDS.',
     compounds_1_time: 'Day by day',
     compounds_1_body: 'you notice patterns earlier.',
     compounds_2_time: 'Week by week',

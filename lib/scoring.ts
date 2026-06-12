@@ -78,6 +78,17 @@ export function getCycleDay(cycleStartDate: string): number {
   return Math.min(Math.max(diffDays + 1, 1), 28);
 }
 
+// ─── Get elapsed day since cycle start, unclamped ─────────────────────────────
+// Unlike getCycleDay, this keeps counting past 28 so stage windows that have
+// fully passed (including stage 4 / day 29+) can be detected for report generation.
+export function getElapsedCycleDay(cycleStartDate: string): number {
+  const start = new Date(cycleStartDate);
+  const now = new Date();
+  const diffMs = now.getTime() - start.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  return Math.max(diffDays + 1, 1);
+}
+
 // ─── Get stage number from day ────────────────────────────────────────────────
 export function getStageFromDay(day: number): number {
   if (day <= 7) return 1;

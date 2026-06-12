@@ -12,6 +12,7 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../stores/auth-store';
+import { useSettingsStore } from '../../stores/settings-store';
 import { generateMirarId } from '../../lib/scoring';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { LanguagePicker } from '../../components/ui/LanguagePicker';
@@ -60,6 +61,9 @@ export default function OnboardingScreen() {
         onboarding_completed: true,
         cycle_start_date: now,
         current_cycle: 1,
+        // Persist the language picked during onboarding so backend-generated
+        // text (mirror insight, weekly signal, reports) uses it from day 1
+        language: useSettingsStore.getState().language,
       })
       .select()
       .single();

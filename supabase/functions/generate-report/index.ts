@@ -1,6 +1,7 @@
 // ─── Edge Function: generate-report ──────────────────────────────────────────
-// Triggered after scores are computed.
-// Assembles report using signal language. Writes to reports table.
+// Triggered after scores are computed (or lazily from the client when a stage
+// window has passed without a report).
+// Assembles report using signal language in the user's language (en/hi/gu).
 // Language rule: observations only — no interpretation, no advice.
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -11,106 +12,186 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-const THEME_NAMES: Record<string, string> = {
-  IAP: 'Direction',
-  EWB: 'Energy',
-  FAF: 'Attention',
-  RC: 'Connection',
-  GAL: 'Growth',
-  RA: 'Movement',
+type Lang = 'en' | 'hi' | 'gu';
+
+const THEME_NAMES: Record<Lang, Record<string, string>> = {
+  en: { IAP: 'Direction', EWB: 'Energy', FAF: 'Attention', RC: 'Connection', GAL: 'Growth', RA: 'Movement' },
+  hi: { IAP: 'दिशा', EWB: 'ऊर्जा', FAF: 'ध्यान', RC: 'जुड़ाव', GAL: 'विकास', RA: 'गति' },
+  gu: { IAP: 'દિશા', EWB: 'ઊર્જા', FAF: 'ધ્યાન', RC: 'જોડાણ', GAL: 'વિકાસ', RA: 'ગતિ' },
 };
 
 const THEME_ORDER = ['IAP', 'EWB', 'FAF', 'RC', 'GAL', 'RA'];
 
-const STAGE_LABELS: Record<number, string> = {
-  1: 'First reflections',
-  2: 'Pattern forming',
-  3: 'Movement noticed',
-  4: 'Reflection summary',
-  0: 'Full pattern',
+const STAGE_LABELS: Record<Lang, Record<number, string>> = {
+  en: { 1: 'First reflections', 2: 'Pattern forming', 3: 'Movement noticed', 4: 'Reflection summary', 0: 'Full pattern' },
+  hi: { 1: 'पहले संकेत', 2: 'पैटर्न बन रहा है', 3: 'बदलाव दिखा', 4: 'संकेत सारांश', 0: 'पूरा पैटर्न' },
+  gu: { 1: 'પહેલા સંકેત', 2: 'પેટર્ન બની રહી છે', 3: 'બદલાવ દેખાયો', 4: 'સંકેત સારાંશ', 0: 'સંપૂર્ણ પેટર્ન' },
 };
 
-const STAGE_DESCS: Record<number, string> = {
-  1: 'What became noticeable',
-  2: 'Where adjustment signals appeared',
-  3: 'Where movement occurred',
-  4: 'What remained visible by the end of the cycle',
-  0: 'Full pattern summary',
+const STAGE_DESCS: Record<Lang, Record<number, string>> = {
+  en: { 1: 'What became noticeable', 2: 'Where adjustment signals appeared', 3: 'Where movement occurred', 4: 'What remained visible by the end of the cycle', 0: 'Full pattern summary' },
+  hi: { 1: 'जो दिखाई देने लगा', 2: 'जहाँ बदलाव के संकेत दिखे', 3: 'जहाँ गति दिखी', 4: 'चक्र के अंत तक जो दिखता रहा', 0: 'पूरे पैटर्न का सारांश' },
+  gu: { 1: 'જે દેખાવા લાગ્યું', 2: 'જ્યાં ફેરફારના સંકેત દેખાયા', 3: 'જ્યાં ગતિ દેખાઈ', 4: 'ચક્રના અંત સુધી જે દેખાતું રહ્યું', 0: 'સંપૂર્ણ પેટર્નનો સારાંશ' },
+};
+
+const SECTION_HEADERS: Record<Lang, { title: string; window: string; included: (c: number, t: number) => string; showedUp: string; strongest: string; checks: string; reading: string }> = {
+  en: {
+    title: 'MIRAR REFLECTION SUMMARY',
+    window: 'Window',
+    included: (c, t) => `${c} of ${t} reflections included.`,
+    showedUp: 'WHAT SHOWED UP',
+    strongest: 'STRONGEST SIGNALS',
+    checks: 'GENTLE CHECKS',
+    reading: 'Reading',
+  },
+  hi: {
+    title: 'मिरार संकेत सारांश',
+    window: 'अवधि',
+    included: (c, t) => `${t} में से ${c} चेक-इन शामिल।`,
+    showedUp: 'जो सामने आया',
+    strongest: 'सबसे स्पष्ट संकेत',
+    checks: 'हल्की जाँच',
+    reading: 'रीडिंग',
+  },
+  gu: {
+    title: 'મિરાર સંકેત સારાંશ',
+    window: 'સમયગાળો',
+    included: (c, t) => `${t} માંથી ${c} ચેક-ઇન સામેલ.`,
+    showedUp: 'જે સામે આવ્યું',
+    strongest: 'સૌથી સ્પષ્ટ સંકેત',
+    checks: 'હળવી તપાસ',
+    reading: 'રીડિંગ',
+  },
+};
+
+const STATUS_LABELS: Record<Lang, Record<string, string>> = {
+  en: { 'Aligned': 'Aligned', 'Forming': 'Forming', 'Stabilizing': 'Stabilizing', 'Under Load': 'Under Load', 'No Reading': 'No Reading' },
+  hi: { 'Aligned': 'संरेखित', 'Forming': 'बन रहा है', 'Stabilizing': 'स्थिर हो रहा है', 'Under Load': 'दबाव में', 'No Reading': 'रीडिंग नहीं' },
+  gu: { 'Aligned': 'સંરેખિત', 'Forming': 'બની રહ્યું છે', 'Stabilizing': 'સ્થિર થઈ રહ્યું છે', 'Under Load': 'દબાણમાં', 'No Reading': 'રીડિંગ નથી' },
 };
 
 // ─── Observational summary lines — NEVER interpretive ────────────────────────
-function getSummaryLine(code: string, status: string): string {
-  const name = THEME_NAMES[code] ?? code;
-  const map: Record<string, string> = {
-    Aligned: `${name} appeared steadily across this reflection window.`,
-    Forming: `${name} appeared with moderate regularity.`,
-    Stabilizing: `${name} appeared intermittently.`,
-    'Under Load': `${name} showed pressure across this reflection window.`,
-    'No Reading': `${name}: not enough reflections yet.`,
+function getSummaryLine(lang: Lang, code: string, status: string): string {
+  const name = THEME_NAMES[lang][code] ?? code;
+  const maps: Record<Lang, Record<string, string>> = {
+    en: {
+      Aligned: `${name} appeared steadily across this reflection window.`,
+      Forming: `${name} appeared with moderate regularity.`,
+      Stabilizing: `${name} appeared intermittently.`,
+      'Under Load': `${name} showed pressure across this reflection window.`,
+      'No Reading': `${name}: not enough reflections yet.`,
+    },
+    hi: {
+      Aligned: `${name} इस अवधि में लगातार स्थिर दिखी।`,
+      Forming: `${name} समय-समय पर नियमित दिखी।`,
+      Stabilizing: `${name} रुक-रुक कर दिखी।`,
+      'Under Load': `${name} में इस अवधि में दबाव दिखा।`,
+      'No Reading': `${name}: अभी पर्याप्त चेक-इन नहीं।`,
+    },
+    gu: {
+      Aligned: `${name} આ સમયગાળામાં સતત સ્થિર દેખાઈ.`,
+      Forming: `${name} સમયાંતરે નિયમિત દેખાઈ.`,
+      Stabilizing: `${name} અટકી-અટકીને દેખાઈ.`,
+      'Under Load': `${name} માં આ સમયગાળામાં દબાણ દેખાયું.`,
+      'No Reading': `${name}: હજી પૂરતા ચેક-ઇન નથી.`,
+    },
   };
-  return map[status] ?? `${name} was visible in the reflections.`;
+  return maps[lang][status] ?? maps.en[status] ?? `${name}`;
 }
 
-function buildPrimarySignals(scores: any[], coverage: number, total: number): string[] {
-  const lines = [`${coverage} of ${total} reflections included.`];
+const PRESENCE: Record<Lang, Record<string, string>> = {
+  en: { Aligned: 'steady signal presence', Forming: 'moderate signal presence', Stabilizing: 'settling signal pattern', other: 'pressure present' },
+  hi: { Aligned: 'स्थिर संकेत', Forming: 'मध्यम संकेत', Stabilizing: 'स्थिर होता पैटर्न', other: 'दबाव मौजूद' },
+  gu: { Aligned: 'સ્થિર સંકેત', Forming: 'મધ્યમ સંકેત', Stabilizing: 'સ્થિર થતી પેટર્ન', other: 'દબાણ હાજર' },
+};
+
+function buildPrimarySignals(lang: Lang, scores: any[], coverage: number, total: number): string[] {
+  const lines = [SECTION_HEADERS[lang].included(coverage, total)];
   const sorted = [...scores].filter((s) => s.signal_count > 0).sort((a, b) => (b.average_score ?? 0) - (a.average_score ?? 0));
   for (const s of sorted.slice(0, 3)) {
-    const pres =
-      s.status === 'Aligned' ? 'steady signal presence' :
-      s.status === 'Forming' ? 'moderate signal presence' :
-      s.status === 'Stabilizing' ? 'settling signal pattern' : 'pressure present';
-    lines.push(`${THEME_NAMES[s.theme_code]} — ${pres}.`);
+    const pres = PRESENCE[lang][s.status] ?? PRESENCE[lang].other;
+    lines.push(`${THEME_NAMES[lang][s.theme_code]} — ${pres}.`);
   }
   return lines;
 }
 
-function buildCalibrationChecks(scores: any[]): string[] {
+const CHECK_LINES: Record<Lang, { pressure: (n: string) => string; steady: (n: string) => string; mixed: (n: string) => string; consistent: string }> = {
+  en: {
+    pressure: (n) => `${n} — pressure appeared repeatedly.`,
+    steady: (n) => `${n} — steadiness appeared repeatedly.`,
+    mixed: (n) => `${n} — mixed signals appeared.`,
+    consistent: 'The reflections were consistent across areas.',
+  },
+  hi: {
+    pressure: (n) => `${n} — दबाव बार-बार दिखा।`,
+    steady: (n) => `${n} — स्थिरता बार-बार दिखी।`,
+    mixed: (n) => `${n} — मिले-जुले संकेत दिखे।`,
+    consistent: 'सभी क्षेत्रों में चेक-इन एक जैसे रहे।',
+  },
+  gu: {
+    pressure: (n) => `${n} — દબાણ વારંવાર દેખાયું.`,
+    steady: (n) => `${n} — સ્થિરતા વારંવાર દેખાઈ.`,
+    mixed: (n) => `${n} — મિશ્ર સંકેત દેખાયા.`,
+    consistent: 'બધા ક્ષેત્રોમાં ચેક-ઇન સમાન રહ્યા.',
+  },
+};
+
+function buildCalibrationChecks(lang: Lang, scores: any[]): string[] {
   const checks: string[] = [];
+  const L = CHECK_LINES[lang];
   for (const s of scores) {
     if (s.signal_count === 0) continue;
-    const total = s.low_count + s.medium_count + s.high_count;
+    const total = (s.low_count ?? 0) + (s.medium_count ?? 0) + (s.high_count ?? 0);
     if (total === 0) continue;
-    if (s.low_count / total > 0.6) checks.push(`${THEME_NAMES[s.theme_code]} — pressure appeared repeatedly.`);
-    else if (s.high_count / total > 0.6) checks.push(`${THEME_NAMES[s.theme_code]} — steadiness appeared repeatedly.`);
-    else if (s.low_count > 0 && s.high_count > 0) checks.push(`${THEME_NAMES[s.theme_code]} — mixed signals appeared.`);
+    const name = THEME_NAMES[lang][s.theme_code];
+    if ((s.low_count ?? 0) / total > 0.6) checks.push(L.pressure(name));
+    else if ((s.high_count ?? 0) / total > 0.6) checks.push(L.steady(name));
+    else if ((s.low_count ?? 0) > 0 && (s.high_count ?? 0) > 0) checks.push(L.mixed(name));
   }
-  if (checks.length === 0) checks.push('The reflections were consistent across areas.');
+  if (checks.length === 0) checks.push(L.consistent);
   return checks;
 }
 
-function buildFullReportText(stage: number, coverage: number, total: number, scores: any[], mirarid: string): string {
+function buildFullReportText(lang: Lang, stage: number, coverage: number, total: number, scores: any[], mirarid: string): string {
+  const H = SECTION_HEADERS[lang];
   const lines: string[] = [];
-  lines.push(`MIRAR REFLECTION SUMMARY — ${STAGE_LABELS[stage]?.toUpperCase()}`);
+  lines.push(`${H.title} — ${(STAGE_LABELS[lang][stage] ?? '').toUpperCase()}`);
   lines.push(`Mirar ID: ${mirarid}`);
   lines.push('');
-  lines.push(`Window: ${STAGE_LABELS[stage]}`);
-  lines.push(`"${STAGE_DESCS[stage]}"`);
+  lines.push(`${H.window}: ${STAGE_LABELS[lang][stage]}`);
+  lines.push(`"${STAGE_DESCS[lang][stage]}"`);
   lines.push('');
-  lines.push(`${coverage} of ${total} reflections included.`);
+  lines.push(H.included(coverage, total));
   lines.push('');
   lines.push('─'.repeat(30));
-  lines.push('WHAT SHOWED UP');
+  lines.push(H.showedUp);
   lines.push('─'.repeat(30));
   for (const code of THEME_ORDER) {
     const s = scores.find((sc) => sc.theme_code === code);
     if (!s) continue;
     lines.push('');
-    lines.push(`${THEME_NAMES[code]}`);
-    lines.push(`Reading: ${s.status}`);
-    lines.push(getSummaryLine(code, s.status));
+    lines.push(`${THEME_NAMES[lang][code]}`);
+    lines.push(`${H.reading}: ${STATUS_LABELS[lang][s.status] ?? s.status}`);
+    lines.push(getSummaryLine(lang, code, s.status));
   }
   lines.push('');
   lines.push('─'.repeat(30));
-  lines.push('STRONGEST SIGNALS');
+  lines.push(H.strongest);
   lines.push('─'.repeat(30));
-  for (const sig of buildPrimarySignals(scores, coverage, total)) lines.push(`• ${sig}`);
+  for (const sig of buildPrimarySignals(lang, scores, coverage, total)) lines.push(`• ${sig}`);
   lines.push('');
   lines.push('─'.repeat(30));
-  lines.push('GENTLE CHECKS');
+  lines.push(H.checks);
   lines.push('─'.repeat(30));
-  for (const cal of buildCalibrationChecks(scores)) lines.push(`• ${cal}`);
+  for (const cal of buildCalibrationChecks(lang, scores)) lines.push(`• ${cal}`);
   return lines.join('\n');
 }
+
+const SUMMARY_TEXT: Record<Lang, (label: string, c: number, t: number, aligned: number) => string> = {
+  en: (label, c, t, aligned) => `${label} reflection summary. ${c}/${t} reflections included. ${aligned} areas showed steadiness.`,
+  hi: (label, c, t, aligned) => `${label} — संकेत सारांश। ${t} में से ${c} चेक-इन शामिल। ${aligned} क्षेत्रों में स्थिरता दिखी।`,
+  gu: (label, c, t, aligned) => `${label} — સંકેત સારાંશ. ${t} માંથી ${c} ચેક-ઇન સામેલ. ${aligned} ક્ષેત્રોમાં સ્થિરતા દેખાઈ.`,
+};
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -153,18 +234,20 @@ Deno.serve(async (req) => {
     const coverage = count ?? 0;
     const total = stage === 0 ? 28 : 7;
 
-    // Fetch user for mirar_id
+    // Fetch user for mirar_id + language
     const { data: userRow } = await supabase
       .from('users')
-      .select('mirar_id')
+      .select('mirar_id, language')
       .eq('id', user_id)
       .single();
 
+    const lang: Lang = (['en', 'hi', 'gu'].includes(userRow?.language) ? userRow.language : 'en') as Lang;
     const mirarid = userRow?.mirar_id ?? user_id;
-    const primarySignals = buildPrimarySignals(scores ?? [], coverage, total).join('\n');
-    const calibrationChecks = buildCalibrationChecks(scores ?? []).join('\n');
-    const summaryText = `${STAGE_LABELS[stage]} reflection summary. ${coverage}/${total} reflections included. ${(scores ?? []).filter((s) => s.status === 'Aligned').length} areas showed steadiness.`;
-    const fullReportText = buildFullReportText(stage, coverage, total, scores ?? [], mirarid);
+    const primarySignals = buildPrimarySignals(lang, scores ?? [], coverage, total).join('\n');
+    const calibrationChecks = buildCalibrationChecks(lang, scores ?? []).join('\n');
+    const alignedCount = (scores ?? []).filter((s) => s.status === 'Aligned').length;
+    const summaryText = SUMMARY_TEXT[lang](STAGE_LABELS[lang][stage], coverage, total, alignedCount);
+    const fullReportText = buildFullReportText(lang, stage, coverage, total, scores ?? [], mirarid);
 
     // Upsert report
     const { data: report, error: reportErr } = await supabase

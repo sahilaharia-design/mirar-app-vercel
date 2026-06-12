@@ -283,8 +283,9 @@ serve(async (req) => {
       // Day 8 = stage 2 opens → generate stage 1 report
       // Day 15 = stage 3 opens → generate stage 2 report
       // Day 22 = stage 4 opens → generate stage 3 report
-      // Day 29 = cycle ends   → generate stage 4 report
-      const stageCompletedMap: Record<number, number> = { 8: 1, 15: 2, 22: 3, 29: 4 }
+      // Day 28 = last day of stage 4 → generate stage 4 report after this check-in
+      // (day 29 is unreachable: the client clamps cycle day at 28)
+      const stageCompletedMap: Record<number, number> = { 8: 1, 15: 2, 22: 3, 28: 4 }
       const completedStage = stageCompletedMap[day_number]
       if (completedStage) {
         // Only generate once: check whether report already exists

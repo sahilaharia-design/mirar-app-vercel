@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { CycleRow, StageOverview, ThemeScore, AlignmentScoreRow, ThemeCode } from '../types/mirar';
 import {
   getCycleDay,
+  getElapsedCycleDay,
   getStageFromDay,
   getStageDayRange,
   getStageCoverage,
@@ -70,6 +71,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
     }
 
     const currentDay = getCycleDay(cycle.start_date);
+    const elapsedDay = getElapsedCycleDay(cycle.start_date);
     const currentStage = getStageFromDay(currentDay);
 
     // Load all responses for this cycle
@@ -117,7 +119,8 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       let stageStatus: StageOverview['status'] = 'WAITING';
       if (report?.status === 'generated' || report?.status === 'delivered') {
         stageStatus = 'GENERATED';
-      } else if (currentDay >= endDay + 1) {
+      } else if (elapsedDay >= endDay + 1) {
+        // Use unclamped elapsed day so stage 4 (days 22–28) becomes DUE on day 29+
         stageStatus = 'DUE';
       } else if (currentStage >= stage) {
         stageStatus = 'WAITING';
@@ -174,6 +177,13 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
     // Load today's alignment score + user_state in parallel
     get().loadAlignmentScore(userId);
     loadUserState(userId, set);
+
+    // Self-heal: generate any reports whose stage window has passed but which
+    // never got created (the day-8/15/22 trigger only fires if the user checks
+    // in on exactly that day, and day 29 was previously unreachable).
+    ensureReportsGenerated(userId, cycle.id, stageOverviews, () =>
+      get().loadActiveCycle(userId)
+    );
   },
 
   loadAlignmentScore: async (userId: string) => {
@@ -209,6 +219,44 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
     }
   },
 }));
+
+// ── Ensure overdue reports exist ────────────────────────────────────────────
+// For every stage whose window has fully passed with at least one reflection
+// but no generated report, invoke the generate-report edge function, then
+// reload once so the Reports tab reflects the new state. Guarded so each
+// cycle only attempts generation once per app session.
+const reportGenerationAttempted = new Set<string>();
+
+async function ensureReportsGenerated(
+  userId: string,
+  cycleId: string,
+  stageOverviews: StageOverview[],
+  reload: () => Promise<void>
+) {
+  if (reportGenerationAttempted.has(cycleId)) return;
+
+  const missing = stageOverviews.filter(
+    (s) => s.status === 'DUE' && s.coverage > 0 && !s.reportId
+  );
+  if (missing.length === 0) return;
+
+  reportGenerationAttempted.add(cycleId);
+
+  const results = await Promise.allSettled(
+    missing.map((s) =>
+      supabase.functions.invoke('generate-report', {
+        body: { user_id: userId, cycle_id: cycleId, stage: s.stage },
+      })
+    )
+  );
+
+  const anySucceeded = results.some(
+    (r) => r.status === 'fulfilled' && !(r.value as any)?.error
+  );
+  if (anySucceeded) {
+    await reload();
+  }
+}
 
 // ── Load user_state (contextMessage, latestSignalText) ─────────────────────────
 // Called as a fire-and-forget from loadActiveCycle — updates store when ready.

@@ -28,6 +28,22 @@ serve(async (req) => {
       )
     }
 
+    // Language preference — mirror text must be generated in the user's language
+    const { data: userRow } = await supabase
+      .from('users')
+      .select('language')
+      .eq('id', user_id)
+      .maybeSingle()
+    const language = userRow?.language ?? 'en'
+    const LANGUAGE_NAMES: Record<string, string> = {
+      en: 'English',
+      hi: 'Hindi (Devanagari script)',
+      gu: 'Gujarati (Gujarati script)',
+    }
+    const languageInstruction = language === 'en'
+      ? ''
+      : `\n\nWrite your entire response in ${LANGUAGE_NAMES[language]}. Use natural, everyday ${LANGUAGE_NAMES[language].split(' ')[0]} — not formal or literary register. The vocabulary constraints below describe concepts: express their equivalents in the target language.`
+
     const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
     if (!anthropicKey) {
       return new Response(
@@ -55,7 +71,7 @@ Sentence 2 (only if a theme is showing Low, or the signal is under pressure, or 
 Forbidden words: heal, grow, improve, try, should, need, fix, better, worse, bad, good, score, performance, mindset, attitude.
 Allowed words only: signal, reading, showing, holding, shifting, present, pattern, indicate, register, surface, drift, mirror, reflection, friction, load, pressure, steady.
 
-Write maximum 2 sentences. Be calm, not warm. Be a diagnostic instrument, not a coach.`
+Write maximum 2 sentences. Be calm, not warm. Be a diagnostic instrument, not a coach.${languageInstruction}`
 
     const userPrompt = `Today's signal reading (Day ${day_number}):
 Today’s mirror: ${alignment_score !== null ? 'signal present' : 'still forming'}

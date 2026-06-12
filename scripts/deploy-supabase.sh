@@ -26,15 +26,31 @@ echo "▸ Linking project $PROJECT_REF..."
 npx supabase link --project-ref "$PROJECT_REF"
 
 echo ""
-echo "▸ Running migration 004 (mirror_text column)..."
+echo "▸ Pushing migrations..."
 npx supabase db push
 
 echo ""
-echo "▸ Deploying generate-mirror-insight..."
+echo "▸ Applying v2 translation seed (restores Hindi/Gujarati for Days 1-8)..."
+if ! npx supabase db execute --file supabase/seed_v2_translations.sql; then
+  echo "  ⚠  Could not apply seed_v2_translations.sql via CLI."
+  echo "     Paste its contents into the Supabase SQL editor instead:"
+  echo "     https://supabase.com/dashboard/project/$PROJECT_REF/sql"
+fi
+
+echo ""
+echo "▸ Deploying generate-mirror-insight (updated: multilingual output)..."
 npx supabase functions deploy generate-mirror-insight --no-verify-jwt
 
 echo ""
-echo "▸ Deploying process-checkin (updated: fires mirror insight async)..."
+echo "▸ Deploying generate-weekly-signal (updated: multilingual output)..."
+npx supabase functions deploy generate-weekly-signal --no-verify-jwt
+
+echo ""
+echo "▸ Deploying generate-report (updated: multilingual templates)..."
+npx supabase functions deploy generate-report
+
+echo ""
+echo "▸ Deploying process-checkin (updated: stage-4 report fires on day 28)..."
 npx supabase functions deploy process-checkin
 
 echo ""
@@ -59,8 +75,11 @@ echo ""
 echo "────────────────────────────────────────────────────────"
 echo "✓ Supabase deploy complete."
 echo ""
-echo "  Migration:              ✓ mirror_text column on alignment_scores"
-echo "  generate-mirror-insight ✓ deployed"
-echo "  process-checkin:        ✓ deployed"
-echo "  select-daily-question:  ✓ deployed"
+echo "  Migrations:              ✓ pushed"
+echo "  Translation seed:        ✓ Days 1-8 hi/gu restored"
+echo "  generate-mirror-insight: ✓ deployed (multilingual)"
+echo "  generate-weekly-signal:  ✓ deployed (multilingual)"
+echo "  generate-report:         ✓ deployed (multilingual)"
+echo "  process-checkin:         ✓ deployed (day-28 stage-4 report)"
+echo "  select-daily-question:   ✓ deployed"
 echo "────────────────────────────────────────────────────────"

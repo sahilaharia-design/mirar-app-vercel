@@ -27,7 +27,9 @@ export const useSettingsStore = create<SettingsState>((set) => ({
     await AsyncStorage.setItem(LANG_KEY, lang);
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
-      await supabase.from('users').update({ language: lang }).eq('auth_id', user.id);
+      // users.id IS the Supabase Auth user id (there is no auth_id column —
+      // the previous filter matched zero rows, so language never persisted)
+      await supabase.from('users').update({ language: lang }).eq('id', user.id);
     }
   },
 }));
