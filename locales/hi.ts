@@ -81,6 +81,9 @@ export default {
     daily_pause: 'दैनिक विराम',
     recent_pattern: 'हाल का पैटर्न',
     context_with_count: 'आज का दर्पण · {{count}} हाल के चेक-इन',
+    trend_steady: 'स्थिर',
+    trend_up: '+{{n}} इस हफ़्ते',
+    trend_down: '{{n}} इस हफ़्ते',
   },
 
   awareness: {

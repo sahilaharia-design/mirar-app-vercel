@@ -39,7 +39,12 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 }
 
 // ─── Supabase Client ──────────────────────────────────────────────────────────
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+// Dev/demo mode: EXPO_PUBLIC_DEV_MOCK=1 swaps in an in-memory mock client with
+// a signed-in session and 14 days of fixture data (see lib/supabase-mock.ts).
+// Used for design review, demos, and screenshots — never set in production.
+const USE_MOCK = process.env.EXPO_PUBLIC_DEV_MOCK === '1';
+
+const realSupabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     storage: ExpoSecureStoreAdapter,
     autoRefreshToken: true,
@@ -47,6 +52,11 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     detectSessionInUrl: Platform.OS === 'web',
   },
 });
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const supabase = USE_MOCK
+  ? (require('./supabase-mock').mockSupabase as typeof realSupabase)
+  : realSupabase;
 
 // ─── Typed Query Helpers ──────────────────────────────────────────────────────
 export const db = {

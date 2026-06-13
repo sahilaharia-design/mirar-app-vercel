@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { AlignmentScoreRow } from '../../types/mirar';
+import { useTranslation } from 'react-i18next';
 import { useColors } from '../../contexts/theme-context';
 import { FONT_SIZE, SPACING, getAlignmentColor } from '../../lib/constants';
 
@@ -13,6 +14,7 @@ interface AlignmentSparklineProps {
 
 export function AlignmentSparkline({ history, height = 32, width = 120 }: AlignmentSparklineProps) {
   const colors = useColors();
+  const { t } = useTranslation();
 
   if (history.length < 2) return null;
 
@@ -44,10 +46,10 @@ export function AlignmentSparkline({ history, height = 32, width = 120 }: Alignm
   const delta = latest && prev ? Math.round(latest.score - prev.score) : 0;
   const trendLabel =
     Math.abs(delta) < 2
-      ? 'Steady'
+      ? t('today.trend_steady')
       : delta > 0
-      ? `+${delta} this week`
-      : `${delta} this week`;
+      ? t('today.trend_up', { n: delta })
+      : t('today.trend_down', { n: delta });
   const trendColor =
     Math.abs(delta) < 2
       ? colors.slateLight

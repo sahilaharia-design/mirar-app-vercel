@@ -65,7 +65,7 @@ export function TodayCheckinCard({
       >
         <View style={styles.topRow}>
           <Text style={[styles.dayLabel, { color: colors.slateLight }]}>
-            Daily pause
+            {t('today.daily_pause')}
           </Text>
           <InfoTooltipInline
             helpText={t('tooltips.checkin_card')}

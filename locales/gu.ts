@@ -81,6 +81,9 @@ export default {
     daily_pause: 'દૈનિક વિરામ',
     recent_pattern: 'તાજેતરની પેટર્ન',
     context_with_count: 'આજનું દર્પણ · {{count}} તાજેતરના ચેક-ઇન',
+    trend_steady: 'સ્થિર',
+    trend_up: '+{{n}} આ અઠવાડિયે',
+    trend_down: '{{n}} આ અઠવાડિયે',
   },
 
   awareness: {

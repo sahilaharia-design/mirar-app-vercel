@@ -185,6 +185,25 @@ export function computePatternReading(
   steady.sort(byStrength);
   growth.sort(byStrength);
 
+  // Dedup across buckets so a single theme never appears in two places (e.g.
+  // "Movement is lifting" AND "Movement is building" AND "Movement is holding").
+  // Each theme is claimed by exactly one bucket, in priority order:
+  // carrying > downward shift > growth > upward shift > steady.
+  const claimed = new Set<string>();
+  const claim = (insights: PatternInsight[]) =>
+    insights.filter((i) => {
+      if (claimed.has(i.themeCode)) return false;
+      claimed.add(i.themeCode);
+      return true;
+    });
+
+  const carryingFinal = claim(carrying);
+  const shiftsDown = claim(shifts.filter((s) => s.kind === 'shift_down'));
+  const growthFinal = claim(growth);
+  const shiftsUp = claim(shifts.filter((s) => s.kind === 'shift_up'));
+  const steadyFinal = claim(steady);
+  const shiftsFinal = [...shiftsDown, ...shiftsUp].sort(byStrength);
+
   // Overall tone from the recent window
   const recentAvgAll = average(recentWindow.map((s) => s.points));
   let tone: OverallTone = 'forming';
@@ -201,19 +220,19 @@ export function computePatternReading(
   // What deserves attention — one thing, by priority:
   // recurring tension > strongest downward shift > strongest growth > steadiest strength
   const attention: PatternInsight | null =
-    carrying[0] ??
-    shifts.find((s) => s.kind === 'shift_down') ??
-    growth[0] ??
-    steady[0] ??
+    carryingFinal[0] ??
+    shiftsDown[0] ??
+    growthFinal[0] ??
+    steadyFinal[0] ??
     null;
 
   return {
     tone,
     attention,
-    carrying: carrying.slice(0, 2),
-    shifts: shifts.slice(0, 3),
-    steady: steady.slice(0, 2),
-    growth: growth.slice(0, 2),
+    carrying: carryingFinal.slice(0, 2),
+    shifts: shiftsFinal.slice(0, 3),
+    steady: steadyFinal.slice(0, 2),
+    growth: growthFinal.slice(0, 2),
     daysObserved,
     hasEnoughData: true,
   };

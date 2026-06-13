@@ -258,20 +258,6 @@ function DaySignature({
   );
 }
 
-// ── MirrorCard ────────────────────────────────────────────────────────────────
-function MirrorCard({ text, isLoading }: { text: string | null; isLoading: boolean }) {
-  return (
-    <View style={styles.mirrorCard}>
-      <Text style={styles.mirrorLabel}>Today’s reflection</Text>
-      {isLoading ? (
-          <Text style={styles.mirrorCalibrating}>Letting the reflection settle…</Text>
-      ) : (
-        <Text style={styles.mirrorText}>{text}</Text>
-      )}
-    </View>
-  );
-}
-
 // ── Main screen ───────────────────────────────────────────────────────────────
 export function MirrorScreen({
   userId,
@@ -283,12 +269,12 @@ export function MirrorScreen({
   theme1Level,
   theme2Code,
   theme2Level,
+  tomorrowTease,
   onDone,
 }: MirrorScreenProps) {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [mirrorText, setMirrorText] = useState<string | null>(null);
   const [mirrorLoading, setMirrorLoading] = useState(true);
-  const [howToReadOpen, setHowToReadOpen] = useState(false);
   // 14-day history: index 0 = 13 days ago, index 13 = today
   const [history14, setHistory14] = useState<(number | null)[]>(Array(14).fill(null));
 
@@ -417,60 +403,19 @@ export function MirrorScreen({
       </Animated.View>
       <View style={styles.rule} />
 
-      {/* ── Hero: score + status + delta ────────────────────────────────── */}
-      <Animated.View style={[styles.heroBlock, s1Style]}>
-        <View style={styles.heroMetaRow}>
-          <Text style={styles.heroMeta}>Your signal today</Text>
-          <InfoTooltipInline helpText={signalHelpForStatus(signalLabel)} size={13} />
-        </View>
-        <View style={styles.heroRow}>
-          <View style={styles.heroMeta2}>
-            <Text style={styles.heroStatus}>{signalLabel}</Text>
-            {dLabel ? (
-              <Text style={[styles.heroDelta, { color: dColor }]}>{dLabel}</Text>
-            ) : null}
-          </View>
-          <Text style={styles.heroScore} accessibilityRole="text">
-            {alignmentScore !== null ? `${alignmentScore}` : '—'}
-          </Text>
-        </View>
-        <Text style={styles.heroNote}>Signals are small mirrors, not scores. Read this as a reflection of today’s answer, not a verdict.</Text>
-        <TouchableOpacity
-          style={styles.howReadCard}
-          onPress={() => setHowToReadOpen((v) => !v)}
-          activeOpacity={0.75}
-          accessibilityRole="button"
-        >
-          <View style={styles.howReadHeader}>
-            <Text style={styles.howReadTitle}>How to read this</Text>
-            <Text style={styles.howReadToggle}>{howToReadOpen ? 'Close' : 'Open'}</Text>
-          </View>
-          {howToReadOpen && (
-            <Text style={styles.howReadBody}>
-              This signal reflects what your answer pointed toward today. It is not advice, diagnosis, or judgment.
-            </Text>
-          )}
-        </TouchableOpacity>
+      {/* ── Reflection hero — the reveal, first and largest ─────────────── */}
+      <Animated.View style={[styles.reflectionBlock, s1Style]}>
+        <Text style={styles.reflectionLabel}>Today’s reflection</Text>
+        {mirrorLoading ? (
+          <Text style={styles.reflectionLoading}>Letting the reflection settle…</Text>
+        ) : (
+          <Text style={styles.reflectionText}>{mirrorText}</Text>
+        )}
         <Animated.View style={[styles.underline, underlineStyle]} />
       </Animated.View>
 
-      {/* ── Threshold bar + marker ───────────────────────────────────────── */}
+      {/* ── What today touched — the themes behind the reflection ───────── */}
       <Animated.View style={s2Style}>
-        <ThresholdBar score={alignmentScore} reduceMotion={reduceMotion} />
-      </Animated.View>
-
-      {/* ── 14-day signature ─────────────────────────────────────────────── */}
-      <Animated.View style={s3Style}>
-        <DaySignature history={history14} reduceMotion={reduceMotion} />
-      </Animated.View>
-
-      {/* ── Mirror card ──────────────────────────────────────────────────── */}
-      <Animated.View style={s4Style}>
-        <MirrorCard text={mirrorText} isLoading={mirrorLoading} />
-      </Animated.View>
-
-      {/* ── Themes read today ────────────────────────────────────────────── */}
-      <Animated.View style={s4Style}>
         <View style={styles.themeSection}>
           <Text style={styles.caps}>What today touched</Text>
           <View style={styles.themeCards}>
@@ -491,7 +436,36 @@ export function MirrorScreen({
         </View>
       </Animated.View>
 
-      {/* ── Footer: "Tomorrow at dawn" + Close ──────────────────────────── */}
+      {/* ── Your reading — signal texture, demoted below the reflection ─── */}
+      <Animated.View style={s3Style}>
+        <View style={styles.readingBlock}>
+          <View style={styles.readingHeaderRow}>
+            <Text style={styles.caps}>Your reading</Text>
+            <InfoTooltipInline helpText={signalHelpForStatus(signalLabel)} size={13} />
+          </View>
+          <View style={styles.readingStatusRow}>
+            <Text style={styles.readingStatus}>{signalLabel}</Text>
+            {dLabel ? (
+              <Text style={[styles.heroDelta, { color: dColor }]}>{dLabel}</Text>
+            ) : null}
+          </View>
+          <ThresholdBar score={alignmentScore} reduceMotion={reduceMotion} />
+          <View style={{ height: 8 }} />
+          <DaySignature history={history14} reduceMotion={reduceMotion} />
+        </View>
+      </Animated.View>
+
+      {/* ── Tomorrow — the curiosity hook that pulls the next visit ─────── */}
+      <Animated.View style={[styles.tomorrowBlock, s4Style]}>
+        <Text style={styles.mirrorLabel}>Tomorrow</Text>
+        <Text style={styles.tomorrowText}>
+          {tomorrowTease && tomorrowTease.trim().length > 0
+            ? tomorrowTease
+            : 'Another question is forming. Return tomorrow to see what shifts.'}
+        </Text>
+      </Animated.View>
+
+      {/* ── Footer: Close ────────────────────────────────────────────────── */}
       <Animated.View style={[styles.footer, s5Style]}>
         <Text style={styles.caps}>Return when you’re ready</Text>
         <Pressable
@@ -707,6 +681,71 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     textTransform: 'uppercase',
     color: COLORS.slateLight,
+  },
+
+  // Reflection hero (the reveal)
+  reflectionBlock: {
+    marginTop: 4,
+    gap: 12,
+  },
+  reflectionLabel: {
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 10,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    color: COLORS.brass,
+  },
+  reflectionText: {
+    fontFamily: FONTS.displayItalic,
+    fontSize: 26,
+    lineHeight: 36,
+    letterSpacing: -0.2,
+    color: COLORS.ink,
+  },
+  reflectionLoading: {
+    fontFamily: FONTS.displayItalic,
+    fontSize: 20,
+    lineHeight: 28,
+    color: COLORS.slateLight,
+    letterSpacing: 0.2,
+  },
+
+  // Reading block (demoted signal texture)
+  readingBlock: {
+    gap: 12,
+  },
+  readingHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  readingStatusRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 12,
+  },
+  readingStatus: {
+    fontFamily: FONTS.displayItalic,
+    fontSize: 22,
+    lineHeight: 26,
+    letterSpacing: -0.2,
+    color: COLORS.ink,
+  },
+
+  // Tomorrow hook
+  tomorrowBlock: {
+    gap: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    backgroundColor: COLORS.paper,
+    borderWidth: 1,
+    borderColor: COLORS.ruleLight,
+  },
+  tomorrowText: {
+    fontFamily: FONTS.displayItalic,
+    fontSize: 17,
+    lineHeight: 25,
+    color: COLORS.ink,
   },
 
   // Mirror card

@@ -10,7 +10,7 @@ import { ThemeCode, SignalLevel } from '../../types/mirar';
 
 export default function MirrorRoute() {
   const colors = useColors();
-  const { session } = useAuthStore();
+  const { session, isInitialized } = useAuthStore();
   const { refreshScores } = useCycleStore();
 
   // Params passed from check-in flow after submission
@@ -27,6 +27,18 @@ export default function MirrorRoute() {
   }>();
 
   const userId = session?.user?.id;
+
+  // Wait for auth to initialize before deciding — a direct load or reload of
+  // this route renders before the session resolves, and redirecting on that
+  // first frame would bounce the user out of their own mirror reading.
+  if (!isInitialized) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.cream, justifyContent: 'center' }}>
+        <ActivityIndicator color={colors.slateMid} />
+      </SafeAreaView>
+    );
+  }
+
   if (!userId) {
     router.replace('/(tabs)');
     return null;

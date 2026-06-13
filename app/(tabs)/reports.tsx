@@ -23,21 +23,29 @@ import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 
 export default function ReportsScreen() {
   const { session } = useAuthStore();
-  const { activeCycle } = useCycleStore();
+  const { activeCycle, loadActiveCycle } = useCycleStore();
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [guideVisible, setGuideVisible] = useState(false);
 
   const loadReports = async () => {
-    if (!activeCycle?.id) {
+    // On a direct load or refresh of this tab the active cycle may not be in
+    // the store yet (only Today loads it on mount). Hydrate it here so reports
+    // resolve instead of showing every stage as "still forming".
+    let cycleId = activeCycle?.id;
+    if (!cycleId && session?.user?.id) {
+      await loadActiveCycle(session.user.id);
+      cycleId = useCycleStore.getState().activeCycle?.id;
+    }
+    if (!cycleId) {
       setIsLoading(false);
       return;
     }
     const { data } = await supabase
       .from('reports')
       .select('*')
-      .eq('cycle_id', activeCycle.id)
+      .eq('cycle_id', cycleId)
       .order('stage', { ascending: true });
     setReports(data ?? []);
     setIsLoading(false);
@@ -45,7 +53,7 @@ export default function ReportsScreen() {
 
   useEffect(() => {
     loadReports();
-  }, [activeCycle?.id]);
+  }, [activeCycle?.id, session?.user?.id]);
 
   const onRefresh = async () => {
     setRefreshing(true);

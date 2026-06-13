@@ -23,8 +23,6 @@ import { AlignmentRing } from '../../components/home/AlignmentRing';
 import { AlignmentSparkline } from '../../components/home/AlignmentSparkline';
 import { ThemeSignalsGrid } from '../../components/home/ThemeSignalMiniCard';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
-import { InsightCard } from '../../components/home/InsightCard';
-import { WeeklySignalCard } from '../../components/home/WeeklySignalCard';
 import { AwarenessCard } from '../../components/home/AwarenessCard';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
@@ -213,7 +211,6 @@ export default function TodayScreen() {
     rollingThemeScores,
     streakLength,
     contextMessage,
-    latestSignalText,
     patternReading,
     loadActiveCycle,
     loadAlignmentHistory,
@@ -297,9 +294,6 @@ export default function TodayScreen() {
     status: ts.status,
   }));
 
-  // Compute week number for the weekly signal label
-  const weekNumber = Math.ceil(effectiveDay / 7);
-
   // ─── Check-in flow active ───────────────────────────────────────────────────
   if (showCheckin && !isCompleted) {
     return (
@@ -349,38 +343,42 @@ export default function TodayScreen() {
           contextMessage={contextMessage}
         />
 
-        <Animated.View entering={FadeInDown.duration(400).delay(120)} style={[
-          styles.guidanceCard,
-          { backgroundColor: colors.white, borderColor: colors.borderLight },
-        ]}>
-          <View style={styles.guidanceTitleRow}>
-            <Text style={[styles.guidanceTitle, { color: colors.slate }]}>
-              {t('today.ready_title')}
+        {/* Onboarding guidance — only while the ritual is still new (first week).
+            Established users skip straight to the check-in + awareness. */}
+        {effectiveDay <= 7 && (
+          <Animated.View entering={FadeInDown.duration(400).delay(120)} style={[
+            styles.guidanceCard,
+            { backgroundColor: colors.white, borderColor: colors.borderLight },
+          ]}>
+            <View style={styles.guidanceTitleRow}>
+              <Text style={[styles.guidanceTitle, { color: colors.slate }]}>
+                {t('today.ready_title')}
+              </Text>
+              <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.todaysMirror} size={13} />
+            </View>
+            <Text style={[styles.guidanceText, { color: colors.slateMid }]}>
+              {t('today.ready_sub')}
             </Text>
-            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.todaysMirror} size={13} />
-          </View>
-          <Text style={[styles.guidanceText, { color: colors.slateMid }]}>
-            {t('today.ready_sub')}
-          </Text>
-          <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
-            {t('today.ready_hint')}
-          </Text>
-          {alignmentHistory.length < 3 && (
             <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
-              {t('today.pattern_hint')}
+              {t('today.ready_hint')}
             </Text>
-          )}
-          <TouchableOpacity
-            onPress={() => setGuideVisible(true)}
-            activeOpacity={0.75}
-            accessibilityRole="button"
-            style={styles.guideLink}
-          >
-            <Text style={[styles.guideLinkText, { color: colors.slate }]}>
-              {t('today.how_link')}
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
+            {alignmentHistory.length < 3 && (
+              <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
+                {t('today.pattern_hint')}
+              </Text>
+            )}
+            <TouchableOpacity
+              onPress={() => setGuideVisible(true)}
+              activeOpacity={0.75}
+              accessibilityRole="button"
+              style={styles.guideLink}
+            >
+              <Text style={[styles.guideLinkText, { color: colors.slate }]}>
+                {t('today.how_link')}
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+        )}
 
         {/* 2. Today's check-in card — primary action */}
         <TodayCheckinCard
@@ -391,10 +389,19 @@ export default function TodayScreen() {
           onPress={() => setShowCheckin(true)}
         />
 
-        {/* 3. Alignment ring — primary signal display */}
+        {/* 3. Awareness — the daily payoff: what deserves attention,
+              what's changing, what's holding. This is the reason to return,
+              so it sits directly under the check-in. Synthesis lives here and
+              only here on Today (today's fresh AI reflection appears on the
+              post-check-in Mirror screen). */}
         {effectiveDay === 1 && !isCompleted && score === null ? (
           <FirstDayWelcome />
-        ) : (
+        ) : patternReading ? (
+          <AwarenessCard reading={patternReading} />
+        ) : null}
+
+        {/* 4. Alignment ring — today's signal at a glance */}
+        {!(effectiveDay === 1 && !isCompleted && score === null) && (
           <View style={styles.ringSection}>
             <AlignmentRing score={score} status={status} trend={trendValue} />
             <View style={styles.ringLabelRow}>
@@ -409,7 +416,7 @@ export default function TodayScreen() {
           </View>
         )}
 
-        {/* 4. 14-day sparkline — trend context */}
+        {/* 5. 14-day sparkline — trend context */}
         {alignmentHistory.length >= 2 && (
           <Animated.View entering={FadeInDown.duration(400).delay(200)} style={[styles.sparklineCard, {
             backgroundColor: colors.white,
@@ -422,34 +429,11 @@ export default function TodayScreen() {
           </Animated.View>
         )}
 
-        {/* 5. Awareness — what deserves attention, what's changing, what's holding */}
-        {patternReading && effectiveDay > 1 && (
-          <AwarenessCard reading={patternReading} />
-        )}
-
-        {/* 5b. Weekly signal card — surfaces generated weekly insight */}
-        {latestSignalText && (
-          <WeeklySignalCard
-            signalText={latestSignalText}
-            weekNumber={weekNumber}
-          />
-        )}
-
-        {/* 6. Theme signal grid — 6 mini status cards */}
+        {/* 6. Theme signal grid — 6 dimensions at a glance */}
         {themeScoresForGrid.length > 0 && (
           <ThemeSignalsGrid
             themeScores={themeScoresForGrid}
             onThemePress={() => {}}
-          />
-        )}
-
-        {/* 7. Mirror insight — AI synthesis (secondary context) */}
-        {(score !== null || rollingThemeScores.length > 0) && (
-          <InsightCard
-            currentDay={effectiveDay}
-            rollingThemeScores={rollingThemeScores}
-            alignmentScore={score}
-            mirrorText={alignmentScore?.mirror_text ?? null}
           />
         )}
 

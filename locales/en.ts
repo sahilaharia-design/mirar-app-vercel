@@ -91,6 +91,9 @@ export default {
     daily_pause: 'Daily pause',
     recent_pattern: 'Recent pattern',
     context_with_count: "Today's mirror · {{count}} recent reflections",
+    trend_steady: 'Steady',
+    trend_up: '+{{n}} this week',
+    trend_down: '{{n}} this week',
   },
 
   // ─── Awareness (pattern engine output) ─────────────────────────────────────────

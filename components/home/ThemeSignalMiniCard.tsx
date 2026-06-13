@@ -15,6 +15,15 @@ interface ThemeSignalMiniCardProps {
   index?: number;
 }
 
+// Map runtime status strings to i18n keys (en/hi/gu provide status.*)
+const STATUS_I18N_KEY: Record<string, string> = {
+  Aligned: 'status.aligned',
+  Forming: 'status.forming',
+  Stabilizing: 'status.stabilizing',
+  'Under Load': 'status.under_load',
+  'No Reading': 'status.no_reading',
+};
+
 export function ThemeSignalMiniCard({ code, status, onPress, index = 0 }: ThemeSignalMiniCardProps) {
   const { t } = useTranslation();
   const colors = useColors();
@@ -37,7 +46,10 @@ export function ThemeSignalMiniCard({ code, status, onPress, index = 0 }: ThemeS
   }));
 
   return (
-    <Animated.View entering={FadeInUp.duration(400).delay(200 + index * STAGGER_MS)}>
+    <Animated.View
+      entering={FadeInUp.duration(400).delay(200 + index * STAGGER_MS)}
+      style={styles.cardWrapper}
+    >
       <TouchableOpacity
         style={[
           styles.card,
@@ -52,10 +64,10 @@ export function ThemeSignalMiniCard({ code, status, onPress, index = 0 }: ThemeS
       >
         <View style={[styles.dot, { backgroundColor: config.color }]} />
         <Text style={[styles.name, { color: colors.slate }]} numberOfLines={2}>
-          {theme?.name ?? code}
+          {t(`themes.${code}`)}
         </Text>
         <Text style={[styles.statusText, { color: config.color }]}>
-          {config.label}
+          {t(STATUS_I18N_KEY[status] ?? 'status.no_reading')}
         </Text>
         <Animated.View style={[styles.expandedContent, expandStyle]}>
           <Text style={[styles.description, { color: colors.slateLight }]} numberOfLines={3}>
@@ -137,17 +149,21 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: SPACING.sm,
+    justifyContent: 'space-between',
+    rowGap: SPACING.sm,
+  },
+  // Two-column layout: each wrapper takes just under half so two fit per row
+  cardWrapper: {
+    width: '48.5%',
   },
   card: {
-    width: '30%',
-    flexGrow: 1,
+    width: '100%',
     borderRadius: RADIUS.md,
     borderWidth: 1,
     padding: SPACING.sm,
     gap: 4,
     alignItems: 'flex-start',
-    minWidth: 90,
+    minHeight: 72,
   },
   dot: {
     width: 8,
