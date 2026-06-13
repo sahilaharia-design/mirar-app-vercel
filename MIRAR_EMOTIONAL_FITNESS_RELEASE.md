@@ -55,3 +55,22 @@ bash scripts/deploy-supabase.sh
 - Question bank days 13–28 untranslated (hi/gu) — separate task queued.
 - Report detail screen still uses the older section structure; backend `generate-report` is localized but its Signals/Patterns/Shifts/Growth/Awareness restructure is the next milestone.
 - Some secondary screens (Signals tab guide copy, Reports tab headers, profile rows) retain hardcoded English.
+
+---
+
+## Walkthrough polish pass (2026-06-13)
+
+Ran the full signed-in flow in a browser (Today, check-in, Mirror reveal, Signals, Reports) across all three languages and both breakpoints, using a dev-only in-memory Supabase mock (`EXPO_PUBLIC_DEV_MOCK=1`, gitignored; verified absent from the production bundle). Findings fixed:
+
+- **Mirror reveal — reveal, not receipt.** Restructured to lead with the reflection, demote the score/threshold/14-day-signature into a quiet "Your reading" block, and surface the **Tomorrow** curiosity hook (the `tomorrowTease` was previously discarded). This is the daily-return moment.
+- **Today hierarchy.** check-in → AwarenessCard (payoff) → ring → sparkline → theme grid. Removed the two redundant synthesis cards (WeeklySignal, Insight) that repeated the AwarenessCard; the onboarding guidance card now only shows in week 1.
+- **Theme grid** rendered as a broken single column (cards mis-sized against an unstyled animated wrapper) → fixed to a clean 2-column layout.
+- **Pattern engine dedup.** A theme could appear in multiple buckets at once ("Movement lifting / building / holding"). Each theme now claims only its strongest bucket (carrying > down-shift > growth > up-shift > steady).
+- **Reports tab** showed every stage as "still forming" on a direct load/refresh because the active cycle wasn't hydrated; it now loads the cycle itself.
+- **Mirror route** redirected on the first frame before auth initialized (bounced you out on reload); now waits for `isInitialized`.
+- **i18n gaps** found in the Hindi/Gujarati walkthrough: theme names, status labels, daily-pause and trend labels were hardcoded English — now localized in all three.
+
+### Known remaining gaps
+- `MirrorScreen` and several check-in components use `lib/constants` `COLORS.*` directly instead of the theme context, so they don't adapt to dark mode. Larger refactor, deferred.
+- Theme short-descriptions (shown when a grid card is expanded) are still English-only.
+- Backend functions/migrations + day-1–8 translation seed still await Sahil's `SUPABASE_ACCESS_TOKEN` deploy.
