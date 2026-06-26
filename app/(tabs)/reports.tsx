@@ -23,7 +23,7 @@ import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 
 export default function ReportsScreen() {
   const { session } = useAuthStore();
-  const { activeCycle, loadActiveCycle } = useCycleStore();
+  const { activeCycle, loadActiveCycle, currentDay } = useCycleStore();
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -91,21 +91,22 @@ export default function ReportsScreen() {
             <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.reflectionSummary} size={13} />
           </View>
           <Text style={styles.pageDesc}>
-            Summaries help you see what repeated across your reflections. Read them as a mirror, not a verdict.
+            Summaries show what kept repeating across your reflections. Read them as a mirror, not a verdict.
           </Text>
 
-          <View style={styles.valueCard}>
-            <Text style={styles.valueTitle}>What reports are for</Text>
-            <Text style={styles.valueText}>
-              Based on your recent reflections, Mirar looks for what kept showing up: where you felt steady, stretched, unclear, or pulled in a direction.
-            </Text>
-            <TouchableOpacity onPress={() => setGuideVisible(true)} activeOpacity={0.75} style={styles.guideLink}>
-              <Text style={styles.guideLinkText}>How this works</Text>
-            </TouchableOpacity>
-          </View>
+          {currentDay < 8 && reports.length === 0 && (
+            <View style={styles.progressCard}>
+              <View style={styles.progressBarTrack}>
+                <View style={[styles.progressBarFill, { width: `${Math.min((currentDay / 7) * 100, 100)}%` as any }]} />
+              </View>
+              <Text style={styles.progressLabel}>
+                Day {currentDay} of 7 — your first summary generates after 7 check-ins.
+              </Text>
+            </View>
+          )}
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Recent summaries</Text>
+            <Text style={styles.sectionLabel}>Summaries</Text>
             {[1, 2, 3, 4].map((stage) => (
               <ReportCard
                 key={stage}
@@ -183,6 +184,30 @@ const styles = StyleSheet.create({
     color: COLORS.slateLight,
     lineHeight: 22,
     marginTop: -SPACING.sm,
+  },
+  progressCard: {
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    borderColor: COLORS.borderLight,
+    padding: SPACING.md,
+    gap: SPACING.sm,
+  },
+  progressBarTrack: {
+    height: 4,
+    backgroundColor: COLORS.border,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: 4,
+    backgroundColor: COLORS.accentTeal,
+    borderRadius: 2,
+  },
+  progressLabel: {
+    fontSize: FONT_SIZE.xs,
+    color: COLORS.slateLight,
+    lineHeight: 18,
   },
   valueCard: {
     backgroundColor: COLORS.white,
