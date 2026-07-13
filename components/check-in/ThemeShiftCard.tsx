@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ThemeCode, SignalLevel } from '../../types/mirar';
 import { THEME_COLORS, STATUS_CONFIG, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
@@ -12,13 +13,14 @@ interface ThemeShiftCardProps {
   shortDescription?: string;
 }
 
-const LEVEL_CONFIG: Record<SignalLevel, { label: string; bar: number }> = {
-  Low:    { label: 'present',    bar: 0.28 },
-  Medium: { label: 'visible',    bar: 0.58 },
-  High:   { label: 'strongly visible',   bar: 0.92 },
+const LEVEL_CONFIG: Record<SignalLevel, { key: string; bar: number }> = {
+  Low:    { key: 'theme_shift_card.level_present', bar: 0.28 },
+  Medium: { key: 'theme_shift_card.level_visible', bar: 0.58 },
+  High:   { key: 'theme_shift_card.level_strongly_visible', bar: 0.92 },
 };
 
 export function ThemeShiftCard({ themeCode, themeName, signalLevel, isSecondary = false, shortDescription }: ThemeShiftCardProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   const accentColor = THEME_COLORS[themeCode]?.light ?? '#9494A0';
   const levelCfg = LEVEL_CONFIG[signalLevel];
@@ -37,8 +39,8 @@ export function ThemeShiftCard({ themeCode, themeName, signalLevel, isSecondary 
 
       <View style={styles.body}>
         <View style={styles.topRow}>
-          <Text style={[styles.code, { color: accentColor }]}>area touched</Text>
-          <Text style={[styles.level, { color: colors.slateMid }]}>{levelCfg.label}</Text>
+          <Text style={[styles.code, { color: accentColor }]}>{t('theme_shift_card.area_touched')}</Text>
+          <Text style={[styles.level, { color: colors.slateMid }]}>{t(levelCfg.key)}</Text>
         </View>
         <Text style={[styles.name, { color: colors.slate }]}>{themeName}</Text>
         {shortDescription && (

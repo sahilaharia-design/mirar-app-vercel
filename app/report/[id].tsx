@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { ReportRow, ThemeScore, ReportDisplay } from '../../types/mirar';
 import { buildReportDisplay } from '../../lib/report-generator';
@@ -16,15 +17,6 @@ import { ThemeBlock } from '../../components/reports/ThemeBlock';
 import { SignalList } from '../../components/reports/SignalList';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
-import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
-
-const STAGE_DESCRIPTIONS: Record<number, string> = {
-  1: 'What became noticeable',
-  2: 'Where adjustment signals appeared',
-  3: 'Where movement occurred',
-  4: 'What remained visible by the end of the cycle',
-  0: 'Full pattern summary',
-};
 
 function softenReportLine(line: string): string {
   return line
@@ -40,6 +32,7 @@ function softenReportLine(line: string): string {
 }
 
 export default function ReportDetailScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [reportDisplay, setReportDisplay] = useState<ReportDisplay | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -78,7 +71,7 @@ export default function ReportDetailScreen() {
         signalCount: s.signal_count,
       }));
 
-      setReportDisplay(buildReportDisplay(report, themeScores));
+      setReportDisplay(buildReportDisplay(t, report, themeScores));
       setIsLoading(false);
     };
 
@@ -99,7 +92,7 @@ export default function ReportDetailScreen() {
     return (
       <SafeAreaView style={styles.safe}>
         <View style={styles.loading}>
-          <Text style={styles.errorText}>Report not found.</Text>
+          <Text style={styles.errorText}>{t('report_detail.not_found')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -115,7 +108,7 @@ export default function ReportDetailScreen() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.backText}>← Reports</Text>
+          <Text style={styles.backText}>← {t('report_detail.back_reports')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -128,12 +121,12 @@ export default function ReportDetailScreen() {
         <View style={styles.reportHeader}>
           <View style={styles.titleRow}>
             <Text style={styles.reportTitle}>{stageLabel}</Text>
-            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.reflectionSummary} size={13} />
+            <InfoTooltipInline helpText={t('guidance_tooltips.reflection_summary')} size={13} />
           </View>
-          <Text style={styles.reportDesc}>"{STAGE_DESCRIPTIONS[stage]}"</Text>
+          <Text style={styles.reportDesc}>"{t(`report_detail.stage_description.${stage}`)}"</Text>
           <View style={styles.coverageRow}>
             <Text style={styles.coverageText}>
-              {coverage} of {coverageTotal} reflections included
+              {t('report_detail.coverage_text', { coverage, total: coverageTotal })}
             </Text>
           </View>
         </View>
@@ -141,15 +134,15 @@ export default function ReportDetailScreen() {
         <View style={styles.divider} />
 
         <View style={styles.valueIntro}>
-          <Text style={styles.sectionLabel}>Your reflection summary</Text>
+          <Text style={styles.sectionLabel}>{t('report_detail.your_summary_label')}</Text>
           <Text style={styles.valueIntroText}>
-            Based on your recent reflections, this is what Mirar noticed.
+            {t('report_detail.value_intro_text')}
           </Text>
         </View>
 
         {repeatedSignals.length > 0 && (
           <View style={styles.noticeBlock}>
-            <Text style={styles.sectionLabel}>What kept showing up</Text>
+            <Text style={styles.sectionLabel}>{t('report_detail.what_kept_showing_up')}</Text>
             <View style={styles.noticeCard}>
               {repeatedSignals.map((signal) => (
                 <View key={signal} style={styles.noticeRow}>
@@ -163,7 +156,7 @@ export default function ReportDetailScreen() {
 
         {strongestSignal && (
           <View style={styles.summaryBlock}>
-            <Text style={styles.sectionLabel}>Your strongest signal</Text>
+            <Text style={styles.sectionLabel}>{t('report_detail.strongest_signal_label')}</Text>
             <Text style={styles.summaryText}>{softenReportLine(strongestSignal)}</Text>
           </View>
         )}
@@ -175,12 +168,12 @@ export default function ReportDetailScreen() {
           accessibilityRole="button"
         >
           <View style={styles.meaningHeader}>
-            <Text style={styles.meaningTitle}>What this may help you notice</Text>
-            <Text style={styles.meaningToggle}>{meaningOpen ? 'Close' : 'What does this mean?'}</Text>
+            <Text style={styles.meaningTitle}>{t('report_detail.meaning_title')}</Text>
+            <Text style={styles.meaningToggle}>{meaningOpen ? t('checkin.close') : t('report_detail.meaning_toggle_open')}</Text>
           </View>
           {meaningOpen && (
             <Text style={styles.meaningText}>
-              This does not mean anything is wrong. It simply gives language to something that may have been running quietly in the background.
+              {t('report_detail.meaning_text')}
             </Text>
           )}
         </TouchableOpacity>
@@ -188,14 +181,14 @@ export default function ReportDetailScreen() {
         {/* Summary */}
         {summaryText && (
           <View style={styles.summaryBlock}>
-            <Text style={styles.sectionLabel}>How to read this</Text>
+            <Text style={styles.sectionLabel}>{t('report_detail.how_to_read_label')}</Text>
             <Text style={styles.summaryText}>{summaryText}</Text>
           </View>
         )}
 
         {/* Theme blocks */}
         <View style={styles.themeSection}>
-          <Text style={styles.sectionLabel}>What showed up</Text>
+          <Text style={styles.sectionLabel}>{t('theme_detail.what_showed_up')}</Text>
           <View style={styles.themeList}>
             {themeBlocks.map((block) => (
               <ThemeBlock key={block.code} block={block} />
@@ -206,7 +199,7 @@ export default function ReportDetailScreen() {
         {/* Primary signals */}
         {primarySignals.length > 0 && (
           <SignalList
-            title="Strongest signals"
+            title={t('report_detail.strongest_signals_title')}
             items={primarySignals}
             variant="primary"
           />
@@ -215,7 +208,7 @@ export default function ReportDetailScreen() {
         {/* Calibration checks */}
         {calibrationChecks.length > 0 && (
           <SignalList
-            title="Gentle checks"
+            title={t('report_detail.gentle_checks_title')}
             items={calibrationChecks}
             variant="calibration"
           />
@@ -224,7 +217,7 @@ export default function ReportDetailScreen() {
         {/* Language disclaimer */}
         <View style={styles.disclaimer}>
           <Text style={styles.disclaimerText}>
-            Read this as a mirror, not a verdict. No recommendations or behavioral guidance are present.
+            {t('report_detail.disclaimer_text')}
           </Text>
         </View>
 

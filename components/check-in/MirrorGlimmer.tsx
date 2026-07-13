@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FONT_SIZE, SPACING, RADIUS, THEMES, STATUS_CONFIG } from '../../lib/constants';
+import { useTranslation } from 'react-i18next';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
 import { SubmittedSignal, ThemeCode } from '../../types/mirar';
 
@@ -12,12 +13,10 @@ interface MirrorGlimmerProps {
   submittedSignal?: SubmittedSignal | null;
 }
 
-const DEFAULT_GLIMMER = 'Signal recorded.';
-
-const LEVEL_LABEL: Record<string, string> = {
-  Low: 'Low signal',
-  Medium: 'Mid signal',
-  High: 'High signal',
+const LEVEL_KEY: Record<string, string> = {
+  Low: 'checkin.level_low',
+  Medium: 'checkin.level_mid',
+  High: 'checkin.level_high',
 };
 
 const LEVEL_COLOR: Record<string, string> = {
@@ -26,38 +25,39 @@ const LEVEL_COLOR: Record<string, string> = {
   High: '#5A8A6A',
 };
 
-function ThemeSignalChip({ themeCode, level, colors }: {
+function ThemeSignalChip({ themeCode, level, colors, t }: {
   themeCode: ThemeCode;
   level: string;
   colors: any;
+  t: (key: string) => string;
 }) {
-  const theme = THEMES[themeCode];
   const levelColor = LEVEL_COLOR[level] ?? colors.slateMid;
 
   return (
     <View style={[chipStyles.chip, { backgroundColor: colors.creamDark, borderColor: colors.borderLight }]}>
       <View style={[chipStyles.dot, { backgroundColor: levelColor }]} />
       <Text style={[chipStyles.name, { color: colors.slate }]}>
-        {theme?.name ?? themeCode}
+        {t(`themes.${themeCode}`)}
       </Text>
       <Text style={[chipStyles.level, { color: levelColor }]}>
-        {LEVEL_LABEL[level] ?? level}
+        {t(LEVEL_KEY[level] ?? 'checkin.level_low')}
       </Text>
     </View>
   );
 }
 
-function ScoreDelta({ before, after, colors }: {
+function ScoreDelta({ before, after, colors, t }: {
   before: number | null;
   after: number | null;
   colors: any;
+  t: (key: string, opts?: any) => string;
 }) {
   if (before === null || after === null) return null;
   const delta = Math.round(after - before);
   if (Math.abs(delta) < 1) {
     return (
       <Text style={[deltaStyles.text, { color: colors.slateLight }]}>
-        Reading held steady
+        {t('checkin.reading_steady')}
       </Text>
     );
   }
@@ -67,13 +67,14 @@ function ScoreDelta({ before, after, colors }: {
     <View style={deltaStyles.row}>
       <Text style={[deltaStyles.arrow, { color }]}>{up ? '↑' : '↓'}</Text>
       <Text style={[deltaStyles.text, { color }]}>
-        Reading {up ? 'moved up' : 'shifted down'} {Math.abs(delta)} points
+        {t(up ? 'checkin.reading_up' : 'checkin.reading_down', { n: Math.abs(delta) })}
       </Text>
     </View>
   );
 }
 
 export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: MirrorGlimmerProps) {
+  const { t } = useTranslation();
   const colors = useColors();
 
   return (
@@ -94,13 +95,13 @@ export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: Mirro
             entering={FadeIn.duration(600).delay(300)}
             style={[styles.mirrorLabel, { color: colors.slateLight }]}
           >
-            Mirror signal · Reflection {dayNumber}
+            {t('checkin.mirror_signal_label', { n: dayNumber })}
           </Animated.Text>
           <Animated.Text
             entering={FadeIn.duration(900).delay(600)}
             style={[styles.glimmer, { color: colors.slate }]}
           >
-            {glimmerText ?? DEFAULT_GLIMMER}
+            {glimmerText ?? t('checkin.default_glimmer')}
           </Animated.Text>
         </View>
       </LinearGradient>
@@ -112,7 +113,7 @@ export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: Mirro
           style={[styles.shiftedSection, { borderColor: colors.borderLight, backgroundColor: colors.white }]}
         >
           <Text style={[styles.shiftedLabel, { color: colors.slateLight }]}>
-            What this check-in touched
+            {t('checkin.what_touched')}
           </Text>
 
           <View style={styles.chips}>
@@ -120,11 +121,13 @@ export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: Mirro
               themeCode={submittedSignal.theme1Code}
               level={submittedSignal.theme1Level}
               colors={colors}
+              t={t}
             />
             <ThemeSignalChip
               themeCode={submittedSignal.theme2Code}
               level={submittedSignal.theme2Level}
               colors={colors}
+              t={t}
             />
           </View>
 
@@ -132,6 +135,7 @@ export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: Mirro
             before={submittedSignal.scoreBefore}
             after={submittedSignal.scoreAfter}
             colors={colors}
+            t={t}
           />
         </Animated.View>
       )}
@@ -143,7 +147,7 @@ export function MirrorGlimmer({ glimmerText, dayNumber, submittedSignal }: Mirro
           style={[styles.tomorrowCard, { borderColor: colors.borderLight, backgroundColor: colors.creamLight }]}
         >
           <Text style={[styles.tomorrowLabel, { color: colors.slateXLight }]}>
-            Tomorrow, Mirar will explore
+            {t('checkin.tomorrow_explore')}
           </Text>
           <Text style={[styles.tomorrowText, { color: colors.slateLight }]}>
             {submittedSignal.tomorrowTease}

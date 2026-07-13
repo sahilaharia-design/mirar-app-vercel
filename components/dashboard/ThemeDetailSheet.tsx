@@ -39,12 +39,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Line, Text as SvgText } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 import {
   COLORS,
   FONTS,
   FONT_SIZE,
   SPACING,
-  THEMES,
   CYCLE_DAYS,
 } from '../../lib/constants';
 import {
@@ -94,10 +94,13 @@ function levelNum(avg: number | null): 1 | 2 | 3 | null {
   return 3;
 }
 
-function statusLabel(s: ThemeStatus): string {
-  if (s === 'Under Load') return 'Under Load';
-  return s;
-}
+const STATUS_KEY: Record<ThemeStatus, string> = {
+  Aligned: 'status.aligned',
+  Forming: 'status.forming',
+  Stabilizing: 'status.stabilizing',
+  'Under Load': 'status.under_load',
+  'No Reading': 'status.no_reading',
+};
 
 /** Convert theme average (1–3) to bar position 0–100 */
 function avgToBarPct(avg: number | null): number {
@@ -117,40 +120,40 @@ function trendBadge(history: ThemeDataPoint[]): string | null {
 }
 
 /** Build 2–3 observed rows from real data */
-function buildObservations(score: ThemeScore, history: ThemeDataPoint[]): ObsRow[] {
+function buildObservations(t: (key: string, opts?: any) => string, score: ThemeScore, history: ThemeDataPoint[]): ObsRow[] {
   const obs: ObsRow[] = [];
   const { lowCount, mediumCount, highCount, signalCount, status } = score;
 
   if (signalCount === 0) {
-    obs.push({ text: 'Not enough reflections yet.', meta: 'still forming', brass: false });
+    obs.push({ text: t('theme_detail.obs_not_enough'), meta: t('theme_detail.meta_still_forming'), brass: false });
     return obs;
   }
 
   // Row 1: Distribution statement
   const midHigh = mediumCount + highCount;
   obs.push({
-    text: `${midHigh} of ${signalCount} signals held mid or above.`,
-    meta: 'recent reflections',
+    text: t('theme_detail.obs_distribution', { midHigh, total: signalCount }),
+    meta: t('theme_detail.meta_recent_reflections'),
     brass: false,
   });
 
   // Row 2: Status-driven pattern
   if (status === 'Under Load' && lowCount >= 2) {
     obs.push({
-      text: `Pressure appeared across ${lowCount} reflections.`,
-      meta: 'pattern present',
+      text: t('theme_detail.obs_pressure', { n: lowCount }),
+      meta: t('theme_detail.meta_pattern_present'),
       brass: true,
     });
   } else if (status === 'Aligned' && highCount >= 2) {
     obs.push({
-      text: `${highCount} reflections showed steadiness.`,
-      meta: 'holding steady',
+      text: t('theme_detail.obs_steadiness', { n: highCount }),
+      meta: t('theme_detail.meta_holding_steady'),
       brass: false,
     });
   } else if (status === 'Forming' || status === 'Stabilizing') {
     obs.push({
-      text: 'The readings vary. The pattern is still forming.',
-      meta: 'still forming',
+      text: t('theme_detail.obs_forming_vary'),
+      meta: t('theme_detail.meta_still_forming'),
       brass: false,
     });
   }
@@ -162,14 +165,14 @@ function buildObservations(score: ThemeScore, history: ThemeDataPoint[]): ObsRow
     const delta = recent[2] - recent[0];
     if (delta <= -0.3) {
       obs.push({
-        text: 'The reading has carried more pressure recently.',
-        meta: 'recent shift',
+        text: t('theme_detail.obs_trend_down'),
+        meta: t('theme_detail.meta_recent_shift'),
         brass: true,
       });
     } else if (delta >= 0.3) {
       obs.push({
-        text: 'The reading has shown more steadiness recently.',
-        meta: 'recent shift',
+        text: t('theme_detail.obs_trend_up'),
+        meta: t('theme_detail.meta_recent_shift'),
         brass: false,
       });
     }
@@ -391,6 +394,7 @@ export function ThemeDetailSheet({
   themeHistories,
   onClose,
 }: ThemeDetailSheetProps) {
+  const { t } = useTranslation();
   const reducedMotion = useRef(false);
   const underlineScale = useSharedValue(0);
 
@@ -422,7 +426,8 @@ export function ThemeDetailSheet({
 
   if (!themeCode) return null;
 
-  const theme = THEMES[themeCode];
+  const themeName = t(`themes.${themeCode}`);
+  const themeShortDesc = t(`themes.${themeCode}_short`);
   const history: ThemeDataPoint[] = themeHistories?.[themeCode] ?? [];
 
   // Aggregate ThemeScore across all stage overviews for this theme
@@ -451,8 +456,8 @@ export function ThemeDetailSheet({
   const currentAverage: number | null = aggregateScore?.average ?? null;
   const totalSignals = aggregateScore?.signalCount ?? 0;
   const badge = trendBadge(history);
-  const observations = aggregateScore ? buildObservations(aggregateScore, history) : [];
-  const nameParts = splitThemeName(theme.name);
+  const observations = aggregateScore ? buildObservations(t, aggregateScore, history) : [];
+  const nameParts = splitThemeName(themeName);
 
   const stagger = (i: number) => i * V3_STAGGER_MS;
 
@@ -490,12 +495,12 @@ export function ThemeDetailSheet({
                 onPress={onClose}
                 style={styles.backButton}
                 accessibilityRole="button"
-                accessibilityLabel="Back to signals"
+                accessibilityLabel={t('theme_detail.back_to_signals_a11y')}
               >
-                <Text style={styles.capsLabel}>← Signals</Text>
+                <Text style={styles.capsLabel}>← {t('theme_detail.back_signals')}</Text>
               </TouchableOpacity>
               <Text style={styles.capsLabel}>
-                Reflection area
+                {t('theme_detail.reflection_area')}
               </Text>
             </View>
             <View style={styles.rule} />
@@ -511,10 +516,10 @@ export function ThemeDetailSheet({
                   <Text style={styles.themeNamePlain}>{nameParts[2]}</Text>
                 </>
               ) : (
-                <Text style={styles.themeNamePlain}>{theme.name}</Text>
+                <Text style={styles.themeNamePlain}>{themeName}</Text>
               )}
             </Text>
-            <Text style={styles.themeDesc}>{theme.shortDescription}</Text>
+            <Text style={styles.themeDesc}>{themeShortDesc}</Text>
             <Animated.View style={[styles.brasUnderline, underlineStyle]} />
           </FadeSlide>
 
@@ -523,9 +528,9 @@ export function ThemeDetailSheet({
             <View style={styles.readingRow}>
               {/* Left: status label + trend */}
               <View>
-                <Text style={styles.capsLabel}>Now</Text>
+                <Text style={styles.capsLabel}>{t('theme_detail.now')}</Text>
                 <View style={styles.statusRow}>
-                  <Text style={styles.statusNum}>{statusLabel(currentStatus)}</Text>
+                  <Text style={styles.statusNum}>{t(STATUS_KEY[currentStatus])}</Text>
                   {badge ? (
                     <Text style={styles.trendBadge}>{badge}</Text>
                   ) : null}
@@ -533,9 +538,9 @@ export function ThemeDetailSheet({
               </View>
               {/* Right: coverage */}
               <View style={styles.coverageBlock}>
-                <Text style={styles.capsLabel}>Reflections</Text>
+                <Text style={styles.capsLabel}>{t('theme_detail.reflections')}</Text>
                 <Text style={styles.coverageNum}>
-                  {totalSignals} recorded
+                  {t('theme_detail.recorded_count', { n: totalSignals })}
                 </Text>
               </View>
             </View>
@@ -549,7 +554,7 @@ export function ThemeDetailSheet({
           {/* ── Daily signature ─────────────────────────────────────────── */}
           <FadeSlide delayMs={stagger(3)} reducedMotion={reducedMotion.current} style={styles.signatureSection}>
             <Text style={[styles.capsLabel, { marginBottom: 10 }]}>
-              Recent reflection pattern
+              {t('theme_detail.recent_pattern')}
             </Text>
             <DailySignature history={history} currentDay={currentDay} />
           </FadeSlide>
@@ -557,7 +562,7 @@ export function ThemeDetailSheet({
           {/* ── Observed rows ───────────────────────────────────────────── */}
           {observations.length > 0 && (
             <FadeSlide delayMs={stagger(4)} reducedMotion={reducedMotion.current} style={styles.observedSection}>
-              <Text style={[styles.capsLabel, { marginBottom: 10 }]}>What showed up</Text>
+              <Text style={[styles.capsLabel, { marginBottom: 10 }]}>{t('theme_detail.what_showed_up')}</Text>
               <View style={styles.obsCard}>
                 {observations.map((obs, i) => (
                   <React.Fragment key={i}>

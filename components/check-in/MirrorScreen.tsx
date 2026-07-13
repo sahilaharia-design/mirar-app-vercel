@@ -18,12 +18,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Line, Path } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 import { ThemeShiftCard } from './ThemeShiftCard';
 import {
   COLORS,
   FONTS,
   getAlignmentStatus,
-  THEMES,
 } from '../../lib/constants';
 import {
   V3_SETTLE_EASING,
@@ -38,7 +38,7 @@ import {
   V3_REDUCED_FADE_DURATION,
 } from '../../lib/animations';
 import { supabase } from '../../lib/supabase';
-import { mirrorSignalLabel, signalHelpForStatus } from '../../lib/guidance';
+import { mirrorSignalLabelKey, signalHelpKeyForStatus } from '../../lib/guidance';
 import { InfoTooltipInline } from '../ui/InfoTooltip';
 import { ThemeCode, SignalLevel } from '../../types/mirar';
 
@@ -77,11 +77,13 @@ function markColor(score: number | null): string {
 }
 
 // ── Delta helpers ─────────────────────────────────────────────────────────────
-function deltaLabel(before: number | null, after: number | null): string {
+function deltaLabel(t: (key: string, opts?: any) => string, before: number | null, after: number | null): string {
   if (after === null || before === null) return '';
   const d = after - before;
-  if (Math.abs(d) <= 2) return '— steady';
-  return d > 0 ? `shifted +${Math.round(d)}` : `shifted ${Math.round(d)}`;
+  if (Math.abs(d) <= 2) return t('checkin.delta_steady');
+  return d > 0
+    ? t('checkin.delta_up', { n: Math.round(d) })
+    : t('checkin.delta_down', { n: Math.round(d) });
 }
 
 function deltaColor(before: number | null, after: number | null): string {
@@ -93,20 +95,16 @@ function deltaColor(before: number | null, after: number | null): string {
 
 // ── Fallback mirror text (AI generation timed out) ────────────────────────────
 function buildFallbackMirror(
+  t: (key: string, opts?: any) => string,
   score: number | null,
-  t1: ThemeCode, l1: SignalLevel,
-  t2: ThemeCode, l2: SignalLevel,
+  t1: ThemeCode,
+  t2: ThemeCode,
 ): string {
-  const t1Name = THEMES[t1]?.name ?? t1;
-  const t2Name = THEMES[t2]?.name ?? t2;
-  const levelMap: Record<SignalLevel, string> = {
-    Low: 'low signal levels',
-    Medium: 'mid signal levels',
-    High: 'high signal levels',
-  };
+  const t1Name = t(`themes.${t1}`);
+  const t2Name = t(`themes.${t2}`);
   const status = score !== null ? getAlignmentStatus(score) : null;
-  const statusLine = status ? `Alignment registered at ${status.toLowerCase()} today.` : '';
-  return `${t1Name} and ${t2Name} were visible in today’s reflection. ${statusLine}`.trim();
+  const statusLine = status ? t('checkin.fallback_status_line', { status: status.toLowerCase() }) : '';
+  return t('checkin.fallback_mirror', { theme1: t1Name, theme2: t2Name, statusLine }).trim();
 }
 
 // ── ThresholdBar ──────────────────────────────────────────────────────────────
@@ -117,6 +115,7 @@ function ThresholdBar({
   score: number | null;
   reduceMotion: boolean;
 }) {
+  const { t } = useTranslation();
   const markerLeft = useSharedValue(-24);
   const markerAnimated = useRef(false);
 
@@ -166,7 +165,12 @@ function ThresholdBar({
       </View>
       {/* Zone labels */}
       <View style={styles.barLabels}>
-        {['Under load', 'Settling', 'Forming', 'Steady'].map((l) => (
+        {[
+          t('checkin.zone_under_load'),
+          t('checkin.zone_settling'),
+          t('checkin.zone_forming'),
+          t('checkin.zone_steady'),
+        ].map((l) => (
           <Text key={l} style={styles.barLabel}>{l}</Text>
         ))}
       </View>
@@ -183,6 +187,7 @@ function DaySignature({
   history: (number | null)[];
   reduceMotion: boolean;
 }) {
+  const { t } = useTranslation();
   const arcDash = useSharedValue(50);
 
   const lastThree = [history[11] ?? null, history[12] ?? null, history[13] ?? null];
@@ -216,10 +221,10 @@ function DaySignature({
   return (
     <View>
       <View style={styles.sigHeader}>
-        <Text style={styles.sigCaps}>14-day signature</Text>
+        <Text style={styles.sigCaps}>{t('checkin.signature_label')}</Text>
         {showArc && driftDays > 0 && (
           <Text style={[styles.sigCaps, { color: COLORS.brass }]}>
-            ↘ drift · {driftDays}d
+            ↘ {t('checkin.drift_label', { n: driftDays })}
           </Text>
         )}
       </View>
@@ -272,6 +277,7 @@ export function MirrorScreen({
   tomorrowTease,
   onDone,
 }: MirrorScreenProps) {
+  const { t } = useTranslation();
   const [reduceMotion, setReduceMotion] = useState(false);
   const [mirrorText, setMirrorText] = useState<string | null>(null);
   const [mirrorLoading, setMirrorLoading] = useState(true);
@@ -328,7 +334,7 @@ export function MirrorScreen({
       if (attemptsRef.current < MAX_ATTEMPTS) {
         pollRef.current = setTimeout(poll, 2000);
       } else {
-        setMirrorText(buildFallbackMirror(alignmentScore, theme1Code, theme1Level, theme2Code, theme2Level));
+        setMirrorText(buildFallbackMirror(t, alignmentScore, theme1Code, theme2Code));
         setMirrorLoading(false);
       }
     };
@@ -383,8 +389,9 @@ export function MirrorScreen({
 
   // ── Derived display values ────────────────────────────────────────────────
   const status = getAlignmentStatus(alignmentScore);
-  const signalLabel = mirrorSignalLabel(status);
-  const dLabel = deltaLabel(scoreBefore, alignmentScore);
+  const signalLabelKey = mirrorSignalLabelKey(status);
+  const signalLabel = t(`signal_labels.${signalLabelKey}`);
+  const dLabel = deltaLabel(t, scoreBefore, alignmentScore);
   const dColor = deltaColor(scoreBefore, alignmentScore);
 
   return (
@@ -396,18 +403,18 @@ export function MirrorScreen({
       {/* ── Top strip ───────────────────────────────────────────────────── */}
       <Animated.View style={[styles.strip, s0Style]}>
         <Text style={styles.caps}>
-          <Text style={styles.capsInk}>Today’s mirror</Text>
-          {cycleNumber > 1 && <Text style={styles.capsLight}> · Cycle {cycleNumber}</Text>}
+          <Text style={styles.capsInk}>{t('common.your_alignment_today')}</Text>
+          {cycleNumber > 1 && <Text style={styles.capsLight}> · {t('common.cycle', { n: cycleNumber })}</Text>}
         </Text>
-        <Text style={styles.caps}>Recorded</Text>
+        <Text style={styles.caps}>{t('common.recorded')}</Text>
       </Animated.View>
       <View style={styles.rule} />
 
       {/* ── Reflection hero — the reveal, first and largest ─────────────── */}
       <Animated.View style={[styles.reflectionBlock, s1Style]}>
-        <Text style={styles.reflectionLabel}>Today’s reflection</Text>
+        <Text style={styles.reflectionLabel}>{t('checkin.reflection_label')}</Text>
         {mirrorLoading ? (
-          <Text style={styles.reflectionLoading}>Letting the reflection settle…</Text>
+          <Text style={styles.reflectionLoading}>{t('checkin.reflection_loading')}</Text>
         ) : (
           <Text style={styles.reflectionText}>{mirrorText}</Text>
         )}
@@ -417,20 +424,20 @@ export function MirrorScreen({
       {/* ── What today touched — the themes behind the reflection ───────── */}
       <Animated.View style={s2Style}>
         <View style={styles.themeSection}>
-          <Text style={styles.caps}>What today touched</Text>
+          <Text style={styles.caps}>{t('checkin.themes_touched')}</Text>
           <View style={styles.themeCards}>
             <ThemeShiftCard
               themeCode={theme1Code}
-              themeName={THEMES[theme1Code]?.name ?? theme1Code}
+              themeName={t(`themes.${theme1Code}`)}
               signalLevel={theme1Level}
-              shortDescription={dayNumber <= 7 ? (THEMES[theme1Code]?.shortDescription ?? undefined) : undefined}
+              shortDescription={dayNumber <= 7 ? t(`themes.${theme1Code}_short`) : undefined}
             />
             <ThemeShiftCard
               themeCode={theme2Code}
-              themeName={THEMES[theme2Code]?.name ?? theme2Code}
+              themeName={t(`themes.${theme2Code}`)}
               signalLevel={theme2Level}
               isSecondary
-              shortDescription={dayNumber <= 7 ? (THEMES[theme2Code]?.shortDescription ?? undefined) : undefined}
+              shortDescription={dayNumber <= 7 ? t(`themes.${theme2Code}_short`) : undefined}
             />
           </View>
         </View>
@@ -440,8 +447,8 @@ export function MirrorScreen({
       <Animated.View style={s3Style}>
         <View style={styles.readingBlock}>
           <View style={styles.readingHeaderRow}>
-            <Text style={styles.caps}>Your reading</Text>
-            <InfoTooltipInline helpText={signalHelpForStatus(signalLabel)} size={13} />
+            <Text style={styles.caps}>{t('checkin.your_reading')}</Text>
+            <InfoTooltipInline helpText={t(`guidance_tooltips.${signalHelpKeyForStatus(status)}`)} size={13} />
           </View>
           <View style={styles.readingStatusRow}>
             <Text style={styles.readingStatus}>{signalLabel}</Text>
@@ -457,24 +464,24 @@ export function MirrorScreen({
 
       {/* ── Tomorrow — the curiosity hook that pulls the next visit ─────── */}
       <Animated.View style={[styles.tomorrowBlock, s4Style]}>
-        <Text style={styles.mirrorLabel}>Tomorrow</Text>
+        <Text style={styles.mirrorLabel}>{t('checkin.tomorrow_label')}</Text>
         <Text style={styles.tomorrowText}>
           {tomorrowTease && tomorrowTease.trim().length > 0
             ? tomorrowTease
-            : 'Another question is forming. Return tomorrow to see what shifts.'}
+            : t('checkin.tomorrow_fallback')}
         </Text>
       </Animated.View>
 
       {/* ── Footer: Close ────────────────────────────────────────────────── */}
       <Animated.View style={[styles.footer, s5Style]}>
-        <Text style={styles.caps}>Return when you’re ready</Text>
+        <Text style={styles.caps}>{t('checkin.return_when_ready')}</Text>
         <Pressable
           onPress={onDone}
           accessibilityRole="button"
-          accessibilityLabel="Close mirror reading"
+          accessibilityLabel={t('checkin.close_a11y')}
           hitSlop={12}
         >
-          <Text style={styles.closeBtn}>Close</Text>
+          <Text style={styles.closeBtn}>{t('checkin.close')}</Text>
         </Pressable>
       </Animated.View>
 

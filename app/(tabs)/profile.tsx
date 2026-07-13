@@ -7,7 +7,11 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  Linking,
+  Platform,
 } from 'react-native';
+
+const DANA_LINK = 'https://razorpay.me/mirar';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +24,7 @@ import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { CycleArc } from '../../components/dashboard/CycleArc';
-import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES } from '../../lib/constants';
+import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../../lib/i18n';
 
 interface JournalEntry {
@@ -32,7 +36,7 @@ interface JournalEntry {
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const { user, signOut, session } = useAuthStore();
-  const { activeCycle, currentDay, currentStage } = useCycleStore();
+  const { activeCycle, currentDay, currentStage, totalReflections } = useCycleStore();
   const { language, setLanguage } = useSettingsStore();
   const { colorScheme, setColorScheme } = useTheme();
 
@@ -69,11 +73,20 @@ export default function ProfileScreen() {
   }, [session?.user?.id, activeCycle?.id]);
 
   const handleSignOut = () => {
+    // Alert.alert's button callbacks don't fire on web (react-native-web has
+    // no working native-alert equivalent) — this app is primarily used at
+    // mirar-app.vercel.app, so that silently made sign-out a dead button.
+    if (Platform.OS === 'web') {
+      if (window.confirm(`${t('profile.sign_out')}\n\n${t('profile.sign_out_confirm')}`)) {
+        signOut();
+      }
+      return;
+    }
     Alert.alert(
       t('profile.sign_out'),
-      'You will be signed out of Mirar. Your signal data is preserved.',
+      t('profile.sign_out_confirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('profile.cancel'), style: 'cancel' },
         {
           text: t('profile.sign_out'),
           style: 'destructive',
@@ -83,15 +96,18 @@ export default function ProfileScreen() {
     );
   };
 
-  const cycleStartDate = activeCycle?.start_date
-    ? new Date(activeCycle.start_date).toLocaleDateString(undefined, {
+  // Account creation date — NOT activeCycle.start_date, which resets on every
+  // silent cycle rollover. This is the true "practicing since" anchor.
+  const practicingSinceDate = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString(undefined, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       })
     : '—';
 
-  const stageName = STAGES[currentStage - 1]?.label ?? '';
+  const STAGE_KEYS = ['stages.awareness', 'stages.realignment', 'stages.action', 'stages.reflection'];
+  const stageName = STAGE_KEYS[currentStage - 1] ? t(STAGE_KEYS[currentStage - 1]) : '';
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -109,13 +125,13 @@ export default function ProfileScreen() {
           <View style={styles.idLabelRow}>
             <Text style={styles.idLabel}>{t('profile.mirar_id')}</Text>
             <InfoTooltipInline
-              helpText="Your Mirar ID helps separate your reflection history from your public identity inside the app."
+              helpText={t('profile.id_help')}
               size={12}
             />
           </View>
           <Text style={styles.idValue} selectable>{user?.mirar_id ?? '—'}</Text>
           <Text style={styles.idNote}>
-            Your Mirar ID helps keep your reflection history separate inside the app.
+            {t('profile.id_note')}
           </Text>
         </Animated.View>
 
@@ -128,30 +144,30 @@ export default function ProfileScreen() {
             accessibilityRole="button"
           >
             <View style={styles.guideTextBlock}>
-              <Text style={styles.guideTitle}>The Mirror Guide</Text>
+              <Text style={styles.guideTitle}>{t('guide_modal.eyebrow')}</Text>
               <Text style={styles.guideDesc}>
-                What signals mean, how patterns form, and how to read summaries.
+                {t('profile.guide_desc')}
               </Text>
             </View>
-            <Text style={styles.guideArrow}>Open</Text>
+            <Text style={styles.guideArrow}>{t('profile.open')}</Text>
           </TouchableOpacity>
         </Animated.View>
 
-        {/* Cycle block */}
+        {/* Practice block */}
         <Animated.View entering={FadeInDown.duration(400).delay(120)} style={styles.section}>
           <View style={styles.sectionLabelRow}>
-            <Text style={styles.sectionLabel}>{t('profile.cycle')}</Text>
+            <Text style={styles.sectionLabel}>{t('profile.practice')}</Text>
             <InfoTooltipInline
               helpText={t('tooltips.cycle_info')}
               size={12}
             />
           </View>
           <View style={styles.card}>
-            <Row label="Cycle" value={`#${activeCycle?.cycle_number ?? '—'}`} />
-            <Row label="Started" value={cycleStartDate} />
-            <Row label="Today" value="Daily mirror" />
+            <Row label={t('profile.practicing_since')} value={practicingSinceDate} />
+            <Row label={t('profile.days_practiced')} value={String(totalReflections)} />
+            <Row label={t('profile.today_label')} value={t('profile.daily_mirror')} />
             <Row
-              label="Current pattern"
+              label={t('profile.current_pattern')}
               value={stageName}
             />
           </View>
@@ -186,10 +202,10 @@ export default function ProfileScreen() {
 
         {/* Settings */}
         <Animated.View entering={FadeInDown.duration(400).delay(330)} style={styles.section}>
-          <Text style={styles.sectionLabel}>Settings</Text>
+          <Text style={styles.sectionLabel}>{t('profile.settings_label')}</Text>
           <View style={styles.card}>
-            <SettingsRow label="Daily mirror reminder" value="8:00 AM" />
-            <SettingsRow label="Summary notifications" value="On" />
+            <SettingsRow label={t('profile.daily_reminder')} value="8:00 AM" />
+            <SettingsRow label={t('profile.summary_notifications')} value={t('profile.on')} />
             <TouchableOpacity
               style={[rowStyles.row, { justifyContent: 'space-between' }]}
               onPress={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}
@@ -197,7 +213,7 @@ export default function ProfileScreen() {
             >
               <Text style={rowStyles.label}>{t('profile.dark_mode')}</Text>
               <Text style={{ color: COLORS.accentTeal, fontSize: FONT_SIZE.sm, fontWeight: '600' }}>
-                {colorScheme === 'dark' ? 'On' : 'Off'}
+                {colorScheme === 'dark' ? t('profile.on') : t('profile.off')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -211,10 +227,10 @@ export default function ProfileScreen() {
               onPress={() => setJournalsExpanded((v) => !v)}
               activeOpacity={0.7}
             >
-              <Text style={styles.sectionLabel}>Reflection notes</Text>
+              <Text style={styles.sectionLabel}>{t('profile.reflection_notes')}</Text>
               {journals.length > 0 && (
                 <Text style={styles.journalCount}>
-                  {journals.length} note{journals.length !== 1 ? 's' : ''} · {journalsExpanded ? 'Hide' : 'Show'}
+                  {t('profile.note_count', { count: journals.length })} · {journalsExpanded ? t('profile.hide') : t('profile.show')}
                 </Text>
               )}
             </TouchableOpacity>
@@ -232,7 +248,7 @@ export default function ProfileScreen() {
                     style={styles.journalEntry}
                   >
                     <View style={styles.journalMeta}>
-                      <Text style={styles.journalDay}>Reflection {entry.dayNumber}</Text>
+                      <Text style={styles.journalDay}>{t('profile.reflection_n', { n: entry.dayNumber })}</Text>
                       <Text style={styles.journalDate}>
                         {new Date(entry.submittedAt).toLocaleDateString(undefined, {
                           month: 'short',
@@ -250,13 +266,13 @@ export default function ProfileScreen() {
                 onPress={() => setJournalsExpanded(true)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.journalPreviewDay}>Reflection {journals[0].dayNumber}</Text>
+                <Text style={styles.journalPreviewDay}>{t('profile.reflection_n', { n: journals[0].dayNumber })}</Text>
                 <Text style={styles.journalPreviewText} numberOfLines={2}>
                   {journals[0].text}
                 </Text>
                 {journals.length > 1 && (
                   <Text style={styles.journalMoreHint}>
-                    +{journals.length - 1} more note{journals.length > 2 ? 's' : ''}
+                    {t('profile.more_notes', { count: journals.length - 1 })}
                   </Text>
                 )}
               </TouchableOpacity>
@@ -264,8 +280,20 @@ export default function ProfileScreen() {
           </Animated.View>
         )}
 
+        {/* Support Mirar */}
+        <Animated.View entering={FadeInDown.duration(400).delay(380)} style={styles.section}>
+          <TouchableOpacity
+            style={styles.supportButton}
+            onPress={() => Linking.openURL(DANA_LINK)}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.supportText}>{t('profile.support_mirar')}</Text>
+            <Text style={styles.supportSub}>{t('profile.support_sub')}</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
         {/* Sign out */}
-        <Animated.View entering={FadeInDown.duration(400).delay(400)} style={styles.section}>
+        <Animated.View entering={FadeInDown.duration(400).delay(420)} style={styles.section}>
           <TouchableOpacity
             style={styles.signOutButton}
             onPress={handleSignOut}
@@ -276,7 +304,7 @@ export default function ProfileScreen() {
         </Animated.View>
 
         {/* Version */}
-        <Text style={styles.version}>Mirar · Cycle 1 · v1.0</Text>
+        <Text style={styles.version}>Mirar · v1.0</Text>
 
         <View style={{ height: SPACING.xl }} />
       </ScrollView>
@@ -405,6 +433,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.md,
     borderWidth: 1,
     borderColor: COLORS.borderLight,
+  },
+  supportButton: {
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.md,
+    paddingVertical: 14,
+    paddingHorizontal: SPACING.md,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    gap: 3,
+  },
+  supportText: {
+    fontSize: FONT_SIZE.base,
+    color: COLORS.slate,
+    fontWeight: '500',
+  },
+  supportSub: {
+    fontSize: FONT_SIZE.xs,
+    color: COLORS.slateLight,
+    letterSpacing: 0.2,
   },
   signOutButton: {
     backgroundColor: COLORS.white,

@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FONT_SIZE, SPACING, RADIUS, THEMES } from '../../lib/constants';
+import { useTranslation } from 'react-i18next';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
 import { ThemeScore, AlignmentScoreRow } from '../../types/mirar';
 
@@ -14,24 +15,25 @@ interface InsightCardProps {
 }
 
 function buildInsight(
+  t: (key: string, opts?: any) => string,
   currentDay: number,
   themeScores: ThemeScore[],
   alignmentScore: number | null,
 ): string {
   if (currentDay <= 1) {
-    return 'Your first reflection is here. Mirar begins noticing patterns after a few daily pauses.';
+    return t('insights.first_day');
   }
 
   if (currentDay === 2) {
-    return 'Two reflections in. The pattern is still forming.';
+    return t('insights.second_day');
   }
 
   if (currentDay === 3) {
-    return 'A small pattern window is opening. Read this gently.';
+    return t('insights.third_day');
   }
 
   if (themeScores.length === 0 || alignmentScore === null) {
-    return 'Your mirror is still forming. Each reflection adds a little more shape.';
+    return t('insights.calibrating_mirror');
   }
 
   // Find specific themes by status
@@ -40,42 +42,40 @@ function buildInsight(
   const forming = themeScores.filter((ts) => ts.status === 'Forming');
   const noReading = themeScores.filter((ts) => ts.status === 'No Reading');
 
-  const themeName = (code: string) => THEMES[code as keyof typeof THEMES]?.name ?? code;
+  const themeName = (code: string) => t(`themes.${code}`);
 
   if (underLoad.length >= 2) {
-    const names = underLoad.slice(0, 2).map((t) => themeName(t.code)).join(' and ');
-    return `${names} are showing pressure in recent reflections. Read this as a mirror, not a verdict.`;
+    return t('insights.under_load_two', { a: themeName(underLoad[0].code), b: themeName(underLoad[1].code) });
   }
 
   if (underLoad.length === 1) {
-    return `${themeName(underLoad[0].code)} is carrying some weight in recent reflections.`;
+    return t('insights.under_load_one', { name: themeName(underLoad[0].code) });
   }
 
   if (aligned.length >= 4) {
-    const names = aligned.slice(0, 2).map((t) => themeName(t.code)).join(' and ');
-    return `${names} — among others — are showing steadiness in recent reflections.`;
+    return t('insights.aligned_many', { a: themeName(aligned[0].code), b: themeName(aligned[1].code) });
   }
 
   if (forming.length >= 3) {
-    const names = forming.slice(0, 2).map((t) => themeName(t.code)).join(' and ');
-    return `${names} are starting to form a pattern.`;
+    return t('insights.forming_many', { a: themeName(forming[0].code), b: themeName(forming[1].code) });
   }
 
   if (noReading.length >= 4) {
-    return `${noReading.length} areas are still forming. Each daily pause adds definition to your mirror.`;
+    return t('insights.no_reading_many', { n: noReading.length });
   }
 
   if (aligned.length === 1) {
-    return `${themeName(aligned[0].code)} is the steadiest signal right now.`;
+    return t('insights.aligned_one', { name: themeName(aligned[0].code) });
   }
 
-  return `Your recent reflections are active across ${themeScores.length - noReading.length} areas. The mirror is still forming.`;
+  return t('insights.active_areas', { n: themeScores.length - noReading.length });
 }
 
 export function InsightCard({ currentDay, rollingThemeScores, alignmentScore, mirrorText }: InsightCardProps) {
+  const { t } = useTranslation();
   const colors = useColors();
   // Use AI-generated text if available, fall back to computed insight
-  const insight = mirrorText ?? buildInsight(currentDay, rollingThemeScores, alignmentScore);
+  const insight = mirrorText ?? buildInsight(t, currentDay, rollingThemeScores, alignmentScore);
 
   return (
     <Animated.View entering={FadeInDown.duration(500).delay(150)}>
@@ -88,7 +88,7 @@ export function InsightCard({ currentDay, rollingThemeScores, alignmentScore, mi
         <View style={[styles.mirrorDot, { backgroundColor: colors.gradientStart }]} />
         <View style={styles.content}>
           <Text style={[styles.label, { color: colors.slateLight }]}>
-            {mirrorText ? 'Today’s reflection' : 'A small signal'}
+            {mirrorText ? t('checkin.reflection_label') : t('insights.mirror_notice')}
           </Text>
           <Text style={[styles.insightText, { color: colors.slate }]}>
             {insight}

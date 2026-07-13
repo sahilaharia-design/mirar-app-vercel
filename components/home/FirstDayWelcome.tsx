@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
 import { useColors } from '../../contexts/theme-context';
 import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
 export function FirstDayWelcome() {
+  const { t } = useTranslation();
   const colors = useColors();
 
   return (
@@ -14,10 +16,10 @@ export function FirstDayWelcome() {
     >
       <View style={[styles.dot, { backgroundColor: colors.slateXLight }]} />
       <Text style={[styles.heading, { color: colors.slate }]}>
-        Your first mirror is ready.
+        {t('first_day_welcome.heading')}
       </Text>
       <Text style={[styles.body, { color: colors.slateMid }]}>
-        Mirar reads patterns, not moments. A few daily pauses help what has been shifting become easier to notice.
+        {t('first_day_welcome.body')}
       </Text>
       <View style={[styles.arrow, { borderTopColor: colors.slateXLight }]} />
     </Animated.View>

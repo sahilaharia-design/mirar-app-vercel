@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { GUIDE_CARDS } from '../../lib/guidance';
+import { useTranslation } from 'react-i18next';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
 interface MirrorGuideModalProps {
@@ -16,7 +16,14 @@ interface MirrorGuideModalProps {
   onClose: () => void;
 }
 
+interface GuideCard {
+  title: string;
+  body: string;
+}
+
 export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
+  const { t } = useTranslation();
+  const guideCards = t('guide_cards', { returnObjects: true }) as GuideCard[];
   return (
     <Modal
       visible={visible}
@@ -27,11 +34,11 @@ export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.eyebrow}>The Mirror Guide</Text>
-            <Text style={styles.title}>How Mirar works</Text>
+            <Text style={styles.eyebrow}>{t('guide_modal.eyebrow')}</Text>
+            <Text style={styles.title}>{t('guide_modal.title')}</Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityRole="button">
-            <Text style={styles.closeText}>Close</Text>
+            <Text style={styles.closeText}>{t('checkin.close')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -42,11 +49,11 @@ export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
         >
           <View style={styles.introCard}>
             <Text style={styles.introText}>
-              One answer becomes a signal. Repeated signals become a pattern. Patterns become a mirror.
+              {t('guide_modal.intro_text')}
             </Text>
           </View>
 
-          {GUIDE_CARDS.map((card) => (
+          {guideCards.map((card) => (
             <View key={card.title} style={styles.card}>
               <Text style={styles.cardTitle}>{card.title}</Text>
               <Text style={styles.cardBody}>{card.body}</Text>

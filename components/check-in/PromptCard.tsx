@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, AccessibilityInfo } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -36,6 +37,7 @@ export function PromptCard({
   greeting,
   timeLabel,
 }: PromptCardProps) {
+  const { t } = useTranslation();
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -101,7 +103,7 @@ export function PromptCard({
     transform: [{ scaleX: underlineScale.value }],
   }));
 
-  const todayLabel = 'Today';
+  const todayLabel = t('nav.today');
 
   return (
     <View style={styles.container}>
@@ -118,7 +120,7 @@ export function PromptCard({
       ) : null}
 
       <Animated.View style={[styles.questionWrap, questionStyle]}>
-        <Text style={styles.helperText}>Choose what feels closest. There is no right answer.</Text>
+        <Text style={styles.helperText}>{t('checkin.helper_text')}</Text>
         <Text style={styles.question} accessibilityRole="header">
           {promptText}
         </Text>

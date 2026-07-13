@@ -55,7 +55,7 @@ export function TodayCheckinCard({
   return (
     <Animated.View entering={FadeInDown.duration(500).delay(300)}>
       <TouchableOpacity
-        style={[styles.card, {
+        style={[styles.card, styles.activeCard, {
           backgroundColor: colors.white,
           borderColor: colors.border,
           ...cardShadow(colors.shadowColor),
@@ -63,22 +63,28 @@ export function TodayCheckinCard({
         onPress={onPress}
         activeOpacity={0.88}
       >
-        <View style={styles.topRow}>
-          <Text style={[styles.dayLabel, { color: colors.slateLight }]}>
-            {t('today.daily_pause')}
+        <View style={[styles.accentBar, { backgroundColor: colors.aligned }]} />
+        <View style={styles.cardBody}>
+          <View style={styles.topRow}>
+            <Text style={[styles.dayLabel, { color: colors.slateLight }]}>
+              {t('today.daily_pause')}
+            </Text>
+            <InfoTooltipInline
+              helpText={t('tooltips.checkin_card')}
+              size={13}
+            />
+          </View>
+          <Text style={[styles.prompt, { color: colors.slate }]} numberOfLines={2}>
+            {promptPreview}
           </Text>
-          <InfoTooltipInline
-            helpText={t('tooltips.checkin_card')}
-            size={13}
-          />
-        </View>
-        <Text style={[styles.prompt, { color: colors.slate }]} numberOfLines={2}>
-          {promptPreview}
-        </Text>
-        <View style={styles.footer}>
-          <Text style={[styles.cta, { color: colors.slateMid }]}>
-            {t('common.start_checkin')}
-          </Text>
+          <View style={styles.footer}>
+            <Text style={[styles.cta, { color: colors.slateMid }]}>
+              {t('common.start_checkin')}
+            </Text>
+            <View style={[styles.ctaCircle, { backgroundColor: colors.slate }]}>
+              <Text style={styles.ctaArrow}>→</Text>
+            </View>
+          </View>
         </View>
       </TouchableOpacity>
     </Animated.View>
@@ -107,6 +113,19 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: RADIUS.lg,
     borderWidth: 1,
+    padding: SPACING.md,
+    gap: SPACING.xs,
+  },
+  activeCard: {
+    flexDirection: 'row',
+    padding: 0,
+    overflow: 'hidden',
+  },
+  accentBar: {
+    width: 4,
+  },
+  cardBody: {
+    flex: 1,
     padding: SPACING.md,
     gap: SPACING.xs,
   },
@@ -145,10 +164,25 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: SPACING.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   cta: {
     fontSize: FONT_SIZE.sm,
     fontWeight: '500',
+  },
+  ctaCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ctaArrow: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '600',
   },
   time: {
     fontSize: FONT_SIZE.xs,

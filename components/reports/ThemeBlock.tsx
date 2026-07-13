@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ThemeBlock as ThemeBlockType } from '../../types/mirar';
 import { StatusBadge } from '../ui/StatusBadge';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
@@ -9,6 +10,7 @@ interface ThemeBlockProps {
 }
 
 export function ThemeBlock({ block }: ThemeBlockProps) {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,7 +19,7 @@ export function ThemeBlock({ block }: ThemeBlockProps) {
       <View style={styles.footer}>
         <StatusBadge status={block.status} size="sm" />
         {block.averageScore !== null && (
-          <Text style={styles.score}>based on reflections</Text>
+          <Text style={styles.score}>{t('theme_block.based_on_reflections')}</Text>
         )}
       </View>
     </View>

@@ -27,6 +27,7 @@ interface CycleStore {
   streakLength: number;
   contextMessage: string | null;
   latestSignalText: string | null;
+  totalReflections: number;
   themeHistories: Record<ThemeCode, { day: number; average: number | null }[]> | null;
 
   // ── Pattern engine output: signals → patterns → awareness ─────────────────
@@ -53,6 +54,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
   streakLength: 0,
   contextMessage: null,
   latestSignalText: null,
+  totalReflections: 0,
   themeHistories: null,
   patternReading: null,
 
@@ -75,8 +77,40 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       return;
     }
 
-    const currentDay = getCycleDay(cycle.start_date);
     const elapsedDay = getElapsedCycleDay(cycle.start_date);
+
+    // Mirar is a continuous practice, not a 28-day program — when a cycle's
+    // window has fully elapsed, roll over to the next one silently. No gate,
+    // no ceremony; the user experiences day 29 exactly like day 28.
+    if (elapsedDay > 28) {
+      const now = new Date().toISOString();
+      const newCycleNumber = cycle.cycle_number + 1;
+
+      await supabase.from('cycles').update({ status: 'completed' }).eq('id', cycle.id);
+
+      const { data: newCycle } = await supabase
+        .from('cycles')
+        .insert({
+          user_id: userId,
+          cycle_number: newCycleNumber,
+          start_date: now,
+          stage1_start: now,
+          status: 'active',
+        })
+        .select()
+        .single();
+
+      await supabase
+        .from('users')
+        .update({ current_cycle: newCycleNumber, cycle_start_date: now })
+        .eq('id', userId);
+
+      if (newCycle) {
+        return get().loadActiveCycle(userId);
+      }
+    }
+
+    const currentDay = getCycleDay(cycle.start_date);
     const currentStage = getStageFromDay(currentDay);
 
     // Load all responses for this cycle
@@ -275,7 +309,7 @@ async function loadUserState(
 ) {
   const { data } = await supabase
     .from('user_state')
-    .select('streak_length, context_message, latest_signal_text')
+    .select('streak_length, context_message, latest_signal_text, total_reflections')
     .eq('user_id', userId)
     .maybeSingle();
 
@@ -285,6 +319,7 @@ async function loadUserState(
       streakLength: data.streak_length ?? 0,
       contextMessage: data.context_message ?? null,
       latestSignalText: data.latest_signal_text ?? null,
+      totalReflections: data.total_reflections ?? 0,
     });
   }
 }

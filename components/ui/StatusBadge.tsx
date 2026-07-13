@@ -1,7 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ThemeStatus } from '../../types/mirar';
 import { STATUS_CONFIG, FONT_SIZE, RADIUS } from '../../lib/constants';
+
+const STATUS_KEY: Record<ThemeStatus, string> = {
+  Aligned: 'status.aligned',
+  Forming: 'status.forming',
+  Stabilizing: 'status.stabilizing',
+  'Under Load': 'status.under_load',
+  'No Reading': 'status.no_reading',
+};
 
 interface StatusBadgeProps {
   status: ThemeStatus;
@@ -9,6 +18,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, size = 'md' }: StatusBadgeProps) {
+  const { t } = useTranslation();
   const config = STATUS_CONFIG[status];
   const isSmall = size === 'sm';
 
@@ -28,7 +38,7 @@ export function StatusBadge({ status, size = 'md' }: StatusBadgeProps) {
           isSmall && styles.labelSm,
         ]}
       >
-        {config.label}
+        {t(STATUS_KEY[status])}
       </Text>
     </View>
   );

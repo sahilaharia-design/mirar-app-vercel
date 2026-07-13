@@ -23,7 +23,9 @@ const queryClient = new QueryClient({
 function AppShell() {
   const initialize = useAuthStore((s) => s.initialize);
   const session = useAuthStore((s) => s.session);
+  const user = useAuthStore((s) => s.user);
   const isInitialized = useAuthStore((s) => s.isInitialized);
+  const isUserLoading = useAuthStore((s) => s.isUserLoading);
   const loadLanguage = useSettingsStore((s) => s.loadLanguage);
   const { isDark } = useTheme();
   const segments = useSegments();
@@ -50,34 +52,56 @@ function AppShell() {
           access_token: params.access_token,
           refresh_token: params.refresh_token,
         });
-        // onAuthStateChange in auth-store picks up the new session from here
       }
     };
 
-    // Cold start: app opened via deep link while it was closed
     Linking.getInitialURL().then(handleURL);
-
-    // Warm start: deep link received while app is already running
     const sub = Linking.addEventListener('url', ({ url }) => handleURL(url));
     return () => sub.remove();
   }, []);
 
   // ── Auth guard ──────────────────────────────────────────────────────────────
-  // Redirects to login if no session and not already in the auth group.
+  // Wait for both initialization and the DB user-row fetch before routing.
+  // session=true + user=null + !isUserLoading → new user, send to onboarding.
+  // session=false → send to login unless already in auth/assess.
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || isUserLoading) return;
+
     const inAuthGroup = segments[0] === '(auth)';
-    if (!session && !inAuthGroup) {
-      router.replace('/(auth)/login');
+    const inAssessGroup = segments[0] === 'assess';
+    const inOnboardingGroup = segments[0] === '(onboarding)';
+
+    if (!session) {
+      if (!inAuthGroup && !inAssessGroup && !inOnboardingGroup) {
+        router.replace('/(auth)/login');
+      }
+      return;
     }
-  }, [session, isInitialized, segments]);
+
+    // Authenticated but no DB row → new user arriving via magic link
+    if (!user && !inAuthGroup) {
+      router.replace('/(auth)/onboarding');
+      return;
+    }
+
+    // Existing user on login/assess screen — redirect to their dashboard
+    // (does NOT fire during onboarding.tsx account-creation, which uses segment 'onboarding')
+    const onLoginScreen = segments[0] === '(auth)' && (segments as string[])[1] === 'login';
+    const onAssessScreen = segments[0] === 'assess';
+    if (user && (onLoginScreen || onAssessScreen)) {
+      router.replace('/(tabs)/');
+    }
+  }, [session, user, isInitialized, isUserLoading, segments]);
 
   return (
     <>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+        <Stack.Screen name="assess" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/callback" options={{ headerShown: false }} />
         <Stack.Screen
           name="report/[id]"
           options={{ presentation: 'modal', headerShown: false }}

@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCycleStore } from '../../stores/cycle-store';
 import { useDevStore } from '../../stores/dev-store';
@@ -20,31 +21,31 @@ import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { ThemeScore, ThemeCode } from '../../types/mirar';
-import { COLORS, FONT_SIZE, SPACING, RADIUS, STAGES, THEME_ORDER } from '../../lib/constants';
+import { COLORS, FONT_SIZE, SPACING, RADIUS, THEME_ORDER } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
-import { GUIDANCE_TOOLTIPS, signalHelpForStatus } from '../../lib/guidance';
+import { signalHelpKeyForStatus } from '../../lib/guidance';
 import { useColors } from '../../contexts/theme-context';
 import { ThemeDetailSheet } from '../../components/dashboard/ThemeDetailSheet';
 import { PatternsPanel } from '../../components/dashboard/PatternsPanel';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function getCrossThemeObservation(themeScores: ThemeScore[]): string | null {
+function getCrossThemeObservation(t: (key: string, opts?: any) => string, themeScores: ThemeScore[]): string | null {
   if (!themeScores.length) return null;
-  const underLoad = themeScores.filter((t) => t.status === 'Under Load');
-  const aligned = themeScores.filter((t) => t.status === 'Aligned');
+  const underLoad = themeScores.filter((ts) => ts.status === 'Under Load');
+  const aligned = themeScores.filter((ts) => ts.status === 'Aligned');
 
   if (underLoad.length >= 3) {
-    return `${underLoad.length} areas are carrying load at the same time. The pattern is worth holding gently.`;
+    return t('signals_tab.cross_load_many', { n: underLoad.length });
   }
   if (underLoad.length === 2) {
-    return `${underLoad[0].name} and ${underLoad[1].name} are both showing pressure. These often move together.`;
+    return t('signals_tab.cross_load_two', { a: t(`themes.${underLoad[0].code}`), b: t(`themes.${underLoad[1].code}`) });
   }
   if (aligned.length >= 4) {
-    return `${aligned.length} areas are showing steadiness in recent reflections.`;
+    return t('signals_tab.cross_aligned_many', { n: aligned.length });
   }
   if (aligned.length >= 2 && underLoad.length === 0) {
-    return `${aligned[0].name} and ${aligned[1].name} are both holding steady right now.`;
+    return t('signals_tab.cross_aligned_two', { a: t(`themes.${aligned[0].code}`), b: t(`themes.${aligned[1].code}`) });
   }
   return null;
 }
@@ -52,6 +53,7 @@ function getCrossThemeObservation(themeScores: ThemeScore[]): string | null {
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export default function SignalsScreen() {
+  const { t } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
   const {
@@ -105,7 +107,7 @@ export default function SignalsScreen() {
   const currentStageOverview = stageOverviews.find((s) => s.stage === effectiveStage);
   const currentStageCoverage = currentStageOverview?.coverage ?? 0;
   const crossThemeNote = currentStageOverview
-    ? getCrossThemeObservation(currentStageOverview.themeScores)
+    ? getCrossThemeObservation(t, currentStageOverview.themeScores)
     : null;
 
   // Build previous-stage theme statuses for delta labels
@@ -142,41 +144,41 @@ export default function SignalsScreen() {
         <View style={[styles.guideCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
           <View style={styles.guideHeaderRow}>
             <Text style={[styles.guideTitle, { color: colors.slate }]}>
-              Signals are small reflections from your daily mirrors.
+              {t('signals_tab.guide_title')}
             </Text>
-            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.signal} size={13} />
+            <InfoTooltipInline helpText={t('guidance_tooltips.signal')} size={13} />
           </View>
           <Text style={[styles.guideText, { color: colors.slateMid }]}>
-            When they repeat, they start to show a pattern.
+            {t('signals_tab.guide_text')}
           </Text>
           {currentStageCoverage < 3 && (
             <Text style={[styles.guideHint, { color: colors.slateLight }]}>
-              Your signals are still forming. A few more reflections will make this clearer.
+              {t('signals_tab.guide_hint')}
             </Text>
           )}
           <TouchableOpacity onPress={() => setGuideVisible(true)} activeOpacity={0.75} style={styles.guideLink}>
-            <Text style={[styles.guideLinkText, { color: colors.slate }]}>How this works</Text>
+            <Text style={[styles.guideLinkText, { color: colors.slate }]}>{t('signals_tab.how_this_works')}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.section}>
           <View style={styles.sectionLabelRow}>
-            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>What’s showing up</Text>
-            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.whatsShowingUp} size={12} />
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('signals_tab.whats_showing_up')}</Text>
+            <InfoTooltipInline helpText={t('guidance_tooltips.whats_showing_up')} size={12} />
           </View>
           <View style={[styles.stageSummaryCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             <View style={styles.stageSummaryHeader}>
               <Text style={[styles.stageSummaryTitle, { color: colors.slate }]}>
-                Recent reflections
+                {t('signals_tab.recent_reflections')}
               </Text>
               <Text style={[styles.stageSummaryDesc, { color: colors.slateLight }]}>
-                "{STAGES[effectiveStage - 1]?.description}"
+                "{t(`report_detail.stage_description.${effectiveStage}`)}"
               </Text>
             </View>
             <CoverageBar
               coverage={currentStageCoverage}
               total={7}
-              label="Reflections in this window"
+              label={t('signals_tab.reflections_in_window')}
             />
           </View>
         </View>
@@ -185,8 +187,8 @@ export default function SignalsScreen() {
         {currentStageOverview && currentStageOverview.themeScores.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionLabelRow}>
-              <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Recent signals</Text>
-              <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.recentReflections} size={12} />
+              <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('signals_tab.recent_signals')}</Text>
+              <InfoTooltipInline helpText={t('guidance_tooltips.recent_reflections')} size={12} />
             </View>
             <View style={styles.themeRows}>
               {THEME_ORDER.map((code, index) => {
@@ -202,17 +204,17 @@ export default function SignalsScreen() {
                     activeOpacity={0.75}
                     onPress={() => setSelectedTheme(code as ThemeCode)}
                     accessibilityRole="button"
-                    accessibilityLabel={`View ${score.name} detail`}
+                    accessibilityLabel={t('signals_tab.view_detail_a11y', { name: t(`themes.${code}`) })}
                   >
                     <ThemeSignalRow
                       code={code as ThemeCode}
-                      name={score.name}
+                      name={t(`themes.${code}`)}
                       status={score.status}
                       average={score.average}
                       signalCount={score.signalCount}
                       history={history}
                       previousStatus={prevStatus}
-                      helpText={signalHelpForStatus(score.status)}
+                      helpText={t(`guidance_tooltips.${signalHelpKeyForStatus(score.status)}`)}
                       index={index}
                     />
                   </TouchableOpacity>
@@ -223,7 +225,7 @@ export default function SignalsScreen() {
             {/* Cross-theme observation */}
             {crossThemeNote && (
               <View style={[styles.crossThemeCard, { backgroundColor: colors.creamDark, borderColor: colors.border }]}>
-                <Text style={[styles.crossThemeLabel, { color: colors.slateLight }]}>Your pattern</Text>
+                <Text style={[styles.crossThemeLabel, { color: colors.slateLight }]}>{t('signals_tab.your_pattern')}</Text>
                 <Text style={[styles.crossThemeText, { color: colors.slateMid }]}>{crossThemeNote}</Text>
               </View>
             )}
@@ -233,8 +235,8 @@ export default function SignalsScreen() {
         {/* ── Signal history (stage progress) ───────────────────────────── */}
         <View style={styles.section}>
           <View style={styles.sectionLabelRow}>
-            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>Recent reflections</Text>
-            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.pattern} size={12} />
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('signals_tab.recent_reflections')}</Text>
+            <InfoTooltipInline helpText={t('guidance_tooltips.pattern')} size={12} />
           </View>
           <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             <StageProgress

@@ -8,10 +8,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { LanguagePicker } from '../../components/ui/LanguagePicker';
@@ -20,38 +20,38 @@ import { COLORS, FONT_SIZE, RADIUS, SPACING } from '../../lib/constants';
 const WORDMARK = require('../../assets/brand/mirar-wordmark.png');
 const isWeb = Platform.OS === 'web';
 
+type Mode = 'email' | 'sent';
+
 export default function LoginScreen() {
   const { t } = useTranslation();
+  const [mode, setMode] = useState<Mode>('email');
   const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { signInWithEmail, isLoading } = useAuthStore();
 
-  const handleSubmit = async () => {
+  const handleEmailSubmit = async () => {
     if (!email.trim()) return;
     setError(null);
     const result = await signInWithEmail(email.trim().toLowerCase());
     if (result.error) {
       setError(result.error);
     } else {
-      setSent(true);
+      setMode('sent');
     }
   };
 
-  if (sent) {
+  if (mode === 'sent') {
     return (
       <SafeAreaView style={styles.safe}>
         <Animated.View entering={FadeIn.duration(500)} style={styles.center}>
           <Image source={WORDMARK} style={styles.wordmark} resizeMode="contain" accessibilityLabel="Mirar" />
-
           <View style={styles.sentCard}>
             <View style={styles.sentDot} />
             <Text style={styles.sentTitle}>{t('auth.check_email')}</Text>
             <Text style={styles.sentBody}>{t('auth.link_sent', { email })}</Text>
             <Text style={styles.sentNote}>{t('auth.link_validity')}</Text>
           </View>
-
-          <TouchableOpacity onPress={() => setSent(false)} style={styles.tryAgain} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => setMode('email')} style={styles.tryAgain} activeOpacity={0.7}>
             <Text style={styles.tryAgainText}>{t('auth.try_again')}</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -72,9 +72,11 @@ export default function LoginScreen() {
         <Animated.View entering={FadeInDown.duration(500)} style={styles.center}>
           <Image source={WORDMARK} style={styles.wordmark} resizeMode="contain" accessibilityLabel="Mirar" />
 
-          <Text style={styles.tagline}>{t('auth.tagline_short')}</Text>
+          <Text style={styles.heading}>{t('auth.heading')}</Text>
+          <Text style={styles.sub}>{t('auth.login_subtitle')}</Text>
 
           <View style={styles.form}>
+            {/* Email — primary intentional path */}
             <TextInput
               style={[styles.input, error ? styles.inputError : null]}
               placeholder={t('auth.email_placeholder')}
@@ -86,28 +88,25 @@ export default function LoginScreen() {
               autoCorrect={false}
               autoComplete="email"
               returnKeyType="send"
-              onSubmitEditing={handleSubmit}
+              onSubmitEditing={handleEmailSubmit}
               editable={!isLoading}
+              autoFocus
             />
-
-            {error ? (
-              <Text style={styles.errorText}>{error}</Text>
-            ) : null}
-
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <TouchableOpacity
-              style={[styles.ctaButton, isLoading && styles.ctaButtonDisabled, isWeb && ({ cursor: 'pointer' } as any)]}
-              onPress={handleSubmit}
+              style={[styles.ctaButton, (isLoading || !email.trim()) && styles.buttonDisabled, isWeb && ({ cursor: 'pointer' } as any)]}
+              onPress={handleEmailSubmit}
               disabled={isLoading || !email.trim()}
               activeOpacity={0.82}
             >
               {isLoading ? (
                 <ActivityIndicator color={COLORS.white} />
               ) : (
-                <Text style={styles.ctaText}>{t('auth.cta_early_access')}</Text>
+                <Text style={styles.ctaText}>{t('auth.send_link')}</Text>
               )}
             </TouchableOpacity>
 
-            <Text style={styles.disclaimer}>{t('auth.disclaimer')}</Text>
+            <Text style={styles.disclaimer}>{t('auth.privacy_badge')}</Text>
           </View>
         </Animated.View>
       </KeyboardAvoidingView>
@@ -116,13 +115,8 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: COLORS.cream,
-  },
-  flex: {
-    flex: 1,
-  },
+  safe: { flex: 1, backgroundColor: COLORS.cream },
+  flex: { flex: 1 },
   topBar: {
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.md,
@@ -143,13 +137,21 @@ const styles = StyleSheet.create({
     width: 120,
     marginBottom: SPACING.xl,
   },
-  tagline: {
-    fontSize: FONT_SIZE.base,
+  heading: {
+    fontSize: FONT_SIZE['2xl'],
+    color: COLORS.slate,
+    fontWeight: '300',
+    letterSpacing: -0.3,
+    marginBottom: SPACING.sm,
+    textAlign: 'center',
+  },
+  sub: {
+    fontSize: FONT_SIZE.sm,
     color: COLORS.slateMid,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 22,
     marginBottom: SPACING['2xl'],
-    paddingHorizontal: SPACING.md,
+    paddingHorizontal: SPACING.sm,
   },
   form: {
     width: '100%',
@@ -166,9 +168,7 @@ const styles = StyleSheet.create({
     color: COLORS.slate,
     backgroundColor: COLORS.white,
   },
-  inputError: {
-    borderColor: '#E05252',
-  },
+  inputError: { borderColor: '#E05252' },
   errorText: {
     fontSize: FONT_SIZE.sm,
     color: '#E05252',
@@ -182,9 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 52,
   },
-  ctaButtonDisabled: {
-    opacity: 0.5,
-  },
+  buttonDisabled: { opacity: 0.45 },
   ctaText: {
     fontSize: FONT_SIZE.base,
     color: COLORS.white,
@@ -197,7 +195,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
   },
-  // Sent state
   sentCard: {
     width: '100%',
     backgroundColor: COLORS.white,
@@ -234,9 +231,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: SPACING.xs,
   },
-  tryAgain: {
-    paddingVertical: SPACING.sm,
-  },
+  tryAgain: { paddingVertical: SPACING.sm },
   tryAgainText: {
     fontSize: FONT_SIZE.sm,
     color: COLORS.slateLight,

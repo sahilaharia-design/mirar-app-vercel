@@ -8,6 +8,7 @@ import {
   StyleSheet,
   RefreshControl,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -32,7 +33,6 @@ import { useColors } from '../../contexts/theme-context';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { getAlignmentStatus } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
-import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 import { ThemeCode } from '../../types/mirar';
 
 // ─── Check-in Flow (modal-style within the tab) ───────────────────────────────
@@ -160,41 +160,11 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   );
 }
 
-// ─── Context Line (replaces plain DayPill) ────────────────────────────────────
-function ContextLine({
-  currentDay,
-  cycleNumber,
-  streakLength,
-  contextMessage,
-}: {
-  currentDay: number;
-  cycleNumber: number;
-  streakLength: number;
-  contextMessage: string | null;
-}) {
-  const { t } = useTranslation();
-  const colors = useColors();
-  // If context_message is available from server, use it; else build a simple one
-  const displayText = contextMessage
-    ?? (streakLength >= 2
-      ? t('today.context_with_count', { count: streakLength })
-      : t('common.your_alignment_today'));
-
-  return (
-    <Animated.View entering={FadeIn.duration(400).delay(100)}>
-      <View style={[styles.contextLine, {
-        backgroundColor: colors.white,
-        borderColor: colors.borderLight,
-      }]}>
-        <Text style={[styles.contextText, { color: colors.slateLight }]}>
-          {displayText}
-        </Text>
-        {streakLength >= 2 && !contextMessage && (
-          <View style={[styles.streakDot, { backgroundColor: colors.accentTeal }]} />
-        )}
-      </View>
-    </Animated.View>
-  );
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning.';
+  if (hour < 17) return 'Good afternoon.';
+  return 'Good evening.';
 }
 
 // ─── Main Home Screen ─────────────────────────────────────────────────────────
@@ -302,9 +272,6 @@ export default function TodayScreen() {
           <TouchableOpacity onPress={() => setShowCheckin(false)}>
             <Text style={[styles.backLink, { color: colors.slateMid }]}>← {t('nav.today')}</Text>
           </TouchableOpacity>
-          <Text style={[styles.dayChip, { color: colors.slateLight }]}>
-            {t('today.daily_pause')}
-          </Text>
         </View>
         <CheckInFlow onDone={() => setShowCheckin(false)} />
       </SafeAreaView>
@@ -318,7 +285,7 @@ export default function TodayScreen() {
         <MirarLogo size="sm" />
         {simulatedDay !== null && (
           <Text style={[styles.dayChip, { color: colors.slateLight }]}>
-            Simulated reflection {effectiveDay}
+            Simulated day {effectiveDay}
           </Text>
         )}
       </Animated.View>
@@ -335,50 +302,17 @@ export default function TodayScreen() {
           />
         }
       >
-        {/* 1. Context line (streak + day + stage) — replaces DayPill */}
-        <ContextLine
-          currentDay={effectiveDay}
-          cycleNumber={cycleNumber}
-          streakLength={streakLength}
-          contextMessage={contextMessage}
-        />
-
-        {/* Onboarding guidance — only while the ritual is still new (first week).
-            Established users skip straight to the check-in + awareness. */}
-        {effectiveDay <= 7 && (
-          <Animated.View entering={FadeInDown.duration(400).delay(120)} style={[
-            styles.guidanceCard,
-            { backgroundColor: colors.white, borderColor: colors.borderLight },
-          ]}>
-            <View style={styles.guidanceTitleRow}>
-              <Text style={[styles.guidanceTitle, { color: colors.slate }]}>
-                {t('today.ready_title')}
-              </Text>
-              <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.todaysMirror} size={13} />
-            </View>
-            <Text style={[styles.guidanceText, { color: colors.slateMid }]}>
-              {t('today.ready_sub')}
+        {/* 1. Greeting — calm, non-metric header */}
+        <Animated.View entering={FadeIn.duration(400).delay(80)}>
+          <Text style={[styles.greeting, { color: colors.slate }]}>
+            {getGreeting()}
+          </Text>
+          {streakLength >= 2 && (
+            <Text style={[styles.streakLine, { color: colors.slateLight }]}>
+              {streakLength} days in a row.
             </Text>
-            <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
-              {t('today.ready_hint')}
-            </Text>
-            {alignmentHistory.length < 3 && (
-              <Text style={[styles.guidanceHint, { color: colors.slateLight }]}>
-                {t('today.pattern_hint')}
-              </Text>
-            )}
-            <TouchableOpacity
-              onPress={() => setGuideVisible(true)}
-              activeOpacity={0.75}
-              accessibilityRole="button"
-              style={styles.guideLink}
-            >
-              <Text style={[styles.guideLinkText, { color: colors.slate }]}>
-                {t('today.how_link')}
-              </Text>
-            </TouchableOpacity>
-          </Animated.View>
-        )}
+          )}
+        </Animated.View>
 
         {/* 2. Today's check-in card — primary action */}
         <TodayCheckinCard
@@ -389,34 +323,46 @@ export default function TodayScreen() {
           onPress={() => setShowCheckin(true)}
         />
 
-        {/* 3. Awareness — the daily payoff: what deserves attention,
-              what's changing, what's holding. This is the reason to return,
-              so it sits directly under the check-in. Synthesis lives here and
-              only here on Today (today's fresh AI reflection appears on the
-              post-check-in Mirror screen). */}
+        {/* 3. Early-days card — human text for days 1–3 before data accumulates */}
         {effectiveDay === 1 && !isCompleted && score === null ? (
           <FirstDayWelcome />
+        ) : effectiveDay <= 3 && !isCompleted && score === null ? (
+          <Animated.View
+            entering={FadeInDown.duration(400).delay(120)}
+            style={[styles.earlyCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}
+          >
+            <Text style={[styles.earlyCardText, { color: colors.slateMid }]}>
+              {effectiveDay === 2
+                ? 'Day 2. The practice continues.'
+                : 'Three days of signal. Your first pattern is forming.'}
+            </Text>
+          </Animated.View>
         ) : patternReading ? (
           <AwarenessCard reading={patternReading} />
         ) : null}
 
-        {/* 4. Alignment ring — today's signal at a glance */}
-        {!(effectiveDay === 1 && !isCompleted && score === null) && (
+        {/* 4. Alignment ring — only when there is a score to show */}
+        {score !== null && (
           <View style={styles.ringSection}>
             <AlignmentRing score={score} status={status} trend={trendValue} />
             <View style={styles.ringLabelRow}>
               <Text style={[styles.ringLabel, { color: colors.slateLight }]}>
                 {t('common.your_alignment_today')}
               </Text>
-              <InfoTooltipInline
-                helpText={GUIDANCE_TOOLTIPS.signal}
-                size={13}
-              />
+              <InfoTooltipInline helpText={t('guidance_tooltips.signal')} size={13} />
             </View>
           </View>
         )}
 
-        {/* 5. 14-day sparkline — trend context */}
+        {/* 5. Theme signal grid — 6 dimensions at a glance */}
+        {themeScoresForGrid.length > 0 && (
+          <ThemeSignalsGrid
+            themeScores={themeScoresForGrid}
+            onThemePress={() => {}}
+          />
+        )}
+
+        {/* 6. 14-day sparkline — trend context, furthest below fold */}
         {alignmentHistory.length >= 2 && (
           <Animated.View entering={FadeInDown.duration(400).delay(200)} style={[styles.sparklineCard, {
             backgroundColor: colors.white,
@@ -427,14 +373,6 @@ export default function TodayScreen() {
             </Text>
             <AlignmentSparkline history={alignmentHistory} width={160} height={28} />
           </Animated.View>
-        )}
-
-        {/* 6. Theme signal grid — 6 dimensions at a glance */}
-        {themeScoresForGrid.length > 0 && (
-          <ThemeSignalsGrid
-            themeScores={themeScoresForGrid}
-            onThemePress={() => {}}
-          />
         )}
 
         {/* Dev Day Simulator */}
@@ -552,27 +490,17 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.sm,
     fontWeight: '500',
   },
-  // Context line (replaces DayPill)
-  contextLine: {
-    borderRadius: RADIUS.md,
-    borderWidth: 1,
-    paddingVertical: SPACING.sm,
-    paddingHorizontal: SPACING.md,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  // Greeting header
+  greeting: {
+    fontSize: FONT_SIZE['2xl'],
+    fontWeight: '300',
+    letterSpacing: -0.3,
+    lineHeight: 34,
   },
-  contextText: {
-    fontSize: FONT_SIZE.xs,
-    fontWeight: '500',
-    letterSpacing: 0.4,
-    flex: 1,
-  },
-  streakDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginLeft: SPACING.sm,
+  streakLine: {
+    fontSize: FONT_SIZE.sm,
+    marginTop: 2,
+    lineHeight: 20,
   },
   // Sparkline card
   sparklineCard: {
@@ -621,6 +549,19 @@ const styles = StyleSheet.create({
   doneButtonText: {
     fontSize: FONT_SIZE.base,
     fontWeight: '500',
+  },
+  // Early-days card (days 2–3, pre-data)
+  earlyCard: {
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+  },
+  earlyCardText: {
+    fontSize: FONT_SIZE.base,
+    fontWeight: '300',
+    lineHeight: 26,
+    letterSpacing: -0.1,
   },
   // Dev simulator
   devSection: {

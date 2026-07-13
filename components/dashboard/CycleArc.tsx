@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
 interface CycleArcProps {
@@ -8,11 +9,12 @@ interface CycleArcProps {
 }
 
 export function CycleArc({ currentDay, totalDays = 28 }: CycleArcProps) {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.label}>Reflection pattern</Text>
-        <Text style={styles.dayCount}>Your pattern is forming</Text>
+        <Text style={styles.label}>{t('cycle_arc.label')}</Text>
+        <Text style={styles.dayCount}>{t('cycle_arc.forming')}</Text>
       </View>
 
       {/* Internal cycle grid, presented as a soft reflection pattern. */}
@@ -50,10 +52,10 @@ export function CycleArc({ currentDay, totalDays = 28 }: CycleArcProps) {
       {/* Stage legend */}
       <View style={styles.legend}>
         {[
-          { label: 'Notice', bg: STAGE_COLORS.stage1Active },
-          { label: 'Adjust', bg: STAGE_COLORS.stage2Active },
-          { label: 'Move', bg: STAGE_COLORS.stage3Active },
-          { label: 'Reflect', bg: STAGE_COLORS.stage4Active },
+          { label: t('cycle_arc.legend_notice'), bg: STAGE_COLORS.stage1Active },
+          { label: t('cycle_arc.legend_adjust'), bg: STAGE_COLORS.stage2Active },
+          { label: t('cycle_arc.legend_move'), bg: STAGE_COLORS.stage3Active },
+          { label: t('cycle_arc.legend_reflect'), bg: STAGE_COLORS.stage4Active },
         ].map(({ label, bg }) => (
           <View key={label} style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: bg }]} />

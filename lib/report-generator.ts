@@ -1,178 +1,31 @@
 import { ThemeScore, ReportDisplay, ThemeBlock } from '../types/mirar';
-import { THEMES, THEME_ORDER, STAGES } from './constants';
+import { THEME_ORDER } from './constants';
 
-// ─── Chapter labels (internal — not exposed as "Stage N" in UI) ──────────────
-const STAGE_LABELS: Record<number, string> = {
-  1: 'First Signals',
-  2: 'Patterns Emerge',
-  3: 'Signal in Action',
-  4: 'Mirror Deepens',
-  0: 'Full Cycle Mirror',
+// ─── Chapter label keys (internal — not exposed as "Stage N" in UI) ──────────
+// Stages 1-4 reuse the existing stages.* namespace (already translated);
+// stage 0 (full-cycle report) uses its own key.
+const STAGE_KEYS: Record<number, string> = {
+  1: 'stages.awareness',
+  2: 'stages.realignment',
+  3: 'stages.action',
+  4: 'stages.reflection',
+  0: 'report_detail.full_cycle_label',
 };
-
-// ─── Observational summary lines per theme+status ────────────────────────────
-// Language rule: describe what appeared, not what it means.
-const SUMMARY_LINES: Record<string, string> = {
-  IAP_Aligned: 'Direction signals appeared consistently across this chapter.',
-  IAP_Forming: 'Direction signals appeared with moderate regularity.',
-  IAP_Stabilizing: 'Direction signals appeared intermittently.',
-  'IAP_Under Load': 'Direction signals registered under load across this chapter.',
-  IAP_NoReading: 'Coverage was not yet enough for a Direction reading.',
-
-  EWB_Aligned: 'Energy signals were present and stable.',
-  EWB_Forming: 'Energy signals appeared with moderate consistency.',
-  EWB_Stabilizing: 'Energy signals appeared at variable levels.',
-  'EWB_Under Load': 'Energy signals registered under load.',
-  EWB_NoReading: 'Coverage was not yet enough for an Energy reading.',
-
-  FAF_Aligned: 'Attention signals appeared with stability across this chapter.',
-  FAF_Forming: 'Attention signals were present at moderate levels.',
-  FAF_Stabilizing: 'Attention signals showed variability.',
-  'FAF_Under Load': 'Attention signals registered under load.',
-  FAF_NoReading: 'Coverage was not yet enough for an Attention reading.',
-
-  RC_Aligned: 'Connection signals were consistent and present.',
-  RC_Forming: 'Connection signals appeared at moderate levels.',
-  RC_Stabilizing: 'Connection signals appeared intermittently.',
-  'RC_Under Load': 'Connection signals registered under load.',
-  RC_NoReading: 'Coverage was not yet enough for a Connection reading.',
-
-  GAL_Aligned: 'Growth signals were consistently present.',
-  GAL_Forming: 'Growth signals appeared with moderate regularity.',
-  GAL_Stabilizing: 'Growth signals appeared intermittently.',
-  'GAL_Under Load': 'Growth signals registered under load.',
-  GAL_NoReading: 'Coverage was not yet enough for a Growth reading.',
-
-  RA_Aligned: 'Movement signals were stable and present.',
-  RA_Forming: 'Movement signals appeared with moderate consistency.',
-  RA_Stabilizing: 'Movement signals showed variation.',
-  'RA_Under Load': 'Movement signals registered under load.',
-  RA_NoReading: 'Coverage was not yet enough for a Movement reading.',
-};
-
-function getSummaryLine(themeCode: string, status: string): string {
-  const key = `${themeCode}_${status.replace(' ', '')}`;
-  return SUMMARY_LINES[key] ?? `${THEMES[themeCode as keyof typeof THEMES]?.name ?? themeCode} signals were recorded.`;
-}
-
-// ─── Calibration check copy ───────────────────────────────────────────────────
-function buildCalibrationChecks(themeScores: ThemeScore[]): string[] {
-  const checks: string[] = [];
-
-  for (const ts of themeScores) {
-    if (ts.signalCount === 0) continue;
-    const total = ts.lowCount + ts.mediumCount + ts.highCount;
-    if (total === 0) continue;
-
-    const dominantLow = ts.lowCount / total > 0.6;
-    const dominantHigh = ts.highCount / total > 0.6;
-    const mixed = ts.lowCount > 0 && ts.highCount > 0;
-
-    if (dominantLow) {
-      checks.push(`${THEMES[ts.code].name} (${ts.code}) — Low signals dominant across this stage.`);
-    } else if (dominantHigh) {
-      checks.push(`${THEMES[ts.code].name} (${ts.code}) — High signals dominant across this stage.`);
-    } else if (mixed) {
-      checks.push(`${THEMES[ts.code].name} (${ts.code}) — Mixed signal levels observed. Low and High both present.`);
-    }
-  }
-
-  if (checks.length === 0) {
-    checks.push('Signal distribution was consistent across themes.');
-  }
-
-  return checks;
-}
-
-// ─── Primary signals copy ─────────────────────────────────────────────────────
-function buildPrimarySignals(themeScores: ThemeScore[], coverage: number, total: number): string[] {
-  const signals: string[] = [];
-
-  signals.push(`Coverage: ${coverage} of ${total} check-ins recorded.`);
-
-  const sorted = [...themeScores]
-    .filter((t) => t.signalCount > 0)
-    .sort((a, b) => (b.average ?? 0) - (a.average ?? 0));
-
-  for (const ts of sorted.slice(0, 3)) {
-    const level =
-      ts.status === 'Aligned'
-        ? 'High signal presence'
-        : ts.status === 'Forming'
-        ? 'Moderate signal presence'
-        : ts.status === 'Stabilizing'
-        ? 'Stabilizing signal pattern'
-        : 'Low signal presence';
-    signals.push(`${THEMES[ts.code].name} (${ts.code}) — ${level}.`);
-  }
-
-  return signals;
-}
-
-// ─── Assemble full report text ────────────────────────────────────────────────
-export function assembleReportText(
-  stage: number,
-  coverage: number,
-  coverageTotal: number,
-  themeScores: ThemeScore[],
-  mirarid: string
-): string {
-  const stageLabel = STAGE_LABELS[stage];
-  const stageDesc = stage > 0 ? STAGES[stage - 1]?.description ?? '' : 'Full cycle signal summary';
-
-  const lines: string[] = [];
-
-  lines.push(`MIRAR ALIGNMENT SUMMARY — ${stageLabel.toUpperCase()}`);
-  lines.push(`Mirar ID: ${mirarid}`);
-  lines.push('');
-  lines.push(`Chapter: ${stageLabel}`);
-  lines.push(`"${stageDesc}"`);
-  lines.push('');
-  lines.push(`Coverage: ${coverage} of ${coverageTotal} check-ins recorded.`);
-  lines.push('');
-  lines.push('─────────────────────────────');
-  lines.push('THEME SIGNAL SUMMARY');
-  lines.push('─────────────────────────────');
-
-  for (const code of THEME_ORDER) {
-    const ts = themeScores.find((t) => t.code === code);
-    if (!ts) continue;
-    const statusLine = ts.status === 'No Reading' ? 'No Reading' : `${ts.status} (avg: ${ts.average?.toFixed(2) ?? '—'})`;
-    lines.push('');
-    lines.push(`${THEMES[code].name} (${code})`);
-    lines.push(`Status: ${statusLine}`);
-    lines.push(getSummaryLine(code, ts.status));
-  }
-
-  lines.push('');
-  lines.push('─────────────────────────────');
-  lines.push('PRIMARY SIGNALS');
-  lines.push('─────────────────────────────');
-  for (const s of buildPrimarySignals(themeScores, coverage, coverageTotal)) {
-    lines.push(`• ${s}`);
-  }
-
-  lines.push('');
-  lines.push('─────────────────────────────');
-  lines.push('CALIBRATION CHECKS');
-  lines.push('─────────────────────────────');
-  for (const c of buildCalibrationChecks(themeScores)) {
-    lines.push(`• ${c}`);
-  }
-
-  return lines.join('\n');
-}
 
 // ─── Build ReportDisplay for rendering ───────────────────────────────────────
+// primary_signals/calibration_checks/summary_text are already generated
+// server-side in the user's language (supabase/functions/generate-report) —
+// only theme names and the stage label are localized here, client-side.
 export function buildReportDisplay(
+  t: (key: string) => string,
   reportRow: any,
   themeScores: ThemeScore[]
 ): ReportDisplay {
   const themeBlocks: ThemeBlock[] = THEME_ORDER.map((code) => {
-    const ts = themeScores.find((t) => t.code === code);
+    const ts = themeScores.find((s) => s.code === code);
     return {
       code,
-      name: THEMES[code].name,
+      name: t(`themes.${code}`),
       status: ts?.status ?? 'No Reading',
       averageScore: ts?.average ?? null,
     };
@@ -186,10 +39,12 @@ export function buildReportDisplay(
     ? reportRow.calibration_checks.split('\n').filter(Boolean)
     : [];
 
+  const stageKey = STAGE_KEYS[reportRow.stage] ?? STAGE_KEYS[0];
+
   return {
     report: reportRow,
     stage: reportRow.stage,
-    stageLabel: STAGE_LABELS[reportRow.stage] ?? `Stage ${reportRow.stage}`,
+    stageLabel: t(stageKey),
     coverage: reportRow.coverage,
     coverageTotal: reportRow.coverage_total,
     themeBlocks,

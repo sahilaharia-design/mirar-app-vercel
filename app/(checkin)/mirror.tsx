@@ -46,7 +46,6 @@ export default function MirrorRoute() {
 
   const handleDone = () => {
     refreshScores();
-    // Navigate back to tabs root, replacing the mirror route
     router.replace('/(tabs)');
   };
 

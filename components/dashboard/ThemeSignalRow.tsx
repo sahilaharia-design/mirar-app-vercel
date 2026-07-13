@@ -1,11 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
 import { ThemeCode, ThemeStatus } from '../../types/mirar';
 import { useColors } from '../../contexts/theme-context';
 import { FONT_SIZE, SPACING, RADIUS, STATUS_CONFIG, THEME_COLORS } from '../../lib/constants';
 import { buildSparklinePath, getThemeScoreColor } from '../../lib/svg-utils';
 import { InfoTooltipInline } from '../ui/InfoTooltip';
+
+const STATUS_KEY: Record<ThemeStatus, string> = {
+  Aligned: 'status.aligned',
+  Forming: 'status.forming',
+  Stabilizing: 'status.stabilizing',
+  'Under Load': 'status.under_load',
+  'No Reading': 'status.no_reading',
+};
 
 interface ThemeDataPoint {
   day: number;
@@ -26,10 +35,11 @@ interface ThemeSignalRowProps {
 
 // ── Status Badge ──────────────────────────────────────────────────────────────
 function StatusBadge({ status }: { status: ThemeStatus }) {
+  const { t } = useTranslation();
   const config = STATUS_CONFIG[status];
   return (
     <View style={[styles.badge, { backgroundColor: config.bg }]}>
-      <Text style={[styles.badgeText, { color: config.color }]}>{config.label}</Text>
+      <Text style={[styles.badgeText, { color: config.color }]}>{t(STATUS_KEY[status])}</Text>
     </View>
   );
 }
@@ -121,6 +131,7 @@ function ThemeSparkline({
 
 // ── Delta label vs previous status ───────────────────────────────────────────
 function getDeltaLabel(
+  t: (key: string) => string,
   currentStatus: ThemeStatus,
   previousStatus: ThemeStatus | null | undefined
 ): { text: string; color: string } | null {
@@ -135,8 +146,8 @@ function getDeltaLabel(
   };
 
   const diff = rank[currentStatus] - rank[previousStatus];
-  if (diff > 0) return { text: 'showing more steadiness', color: '#5B8C5A' };
-  if (diff < 0) return { text: 'showing more pressure', color: '#C47058' };
+  if (diff > 0) return { text: t('theme_signal_row.delta_more_steady'), color: '#5B8C5A' };
+  if (diff < 0) return { text: t('theme_signal_row.delta_more_pressure'), color: '#C47058' };
   return null;
 }
 
@@ -152,8 +163,9 @@ export function ThemeSignalRow({
   helpText,
   index = 0,
 }: ThemeSignalRowProps) {
+  const { t } = useTranslation();
   const colors = useColors();
-  const delta = getDeltaLabel(status, previousStatus);
+  const delta = getDeltaLabel(t, status, previousStatus);
   const accentColor = THEME_COLORS[code]?.light ?? '#9494A0';
 
   return (
@@ -169,7 +181,7 @@ export function ThemeSignalRow({
           {/* Top row: theme name + status badge */}
           <View style={styles.topRow}>
             <View style={styles.nameBlock}>
-              <Text style={[styles.themeCode, { color: accentColor }]}>signal area</Text>
+              <Text style={[styles.themeCode, { color: accentColor }]}>{t('theme_signal_row.signal_area')}</Text>
               <View style={styles.themeNameRow}>
                 <Text style={[styles.themeName, { color: colors.slate }]}>{name}</Text>
                 {helpText ? <InfoTooltipInline helpText={helpText} size={12} /> : null}
@@ -184,7 +196,7 @@ export function ThemeSignalRow({
 
             <View style={styles.statsBlock}>
               <Text style={[styles.signalCount, { color: colors.slateXLight }]}>
-                {signalCount} reflection{signalCount !== 1 ? 's' : ''}
+                {t('theme_signal_row.reflection_count', { count: signalCount })}
               </Text>
             </View>
           </View>

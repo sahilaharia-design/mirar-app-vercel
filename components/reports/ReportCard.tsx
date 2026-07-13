@@ -10,17 +10,17 @@ interface ReportCardProps {
   onPress?: () => void;
 }
 
-const CHAPTER_LABELS: Record<number, string> = {
-  1: 'First reflections',
-  2: 'Pattern forming',
-  3: 'Movement noticed',
-  4: 'Reflection summary',
-  0: 'Full pattern',
+const CHAPTER_KEYS: Record<number, string> = {
+  1: 'stages.awareness',
+  2: 'stages.realignment',
+  3: 'stages.action',
+  4: 'stages.reflection',
+  0: 'report_detail.full_cycle_label',
 };
 
 export function ReportCard({ stage, report, onPress }: ReportCardProps) {
   const { t } = useTranslation();
-  const title = CHAPTER_LABELS[stage] ?? CHAPTER_LABELS[1];
+  const title = t(CHAPTER_KEYS[stage] ?? CHAPTER_KEYS[1]);
   const isGenerated = report?.status === 'generated' || report?.status === 'delivered';
 
   return (
@@ -37,7 +37,7 @@ export function ReportCard({ stage, report, onPress }: ReportCardProps) {
           </Text>
           {report?.generated_at && (
             <Text style={styles.generatedAt}>
-              Ready {new Date(report.generated_at).toLocaleDateString()}
+              {t('reports.ready_date', { date: new Date(report.generated_at).toLocaleDateString() })}
             </Text>
           )}
         </View>

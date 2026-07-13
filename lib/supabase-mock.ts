@@ -214,6 +214,14 @@ class MockQuery {
   in(col: string, vals: any[]) { this.filters.push((r) => vals.includes(r[col])); return this; }
   gte(col: string, val: any) { this.filters.push((r) => r[col] >= val); return this; }
   lte(col: string, val: any) { this.filters.push((r) => r[col] <= val); return this; }
+  not(col: string, operator: string, val: any) {
+    if (operator === 'is' && val === null) {
+      this.filters.push((r) => r[col] !== null && r[col] !== undefined);
+    } else {
+      this.filters.push((r) => r[col] !== val);
+    }
+    return this;
+  }
   order(col: string, opts?: { ascending?: boolean }) { this.orderKey = col; this.orderAsc = opts?.ascending !== false; return this; }
   limit(n: number) { this.limitN = n; return this; }
   single() { this.single_ = true; return this; }

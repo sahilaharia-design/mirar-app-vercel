@@ -29,6 +29,7 @@ import Animated, {
   withTiming,
   withDelay,
 } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
 import {
   COLORS,
   FONTS,
@@ -129,6 +130,7 @@ export function JournalExpander({
   // legacy compat
   journalPrompt: _journalPrompt,
 }: JournalExpanderProps) {
+  const { t } = useTranslation();
   const reducedMotion = useRef(false);
   const timeLabel = capturedTime ?? formatNow();
   const charMax = 280;
@@ -162,9 +164,9 @@ export function JournalExpander({
         <FadeSlide delayMs={stagger(0)} reducedMotion={reducedMotion.current}>
           <View style={styles.headerStrip}>
             <Text style={styles.capsLabel}>
-              <Text style={styles.capsLabelInk}>Today’s mirror</Text>
+              <Text style={styles.capsLabelInk}>{t('common.your_alignment_today')}</Text>
             </Text>
-            <Text style={styles.capsLabel}>Captured · {timeLabel}</Text>
+            <Text style={styles.capsLabel}>{t('journal_expander.captured', { time: timeLabel })}</Text>
           </View>
           <View style={styles.rule} />
         </FadeSlide>
@@ -176,7 +178,7 @@ export function JournalExpander({
               <Text style={styles.echoText}>
                 "{selectedOptionText}"
               </Text>
-              <Text style={styles.themeBadge}>ANSWER CAPTURED</Text>
+              <Text style={styles.themeBadge}>{t('journal_expander.answer_captured')}</Text>
             </View>
           </FadeSlide>
         ) : null}
@@ -184,12 +186,12 @@ export function JournalExpander({
         {/* ── Journal input ─────────────────────────────────────────────── */}
         <FadeSlide delayMs={stagger(2)} reducedMotion={reducedMotion.current}>
           <View style={styles.inputSection}>
-            <Text style={styles.inputLabel}>Add a private line, only if you want.</Text>
-            <Text style={styles.inputHelper}>This is optional. Your answer is enough.</Text>
+            <Text style={styles.inputLabel}>{t('journal_expander.input_label')}</Text>
+            <Text style={styles.inputHelper}>{t('journal_expander.input_helper')}</Text>
             <View style={styles.inputCard}>
               <TextInput
                 style={styles.input}
-                placeholder="Add a sentence if it helps. Your answer is enough."
+                placeholder={t('journal_expander.input_placeholder')}
                 placeholderTextColor={COLORS.slateXLight}
                 multiline
                 textAlignVertical="top"
@@ -202,7 +204,7 @@ export function JournalExpander({
               />
             </View>
             <View style={styles.metaRow}>
-              <Text style={styles.metaLabel}>HELD PRIVATELY</Text>
+              <Text style={styles.metaLabel}>{t('journal_expander.held_privately')}</Text>
               <Text style={styles.metaLabel}>{value.length} / {charMax}</Text>
             </View>
           </View>
@@ -220,10 +222,10 @@ export function JournalExpander({
             onPress={onSkip}
             disabled={disabled || isSubmitting}
             activeOpacity={0.7}
-            accessibilityLabel="Skip journal entry"
+            accessibilityLabel={t('journal_expander.skip_a11y')}
             accessibilityRole="button"
           >
-            <Text style={styles.skipLabel}>Skip</Text>
+            <Text style={styles.skipLabel}>{t('journal_expander.skip')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -234,11 +236,11 @@ export function JournalExpander({
             onPress={onSubmit}
             disabled={disabled || isSubmitting}
             activeOpacity={0.85}
-            accessibilityLabel="Record signal"
+            accessibilityLabel={t('journal_expander.record_a11y')}
             accessibilityRole="button"
           >
             <Text style={styles.recordLabel}>
-              {isSubmitting ? 'Recording…' : 'Record today’s mirror'}
+              {isSubmitting ? t('journal_expander.recording') : t('journal_expander.record_mirror')}
             </Text>
           </TouchableOpacity>
         </View>

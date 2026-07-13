@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCycleStore } from '../../stores/cycle-store';
 import { supabase } from '../../lib/supabase';
@@ -19,9 +20,9 @@ import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
-import { GUIDANCE_TOOLTIPS } from '../../lib/guidance';
 
 export default function ReportsScreen() {
+  const { t } = useTranslation();
   const { session } = useAuthStore();
   const { activeCycle, loadActiveCycle, currentDay } = useCycleStore();
   const [reports, setReports] = useState<ReportRow[]>([]);
@@ -87,11 +88,11 @@ export default function ReportsScreen() {
           }
         >
           <View style={styles.titleRow}>
-            <Text style={styles.pageTitle}>Reflection summaries</Text>
-            <InfoTooltipInline helpText={GUIDANCE_TOOLTIPS.reflectionSummary} size={13} />
+            <Text style={styles.pageTitle}>{t('reports.page_title')}</Text>
+            <InfoTooltipInline helpText={t('guidance_tooltips.reflection_summary')} size={13} />
           </View>
           <Text style={styles.pageDesc}>
-            Summaries show what kept repeating across your reflections. Read them as a mirror, not a verdict.
+            {t('reports.page_desc')}
           </Text>
 
           {currentDay < 8 && reports.length === 0 && (
@@ -100,13 +101,13 @@ export default function ReportsScreen() {
                 <View style={[styles.progressBarFill, { width: `${Math.min((currentDay / 7) * 100, 100)}%` as any }]} />
               </View>
               <Text style={styles.progressLabel}>
-                Day {currentDay} of 7 — your first summary generates after 7 check-ins.
+                {t('reports.progress_label', { day: currentDay })}
               </Text>
             </View>
           )}
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Summaries</Text>
+            <Text style={styles.sectionLabel}>{t('reports.summaries_label')}</Text>
             {[1, 2, 3, 4].map((stage) => (
               <ReportCard
                 key={stage}
@@ -121,7 +122,7 @@ export default function ReportsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Full pattern</Text>
+            <Text style={styles.sectionLabel}>{t('reports.full_pattern_label')}</Text>
             <ReportCard
               stage={0}
               report={getReport(0)}
@@ -134,7 +135,7 @@ export default function ReportsScreen() {
 
           <View style={styles.note}>
             <Text style={styles.noteText}>
-              Reflection summaries only. Mirar reflects — you interpret.
+              {t('reports.footer_note')}
             </Text>
           </View>
 
