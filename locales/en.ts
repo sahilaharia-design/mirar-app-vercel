@@ -348,6 +348,7 @@ export default {
     check_email: 'Check your email',
     link_sent: "We've sent a sign-in link to {{email}}",
     link_validity: 'The link is valid for 60 minutes and can only be used once.',
+    link_expired: 'That link has expired or was already used. Enter your email to get a new one.',
     open_email: 'Open email app',
     try_again: 'Try a different email',
     disclaimer: 'No password needed. One tap to sign in.',

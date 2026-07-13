@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { LanguagePicker } from '../../components/ui/LanguagePicker';
@@ -22,11 +23,20 @@ const isWeb = Platform.OS === 'web';
 
 type Mode = 'email' | 'sent';
 
+const AUTH_ERROR_KEYS: Record<string, string> = {
+  otp_expired: 'auth.link_expired',
+  no_session: 'auth.link_expired',
+  access_denied: 'auth.link_expired',
+};
+
 export default function LoginScreen() {
   const { t } = useTranslation();
+  const { auth_error } = useLocalSearchParams<{ auth_error?: string }>();
   const [mode, setMode] = useState<Mode>('email');
   const [email, setEmail] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    auth_error ? t(AUTH_ERROR_KEYS[auth_error] ?? 'auth.link_expired') : null
+  );
   const { signInWithEmail, isLoading } = useAuthStore();
 
   const handleEmailSubmit = async () => {
