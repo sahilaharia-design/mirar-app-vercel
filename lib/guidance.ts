@@ -24,3 +24,16 @@ export function mirrorSignalLabelKey(status: string | null | undefined): string 
   if (normalized.includes('drift')) return 'drifting';
   return 'still_forming';
 }
+
+// Maps an identity-vector pattern flag (alignment_identity_vectors.pattern_flags)
+// to the i18n key for the compass's "why" sentence. `null`/unknown → generic key.
+export function compassWhyKey(flag: string | null | undefined): string {
+  switch (flag) {
+    case 'recurring_tension': return 'checkin.why_recurring_tension';
+    case 'shift_down': return 'checkin.why_shift_down';
+    case 'growth': return 'checkin.why_growth';
+    case 'shift_up': return 'checkin.why_shift_up';
+    case 'steady': return 'checkin.why_steady';
+    default: return 'checkin.why_fallback';
+  }
+}

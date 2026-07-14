@@ -245,6 +245,17 @@ export const DARK_COLORS = {
 
   // Shadows
   shadowColor: '#000000',
+
+  // ─── V3 · Linen & Brass tokens (dark) ─────────────────────────────────────
+  ink: '#EDEAE3',
+  paper: '#1E1E24',
+  rule: '#38383F',
+  ruleLight: '#2C2C33',
+  brass: '#C9A860',
+  signalLow: '#D47060',
+  signalMid: '#D4B043',
+  signalHigh: '#6BA86A',
+  signalCalm: '#6B9FD4',
 } as const;
 
 // ─── Theme Accent Colors (6 themes, light + dark variants) ───────────────────

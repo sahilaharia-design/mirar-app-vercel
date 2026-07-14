@@ -168,6 +168,8 @@ export const useCheckInStore = create<CheckInStore>((set, get) => ({
         scoreBefore,
         scoreAfter,
         tomorrowTease: question.tomorrow_tease ?? null,
+        theme1PatternFlag: data?.theme1PatternFlag ?? null,
+        theme2PatternFlag: data?.theme2PatternFlag ?? null,
       } : null;
 
       set({
@@ -201,6 +203,8 @@ export const useCheckInStore = create<CheckInStore>((set, get) => ({
         scoreBefore,
         scoreAfter: null,
         tomorrowTease: question.tomorrow_tease ?? null,
+        theme1PatternFlag: null,
+        theme2PatternFlag: null,
       } : null;
 
       set({

@@ -41,6 +41,17 @@ serve(async (req) => {
       return serveQuestion(supabase, todayHistory.question_id, corsHeaders)
     }
 
+    // 1b. Attempt a personalized, AI-generated question once the user's identity
+    // vector has enough history. New users (no vector yet, or fewer than ~1
+    // cycle of signal) fall straight through to curated selection below —
+    // unchanged from today. Any generation failure also falls through silently;
+    // a check-in must never be blocked by an AI call.
+    const { data: identityVector } = await supabase
+      .from('alignment_identity_vectors')
+      .select('velocity_vector, pattern_flags, personalization_depth')
+      .eq('user_id', user_id)
+      .maybeSingle()
+
     // 2. Get questions served in last 14 days (avoid repeats)
     const fourteenDaysAgo = new Date()
     fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14)
@@ -131,19 +142,44 @@ serve(async (req) => {
     const journalResponses = (stageResponses ?? []).filter((r: any) => r.journal_text?.trim()).length
     const journalAffinity = totalStageResponses >= 2 && journalResponses / totalStageResponses > 0.5
 
-    // 5. Fetch candidate questions
+    // 4d. Attempt a personalized, AI-generated question — only once there's
+    // enough identity-vector history to personalize meaningfully. Respects the
+    // exact same stage/depth/gentleness rules just computed above.
+    if ((identityVector?.personalization_depth ?? 0) >= 1) {
+      const generated = await tryGenerateQuestion(supabase, {
+        user_id,
+        current_day,
+        stage,
+        stageAffinity,
+        maxDepth,
+        underLoadThemes,
+        journalAffinity,
+        velocity_vector: identityVector?.velocity_vector ?? {},
+        pattern_flags: identityVector?.pattern_flags ?? {},
+      })
+      if (generated) {
+        await recordHistory(supabase, user_id, generated.id, cycle_id, current_day)
+        return serveQuestion(supabase, generated.id, corsHeaders)
+      }
+      // Falls through to curated selection below on any validation/API failure.
+    }
+
+    // 5. Fetch candidate questions — curated bank only (user_id IS NULL).
+    // Explicitly excludes other users' private generated questions.
     const { data: candidates } = await supabase
       .from('questions')
       .select('id, theme_1, theme_2, depth_level, stage_affinity, journal_prompt')
+      .is('user_id', null)
       .eq('active', true)
       .lte('depth_level', maxDepth)
       .in('stage_affinity', [stageAffinity, 'any'])
 
     if (!candidates || candidates.length === 0) {
-      // Fallback: any active question
+      // Fallback: any active curated question
       const { data: fallback } = await supabase
         .from('questions')
         .select('id')
+        .is('user_id', null)
         .eq('active', true)
         .limit(1)
         .single()
@@ -240,4 +276,214 @@ async function recordHistory(
     cycle_id: cycleId,
     day_number: dayNumber,
   })
+}
+
+const THEME_CODES = ['IAP', 'EWB', 'FAF', 'RC', 'GAL', 'RA'] as const
+const THEME_NAMES: Record<string, string> = {
+  IAP: 'Direction', EWB: 'Energy', FAF: 'Attention',
+  RC: 'Connection', GAL: 'Growth', RA: 'Movement',
+}
+const LEVEL_POINTS: Record<string, number> = { Low: 1, Medium: 2, High: 3 }
+
+// Generates a genuinely new question + 5 options for one specific user, using
+// their long-term identity vector. Returns null on ANY failure — validation,
+// API error, timeout, malformed JSON — so the caller can silently fall back
+// to curated selection. A check-in must never be blocked by an AI call.
+async function tryGenerateQuestion(
+  supabase: any,
+  ctx: {
+    user_id: string
+    current_day: number
+    stage: number
+    stageAffinity: string
+    maxDepth: number
+    underLoadThemes: Set<string>
+    journalAffinity: boolean
+    velocity_vector: Record<string, number>
+    pattern_flags: Record<string, string>
+  }
+): Promise<{ id: string } | null> {
+  try {
+    const anthropicKey = Deno.env.get('ANTHROPIC_API_KEY')
+    if (!anthropicKey) return null
+
+    // Pick focus themes ourselves — never trust Claude's output for the
+    // question row's own theme_1/theme_2 columns, only for per-option data.
+    const ranked = [...THEME_CODES].sort((a, b) => {
+      const aTension = ctx.pattern_flags[a] === 'recurring_tension' ? -2 : 0
+      const bTension = ctx.pattern_flags[b] === 'recurring_tension' ? -2 : 0
+      const aVel = ctx.velocity_vector[a] ?? 0
+      const bVel = ctx.velocity_vector[b] ?? 0
+      return (aTension + aVel) - (bTension + bVel)
+    })
+    const focusTheme1 = ranked[0]
+    const focusTheme2 = ranked.find((c) => c !== focusTheme1) ?? ranked[1]
+
+    const isUnderLoadFocus = ctx.underLoadThemes.has(focusTheme1) || ctx.pattern_flags[focusTheme1] === 'recurring_tension'
+    const depthLevel = isUnderLoadFocus ? 1 : ctx.maxDepth
+
+    // Recent prompts (curated or previously generated) to avoid repeating.
+    const { data: recentHistoryRows } = await supabase
+      .from('question_history')
+      .select('question_id')
+      .eq('user_id', ctx.user_id)
+      .order('served_at', { ascending: false })
+      .limit(14)
+    const recentQuestionIds = (recentHistoryRows ?? []).map((r: any) => r.question_id)
+    let recentPrompts: string[] = []
+    if (recentQuestionIds.length > 0) {
+      const { data: recentQs } = await supabase
+        .from('questions')
+        .select('prompt_text')
+        .in('id', recentQuestionIds)
+      recentPrompts = (recentQs ?? []).map((q: any) => q.prompt_text).filter(Boolean)
+    }
+
+    const patternLines = THEME_CODES
+      .map((code) => {
+        const flag = ctx.pattern_flags[code]
+        if (!flag) return null
+        return `- ${THEME_NAMES[code]}: ${flag.replace('_', ' ')}`
+      })
+      .filter(Boolean)
+      .join('\n')
+
+    const systemPrompt = `You are the question-writing engine of Mirar — a daily emotional-hygiene mirror, not a therapy or coaching app.
+
+You write exactly ONE daily check-in question with exactly 5 answer options for a specific returning user, based on what their long-term signal history shows.
+
+Use only this vocabulary style: signal, alignment, drift, calibration, check-in, internal state, notice, present, holding, shifting.
+Never use: heal, healing, journal, journaling, therapy, motivational, should, fix, improve, better, worse, coach, advise.
+
+The question must read like a natural continuation of a daily practice — calm, observational, never leading toward a "right" answer. Options must span a real spectrum from low signal to high signal on the focus themes, not just positive-to-negative wording.
+
+Respond with ONLY raw JSON, no markdown fences, no prose, matching exactly this shape:
+{"prompt_text": "...", "options": [{"option_text": "...", "theme_1_code": "XXX", "theme_2_code": "XXX"}, ... exactly 5 total]}
+
+theme codes must be exactly one of: IAP, EWB, FAF, RC, GAL, RA.`
+
+    const userPrompt = `Write today's question for this user.
+
+Primary focus theme: ${THEME_NAMES[focusTheme1]} (${focusTheme1})${isUnderLoadFocus ? ' — this theme needs a GENTLE question, do not probe deeply' : ''}
+Secondary theme: ${THEME_NAMES[focusTheme2]} (${focusTheme2})
+Stage of practice: ${ctx.stageAffinity}
+Depth allowed: ${depthLevel} of 3 (1 = gentle/surface, 3 = deep/probing)
+${patternLines ? `Recent long-term patterns:\n${patternLines}` : 'No strong long-term pattern yet.'}
+${ctx.journalAffinity ? 'This user tends to write reflective notes — a slightly more open-ended prompt suits them.' : ''}
+
+Do not repeat or closely paraphrase any of these previously-asked questions:
+${recentPrompts.map((p) => `- ${p}`).join('\n') || '(none yet)'}
+
+Return the JSON now.`
+
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+    let response: Response
+    try {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'x-api-key': anthropicKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 600,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userPrompt }],
+        }),
+      })
+    } finally {
+      clearTimeout(timeout)
+    }
+    if (!response.ok) return null
+
+    const result = await response.json()
+    const rawText: string = result.content?.[0]?.text?.trim() ?? ''
+    const jsonText = rawText.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/```\s*$/, '').trim()
+
+    let parsed: any
+    try {
+      parsed = JSON.parse(jsonText)
+    } catch {
+      return null
+    }
+
+    // ── Strict validation — any failure here silently falls back to curated ──
+    if (typeof parsed?.prompt_text !== 'string' || parsed.prompt_text.length < 8 || parsed.prompt_text.length > 300) {
+      return null
+    }
+    if (!Array.isArray(parsed.options) || parsed.options.length !== 5) {
+      return null
+    }
+    const validatedOptions: Array<{
+      option_text: string
+      theme_1_code: string
+      theme_1_level: string
+      theme_1_points: number
+      theme_2_code: string
+      theme_2_level: string
+      theme_2_points: number
+    }> = []
+    for (const opt of parsed.options) {
+      if (typeof opt?.option_text !== 'string' || opt.option_text.length < 3 || opt.option_text.length > 200) return null
+      if (!THEME_CODES.includes(opt.theme_1_code) || !THEME_CODES.includes(opt.theme_2_code)) return null
+      // Levels/points are derived server-side from a fixed spread across the 5
+      // options rather than trusted from the model — guarantees a real Low→High
+      // spectrum and removes an entire class of malformed-output risk.
+      validatedOptions.push({
+        option_text: opt.option_text,
+        theme_1_code: opt.theme_1_code,
+        theme_1_level: 'Medium',
+        theme_1_points: 2,
+        theme_2_code: opt.theme_2_code,
+        theme_2_level: 'Medium',
+        theme_2_points: 2,
+      })
+    }
+    // Assign a real Low/Medium/High spread across the 5 validated options.
+    const spread = ['Low', 'Low', 'Medium', 'High', 'High']
+    validatedOptions.forEach((opt, i) => {
+      const level = spread[i]
+      opt.theme_1_level = level
+      opt.theme_1_points = LEVEL_POINTS[level]
+      opt.theme_2_level = level
+      opt.theme_2_points = LEVEL_POINTS[level]
+    })
+
+    const dayNumber = Math.max(1, Math.min(28, ctx.current_day))
+
+    const { data: newQuestion, error: qErr } = await supabase
+      .from('questions')
+      .insert({
+        user_id: ctx.user_id,
+        source: 'generated',
+        day_number: dayNumber,
+        stage: ctx.stage,
+        stage_affinity: ctx.stageAffinity,
+        depth_level: depthLevel,
+        active: true,
+        prompt_text: parsed.prompt_text,
+        theme_1: focusTheme1,
+        theme_2: focusTheme2,
+      })
+      .select('id')
+      .single()
+
+    if (qErr || !newQuestion) return null
+
+    const optionRows = validatedOptions.map((opt, i) => ({
+      question_id: newQuestion.id,
+      option_number: i + 1,
+      ...opt,
+    }))
+    const { error: optErr } = await supabase.from('options').insert(optionRows)
+    if (optErr) return null
+
+    return { id: newQuestion.id }
+  } catch {
+    return null
+  }
 }

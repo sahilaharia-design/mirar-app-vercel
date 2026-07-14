@@ -10,10 +10,12 @@ import { useSettingsStore } from '../../stores/settings-store';
 import { useAssessStore } from '../../stores/assess-store';
 import { generateMirarId } from '../../lib/scoring';
 import { MirarLogo } from '../../components/ui/MirarLogo';
-import { COLORS, FONT_SIZE, SPACING } from '../../lib/constants';
+import { FONT_SIZE, SPACING } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 export default function OnboardingScreen() {
   const { t } = useTranslation();
+  const colors = useColors();
   const [status, setStatus] = useState<'creating' | 'done' | 'error'>('creating');
   const { session, setUser } = useAuthStore();
   const hasRun = useRef(false);
@@ -92,7 +94,7 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <View style={styles.header}>
         <MirarLogo size="sm" />
       </View>
@@ -100,21 +102,21 @@ export default function OnboardingScreen() {
       <View style={styles.center}>
         {status === 'creating' && (
           <Animated.View entering={FadeIn.duration(400)} style={styles.content}>
-            <ActivityIndicator color={COLORS.slateMid} style={styles.spinner} />
-            <Text style={styles.label}>{t('account_setup.creating')}</Text>
+            <ActivityIndicator color={colors.slateMid} style={styles.spinner} />
+            <Text style={[styles.label, { color: colors.slateMid }]}>{t('account_setup.creating')}</Text>
           </Animated.View>
         )}
 
         {status === 'done' && (
           <Animated.View entering={FadeIn.duration(500)} style={styles.content}>
-            <Text style={styles.doneTitle}>{t('account_setup.done_title')}</Text>
-            <Text style={styles.doneSub}>{t('account_setup.done_sub')}</Text>
+            <Text style={[styles.doneTitle, { color: colors.slate }]}>{t('account_setup.done_title')}</Text>
+            <Text style={[styles.doneSub, { color: colors.slateLight }]}>{t('account_setup.done_sub')}</Text>
           </Animated.View>
         )}
 
         {status === 'error' && (
           <Animated.View entering={FadeIn.duration(400)} style={styles.content}>
-            <Text style={styles.errorText}>
+            <Text style={[styles.errorText, { color: colors.slateMid }]}>
               {t('account_setup.error_text')}
             </Text>
           </Animated.View>
@@ -125,7 +127,7 @@ export default function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
+  safe: { flex: 1 },
   header: {
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.md,
@@ -146,24 +148,20 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
     fontWeight: '300',
   },
   doneTitle: {
     fontSize: FONT_SIZE['3xl'],
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: -0.5,
     textAlign: 'center',
   },
   doneSub: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateLight,
     textAlign: 'center',
   },
   errorText: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
     textAlign: 'center',
     lineHeight: 24,
   },

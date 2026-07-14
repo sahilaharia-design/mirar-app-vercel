@@ -7,7 +7,8 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import { COLORS, FONTS, CYCLE_DAYS } from '../../lib/constants';
+import { FONTS, CYCLE_DAYS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 import {
   V3_SETTLE_EASING,
   V3_SETTLE_DURATION,
@@ -38,6 +39,7 @@ export function PromptCard({
   timeLabel,
 }: PromptCardProps) {
   const { t } = useTranslation();
+  const colors = useColors();
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -108,23 +110,23 @@ export function PromptCard({
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.strip, stripStyle]}>
-        <Text style={styles.caps}>
-          <Text style={styles.capsInk}>{todayLabel}</Text>
+        <Text style={[styles.caps, { color: colors.slateLight }]}>
+          <Text style={{ color: colors.ink }}>{todayLabel}</Text>
         </Text>
-        {timeLabel ? <Text style={styles.caps}>{timeLabel}</Text> : <View />}
+        {timeLabel ? <Text style={[styles.caps, { color: colors.slateLight }]}>{timeLabel}</Text> : <View />}
       </Animated.View>
-      <View style={styles.rule} />
+      <View style={[styles.rule, { backgroundColor: colors.ruleLight }]} />
 
       {greeting ? (
-        <Animated.Text style={[styles.greeting, greetStyle]}>{greeting}</Animated.Text>
+        <Animated.Text style={[styles.greeting, { color: colors.slateMid }, greetStyle]}>{greeting}</Animated.Text>
       ) : null}
 
       <Animated.View style={[styles.questionWrap, questionStyle]}>
-        <Text style={styles.helperText}>{t('checkin.helper_text')}</Text>
-        <Text style={styles.question} accessibilityRole="header">
+        <Text style={[styles.helperText, { color: colors.slateLight }]}>{t('checkin.helper_text')}</Text>
+        <Text style={[styles.question, { color: colors.ink }]} accessibilityRole="header">
           {promptText}
         </Text>
-        <Animated.View style={[styles.underline, underlineStyle]} />
+        <Animated.View style={[styles.underline, { backgroundColor: colors.brass }, underlineStyle]} />
       </Animated.View>
     </View>
   );
@@ -145,17 +147,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2, // ≈0.2em at 10px
     textTransform: 'uppercase',
-    color: COLORS.slateLight,
-  },
-  capsLight: {
-    color: COLORS.slateLight,
-  },
-  capsInk: {
-    color: COLORS.ink,
   },
   rule: {
     height: 1,
-    backgroundColor: COLORS.ruleLight,
     marginTop: 10,
   },
   greeting: {
@@ -163,7 +157,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.displayItalic,
     fontSize: 18,
     lineHeight: 24,
-    color: COLORS.slateMid,
     letterSpacing: 0.1,
   },
   questionWrap: {
@@ -174,7 +167,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body,
     fontSize: 13,
     lineHeight: 19,
-    color: COLORS.slateLight,
     marginBottom: 14,
   },
   question: {
@@ -182,13 +174,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     lineHeight: 30 * 1.22,
     letterSpacing: -0.3,
-    color: COLORS.ink,
   },
   underline: {
     marginTop: 16,
     width: 48,
     height: 1,
-    backgroundColor: COLORS.brass,
     transformOrigin: 'left',
   },
 });

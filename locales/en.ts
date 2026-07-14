@@ -47,6 +47,13 @@ export default {
     delta_steady: '— steady',
     delta_up: 'shifted +{{n}}',
     delta_down: 'shifted {{n}}',
+    why_recurring_tension: '{{theme}} has been carrying weight for a few days — that\'s part of what today\'s reading is picking up.',
+    why_shift_down: '{{theme}} has been drifting lower — that\'s what today\'s reading is picking up.',
+    why_growth: '{{theme}} has been steadily opening up — that\'s part of what\'s showing today.',
+    why_shift_up: '{{theme}} moved up recently — that\'s part of what\'s showing today.',
+    why_steady: '{{theme}} has been holding steady — that\'s part of what\'s showing today.',
+    why_fallback: '{{theme}} is part of what today\'s reading is built from.',
+    cold_start_note: '{{theme}} is now part of what Mirar is listening for.',
     fallback_mirror: '{{theme1}} and {{theme2}} were visible in today’s reflection. {{statusLine}}',
     fallback_status_line: 'Alignment registered at {{status}} today.',
     level_low: 'Low signal',
@@ -103,6 +110,7 @@ export default {
     settling: 'Settling',
     still_forming: 'Still forming',
     drifting: 'Drifting',
+    listening: 'Listening',
   },
 
   // ─── Guidance tooltips ─────────────────────────────────────────────────────
@@ -418,8 +426,8 @@ export default {
     reflection_n: 'Reflection {{n}}',
     more_notes_one: '+{{count}} more note',
     more_notes_other: '+{{count}} more notes',
-    support_mirar: 'Support Mirar',
-    support_sub: 'No subscription. The practice comes first — offer what feels right, whenever you’re ready.',
+    support_mirar: 'Contact Mirar',
+    support_sub: 'Questions, feedback, or want to support what we\'re building — write to us anytime.',
   },
 
   // ─── Language Names (shown in selector) ───────────────────────────────────────

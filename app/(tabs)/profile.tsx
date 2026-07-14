@@ -11,14 +11,14 @@ import {
   Platform,
 } from 'react-native';
 
-const DANA_LINK = 'https://razorpay.me/mirar';
+const CONTACT_LINK = 'mailto:info@mirar.life';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCycleStore } from '../../stores/cycle-store';
 import { useSettingsStore } from '../../stores/settings-store';
-import { useTheme } from '../../contexts/theme-context';
+import { useTheme, useColors } from '../../contexts/theme-context';
 import { supabase } from '../../lib/supabase';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
@@ -39,6 +39,7 @@ export default function ProfileScreen() {
   const { activeCycle, currentDay, currentStage, totalReflections } = useCycleStore();
   const { language, setLanguage } = useSettingsStore();
   const { colorScheme, setColorScheme } = useTheme();
+  const colors = useColors();
 
   const [journals, setJournals] = useState<JournalEntry[]>([]);
   const [journalsLoading, setJournalsLoading] = useState(false);
@@ -110,7 +111,7 @@ export default function ProfileScreen() {
   const stageName = STAGE_KEYS[currentStage - 1] ? t(STAGE_KEYS[currentStage - 1]) : '';
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <View style={styles.header}>
         <MirarLogo size="sm" />
       </View>
@@ -121,16 +122,16 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Mirar ID block */}
-        <Animated.View entering={FadeInDown.duration(400).delay(50)} style={styles.idCard}>
+        <Animated.View entering={FadeInDown.duration(400).delay(50)} style={[styles.idCard, { backgroundColor: colors.creamDark, borderColor: colors.border }]}>
           <View style={styles.idLabelRow}>
-            <Text style={styles.idLabel}>{t('profile.mirar_id')}</Text>
+            <Text style={[styles.idLabel, { color: colors.slateLight }]}>{t('profile.mirar_id')}</Text>
             <InfoTooltipInline
               helpText={t('profile.id_help')}
               size={12}
             />
           </View>
-          <Text style={styles.idValue} selectable>{user?.mirar_id ?? '—'}</Text>
-          <Text style={styles.idNote}>
+          <Text style={[styles.idValue, { color: colors.slate }]} selectable>{user?.mirar_id ?? '—'}</Text>
+          <Text style={[styles.idNote, { color: colors.slateLight }]}>
             {t('profile.id_note')}
           </Text>
         </Animated.View>
@@ -138,62 +139,63 @@ export default function ProfileScreen() {
         {/* Mirror guide */}
         <Animated.View entering={FadeInDown.duration(400).delay(85)} style={styles.section}>
           <TouchableOpacity
-            style={styles.guideCard}
+            style={[styles.guideCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}
             onPress={() => setGuideVisible(true)}
             activeOpacity={0.78}
             accessibilityRole="button"
           >
             <View style={styles.guideTextBlock}>
-              <Text style={styles.guideTitle}>{t('guide_modal.eyebrow')}</Text>
-              <Text style={styles.guideDesc}>
+              <Text style={[styles.guideTitle, { color: colors.slate }]}>{t('guide_modal.eyebrow')}</Text>
+              <Text style={[styles.guideDesc, { color: colors.slateLight }]}>
                 {t('profile.guide_desc')}
               </Text>
             </View>
-            <Text style={styles.guideArrow}>{t('profile.open')}</Text>
+            <Text style={[styles.guideArrow, { color: colors.slateMid }]}>{t('profile.open')}</Text>
           </TouchableOpacity>
         </Animated.View>
 
         {/* Practice block */}
         <Animated.View entering={FadeInDown.duration(400).delay(120)} style={styles.section}>
           <View style={styles.sectionLabelRow}>
-            <Text style={styles.sectionLabel}>{t('profile.practice')}</Text>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('profile.practice')}</Text>
             <InfoTooltipInline
               helpText={t('tooltips.cycle_info')}
               size={12}
             />
           </View>
-          <View style={styles.card}>
-            <Row label={t('profile.practicing_since')} value={practicingSinceDate} />
-            <Row label={t('profile.days_practiced')} value={String(totalReflections)} />
-            <Row label={t('profile.today_label')} value={t('profile.daily_mirror')} />
+          <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
+            <Row label={t('profile.practicing_since')} value={practicingSinceDate} colors={colors} />
+            <Row label={t('profile.days_practiced')} value={String(totalReflections)} colors={colors} />
+            <Row label={t('profile.today_label')} value={t('profile.daily_mirror')} colors={colors} />
             <Row
               label={t('profile.current_pattern')}
               value={stageName}
+              colors={colors}
             />
           </View>
         </Animated.View>
 
         {/* Cycle arc */}
         <Animated.View entering={FadeInDown.duration(400).delay(190)} style={styles.section}>
-          <View style={styles.card}>
+          <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             <CycleArc currentDay={currentDay} />
           </View>
         </Animated.View>
 
         {/* Language */}
         <Animated.View entering={FadeInDown.duration(400).delay(260)} style={styles.section}>
-          <Text style={styles.sectionLabel}>{t('profile.language')}</Text>
-          <View style={styles.card}>
+          <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('profile.language')}</Text>
+          <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             {SUPPORTED_LANGUAGES.map((lang) => (
               <TouchableOpacity
                 key={lang.code}
-                style={[rowStyles.row, { justifyContent: 'space-between' }]}
+                style={[rowStyles.row, { justifyContent: 'space-between', borderBottomColor: colors.borderLight }]}
                 onPress={() => setLanguage(lang.code as SupportedLanguage)}
                 activeOpacity={0.7}
               >
-                <Text style={rowStyles.label}>{lang.label}</Text>
+                <Text style={[rowStyles.label, { color: colors.slateMid }]}>{lang.label}</Text>
                 {language === lang.code && (
-                  <Text style={{ color: COLORS.accentTeal, fontSize: FONT_SIZE.sm, fontWeight: '600' }}>✓</Text>
+                  <Text style={{ color: colors.accentTeal, fontSize: FONT_SIZE.sm, fontWeight: '600' }}>✓</Text>
                 )}
               </TouchableOpacity>
             ))}
@@ -202,17 +204,17 @@ export default function ProfileScreen() {
 
         {/* Settings */}
         <Animated.View entering={FadeInDown.duration(400).delay(330)} style={styles.section}>
-          <Text style={styles.sectionLabel}>{t('profile.settings_label')}</Text>
-          <View style={styles.card}>
-            <SettingsRow label={t('profile.daily_reminder')} value="8:00 AM" />
-            <SettingsRow label={t('profile.summary_notifications')} value={t('profile.on')} />
+          <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('profile.settings_label')}</Text>
+          <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
+            <SettingsRow label={t('profile.daily_reminder')} value="8:00 AM" colors={colors} />
+            <SettingsRow label={t('profile.summary_notifications')} value={t('profile.on')} colors={colors} />
             <TouchableOpacity
-              style={[rowStyles.row, { justifyContent: 'space-between' }]}
+              style={[rowStyles.row, { justifyContent: 'space-between', borderBottomColor: colors.borderLight }]}
               onPress={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}
               activeOpacity={0.7}
             >
-              <Text style={rowStyles.label}>{t('profile.dark_mode')}</Text>
-              <Text style={{ color: COLORS.accentTeal, fontSize: FONT_SIZE.sm, fontWeight: '600' }}>
+              <Text style={[rowStyles.label, { color: colors.slateMid }]}>{t('profile.dark_mode')}</Text>
+              <Text style={{ color: colors.accentTeal, fontSize: FONT_SIZE.sm, fontWeight: '600' }}>
                 {colorScheme === 'dark' ? t('profile.on') : t('profile.off')}
               </Text>
             </TouchableOpacity>
@@ -227,9 +229,9 @@ export default function ProfileScreen() {
               onPress={() => setJournalsExpanded((v) => !v)}
               activeOpacity={0.7}
             >
-              <Text style={styles.sectionLabel}>{t('profile.reflection_notes')}</Text>
+              <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('profile.reflection_notes')}</Text>
               {journals.length > 0 && (
-                <Text style={styles.journalCount}>
+                <Text style={[styles.journalCount, { color: colors.accentTeal }]}>
                   {t('profile.note_count', { count: journals.length })} · {journalsExpanded ? t('profile.hide') : t('profile.show')}
                 </Text>
               )}
@@ -237,7 +239,7 @@ export default function ProfileScreen() {
 
             {journalsLoading ? (
               <View style={styles.journalLoading}>
-                <ActivityIndicator size="small" color={COLORS.slateMid} />
+                <ActivityIndicator size="small" color={colors.slateMid} />
               </View>
             ) : journalsExpanded ? (
               <View style={styles.journalList}>
@@ -245,33 +247,33 @@ export default function ProfileScreen() {
                   <Animated.View
                     key={i}
                     entering={FadeIn.duration(300).delay(i * 60)}
-                    style={styles.journalEntry}
+                    style={[styles.journalEntry, { backgroundColor: colors.white, borderColor: colors.borderLight, borderLeftColor: colors.accentTeal }]}
                   >
                     <View style={styles.journalMeta}>
-                      <Text style={styles.journalDay}>{t('profile.reflection_n', { n: entry.dayNumber })}</Text>
-                      <Text style={styles.journalDate}>
+                      <Text style={[styles.journalDay, { color: colors.accentTeal }]}>{t('profile.reflection_n', { n: entry.dayNumber })}</Text>
+                      <Text style={[styles.journalDate, { color: colors.slateLight }]}>
                         {new Date(entry.submittedAt).toLocaleDateString(undefined, {
                           month: 'short',
                           day: 'numeric',
                         })}
                       </Text>
                     </View>
-                    <Text style={styles.journalText}>{entry.text}</Text>
+                    <Text style={[styles.journalText, { color: colors.slateMid }]}>{entry.text}</Text>
                   </Animated.View>
                 ))}
               </View>
             ) : journals.length > 0 ? (
               <TouchableOpacity
-                style={styles.journalPreview}
+                style={[styles.journalPreview, { backgroundColor: colors.white, borderColor: colors.borderLight, borderLeftColor: colors.accentTeal }]}
                 onPress={() => setJournalsExpanded(true)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.journalPreviewDay}>{t('profile.reflection_n', { n: journals[0].dayNumber })}</Text>
-                <Text style={styles.journalPreviewText} numberOfLines={2}>
+                <Text style={[styles.journalPreviewDay, { color: colors.accentTeal }]}>{t('profile.reflection_n', { n: journals[0].dayNumber })}</Text>
+                <Text style={[styles.journalPreviewText, { color: colors.slateMid }]} numberOfLines={2}>
                   {journals[0].text}
                 </Text>
                 {journals.length > 1 && (
-                  <Text style={styles.journalMoreHint}>
+                  <Text style={[styles.journalMoreHint, { color: colors.slateLight }]}>
                     {t('profile.more_notes', { count: journals.length - 1 })}
                   </Text>
                 )}
@@ -283,28 +285,28 @@ export default function ProfileScreen() {
         {/* Support Mirar */}
         <Animated.View entering={FadeInDown.duration(400).delay(380)} style={styles.section}>
           <TouchableOpacity
-            style={styles.supportButton}
-            onPress={() => Linking.openURL(DANA_LINK)}
+            style={[styles.supportButton, { backgroundColor: colors.white, borderColor: colors.border }]}
+            onPress={() => Linking.openURL(CONTACT_LINK)}
             activeOpacity={0.8}
           >
-            <Text style={styles.supportText}>{t('profile.support_mirar')}</Text>
-            <Text style={styles.supportSub}>{t('profile.support_sub')}</Text>
+            <Text style={[styles.supportText, { color: colors.slate }]}>{t('profile.support_mirar')}</Text>
+            <Text style={[styles.supportSub, { color: colors.slateLight }]}>{t('profile.support_sub')}</Text>
           </TouchableOpacity>
         </Animated.View>
 
         {/* Sign out */}
         <Animated.View entering={FadeInDown.duration(400).delay(420)} style={styles.section}>
           <TouchableOpacity
-            style={styles.signOutButton}
+            style={[styles.signOutButton, { backgroundColor: colors.white, borderColor: colors.border }]}
             onPress={handleSignOut}
             activeOpacity={0.8}
           >
-            <Text style={styles.signOutText}>{t('profile.sign_out')}</Text>
+            <Text style={[styles.signOutText, { color: colors.underLoad }]}>{t('profile.sign_out')}</Text>
           </TouchableOpacity>
         </Animated.View>
 
         {/* Version */}
-        <Text style={styles.version}>Mirar · v1.0</Text>
+        <Text style={[styles.version, { color: colors.slateXLight }]}>Mirar · v1.0</Text>
 
         <View style={{ height: SPACING.xl }} />
       </ScrollView>
@@ -313,20 +315,20 @@ export default function ProfileScreen() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value, colors }: { label: string; value: string; colors: ReturnType<typeof useColors> }) {
   return (
-    <View style={rowStyles.row}>
-      <Text style={rowStyles.label}>{label}</Text>
-      <Text style={rowStyles.value}>{value}</Text>
+    <View style={[rowStyles.row, { borderBottomColor: colors.borderLight }]}>
+      <Text style={[rowStyles.label, { color: colors.slateMid }]}>{label}</Text>
+      <Text style={[rowStyles.value, { color: colors.slate }]}>{value}</Text>
     </View>
   );
 }
 
-function SettingsRow({ label, value }: { label: string; value: string }) {
+function SettingsRow({ label, value, colors }: { label: string; value: string; colors: ReturnType<typeof useColors> }) {
   return (
-    <View style={rowStyles.row}>
-      <Text style={rowStyles.label}>{label}</Text>
-      <Text style={[rowStyles.value, rowStyles.settingsValue]}>{value}</Text>
+    <View style={[rowStyles.row, { borderBottomColor: colors.borderLight }]}>
+      <Text style={[rowStyles.label, { color: colors.slateMid }]}>{label}</Text>
+      <Text style={[rowStyles.value, rowStyles.settingsValue, { color: colors.slateLight }]}>{value}</Text>
     </View>
   );
 }

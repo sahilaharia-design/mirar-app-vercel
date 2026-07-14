@@ -16,7 +16,8 @@ import { useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { LanguagePicker } from '../../components/ui/LanguagePicker';
-import { COLORS, FONT_SIZE, RADIUS, SPACING } from '../../lib/constants';
+import { FONT_SIZE, RADIUS, SPACING } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 const WORDMARK = require('../../assets/brand/mirar-wordmark.png');
 const isWeb = Platform.OS === 'web';
@@ -31,6 +32,7 @@ const AUTH_ERROR_KEYS: Record<string, string> = {
 
 export default function LoginScreen() {
   const { t } = useTranslation();
+  const colors = useColors();
   const { auth_error } = useLocalSearchParams<{ auth_error?: string }>();
   const [mode, setMode] = useState<Mode>('email');
   const [email, setEmail] = useState('');
@@ -52,17 +54,17 @@ export default function LoginScreen() {
 
   if (mode === 'sent') {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
         <Animated.View entering={FadeIn.duration(500)} style={styles.center}>
           <Image source={WORDMARK} style={styles.wordmark} resizeMode="contain" accessibilityLabel="Mirar" />
-          <View style={styles.sentCard}>
-            <View style={styles.sentDot} />
-            <Text style={styles.sentTitle}>{t('auth.check_email')}</Text>
-            <Text style={styles.sentBody}>{t('auth.link_sent', { email })}</Text>
-            <Text style={styles.sentNote}>{t('auth.link_validity')}</Text>
+          <View style={[styles.sentCard, { backgroundColor: colors.white, borderColor: colors.border }]}>
+            <View style={[styles.sentDot, { backgroundColor: colors.accentTeal }]} />
+            <Text style={[styles.sentTitle, { color: colors.slate }]}>{t('auth.check_email')}</Text>
+            <Text style={[styles.sentBody, { color: colors.slateMid }]}>{t('auth.link_sent', { email })}</Text>
+            <Text style={[styles.sentNote, { color: colors.slateLight }]}>{t('auth.link_validity')}</Text>
           </View>
           <TouchableOpacity onPress={() => setMode('email')} style={styles.tryAgain} activeOpacity={0.7}>
-            <Text style={styles.tryAgainText}>{t('auth.try_again')}</Text>
+            <Text style={[styles.tryAgainText, { color: colors.slateLight }]}>{t('auth.try_again')}</Text>
           </TouchableOpacity>
         </Animated.View>
       </SafeAreaView>
@@ -70,7 +72,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.flex}
@@ -82,15 +84,19 @@ export default function LoginScreen() {
         <Animated.View entering={FadeInDown.duration(500)} style={styles.center}>
           <Image source={WORDMARK} style={styles.wordmark} resizeMode="contain" accessibilityLabel="Mirar" />
 
-          <Text style={styles.heading}>{t('auth.heading')}</Text>
-          <Text style={styles.sub}>{t('auth.login_subtitle')}</Text>
+          <Text style={[styles.heading, { color: colors.slate }]}>{t('auth.heading')}</Text>
+          <Text style={[styles.sub, { color: colors.slateMid }]}>{t('auth.login_subtitle')}</Text>
 
           <View style={styles.form}>
             {/* Email — primary intentional path */}
             <TextInput
-              style={[styles.input, error ? styles.inputError : null]}
+              style={[
+                styles.input,
+                { borderColor: colors.border, backgroundColor: colors.white, color: colors.slate },
+                error ? styles.inputError : null,
+              ]}
               placeholder={t('auth.email_placeholder')}
-              placeholderTextColor={COLORS.slateLight}
+              placeholderTextColor={colors.slateLight}
               value={email}
               onChangeText={(v) => { setEmail(v); setError(null); }}
               keyboardType="email-address"
@@ -104,19 +110,24 @@ export default function LoginScreen() {
             />
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <TouchableOpacity
-              style={[styles.ctaButton, (isLoading || !email.trim()) && styles.buttonDisabled, isWeb && ({ cursor: 'pointer' } as any)]}
+              style={[
+                styles.ctaButton,
+                { backgroundColor: colors.slate },
+                (isLoading || !email.trim()) && styles.buttonDisabled,
+                isWeb && ({ cursor: 'pointer' } as any),
+              ]}
               onPress={handleEmailSubmit}
               disabled={isLoading || !email.trim()}
               activeOpacity={0.82}
             >
               {isLoading ? (
-                <ActivityIndicator color={COLORS.white} />
+                <ActivityIndicator color={colors.white} />
               ) : (
-                <Text style={styles.ctaText}>{t('auth.send_link')}</Text>
+                <Text style={[styles.ctaText, { color: colors.white }]}>{t('auth.send_link')}</Text>
               )}
             </TouchableOpacity>
 
-            <Text style={styles.disclaimer}>{t('auth.privacy_badge')}</Text>
+            <Text style={[styles.disclaimer, { color: colors.slateLight }]}>{t('auth.privacy_badge')}</Text>
           </View>
         </Animated.View>
       </KeyboardAvoidingView>
@@ -125,7 +136,7 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
+  safe: { flex: 1 },
   flex: { flex: 1 },
   topBar: {
     paddingHorizontal: SPACING.lg,
@@ -149,7 +160,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: -0.3,
     marginBottom: SPACING.sm,
@@ -157,7 +167,6 @@ const styles = StyleSheet.create({
   },
   sub: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: SPACING['2xl'],
@@ -170,13 +179,10 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     borderWidth: 1,
-    borderColor: COLORS.border,
     borderRadius: RADIUS.md,
     paddingVertical: 14,
     paddingHorizontal: SPACING.md,
     fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-    backgroundColor: COLORS.white,
   },
   inputError: { borderColor: '#E05252' },
   errorText: {
@@ -185,7 +191,6 @@ const styles = StyleSheet.create({
     marginTop: -SPACING.xs,
   },
   ctaButton: {
-    backgroundColor: COLORS.slate,
     borderRadius: RADIUS.md,
     paddingVertical: 16,
     alignItems: 'center',
@@ -195,22 +200,18 @@ const styles = StyleSheet.create({
   buttonDisabled: { opacity: 0.45 },
   ctaText: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.white,
     fontWeight: '500',
     letterSpacing: 0.3,
   },
   disclaimer: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     textAlign: 'center',
     lineHeight: 18,
   },
   sentCard: {
     width: '100%',
-    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.border,
     padding: SPACING.xl,
     alignItems: 'center',
     gap: SPACING.sm,
@@ -220,31 +221,26 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.accentTeal,
     marginBottom: SPACING.sm,
   },
   sentTitle: {
     fontSize: FONT_SIZE.xl,
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: -0.2,
   },
   sentBody: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     textAlign: 'center',
     lineHeight: 22,
   },
   sentNote: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     textAlign: 'center',
     marginTop: SPACING.xs,
   },
   tryAgain: { paddingVertical: SPACING.sm },
   tryAgainText: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
     textDecorationLine: 'underline',
   },
 });

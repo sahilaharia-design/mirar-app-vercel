@@ -58,3 +58,12 @@ verify_jwt = false
 
 [functions.send-notification]
 verify_jwt = false
+
+[functions.admin-analytics]
+verify_jwt = false
+
+[functions.admin-user-list]
+verify_jwt = false
+
+[functions.update-identity-vector]
+verify_jwt = false

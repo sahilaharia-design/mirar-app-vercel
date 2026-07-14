@@ -232,6 +232,39 @@ serve(async (req) => {
         .eq('day_number', day_number)
         .maybeSingle()
 
+      // Repeat-awareness: with only a fixed question bank, this exact prompt
+      // will eventually repeat. Rather than silently re-asking as if new, let
+      // the mirror insight name what's shifted — only when the answer differs
+      // from the prior time this same question was served.
+      let previousAnswerText: string | null = null
+      const { data: historyRows } = await supabase
+        .from('question_history')
+        .select('day_number, cycle_id')
+        .eq('user_id', user_id)
+        .eq('question_id', question_id)
+        .order('served_at', { ascending: false })
+        .limit(2)
+
+      const priorHistory = (historyRows ?? [])[1] // [0] is today's own entry
+      if (priorHistory) {
+        const { data: priorResponse } = await supabase
+          .from('responses')
+          .select('option_id')
+          .eq('user_id', user_id)
+          .eq('cycle_id', priorHistory.cycle_id)
+          .eq('day_number', priorHistory.day_number)
+          .maybeSingle()
+
+        if (priorResponse && priorResponse.option_id !== option_id) {
+          const { data: priorOption } = await supabase
+            .from('options')
+            .select('option_text')
+            .eq('id', priorResponse.option_id)
+            .maybeSingle()
+          previousAnswerText = priorOption?.option_text ?? null
+        }
+      }
+
       // Fire async — hard 8s timeout so Deno doesn't hold the connection alive
       const supabaseUrl = Deno.env.get('SUPABASE_URL')!
       const serviceKey   = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -252,7 +285,22 @@ serve(async (req) => {
           alignment_score: alignmentScore,
           theme_statuses: themeStatuses,
           journal_snippet: todayResponse?.journal_text ?? null,
+          previous_answer_text: previousAnswerText,
         }),
+      }).catch(() => { /* non-fatal */ })
+
+      // 9b. update-identity-vector (always, non-blocking) — the system's
+      // long-term memory of this user, recomputed after every check-in.
+      const identityController = new AbortController()
+      setTimeout(() => identityController.abort(), 8000)
+      fetch(`${supabaseUrl}/functions/v1/update-identity-vector`, {
+        method: 'POST',
+        signal: identityController.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${serviceKey}`,
+        },
+        body: JSON.stringify({ user_id }),
       }).catch(() => { /* non-fatal */ })
 
       // 10. sync-user-state (always, non-blocking)
@@ -355,8 +403,27 @@ serve(async (req) => {
       }
     }
 
+    // 14. Read back the identity vector's pattern flags for the two touched
+    // themes (state as of before this check-in — update-identity-vector above
+    // runs fire-and-forget, so today's answer isn't folded in yet). This is
+    // what lets the client explain *why* today's reading looks the way it
+    // does, e.g. "Focus has been drifting for 3 days," instead of a bare
+    // status word. Null for users with no identity vector yet — never blocks.
+    let theme1PatternFlag: string | null = null
+    let theme2PatternFlag: string | null = null
+    if (chosenOption) {
+      const { data: identityVector } = await supabase
+        .from('alignment_identity_vectors')
+        .select('pattern_flags')
+        .eq('user_id', user_id)
+        .maybeSingle()
+      const flags = identityVector?.pattern_flags ?? {}
+      theme1PatternFlag = flags[chosenOption.theme_1_code] ?? null
+      theme2PatternFlag = flags[chosenOption.theme_2_code] ?? null
+    }
+
     return new Response(
-      JSON.stringify({ alignmentScore, statusLabel, trend }),
+      JSON.stringify({ alignmentScore, statusLabel, trend, theme1PatternFlag, theme2PatternFlag }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 

@@ -23,6 +23,8 @@ export default function MirrorRoute() {
     theme1_level: string;
     theme2_code: string;
     theme2_level: string;
+    theme1_pattern_flag: string;
+    theme2_pattern_flag: string;
     tomorrow_tease: string;
   }>();
 
@@ -61,6 +63,8 @@ export default function MirrorRoute() {
         theme1Level={(params.theme1_level ?? 'Medium') as SignalLevel}
         theme2Code={(params.theme2_code ?? 'EWB') as ThemeCode}
         theme2Level={(params.theme2_level ?? 'Medium') as SignalLevel}
+        theme1PatternFlag={params.theme1_pattern_flag || null}
+        theme2PatternFlag={params.theme2_pattern_flag || null}
         tomorrowTease={params.tomorrow_tease || null}
         onDone={handleDone}
       />

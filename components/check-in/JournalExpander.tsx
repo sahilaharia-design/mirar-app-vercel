@@ -31,11 +31,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
 import {
-  COLORS,
   FONTS,
   FONT_SIZE,
   SPACING,
 } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 import {
   V3_SETTLE_DURATION,
   V3_SETTLE_EASING,
@@ -131,6 +131,7 @@ export function JournalExpander({
   journalPrompt: _journalPrompt,
 }: JournalExpanderProps) {
   const { t } = useTranslation();
+  const colors = useColors();
   const reducedMotion = useRef(false);
   const timeLabel = capturedTime ?? formatNow();
   const charMax = 280;
@@ -150,7 +151,7 @@ export function JournalExpander({
 
   return (
     <KeyboardAvoidingView
-      style={styles.root}
+      style={[styles.root, { backgroundColor: colors.paper }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={0}
     >
@@ -163,22 +164,22 @@ export function JournalExpander({
         {/* ── Header strip ──────────────────────────────────────────────── */}
         <FadeSlide delayMs={stagger(0)} reducedMotion={reducedMotion.current}>
           <View style={styles.headerStrip}>
-            <Text style={styles.capsLabel}>
-              <Text style={styles.capsLabelInk}>{t('common.your_alignment_today')}</Text>
+            <Text style={[styles.capsLabel, { color: colors.slateLight }]}>
+              <Text style={{ color: colors.ink }}>{t('common.your_alignment_today')}</Text>
             </Text>
-            <Text style={styles.capsLabel}>{t('journal_expander.captured', { time: timeLabel })}</Text>
+            <Text style={[styles.capsLabel, { color: colors.slateLight }]}>{t('journal_expander.captured', { time: timeLabel })}</Text>
           </View>
-          <View style={styles.rule} />
+          <View style={[styles.rule, { backgroundColor: colors.ruleLight }]} />
         </FadeSlide>
 
         {/* ── Echoed answer ─────────────────────────────────────────────── */}
         {selectedOptionText ? (
           <FadeSlide delayMs={stagger(1)} reducedMotion={reducedMotion.current}>
             <View style={styles.echoSection}>
-              <Text style={styles.echoText}>
+              <Text style={[styles.echoText, { color: colors.ink }]}>
                 "{selectedOptionText}"
               </Text>
-              <Text style={styles.themeBadge}>{t('journal_expander.answer_captured')}</Text>
+              <Text style={[styles.themeBadge, { color: colors.brass }]}>{t('journal_expander.answer_captured')}</Text>
             </View>
           </FadeSlide>
         ) : null}
@@ -186,13 +187,13 @@ export function JournalExpander({
         {/* ── Journal input ─────────────────────────────────────────────── */}
         <FadeSlide delayMs={stagger(2)} reducedMotion={reducedMotion.current}>
           <View style={styles.inputSection}>
-            <Text style={styles.inputLabel}>{t('journal_expander.input_label')}</Text>
-            <Text style={styles.inputHelper}>{t('journal_expander.input_helper')}</Text>
-            <View style={styles.inputCard}>
+            <Text style={[styles.inputLabel, { color: colors.slate }]}>{t('journal_expander.input_label')}</Text>
+            <Text style={[styles.inputHelper, { color: colors.slateLight }]}>{t('journal_expander.input_helper')}</Text>
+            <View style={[styles.inputCard, { backgroundColor: colors.paper, borderColor: colors.ruleLight }]}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.slate }]}
                 placeholder={t('journal_expander.input_placeholder')}
-                placeholderTextColor={COLORS.slateXLight}
+                placeholderTextColor={colors.slateXLight}
                 multiline
                 textAlignVertical="top"
                 value={value}
@@ -204,8 +205,8 @@ export function JournalExpander({
               />
             </View>
             <View style={styles.metaRow}>
-              <Text style={styles.metaLabel}>{t('journal_expander.held_privately')}</Text>
-              <Text style={styles.metaLabel}>{value.length} / {charMax}</Text>
+              <Text style={[styles.metaLabel, { color: colors.slateXLight }]}>{t('journal_expander.held_privately')}</Text>
+              <Text style={[styles.metaLabel, { color: colors.slateXLight }]}>{value.length} / {charMax}</Text>
             </View>
           </View>
         </FadeSlide>
@@ -216,21 +217,22 @@ export function JournalExpander({
 
       {/* ── Footer buttons ────────────────────────────────────────────────── */}
       <FadeSlide delayMs={stagger(3)} reducedMotion={reducedMotion.current}>
-        <View style={styles.footer}>
+        <View style={[styles.footer, { backgroundColor: colors.paper, borderTopColor: colors.ruleLight }]}>
           <TouchableOpacity
-            style={styles.skipButton}
+            style={[styles.skipButton, { borderColor: colors.rule }]}
             onPress={onSkip}
             disabled={disabled || isSubmitting}
             activeOpacity={0.7}
             accessibilityLabel={t('journal_expander.skip_a11y')}
             accessibilityRole="button"
           >
-            <Text style={styles.skipLabel}>{t('journal_expander.skip')}</Text>
+            <Text style={[styles.skipLabel, { color: colors.slateMid }]}>{t('journal_expander.skip')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[
               styles.recordButton,
+              { backgroundColor: colors.slate },
               (disabled || isSubmitting) && styles.recordButtonDisabled,
             ]}
             onPress={onSubmit}
@@ -239,7 +241,7 @@ export function JournalExpander({
             accessibilityLabel={t('journal_expander.record_a11y')}
             accessibilityRole="button"
           >
-            <Text style={styles.recordLabel}>
+            <Text style={[styles.recordLabel, { color: colors.cream }]}>
               {isSubmitting ? t('journal_expander.recording') : t('journal_expander.record_mirror')}
             </Text>
           </TouchableOpacity>
@@ -254,7 +256,6 @@ export function JournalExpander({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.paper,
   },
   scroll: {
     flex: 1,
@@ -274,7 +275,6 @@ const styles = StyleSheet.create({
   },
   rule: {
     height: 1,
-    backgroundColor: COLORS.ruleLight,
     marginBottom: 28,
   },
   capsLabel: {
@@ -282,10 +282,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.2,
     textTransform: 'uppercase',
-    color: COLORS.slateLight,
-  },
-  capsLabelInk: {
-    color: COLORS.ink,
   },
 
   // Echo section
@@ -296,14 +292,12 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.displayItalic,
     fontSize: 22,
     lineHeight: 22 * 1.3,
-    color: COLORS.ink,
     letterSpacing: -0.2,
   },
   themeBadge: {
     fontFamily: FONTS.bodyMedium,
     fontSize: 10,
     letterSpacing: 1.2,
-    color: COLORS.brass,
     marginTop: 14,
   },
 
@@ -315,21 +309,17 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.bodyMedium,
     fontSize: FONT_SIZE.base,
     letterSpacing: 0,
-    color: COLORS.slate,
   },
   inputHelper: {
     fontFamily: FONTS.body,
     fontSize: FONT_SIZE.sm,
     lineHeight: 20,
-    color: COLORS.slateLight,
     marginTop: 6,
     marginBottom: 12,
   },
   inputCard: {
-    backgroundColor: COLORS.paper,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLORS.ruleLight,
     padding: 16,
     minHeight: 180,
   },
@@ -337,7 +327,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.displayItalic,
     fontSize: FONT_SIZE.md,
     lineHeight: FONT_SIZE.md * 1.5,
-    color: COLORS.slate,
     minHeight: 148,
   },
   metaRow: {
@@ -351,7 +340,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.2,
     textTransform: 'uppercase',
-    color: COLORS.slateXLight,
   },
 
   // Footer
@@ -361,14 +349,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 26,
     paddingBottom: Platform.OS === 'ios' ? 32 : 20,
     paddingTop: 12,
-    backgroundColor: COLORS.paper,
     borderTopWidth: 1,
-    borderTopColor: COLORS.ruleLight,
   },
   skipButton: {
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.rule,
     borderRadius: 999,
     paddingVertical: 12,
     alignItems: 'center',
@@ -377,12 +362,10 @@ const styles = StyleSheet.create({
   skipLabel: {
     fontFamily: FONTS.body,
     fontSize: 13,
-    color: COLORS.slateMid,
     letterSpacing: 0.2,
   },
   recordButton: {
     flex: 2,
-    backgroundColor: COLORS.slate,
     borderRadius: 999,
     paddingVertical: 12,
     alignItems: 'center',
@@ -394,7 +377,6 @@ const styles = StyleSheet.create({
   recordLabel: {
     fontFamily: FONTS.bodyMedium,
     fontSize: 13,
-    color: COLORS.cream,
     letterSpacing: 0.3,
     fontWeight: '500',
   },

@@ -44,6 +44,13 @@ export default {
     delta_steady: '— સ્થિર',
     delta_up: '+{{n}} ફેરફાર',
     delta_down: '{{n}} ફેરફાર',
+    why_recurring_tension: '{{theme}} થોડા દિવસોથી ભાર વહન કરી રહ્યું છે — એ જ આજની રીડિંગમાં દેખાઈ રહ્યું છે.',
+    why_shift_down: '{{theme}} તાજેતરમાં નીચે તરફ ખસ્યું છે — એ જ આજની રીડિંગમાં દેખાઈ રહ્યું છે.',
+    why_growth: '{{theme}} ધીમે ધીમે ખુલી રહ્યું છે — આજના ભાગમાં એ દેખાઈ રહ્યું છે.',
+    why_shift_up: '{{theme}} તાજેતરમાં ઉપર ગયું છે — આજના ભાગમાં એ દેખાઈ રહ્યું છે.',
+    why_steady: '{{theme}} સ્થિર રહ્યું છે — આજના ભાગમાં એ દેખાઈ રહ્યું છે.',
+    why_fallback: '{{theme}} આજની રીડિંગનો ભાગ છે.',
+    cold_start_note: '{{theme}} હવે Mirar જે સાંભળી રહ્યું છે તેનો ભાગ છે.',
     fallback_mirror: '{{theme1}} અને {{theme2}} આજના પ્રતિબિંબમાં દેખાયા. {{statusLine}}',
     fallback_status_line: 'આજે સંરેખણ {{status}} સ્તરે નોંધાયું.',
     level_low: 'નીચો સંકેત',
@@ -97,6 +104,7 @@ export default {
     settling: 'સ્થિર થઈ રહ્યું',
     still_forming: 'હજી બની રહ્યું છે',
     drifting: 'વહી રહ્યું છે',
+    listening: 'સાંભળી રહ્યું છે',
   },
 
   guidance_tooltips: {
@@ -486,8 +494,8 @@ export default {
     reflection_n: 'પ્રતિબિંબ {{n}}',
     more_notes_one: '+{{count}} વધુ નોંધ',
     more_notes_other: '+{{count}} વધુ નોંધ',
-    support_mirar: 'Mirar ને ટેકો આપો',
-    support_sub: 'કોઈ સબ્સ્ક્રિપ્શન નહીં. પ્રેક્ટિસ પ્રથમ આવે છે — જ્યારે તૈયાર હો ત્યારે, જે યોગ્ય લાગે તે આપો.',
+    support_mirar: 'Mirar નો સંપર્ક કરો',
+    support_sub: 'સવાલ, પ્રતિભાવ, અથવા અમારા કામને ટેકો આપવા માંગો છો — ગમે ત્યારે લખો.',
   },
 
   languages: {

@@ -20,7 +20,7 @@ import { PromptCard } from '../../components/check-in/PromptCard';
 import { OptionSelector } from '../../components/check-in/OptionSelector';
 import { JournalExpander } from '../../components/check-in/JournalExpander';
 import { MirarLogo } from '../../components/ui/MirarLogo';
-import { AlignmentRing } from '../../components/home/AlignmentRing';
+import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
 import { AlignmentSparkline } from '../../components/home/AlignmentSparkline';
 import { ThemeSignalsGrid } from '../../components/home/ThemeSignalMiniCard';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
@@ -33,6 +33,7 @@ import { useColors } from '../../contexts/theme-context';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { getAlignmentStatus } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
+import { mirrorSignalLabelKey } from '../../lib/guidance';
 import { ThemeCode } from '../../types/mirar';
 
 // ─── Check-in Flow (modal-style within the tab) ───────────────────────────────
@@ -77,6 +78,8 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
           theme1_level: signal?.theme1Level ?? 'Medium',
           theme2_code: signal?.theme2Code ?? 'EWB',
           theme2_level: signal?.theme2Level ?? 'Medium',
+          theme1_pattern_flag: signal?.theme1PatternFlag ?? '',
+          theme2_pattern_flag: signal?.theme2PatternFlag ?? '',
           tomorrow_tease: signal?.tomorrowTease ?? '',
         },
       });
@@ -121,7 +124,7 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   return (
     <>
       <ScrollView
-        style={{ flex: 1, backgroundColor: COLORS.paper }}
+        style={{ flex: 1, backgroundColor: colors.paper }}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -131,7 +134,7 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
           stage={stage}
           promptText={question.prompt_text}
         />
-        <View style={[styles.divider, { backgroundColor: COLORS.ruleLight }]} />
+        <View style={[styles.divider, { backgroundColor: colors.ruleLight }]} />
         <OptionSelector
           options={question.options ?? []}
           selectedOptionId={selectedOptionId}
@@ -140,18 +143,18 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
         />
       </ScrollView>
 
-      <View style={[styles.submitContainer, { backgroundColor: COLORS.paper, borderTopColor: COLORS.ruleLight }]}>
+      <View style={[styles.submitContainer, { backgroundColor: colors.paper, borderTopColor: colors.ruleLight }]}>
         <TouchableOpacity
           style={[
             styles.submitButton,
-            { backgroundColor: COLORS.slate },
+            { backgroundColor: colors.slate },
             !selectedOptionId && styles.submitButtonDisabled,
           ]}
           onPress={() => setCheckInStep(2)}
           disabled={!selectedOptionId}
           activeOpacity={0.85}
         >
-          <Text style={[styles.submitButtonText, { color: COLORS.cream }]}>
+          <Text style={[styles.submitButtonText, { color: colors.cream }]}>
             {t('onboarding.continue')} →
           </Text>
         </TouchableOpacity>
@@ -267,8 +270,8 @@ export default function TodayScreen() {
   // ─── Check-in flow active ───────────────────────────────────────────────────
   if (showCheckin && !isCompleted) {
     return (
-      <SafeAreaView style={[styles.safe, { backgroundColor: COLORS.paper }]}>
-        <View style={[styles.header, { borderBottomColor: COLORS.ruleLight }]}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: colors.paper }]}>
+        <View style={[styles.header, { borderBottomColor: colors.ruleLight }]}>
           <TouchableOpacity onPress={() => setShowCheckin(false)}>
             <Text style={[styles.backLink, { color: colors.slateMid }]}>← {t('nav.today')}</Text>
           </TouchableOpacity>
@@ -341,10 +344,17 @@ export default function TodayScreen() {
           <AwarenessCard reading={patternReading} />
         ) : null}
 
-        {/* 4. Alignment ring — only when there is a score to show */}
+        {/* 4. Alignment compass — same visual as the post-check-in Mirror screen */}
         {score !== null && (
           <View style={styles.ringSection}>
-            <AlignmentRing score={score} status={status} trend={trendValue} />
+            <AlignmentCompass
+              score={score}
+              previousScore={null}
+              statusLabel={t(`signal_labels.${mirrorSignalLabelKey(status)}`)}
+              deltaLabel={trendValue === 'up' ? '↑' : trendValue === 'down' ? '↓' : trendValue === 'steady' ? '→' : null}
+              deltaColor={colors.slateLight}
+              reduceMotion
+            />
             <View style={styles.ringLabelRow}>
               <Text style={[styles.ringLabel, { color: colors.slateLight }]}>
                 {t('common.your_alignment_today')}

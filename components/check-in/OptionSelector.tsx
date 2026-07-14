@@ -15,7 +15,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { OptionRow } from '../../types/mirar';
-import { COLORS, FONTS } from '../../lib/constants';
+import { FONTS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 import {
   SPRING_GENTLE,
   SPRING_SNAPPY,
@@ -65,6 +66,7 @@ interface OptionItemProps {
 }
 
 function OptionItem({ option, isSelected, onSelect, disabled, index }: OptionItemProps) {
+  const colors = useColors();
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -120,22 +122,22 @@ function OptionItem({ option, isSelected, onSelect, disabled, index }: OptionIte
         accessibilityLabel={option.option_text}
         style={[
           styles.option,
-          { borderColor: isSelected ? COLORS.slate : COLORS.ruleLight },
-          isSelected ? selectedShadow : unselectedShadow,
+          { backgroundColor: colors.paper, borderColor: isSelected ? colors.slate : colors.ruleLight },
+          isSelected ? shadowFor(colors.slate, true) : shadowFor(colors.slate, false),
           disabled && !isSelected && styles.optionDimmed,
         ]}
       >
         <View
           style={[
             styles.leftBar,
-            { backgroundColor: isSelected ? COLORS.brass : 'transparent' },
+            { backgroundColor: isSelected ? colors.brass : 'transparent' },
           ]}
         />
         <Text
           style={[
             styles.optionText,
             {
-              color: isSelected ? COLORS.ink : COLORS.slateMid,
+              color: isSelected ? colors.ink : colors.slateMid,
               fontFamily: isSelected ? FONTS.bodyMedium : FONTS.body,
             },
           ]}
@@ -147,29 +149,23 @@ function OptionItem({ option, isSelected, onSelect, disabled, index }: OptionIte
   );
 }
 
-const selectedShadow = Platform.select({
-  ios: {
-    shadowColor: COLORS.slate,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 9,
-  },
-  android: { elevation: 2 },
-  web: { boxShadow: '0 1px 0 0 rgba(74,74,85,0.4), 0 6px 18px -8px rgba(74,74,85,0.18)' },
-  default: {},
-}) as any;
-
-const unselectedShadow = Platform.select({
-  ios: {
-    shadowColor: COLORS.slate,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-  },
-  android: { elevation: 0 },
-  web: { boxShadow: '0 1px 2px rgba(74,74,85,0.03)' },
-  default: {},
-}) as any;
+function shadowFor(shadowColor: string, selected: boolean): any {
+  return Platform.select({
+    ios: {
+      shadowColor,
+      shadowOffset: { width: 0, height: selected ? 3 : 1 },
+      shadowOpacity: selected ? 0.12 : 0.03,
+      shadowRadius: selected ? 9 : 2,
+    },
+    android: { elevation: selected ? 2 : 0 },
+    web: {
+      boxShadow: selected
+        ? '0 1px 0 0 rgba(74,74,85,0.4), 0 6px 18px -8px rgba(74,74,85,0.18)'
+        : '0 1px 2px rgba(74,74,85,0.03)',
+    },
+    default: {},
+  });
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -183,7 +179,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 10,
     borderWidth: 1,
-    backgroundColor: COLORS.paper,
   },
   optionDimmed: {
     opacity: 0.5,

@@ -133,6 +133,11 @@ export interface SubmittedSignal {
   scoreBefore: number | null;
   scoreAfter: number | null;
   tomorrowTease: string | null;
+  // Identity-vector pattern flag for each touched theme, read from
+  // alignment_identity_vectors as of just before this check-in (may be
+  // null for new users or before the identity vector has ever run).
+  theme1PatternFlag: string | null;
+  theme2PatternFlag: string | null;
 }
 
 export interface QuestionHistoryRow {

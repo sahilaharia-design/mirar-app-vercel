@@ -1,13 +1,11 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
   ScrollView,
   Pressable,
-  TouchableOpacity,
   StyleSheet,
   AccessibilityInfo,
-  LayoutChangeEvent,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -17,14 +15,14 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Line, Path } from 'react-native-svg';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { ThemeShiftCard } from './ThemeShiftCard';
+import { AlignmentCompass } from '../ui/AlignmentCompass';
 import {
-  COLORS,
   FONTS,
   getAlignmentStatus,
 } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 import {
   V3_SETTLE_EASING,
   V3_SETTLE_DURATION,
@@ -32,20 +30,19 @@ import {
   V3_UNDERLINE_EASING,
   V3_UNDERLINE_DURATION,
   V3_UNDERLINE_DELAY,
-  V3_MARKER_EASING,
-  V3_MARKER_DURATION,
-  V3_MARKER_DELAY,
   V3_REDUCED_FADE_DURATION,
 } from '../../lib/animations';
 import { supabase } from '../../lib/supabase';
-import { mirrorSignalLabelKey, signalHelpKeyForStatus } from '../../lib/guidance';
+import { mirrorSignalLabelKey, signalHelpKeyForStatus, compassWhyKey } from '../../lib/guidance';
 import { InfoTooltipInline } from '../ui/InfoTooltip';
 import { ThemeCode, SignalLevel } from '../../types/mirar';
+
+type Colors = ReturnType<typeof useColors>;
 
 // Declared at module level — must not be inside a component to avoid re-creation on every render
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-// ── Prop contract (unchanged from previous version) ───────────────────────────
+// ── Prop contract ──────────────────────────────────────────────────────────
 interface MirrorScreenProps {
   userId: string;
   dayNumber: number;
@@ -56,6 +53,8 @@ interface MirrorScreenProps {
   theme1Level: SignalLevel;
   theme2Code: ThemeCode;
   theme2Level: SignalLevel;
+  theme1PatternFlag: string | null;
+  theme2PatternFlag: string | null;
   /** Accepted for back-compat. V3 footer shows static "Tomorrow at dawn" instead. */
   tomorrowTease: string | null;
   onDone: () => void;
@@ -69,11 +68,11 @@ function markLen(score: number | null): number {
   return 4;
 }
 
-function markColor(score: number | null): string {
-  if (score === null) return COLORS.slateXLight;
-  if (score >= 75) return COLORS.signalHigh;
-  if (score >= 38) return COLORS.slate;
-  return COLORS.signalLow;
+function markColor(score: number | null, colors: Colors): string {
+  if (score === null) return colors.slateXLight;
+  if (score >= 75) return colors.signalHigh;
+  if (score >= 38) return colors.slate;
+  return colors.signalLow;
 }
 
 // ── Delta helpers ─────────────────────────────────────────────────────────────
@@ -86,11 +85,11 @@ function deltaLabel(t: (key: string, opts?: any) => string, before: number | nul
     : t('checkin.delta_down', { n: Math.round(d) });
 }
 
-function deltaColor(before: number | null, after: number | null): string {
-  if (after === null || before === null) return COLORS.slateLight;
+function deltaColor(before: number | null, after: number | null, colors: Colors): string {
+  if (after === null || before === null) return colors.slateLight;
   const d = after - before;
-  if (Math.abs(d) <= 2) return COLORS.slateLight;
-  return d > 0 ? COLORS.signalHigh : COLORS.brass;
+  if (Math.abs(d) <= 2) return colors.slateLight;
+  return d > 0 ? colors.signalHigh : colors.brass;
 }
 
 // ── Fallback mirror text (AI generation timed out) ────────────────────────────
@@ -107,85 +106,16 @@ function buildFallbackMirror(
   return t('checkin.fallback_mirror', { theme1: t1Name, theme2: t2Name, statusLine }).trim();
 }
 
-// ── ThresholdBar ──────────────────────────────────────────────────────────────
-function ThresholdBar({
-  score,
-  reduceMotion,
-}: {
-  score: number | null;
-  reduceMotion: boolean;
-}) {
-  const { t } = useTranslation();
-  const markerLeft = useSharedValue(-24);
-  const markerAnimated = useRef(false);
-
-  const markerCircleStyle = useAnimatedStyle(() => ({ left: markerLeft.value }));
-  // Inner dot is centered inside the 24px circle: offset = (24 - 8) / 2 = 8
-  const markerDotStyle = useAnimatedStyle(() => ({ left: markerLeft.value + 8 }));
-
-  const handleBarLayout = useCallback(
-    (e: LayoutChangeEvent) => {
-      if (markerAnimated.current || score === null) return;
-      const width = e.nativeEvent.layout.width;
-      if (width <= 0) return;
-      markerAnimated.current = true;
-      const target = Math.max(0, width * (score / 100) - 12);
-      const start = Math.max(0, width * 0.12 - 12);
-      markerLeft.value = start;
-      markerLeft.value = reduceMotion
-        ? target
-        : withDelay(
-            V3_MARKER_DELAY,
-            withTiming(target, { duration: V3_MARKER_DURATION, easing: V3_MARKER_EASING }),
-          );
-    },
-    [score, reduceMotion],
-  );
-
-  return (
-    <View>
-      {/* Bar + marker */}
-      <View style={styles.barContainer} onLayout={handleBarLayout}>
-        <LinearGradient
-          colors={[COLORS.signalLow, COLORS.signalCalm, COLORS.signalMid, COLORS.signalHigh]}
-          locations={[0, 0.38, 0.5, 1]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.barGradient}
-        />
-        {[0, 38, 50, 75, 100].map((p) => (
-          <View key={p} style={[styles.tick, { left: `${p}%` as any }]} />
-        ))}
-        {score !== null && (
-          <>
-            <Animated.View style={[styles.markerOuter, markerCircleStyle]} />
-            <Animated.View style={[styles.markerDot, markerDotStyle]} />
-          </>
-        )}
-      </View>
-      {/* Zone labels */}
-      <View style={styles.barLabels}>
-        {[
-          t('checkin.zone_under_load'),
-          t('checkin.zone_settling'),
-          t('checkin.zone_forming'),
-          t('checkin.zone_steady'),
-        ].map((l) => (
-          <Text key={l} style={styles.barLabel}>{l}</Text>
-        ))}
-      </View>
-    </View>
-  );
-}
-
 // ── DaySignature ──────────────────────────────────────────────────────────────
 // 14 vertical marks encoding magnitude; brass drift arc if last 3 show sustained low.
 function DaySignature({
   history,
   reduceMotion,
+  colors,
 }: {
   history: (number | null)[];
   reduceMotion: boolean;
+  colors: Colors;
 }) {
   const { t } = useTranslation();
   const arcDash = useSharedValue(50);
@@ -221,9 +151,9 @@ function DaySignature({
   return (
     <View>
       <View style={styles.sigHeader}>
-        <Text style={styles.sigCaps}>{t('checkin.signature_label')}</Text>
+        <Text style={[styles.sigCaps, { color: colors.slateLight }]}>{t('checkin.signature_label')}</Text>
         {showArc && driftDays > 0 && (
-          <Text style={[styles.sigCaps, { color: COLORS.brass }]}>
+          <Text style={[styles.sigCaps, { color: colors.brass }]}>
             ↘ {t('checkin.drift_label', { n: driftDays })}
           </Text>
         )}
@@ -232,13 +162,13 @@ function DaySignature({
         {/* Center baseline */}
         <Line
           x1="0" y1={CY} x2={VW} y2={CY}
-          stroke={COLORS.ruleLight} strokeWidth="1" strokeDasharray="1 3"
+          stroke={colors.ruleLight} strokeWidth="1" strokeDasharray="1 3"
         />
         {/* Day marks */}
         {history.map((score, i) => {
           const x = 10 + i * STEP;
           const len = markLen(score);
-          const color = markColor(score);
+          const color = markColor(score, colors);
           return (
             <Line
               key={i}
@@ -252,7 +182,7 @@ function DaySignature({
           <AnimatedPath
             d="M 276 44 Q 300 54 324 48"
             fill="none"
-            stroke={COLORS.brass}
+            stroke={colors.brass}
             strokeWidth="1"
             strokeDasharray={50}
             animatedProps={arcProps}
@@ -274,10 +204,13 @@ export function MirrorScreen({
   theme1Level,
   theme2Code,
   theme2Level,
+  theme1PatternFlag,
+  theme2PatternFlag,
   tomorrowTease,
   onDone,
 }: MirrorScreenProps) {
   const { t } = useTranslation();
+  const colors = useColors();
   const [reduceMotion, setReduceMotion] = useState(false);
   const [mirrorText, setMirrorText] = useState<string | null>(null);
   const [mirrorLoading, setMirrorLoading] = useState(true);
@@ -344,12 +277,12 @@ export function MirrorScreen({
     return () => { if (pollRef.current) clearTimeout(pollRef.current); };
   }, [userId]);
 
-  // ── Settle animations (6 sections, 100ms stagger) ─────────────────────────
+  // ── Settle animations (5 sections, 100ms stagger) ─────────────────────────
   const s0Op = useSharedValue(0); const s0Y = useSharedValue(4); // strip
   const s1Op = useSharedValue(0); const s1Y = useSharedValue(4); // hero
-  const s2Op = useSharedValue(0); const s2Y = useSharedValue(4); // threshold bar
-  const s3Op = useSharedValue(0); const s3Y = useSharedValue(4); // signature
-  const s4Op = useSharedValue(0); const s4Y = useSharedValue(4); // mirror card
+  const s2Op = useSharedValue(0); const s2Y = useSharedValue(4); // themes
+  const s3Op = useSharedValue(0); const s3Y = useSharedValue(4); // compass + signature
+  const s4Op = useSharedValue(0); const s4Y = useSharedValue(4); // tomorrow
   const s5Op = useSharedValue(0); const s5Y = useSharedValue(4); // footer
 
   const underlineScale = useSharedValue(0);
@@ -388,53 +321,67 @@ export function MirrorScreen({
   const underlineStyle = useAnimatedStyle(() => ({ transform: [{ scaleX: underlineScale.value }] }));
 
   // ── Derived display values ────────────────────────────────────────────────
+  const isListening = alignmentScore === null;
   const status = getAlignmentStatus(alignmentScore);
   const signalLabelKey = mirrorSignalLabelKey(status);
-  const signalLabel = t(`signal_labels.${signalLabelKey}`);
+  const compassStatusLabel = isListening ? t('signal_labels.listening') : t(`signal_labels.${signalLabelKey}`);
   const dLabel = deltaLabel(t, scoreBefore, alignmentScore);
-  const dColor = deltaColor(scoreBefore, alignmentScore);
+  const dColor = deltaColor(scoreBefore, alignmentScore, colors);
+
+  // "Why" sentence — built from the identity vector's pattern flag for whichever
+  // touched theme has one (theme1 first), falling back to a cold-start note when
+  // there's no score yet, or a generic naming line when there's no flag at all.
+  const theme1Name = t(`themes.${theme1Code}`);
+  const theme2Name = t(`themes.${theme2Code}`);
+  const explanation = isListening
+    ? t('checkin.cold_start_note', { theme: theme1Name })
+    : theme1PatternFlag
+      ? t(compassWhyKey(theme1PatternFlag), { theme: theme1Name })
+      : theme2PatternFlag
+        ? t(compassWhyKey(theme2PatternFlag), { theme: theme2Name })
+        : t('checkin.why_fallback', { theme: theme1Name });
 
   return (
     <ScrollView
-      style={styles.scroll}
+      style={[styles.scroll, { backgroundColor: colors.cream }]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
       {/* ── Top strip ───────────────────────────────────────────────────── */}
       <Animated.View style={[styles.strip, s0Style]}>
-        <Text style={styles.caps}>
-          <Text style={styles.capsInk}>{t('common.your_alignment_today')}</Text>
-          {cycleNumber > 1 && <Text style={styles.capsLight}> · {t('common.cycle', { n: cycleNumber })}</Text>}
+        <Text style={[styles.caps, { color: colors.slateLight }]}>
+          <Text style={{ color: colors.ink }}>{t('common.your_alignment_today')}</Text>
+          {cycleNumber > 1 && <Text style={{ color: colors.slateLight }}> · {t('common.cycle', { n: cycleNumber })}</Text>}
         </Text>
-        <Text style={styles.caps}>{t('common.recorded')}</Text>
+        <Text style={[styles.caps, { color: colors.slateLight }]}>{t('common.recorded')}</Text>
       </Animated.View>
-      <View style={styles.rule} />
+      <View style={[styles.rule, { backgroundColor: colors.ruleLight }]} />
 
       {/* ── Reflection hero — the reveal, first and largest ─────────────── */}
       <Animated.View style={[styles.reflectionBlock, s1Style]}>
-        <Text style={styles.reflectionLabel}>{t('checkin.reflection_label')}</Text>
+        <Text style={[styles.reflectionLabel, { color: colors.brass }]}>{t('checkin.reflection_label')}</Text>
         {mirrorLoading ? (
-          <Text style={styles.reflectionLoading}>{t('checkin.reflection_loading')}</Text>
+          <Text style={[styles.reflectionLoading, { color: colors.slateLight }]}>{t('checkin.reflection_loading')}</Text>
         ) : (
-          <Text style={styles.reflectionText}>{mirrorText}</Text>
+          <Text style={[styles.reflectionText, { color: colors.ink }]}>{mirrorText}</Text>
         )}
-        <Animated.View style={[styles.underline, underlineStyle]} />
+        <Animated.View style={[styles.underline, { backgroundColor: colors.brass }, underlineStyle]} />
       </Animated.View>
 
       {/* ── What today touched — the themes behind the reflection ───────── */}
       <Animated.View style={s2Style}>
         <View style={styles.themeSection}>
-          <Text style={styles.caps}>{t('checkin.themes_touched')}</Text>
+          <Text style={[styles.caps, { color: colors.slateLight }]}>{t('checkin.themes_touched')}</Text>
           <View style={styles.themeCards}>
             <ThemeShiftCard
               themeCode={theme1Code}
-              themeName={t(`themes.${theme1Code}`)}
+              themeName={theme1Name}
               signalLevel={theme1Level}
               shortDescription={dayNumber <= 7 ? t(`themes.${theme1Code}_short`) : undefined}
             />
             <ThemeShiftCard
               themeCode={theme2Code}
-              themeName={t(`themes.${theme2Code}`)}
+              themeName={theme2Name}
               signalLevel={theme2Level}
               isSecondary
               shortDescription={dayNumber <= 7 ? t(`themes.${theme2Code}_short`) : undefined}
@@ -443,29 +390,31 @@ export function MirrorScreen({
         </View>
       </Animated.View>
 
-      {/* ── Your reading — signal texture, demoted below the reflection ─── */}
+      {/* ── Compass — the direction, felt immediately ────────────────────── */}
       <Animated.View style={s3Style}>
         <View style={styles.readingBlock}>
           <View style={styles.readingHeaderRow}>
-            <Text style={styles.caps}>{t('checkin.your_reading')}</Text>
+            <Text style={[styles.caps, { color: colors.slateLight }]}>{t('checkin.your_reading')}</Text>
             <InfoTooltipInline helpText={t(`guidance_tooltips.${signalHelpKeyForStatus(status)}`)} size={13} />
           </View>
-          <View style={styles.readingStatusRow}>
-            <Text style={styles.readingStatus}>{signalLabel}</Text>
-            {dLabel ? (
-              <Text style={[styles.heroDelta, { color: dColor }]}>{dLabel}</Text>
-            ) : null}
-          </View>
-          <ThresholdBar score={alignmentScore} reduceMotion={reduceMotion} />
-          <View style={{ height: 8 }} />
-          <DaySignature history={history14} reduceMotion={reduceMotion} />
+          <AlignmentCompass
+            score={alignmentScore}
+            previousScore={scoreBefore}
+            statusLabel={compassStatusLabel}
+            deltaLabel={dLabel || null}
+            deltaColor={dColor}
+            explanation={explanation}
+            reduceMotion={reduceMotion}
+          />
+          <View style={{ height: 4 }} />
+          <DaySignature history={history14} reduceMotion={reduceMotion} colors={colors} />
         </View>
       </Animated.View>
 
       {/* ── Tomorrow — the curiosity hook that pulls the next visit ─────── */}
-      <Animated.View style={[styles.tomorrowBlock, s4Style]}>
-        <Text style={styles.mirrorLabel}>{t('checkin.tomorrow_label')}</Text>
-        <Text style={styles.tomorrowText}>
+      <Animated.View style={[styles.tomorrowBlock, { backgroundColor: colors.paper, borderColor: colors.ruleLight }, s4Style]}>
+        <Text style={[styles.mirrorLabel, { color: colors.brass }]}>{t('checkin.tomorrow_label')}</Text>
+        <Text style={[styles.tomorrowText, { color: colors.ink }]}>
           {tomorrowTease && tomorrowTease.trim().length > 0
             ? tomorrowTease
             : t('checkin.tomorrow_fallback')}
@@ -474,14 +423,14 @@ export function MirrorScreen({
 
       {/* ── Footer: Close ────────────────────────────────────────────────── */}
       <Animated.View style={[styles.footer, s5Style]}>
-        <Text style={styles.caps}>{t('checkin.return_when_ready')}</Text>
+        <Text style={[styles.caps, { color: colors.slateLight }]}>{t('checkin.return_when_ready')}</Text>
         <Pressable
           onPress={onDone}
           accessibilityRole="button"
           accessibilityLabel={t('checkin.close_a11y')}
           hitSlop={12}
         >
-          <Text style={styles.closeBtn}>{t('checkin.close')}</Text>
+          <Text style={[styles.closeBtn, { color: colors.ink, borderBottomColor: colors.ink }]}>{t('checkin.close')}</Text>
         </Pressable>
       </Animated.View>
 
@@ -490,11 +439,10 @@ export function MirrorScreen({
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// ── Styles (layout only — colors applied inline via useColors()) ─────────────
 const styles = StyleSheet.create({
   scroll: {
     flex: 1,
-    backgroundColor: COLORS.cream,
   },
   content: {
     paddingHorizontal: 26,
@@ -513,167 +461,17 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: COLORS.slateLight,
   },
-  capsLight: { color: COLORS.slateLight },
-  capsInk: { color: COLORS.ink },
   rule: {
     height: 1,
-    backgroundColor: COLORS.ruleLight,
     marginTop: -14, // pulls rule flush under strip within the content gap
   },
 
-  // Hero
-  heroBlock: {
-    marginTop: 4,
-  },
-  heroMeta: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 10,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-    color: COLORS.slateLight,
-    marginBottom: 6,
-  },
-  heroMetaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  heroRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 14,
-  },
-  heroScore: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 13,
-    lineHeight: 18,
-    letterSpacing: 1.4,
-    color: COLORS.slateLight,
-  },
-  heroMeta2: {
-    gap: 4,
-  },
-  heroStatus: {
-    fontFamily: FONTS.displayItalic,
-    fontSize: 34,
-    lineHeight: 38,
-    letterSpacing: -0.2,
-    color: COLORS.ink,
-  },
-  heroDelta: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 10,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-  },
-  heroNote: {
-    marginTop: 12,
-    fontFamily: FONTS.body,
-    fontSize: 13,
-    lineHeight: 20,
-    color: COLORS.slateMid,
-    maxWidth: 300,
-  },
-  howReadCard: {
-    marginTop: 14,
-    borderWidth: 1,
-    borderColor: COLORS.ruleLight,
-    borderRadius: 10,
-    padding: 12,
-    backgroundColor: COLORS.paper,
-    maxWidth: 340,
-  },
-  howReadHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: 12,
-  },
-  howReadTitle: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 12,
-    color: COLORS.ink,
-  },
-  howReadToggle: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 10,
-    color: COLORS.slateLight,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-  howReadBody: {
-    marginTop: 10,
-    fontFamily: FONTS.body,
-    fontSize: 13,
-    lineHeight: 20,
-    color: COLORS.slateMid,
-  },
   underline: {
     marginTop: 12,
     width: 96,
     height: 1,
-    backgroundColor: COLORS.brass,
     transformOrigin: 'left',
-  },
-
-  // Threshold bar
-  barContainer: {
-    height: 32,
-    position: 'relative',
-    overflow: 'visible',
-  },
-  barGradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 13,
-    height: 6,
-    borderRadius: 3,
-    opacity: 0.35,
-  },
-  tick: {
-    position: 'absolute',
-    top: 7,
-    width: 1,
-    height: 18,
-    backgroundColor: COLORS.slateMid,
-    opacity: 0.5,
-  },
-  markerOuter: {
-    position: 'absolute',
-    top: 4,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: COLORS.cream,
-    borderWidth: 2,
-    borderColor: COLORS.ink,
-    shadowColor: COLORS.ink,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-  },
-  markerDot: {
-    position: 'absolute',
-    top: 12,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: COLORS.ink,
-  },
-  barLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  barLabel: {
-    fontFamily: FONTS.bodyMedium,
-    fontSize: 9,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-    color: COLORS.slateLight,
   },
 
   // Signature
@@ -687,7 +485,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: COLORS.slateLight,
   },
 
   // Reflection hero (the reveal)
@@ -700,42 +497,27 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: COLORS.brass,
   },
   reflectionText: {
     fontFamily: FONTS.displayItalic,
     fontSize: 26,
     lineHeight: 36,
     letterSpacing: -0.2,
-    color: COLORS.ink,
   },
   reflectionLoading: {
     fontFamily: FONTS.displayItalic,
     fontSize: 20,
     lineHeight: 28,
-    color: COLORS.slateLight,
     letterSpacing: 0.2,
   },
 
-  // Reading block (demoted signal texture)
+  // Reading block (compass + signature)
   readingBlock: {
-    gap: 12,
+    gap: 4,
   },
   readingHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  readingStatusRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 12,
-  },
-  readingStatus: {
-    fontFamily: FONTS.displayItalic,
-    fontSize: 22,
-    lineHeight: 26,
-    letterSpacing: -0.2,
-    color: COLORS.ink,
   },
 
   // Tomorrow hook
@@ -744,45 +526,18 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 18,
     borderRadius: 12,
-    backgroundColor: COLORS.paper,
     borderWidth: 1,
-    borderColor: COLORS.ruleLight,
-  },
-  tomorrowText: {
-    fontFamily: FONTS.displayItalic,
-    fontSize: 17,
-    lineHeight: 25,
-    color: COLORS.ink,
-  },
-
-  // Mirror card
-  mirrorCard: {
-    paddingVertical: 16,
-    paddingHorizontal: 18,
-    borderRadius: 12,
-    backgroundColor: COLORS.paper,
-    borderWidth: 1,
-    borderColor: COLORS.ruleLight,
-    gap: 8,
   },
   mirrorLabel: {
     fontFamily: FONTS.bodyMedium,
     fontSize: 10,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: COLORS.brass,
   },
-  mirrorText: {
+  tomorrowText: {
     fontFamily: FONTS.displayItalic,
     fontSize: 17,
-    lineHeight: 25, // 17 × 1.5
-    color: COLORS.ink,
-  },
-  mirrorCalibrating: {
-    fontFamily: FONTS.displayItalic,
-    fontSize: 15,
-    color: COLORS.slateLight,
-    letterSpacing: 0.2,
+    lineHeight: 25,
   },
 
   // Themes
@@ -805,9 +560,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: COLORS.ink,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.ink,
     paddingBottom: 2,
   },
 });
