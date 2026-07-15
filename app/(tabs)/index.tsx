@@ -21,8 +21,6 @@ import { OptionSelector } from '../../components/check-in/OptionSelector';
 import { JournalExpander } from '../../components/check-in/JournalExpander';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
-import { AlignmentSparkline } from '../../components/home/AlignmentSparkline';
-import { ThemeSignalsGrid } from '../../components/home/ThemeSignalMiniCard';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
 import { AwarenessCard } from '../../components/home/AwarenessCard';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
@@ -34,7 +32,6 @@ import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { getAlignmentStatus } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
 import { mirrorSignalLabelKey } from '../../lib/guidance';
-import { ThemeCode } from '../../types/mirar';
 
 // ─── Check-in Flow (modal-style within the tab) ───────────────────────────────
 function CheckInFlow({ onDone }: { onDone: () => void }) {
@@ -181,7 +178,6 @@ export default function TodayScreen() {
     currentStage,
     alignmentScore,
     alignmentHistory,
-    rollingThemeScores,
     streakLength,
     contextMessage,
     patternReading,
@@ -262,10 +258,6 @@ export default function TodayScreen() {
   const score = alignmentScore?.score ?? null;
   const status = getAlignmentStatus(score);
   const trendValue = alignmentScore?.trend ?? null;
-  const themeScoresForGrid = rollingThemeScores.map((ts) => ({
-    code: ts.code as ThemeCode,
-    status: ts.status,
-  }));
 
   // ─── Check-in flow active ───────────────────────────────────────────────────
   if (showCheckin && !isCompleted) {
@@ -327,24 +319,15 @@ export default function TodayScreen() {
         />
 
         {/* 3. Early-days card — human text for days 1–3 before data accumulates */}
-        {effectiveDay === 1 && !isCompleted && score === null ? (
+        {effectiveDay === 1 && !isCompleted && score === null && (
           <FirstDayWelcome />
-        ) : effectiveDay <= 3 && !isCompleted && score === null ? (
-          <Animated.View
-            entering={FadeInDown.duration(400).delay(120)}
-            style={[styles.earlyCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}
-          >
-            <Text style={[styles.earlyCardText, { color: colors.slateMid }]}>
-              {effectiveDay === 2
-                ? 'Day 2. The practice continues.'
-                : 'Three days of signal. Your first pattern is forming.'}
-            </Text>
-          </Animated.View>
-        ) : patternReading ? (
-          <AwarenessCard reading={patternReading} />
-        ) : null}
+        )}
 
-        {/* 4. Alignment compass — same visual as the post-check-in Mirror screen */}
+        {/* 4. Alignment compass — same visual as the post-check-in Mirror screen.
+            The single "today" focus of this screen; deeper history and the
+            6-theme breakdown live exclusively on the Signals tab now, so this
+            screen guides one thing at a time instead of showing everything
+            at once. */}
         {score !== null && (
           <View style={styles.ringSection}>
             <AlignmentCompass
@@ -364,26 +347,21 @@ export default function TodayScreen() {
           </View>
         )}
 
-        {/* 5. Theme signal grid — 6 dimensions at a glance */}
-        {themeScoresForGrid.length > 0 && (
-          <ThemeSignalsGrid
-            themeScores={themeScoresForGrid}
-            onThemePress={() => {}}
-          />
-        )}
-
-        {/* 6. 14-day sparkline — trend context, furthest below fold */}
-        {alignmentHistory.length >= 2 && (
-          <Animated.View entering={FadeInDown.duration(400).delay(200)} style={[styles.sparklineCard, {
-            backgroundColor: colors.white,
-            borderColor: colors.borderLight,
-          }]}>
-            <Text style={[styles.sparklineCardLabel, { color: colors.slateLight }]}>
-              {t('today.recent_pattern')}
+        {/* 5. Pattern-of-the-week note — appears after today's reading, not competing with it */}
+        {effectiveDay > 1 && effectiveDay <= 3 && !isCompleted && score === null ? (
+          <Animated.View
+            entering={FadeInDown.duration(400).delay(120)}
+            style={[styles.earlyCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}
+          >
+            <Text style={[styles.earlyCardText, { color: colors.slateMid }]}>
+              {effectiveDay === 2
+                ? 'Day 2. The practice continues.'
+                : 'Three days of signal. Your first pattern is forming.'}
             </Text>
-            <AlignmentSparkline history={alignmentHistory} width={160} height={28} />
           </Animated.View>
-        )}
+        ) : patternReading ? (
+          <AwarenessCard reading={patternReading} />
+        ) : null}
 
         {/* Dev Day Simulator */}
         {__DEV__ && (
