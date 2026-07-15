@@ -19,9 +19,11 @@ CREATE INDEX IF NOT EXISTS idx_questions_user_generated
 -- process-checkin), not service-role — so inserting a generated question needs
 -- explicit INSERT policies. Curated rows are still seeded via service-role /
 -- migrations, which bypasses RLS entirely, so this doesn't affect them.
+DROP POLICY IF EXISTS "questions_insert_own_generated" ON questions;
 CREATE POLICY "questions_insert_own_generated" ON questions
   FOR INSERT WITH CHECK (user_id = auth.uid() AND source = 'generated');
 
+DROP POLICY IF EXISTS "options_insert_own_generated" ON options;
 CREATE POLICY "options_insert_own_generated" ON options
   FOR INSERT WITH CHECK (
     question_id IN (SELECT id FROM questions WHERE user_id = auth.uid() AND source = 'generated')
