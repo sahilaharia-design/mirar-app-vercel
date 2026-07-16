@@ -99,10 +99,8 @@ export default function ReportDetailScreen() {
   }
 
   const { stage, stageLabel, coverage, coverageTotal, themeBlocks, primarySignals, calibrationChecks, summaryText } = reportDisplay;
-  const strongestSignal = primarySignals.find((signal) => !signal.toLowerCase().startsWith('coverage')) ?? primarySignals[0];
-  const repeatedSignals = primarySignals
-    .filter((signal) => !signal.toLowerCase().startsWith('coverage'))
-    .slice(0, 3);
+  const strongestSignal = primarySignals[0] ?? null;
+  const repeatedSignals = primarySignals.slice(0, 3);
 
   return (
     <SafeAreaView style={styles.safe}>

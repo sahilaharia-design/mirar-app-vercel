@@ -430,11 +430,17 @@ export function ThemeDetailSheet({
   const themeShortDesc = t(`themes.${themeCode}_short`);
   const history: ThemeDataPoint[] = themeHistories?.[themeCode] ?? [];
 
-  // Aggregate ThemeScore across all stage overviews for this theme
+  // Aggregate ThemeScore across all stage overviews for this theme.
+  // computeThemeScores() always returns an entry per theme (even with
+  // signalCount 0 for stages that haven't started yet), so `find` never
+  // returns undefined — only fold in stages that actually have signals,
+  // otherwise a cycle mid-way through (i.e. every real user) would have its
+  // "current" status blindly overwritten by an empty future stage on every
+  // iteration, always landing on "No Reading" regardless of real data.
   let aggregateScore: ThemeScore | null = null;
   for (const stage of stageOverviews) {
     const ts = stage.themeScores.find((s) => s.code === themeCode);
-    if (ts) {
+    if (ts && ts.signalCount > 0) {
       if (!aggregateScore) {
         aggregateScore = { ...ts };
       } else {
@@ -445,8 +451,8 @@ export function ThemeDetailSheet({
           mediumCount: previousScore.mediumCount + ts.mediumCount,
           highCount: previousScore.highCount + ts.highCount,
           signalCount: previousScore.signalCount + ts.signalCount,
-          average: ts.average, // use most recent stage's average
-          status: ts.status,   // use most recent stage's status
+          average: ts.average, // use most recent stage-with-data's average
+          status: ts.status,   // use most recent stage-with-data's status
         };
       }
     }
@@ -526,11 +532,20 @@ export function ThemeDetailSheet({
           {/* ── Current reading + coverage ──────────────────────────────── */}
           <FadeSlide delayMs={stagger(2)} reducedMotion={reducedMotion.current} style={styles.readingSection}>
             <View style={styles.readingRow}>
-              {/* Left: status label + trend */}
-              <View>
+              {/* Left: status label + trend — flexShrink so long words like
+                  "No Reading" scale down instead of overlapping the coverage
+                  block on the right */}
+              <View style={styles.statusBlock}>
                 <Text style={styles.capsLabel}>{t('theme_detail.now')}</Text>
                 <View style={styles.statusRow}>
-                  <Text style={styles.statusNum}>{t(STATUS_KEY[currentStatus])}</Text>
+                  <Text
+                    style={styles.statusNum}
+                    numberOfLines={1}
+                    adjustsFontSizeToFit
+                    minimumFontScale={0.5}
+                  >
+                    {t(STATUS_KEY[currentStatus])}
+                  </Text>
                   {badge ? (
                     <Text style={styles.trendBadge}>{badge}</Text>
                   ) : null}
@@ -695,6 +710,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginBottom: 14,
   },
+  statusBlock: {
+    flex: 1,
+    flexShrink: 1,
+    marginRight: SPACING.md,
+  },
   statusRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -717,6 +737,7 @@ const styles = StyleSheet.create({
   },
   coverageBlock: {
     alignItems: 'flex-end',
+    flexShrink: 0,
   },
   coverageNum: {
     fontFamily: FONTS.display,

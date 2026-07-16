@@ -7,6 +7,14 @@ export default {
     profile: 'Profile',
   },
 
+  // ─── Welcome-back banner (shown once after the rebuild) ────────────────────────
+  welcome_back: {
+    title: "We've rebuilt Mirar.",
+    body: 'Simpler, faster, and closer to the daily practice it was meant to be. If something feels off — or right — we\'d genuinely like to hear it.',
+    cta: 'Write to us',
+    dismiss_a11y: 'Dismiss',
+  },
+
   // ─── Common ───────────────────────────────────────────────────────────────────
   common: {
     day: 'Day {{n}}',

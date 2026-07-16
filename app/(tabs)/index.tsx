@@ -23,6 +23,7 @@ import { MirarLogo } from '../../components/ui/MirarLogo';
 import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
 import { AwarenessCard } from '../../components/home/AwarenessCard';
+import { WelcomeBackBanner } from '../../components/home/WelcomeBackBanner';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
@@ -308,6 +309,9 @@ export default function TodayScreen() {
             </Text>
           )}
         </Animated.View>
+
+        {/* Welcome-back — one-time notice that the app was rebuilt, inviting feedback */}
+        <WelcomeBackBanner />
 
         {/* 2. Today's check-in card — primary action */}
         <TodayCheckinCard

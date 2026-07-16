@@ -105,8 +105,12 @@ const PRESENCE: Record<Lang, Record<string, string>> = {
   gu: { Aligned: 'સ્થિર સંકેત', Forming: 'મધ્યમ સંકેત', Stabilizing: 'સ્થિર થતી પેટર્ન', other: 'દબાણ હાજર' },
 };
 
-function buildPrimarySignals(lang: Lang, scores: any[], coverage: number, total: number): string[] {
-  const lines = [SECTION_HEADERS[lang].included(coverage, total)];
+function buildPrimarySignals(lang: Lang, scores: any[]): string[] {
+  // Coverage ("N of N reflections included") is NOT a signal — it's already
+  // shown separately in the report header from report.coverage/coverage_total.
+  // Mixing it into this list made it show up as the "strongest signal" and as
+  // a stray first bullet under "Strongest Signals" on the client.
+  const lines: string[] = [];
   const sorted = [...scores].filter((s) => s.signal_count > 0).sort((a, b) => (b.average_score ?? 0) - (a.average_score ?? 0));
   for (const s of sorted.slice(0, 3)) {
     const pres = PRESENCE[lang][s.status] ?? PRESENCE[lang].other;
@@ -178,7 +182,7 @@ function buildFullReportText(lang: Lang, stage: number, coverage: number, total:
   lines.push('─'.repeat(30));
   lines.push(H.strongest);
   lines.push('─'.repeat(30));
-  for (const sig of buildPrimarySignals(lang, scores, coverage, total)) lines.push(`• ${sig}`);
+  for (const sig of buildPrimarySignals(lang, scores)) lines.push(`• ${sig}`);
   lines.push('');
   lines.push('─'.repeat(30));
   lines.push(H.checks);
@@ -243,7 +247,7 @@ Deno.serve(async (req) => {
 
     const lang: Lang = (['en', 'hi', 'gu'].includes(userRow?.language) ? userRow.language : 'en') as Lang;
     const mirarid = userRow?.mirar_id ?? user_id;
-    const primarySignals = buildPrimarySignals(lang, scores ?? [], coverage, total).join('\n');
+    const primarySignals = buildPrimarySignals(lang, scores ?? []).join('\n');
     const calibrationChecks = buildCalibrationChecks(lang, scores ?? []).join('\n');
     const alignedCount = (scores ?? []).filter((s) => s.status === 'Aligned').length;
     const summaryText = SUMMARY_TEXT[lang](STAGE_LABELS[lang][stage], coverage, total, alignedCount);
