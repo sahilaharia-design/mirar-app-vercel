@@ -9,6 +9,7 @@ import { useAuthStore } from '../../stores/auth-store';
 import { useSettingsStore } from '../../stores/settings-store';
 import { useAssessStore } from '../../stores/assess-store';
 import { generateMirarId } from '../../lib/scoring';
+import { withTimeout } from '../../lib/with-timeout';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { FONT_SIZE, SPACING } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
@@ -31,66 +32,87 @@ export default function OnboardingScreen() {
 
     const now = new Date().toISOString();
 
-    // Insert user row — idempotent via unique constraint on id
-    const { data: user, error: userError } = await supabase
-      .from('users')
-      .insert({
-        id: session.user.id,
-        mirar_id: generateMirarId(),
-        email: session.user.email,
-        onboarding_completed: true,
-        cycle_start_date: now,
-        current_cycle: 1,
-        language: useSettingsStore.getState().language,
-      })
-      .select()
-      .single();
-
-    if (userError) {
-      if (userError.code === '23505') {
-        // User already exists — fetch their row and go straight to tabs
-        const { data: existing } = await supabase
+    try {
+      // Insert user row — idempotent via unique constraint on id
+      const { data: user, error: userError } = await withTimeout(
+        supabase
           .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        if (existing) setUser(existing);
-        router.replace('/(tabs)/');
+          .insert({
+            id: session.user.id,
+            mirar_id: generateMirarId(),
+            email: session.user.email,
+            onboarding_completed: true,
+            cycle_start_date: now,
+            current_cycle: 1,
+            language: useSettingsStore.getState().language,
+          })
+          .select()
+          .single()
+      );
+
+      if (userError) {
+        if (userError.code === '23505') {
+          // User already exists — fetch their row and go straight to tabs
+          try {
+            const { data: existing } = await withTimeout(
+              supabase.from('users').select('*').eq('id', session.user.id).single()
+            );
+            if (existing) setUser(existing);
+          } catch {
+            // Couldn't fetch the existing row — still safe to continue,
+            // the tabs screen will load the user state itself.
+          }
+          router.replace('/(tabs)/');
+          return;
+        }
+        console.error('User create error:', userError);
+        setStatus('error');
         return;
       }
-      console.error('User create error:', userError);
+
+      // Only create cycle for brand-new users (user insert succeeded above).
+      // Best-effort: an error here shouldn't strand a user who already has
+      // a valid account row.
+      try {
+        await withTimeout(supabase.from('cycles').insert({
+          user_id: session.user.id,
+          cycle_number: 1,
+          start_date: now,
+          stage1_start: now,
+          status: 'active',
+        }));
+      } catch (err) {
+        console.error('Cycle create error:', err);
+      }
+
+      // Save assessment answers collected during pre-auth flow. Best-effort —
+      // this is supplementary context, not required for the account to work.
+      try {
+        const { q1, q2, q3, q4, reset } = useAssessStore.getState();
+        if (q1.length > 0 || q2.length > 0) {
+          await withTimeout(supabase.from('onboarding_assessments').insert({
+            user_id: session.user.id,
+            brought_here: q1,
+            misaligned_themes: q2,
+            checkin_frequency: q3 || null,
+            last_felt_self: q4 || null,
+          }));
+          reset();
+        }
+      } catch (err) {
+        console.error('Onboarding assessment save error:', err);
+      }
+
+      if (user) setUser(user);
+      setStatus('done');
+
+      setTimeout(() => {
+        router.replace('/(onboarding)/');
+      }, 1200);
+    } catch (err) {
+      console.error('Account creation failed:', err);
       setStatus('error');
-      return;
     }
-
-    // Only create cycle for brand-new users (user insert succeeded above)
-    await supabase.from('cycles').insert({
-      user_id: session.user.id,
-      cycle_number: 1,
-      start_date: now,
-      stage1_start: now,
-      status: 'active',
-    });
-
-    // Save assessment answers collected during pre-auth flow
-    const { q1, q2, q3, q4, reset } = useAssessStore.getState();
-    if (q1.length > 0 || q2.length > 0) {
-      await supabase.from('onboarding_assessments').insert({
-        user_id: session.user.id,
-        brought_here: q1,
-        misaligned_themes: q2,
-        checkin_frequency: q3 || null,
-        last_felt_self: q4 || null,
-      });
-      reset();
-    }
-
-    if (user) setUser(user);
-    setStatus('done');
-
-    setTimeout(() => {
-      router.replace('/(onboarding)/');
-    }, 1200);
   };
 
   return (

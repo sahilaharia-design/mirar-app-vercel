@@ -20,6 +20,7 @@ import { useCycleStore } from '../../stores/cycle-store';
 import { useSettingsStore } from '../../stores/settings-store';
 import { useTheme, useColors } from '../../contexts/theme-context';
 import { supabase } from '../../lib/supabase';
+import { withTimeout } from '../../lib/with-timeout';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
@@ -52,14 +53,16 @@ export default function ProfileScreen() {
     if (!userId || !cycleId) return;
 
     setJournalsLoading(true);
-    supabase
-      .from('responses')
-      .select('journal_text, submitted_at, day_number')
-      .eq('user_id', userId)
-      .eq('cycle_id', cycleId)
-      .not('journal_text', 'is', null)
-      .order('submitted_at', { ascending: false })
-      .limit(28)
+    withTimeout(
+      supabase
+        .from('responses')
+        .select('journal_text, submitted_at, day_number')
+        .eq('user_id', userId)
+        .eq('cycle_id', cycleId)
+        .not('journal_text', 'is', null)
+        .order('submitted_at', { ascending: false })
+        .limit(28)
+    )
       .then(({ data }) => {
         const entries = (data ?? [])
           .filter((r: any) => r.journal_text?.trim())
@@ -69,6 +72,12 @@ export default function ProfileScreen() {
             dayNumber: r.day_number as number,
           }));
         setJournals(entries);
+      })
+      .catch((err) => {
+        console.error('[Mirar] loading journals failed:', err);
+        setJournals([]);
+      })
+      .finally(() => {
         setJournalsLoading(false);
       });
   }, [session?.user?.id, activeCycle?.id]);

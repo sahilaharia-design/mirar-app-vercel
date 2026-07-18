@@ -29,6 +29,7 @@ import { AlignmentRing } from '../../components/home/AlignmentRing';
 import { useAssessStore } from '../../stores/assess-store';
 import { useAuthStore } from '../../stores/auth-store';
 import { supabase } from '../../lib/supabase';
+import { withTimeout } from '../../lib/with-timeout';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
 // ── Welcome motif — a still, breathing mirror surface ──────────────────────
@@ -199,23 +200,34 @@ export default function OnboardingWizard() {
     setIsSaving(true);
     const userId = session?.user?.id;
 
-    if (userId) {
-      // Upsert assessment answers (may already exist if OAuth + assess/ path)
-      const existing = assessStore.q1.length > 0 || assessStore.q2.length > 0;
-      if (!existing) {
-        await supabase.from('onboarding_assessments').upsert({
-          user_id: userId,
-          brought_here: q1Selections,
-          misaligned_themes: q2Selections,
-          checkin_frequency: null,
-          last_felt_self: null,
-        }, { onConflict: 'user_id' });
+    try {
+      if (userId) {
+        // Upsert assessment answers (may already exist if OAuth + assess/ path).
+        // Best-effort — this is supplementary context, not required for the
+        // account itself, so a failure here shouldn't strand the user on this
+        // screen forever.
+        const existing = assessStore.q1.length > 0 || assessStore.q2.length > 0;
+        if (!existing) {
+          try {
+            await withTimeout(supabase.from('onboarding_assessments').upsert({
+              user_id: userId,
+              brought_here: q1Selections,
+              misaligned_themes: q2Selections,
+              checkin_frequency: null,
+              last_felt_self: null,
+            }, { onConflict: 'user_id' }));
+          } catch (err) {
+            console.error('[Mirar] saving onboarding assessment failed:', err);
+          }
+        }
+        assessStore.reset();
       }
-      assessStore.reset();
-    }
 
-    await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
-    router.replace('/(tabs)/');
+      await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
+      router.replace('/(tabs)/');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const next = () => setStep((s) => s + 1);

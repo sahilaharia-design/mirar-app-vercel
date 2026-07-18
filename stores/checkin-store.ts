@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { QuestionWithOptions, CheckInState, SubmittedSignal } from '../types/mirar';
 import { getCycleDay, getStageFromDay } from '../lib/scoring';
+import { withTimeout } from '../lib/with-timeout';
 
 interface CheckInStore extends CheckInState {
   loadTodayQuestion: (cycleId: string, cycleStartDate: string) => Promise<void>;
@@ -9,23 +10,6 @@ interface CheckInStore extends CheckInState {
   setJournalText: (text: string) => void;
   submitCheckIn: (userId: string, cycleId: string) => Promise<{ error: string | null; alignmentScore?: number | null; scoreBefore?: number | null }>;
   reset: () => void;
-}
-
-// Any single network call gets this long to resolve before we treat it as
-// failed. Without this, a slow/unresponsive backend (e.g. under concurrent
-// load) leaves isSubmitting stuck true forever — the submit button never
-// re-enables and never shows an error, since supabase-js has no built-in
-// request timeout.
-const REQUEST_TIMEOUT_MS = 15000;
-
-function withTimeout<T>(promise: PromiseLike<T>, ms = REQUEST_TIMEOUT_MS): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('Request timed out. Please try again.')), ms);
-    Promise.resolve(promise).then(
-      (value) => { clearTimeout(timer); resolve(value); },
-      (err) => { clearTimeout(timer); reject(err); }
-    );
-  });
 }
 
 const defaultState: CheckInState = {

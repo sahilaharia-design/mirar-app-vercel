@@ -10,6 +10,7 @@ import { useAuthStore } from '../stores/auth-store';
 import { useSettingsStore } from '../stores/settings-store';
 import { ThemeProvider, useTheme } from '../contexts/theme-context';
 import { supabase } from '../lib/supabase';
+import { withTimeout } from '../lib/with-timeout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,10 +49,14 @@ function AppShell() {
       if (!fragment) return;
       const params = Object.fromEntries(new URLSearchParams(fragment));
       if (params.access_token && params.refresh_token) {
-        await supabase.auth.setSession({
-          access_token: params.access_token,
-          refresh_token: params.refresh_token,
-        });
+        try {
+          await withTimeout(supabase.auth.setSession({
+            access_token: params.access_token,
+            refresh_token: params.refresh_token,
+          }));
+        } catch (err) {
+          console.error('[Mirar] setSession from deep link failed:', err);
+        }
       }
     };
 
