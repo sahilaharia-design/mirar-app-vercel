@@ -59,8 +59,8 @@ function WelcomeMirror({ size = 120 }: { size?: number }) {
       <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <Circle cx={c} cy={c} r={r1} stroke={COLORS.slateXLight} strokeWidth={1} fill="none" opacity={0.35} />
         <Circle cx={c} cy={c} r={r2} stroke={COLORS.slateXLight} strokeWidth={1} fill="none" opacity={0.5} />
-        <Circle cx={c} cy={c} r={r3} stroke="#D99A73" strokeWidth={1.25} fill="none" opacity={0.55} />
-        <Circle cx={c} cy={c} r={size * 0.033} fill="#D99A73" opacity={0.8} />
+        <Circle cx={c} cy={c} r={r3} stroke={COLORS.peach} strokeWidth={1.25} fill="none" opacity={0.55} />
+        <Circle cx={c} cy={c} r={size * 0.033} fill={COLORS.peach} opacity={0.8} />
       </Svg>
     </Animated.View>
   );

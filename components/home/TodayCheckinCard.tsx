@@ -1,10 +1,56 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, AccessibilityInfo } from 'react-native';
+import Animated, {
+  FadeInDown,
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
 import { InfoTooltipInline } from '../ui/InfoTooltip';
+
+// ── Ambient wash behind today's action card — same slow "breathe" motif
+// used for the onboarding welcome mirror (3200ms half-cycle, sine easing),
+// extended here so the primary daily action carries the same atmospheric
+// feel as the redesigned landing hero. Respects reduced motion.
+function AmbientWash({ colors }: { colors: ReturnType<typeof useColors> }) {
+  const breathe = useSharedValue(0);
+  const reducedMotion = useRef(false);
+
+  useEffect(() => {
+    AccessibilityInfo.isReduceMotionEnabled().then((val) => {
+      reducedMotion.current = val;
+      if (!val) {
+        breathe.value = withRepeat(
+          withTiming(1, { duration: 3200, easing: Easing.inOut(Easing.sin) }),
+          -1,
+          true
+        );
+      }
+    });
+  }, []);
+
+  const washStyle = useAnimatedStyle(() => ({
+    opacity: 0.35 + breathe.value * 0.15,
+    transform: [{ scale: 1 + breathe.value * 0.03 }],
+  }));
+
+  return (
+    <Animated.View style={[styles.ambientWash, washStyle]} pointerEvents="none">
+      <LinearGradient
+        colors={[colors.peach ?? colors.warmGlow, 'transparent']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
+    </Animated.View>
+  );
+}
 
 interface TodayCheckinCardProps {
   dayNumber: number;
@@ -63,6 +109,7 @@ export function TodayCheckinCard({
         onPress={onPress}
         activeOpacity={0.88}
       >
+        <AmbientWash colors={colors} />
         <View style={[styles.accentBar, { backgroundColor: colors.aligned }]} />
         <View style={styles.cardBody}>
           <View style={styles.topRow}>
@@ -110,6 +157,9 @@ function cardShadow(shadowColor: string) {
 }
 
 const styles = StyleSheet.create({
+  ambientWash: {
+    ...StyleSheet.absoluteFillObject,
+  },
   card: {
     borderRadius: RADIUS.lg,
     borderWidth: 1,

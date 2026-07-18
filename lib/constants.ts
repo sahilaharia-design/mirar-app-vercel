@@ -2,10 +2,11 @@ import { ThemeCode, ThemeMeta, ThemeStatus, AlignmentStatus } from '../types/mir
 
 // ─── Brand Colors ─────────────────────────────────────────────────────────────
 export const COLORS = {
-  // Backgrounds
-  cream: '#F0EDE8',
-  creamDark: '#E8E4DE',
-  creamLight: '#F7F5F2',
+  // Backgrounds — ivory retuned to match the shared design system now used
+  // on the landing page (docs/mirar-design-system.md: Ivory #F4F0EA)
+  cream: '#F4F0EA',
+  creamDark: '#ECE6DE',
+  creamLight: '#F9F6F1',
 
   // Text
   slate: '#4A4A55',
@@ -26,8 +27,12 @@ export const COLORS = {
   noReadingBg: '#F0F0F2',
 
   // Accent gradient endpoints (for BrandOval)
-  gradientStart: '#8BA5D4', // Soft blue-lavender
+  gradientStart: '#8BA5D4', // Soft blue-lavender (matches shared design system's Lavender blue)
   gradientEnd: '#E8B89A',   // Warm peach
+
+  // Shared design-system accent (docs/mirar-design-system.md: Peach #C98E6B) —
+  // the same warm emphasis color the landing page uses for its primary CTA.
+  peach: '#C98E6B',
 
   // Warm accents
   warmGlow: '#F4E8D1',
@@ -228,6 +233,10 @@ export const DARK_COLORS = {
   // Accent gradient (same — pops on dark)
   gradientStart: '#8BA5D4',
   gradientEnd: '#E8B89A',
+
+  // Shared design-system accent, brightened for dark backgrounds (same
+  // pattern as the other brightened dark-mode status colors below)
+  peach: '#D9A480',
 
   // Warm accents
   warmGlow: '#2A2518',

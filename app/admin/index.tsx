@@ -200,7 +200,7 @@ function UserRow({ user }: { user: any }) {
         }}
       >
         <td style={tdStyle}>
-          <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#6B6B78', background: '#F0EDE8', padding: '2px 6px', borderRadius: 4 }}>
+          <span style={{ fontFamily: 'monospace', fontSize: 12, color: '#6B6B78', background: '#F4F0EA', padding: '2px 6px', borderRadius: 4 }}>
             {user.mirar_id ?? '—'}
           </span>
         </td>
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
   // ── Auth gate ──────────────────────────────────────────────────────────────
   if (!authed) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F0EDE8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#F4F0EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ background: '#FFFFFF', borderRadius: 16, padding: 40, width: 360, border: '1px solid #EAE7E2' }}>
           <div style={{ fontSize: 13, letterSpacing: '2px', textTransform: 'uppercase', color: '#9494A0', marginBottom: 8 }}>
             MIRAR
@@ -515,7 +515,7 @@ export default function AdminDashboard() {
   // ── Loading state ──────────────────────────────────────────────────────────
   if (loading && !userListData) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F0EDE8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#F4F0EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 13, color: '#9494A0', letterSpacing: '1px' }}>Loading operator data…</div>
         </div>
@@ -525,7 +525,7 @@ export default function AdminDashboard() {
 
   if (error && !userListData) {
     return (
-      <div style={{ minHeight: '100vh', background: '#F0EDE8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: '#F4F0EA', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ background: '#FFFFFF', borderRadius: 12, padding: 32, maxWidth: 400 }}>
           <div style={{ fontSize: 13, color: '#B85A4A' }}>{error}</div>
           <button onClick={() => fetchData(adminSecret)} style={{ marginTop: 16, padding: '8px 16px', background: '#4A4A55', color: '#FFF', border: 'none', borderRadius: 8, cursor: 'pointer' }}>
@@ -544,7 +544,7 @@ export default function AdminDashboard() {
   const trialFunnel = analyticsData?.trial_funnel ?? {};
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F0EDE8', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: '#F4F0EA', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <div style={{ background: '#FFFFFF', borderBottom: '1px solid #EAE7E2', padding: '14px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
