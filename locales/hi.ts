@@ -29,6 +29,9 @@ export default {
     signal_ready: 'आज का दर्पण तैयार है।',
     chapter_label: 'अध्याय {{n}}',
     day_label: 'दिन {{day}}',
+    submit_error_title: 'दर्ज नहीं हो पाया',
+    submit_error_body: 'सर्वर तक पहुँचने में समस्या हुई। कृपया फिर से कोशिश करें।',
+    try_again: 'फिर कोशिश करें',
   },
 
   checkin: {

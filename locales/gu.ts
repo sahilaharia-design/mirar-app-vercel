@@ -29,6 +29,9 @@ export default {
     signal_ready: 'આજનું દર્પણ તૈયાર છે.',
     chapter_label: 'પ્રકરણ {{n}}',
     day_label: 'દિવસ {{day}}',
+    submit_error_title: 'નોંધાયું નહીં',
+    submit_error_body: 'સર્વર સુધી પહોંચવામાં સમસ્યા થઈ. કૃપા કરી ફરી પ્રયાસ કરો.',
+    try_again: 'ફરી પ્રયાસ કરો',
   },
 
   checkin: {

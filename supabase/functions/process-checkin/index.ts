@@ -205,6 +205,14 @@ serve(async (req) => {
       }, { onConflict: 'user_id,cycle_id,stage,theme_code' })
     }
 
+    // Background jobs below are fire-and-forget so the response returns fast,
+    // but an un-awaited fetch isn't guaranteed to survive past `return` — the
+    // edge runtime can tear down the isolate as soon as the response is sent.
+    // Collecting them here and handing them to EdgeRuntime.waitUntil() keeps
+    // the isolate alive until they finish, so they don't silently get killed
+    // mid-flight under concurrent load.
+    const backgroundTasks: Promise<any>[] = []
+
     // 9. Async: generate Haiku mirror insight (fire-and-forget, non-blocking)
     if (alignmentScore !== null) {
       const themeStatuses = Object.entries(themeAcc)
@@ -271,7 +279,7 @@ serve(async (req) => {
 
       const mirrorController = new AbortController()
       setTimeout(() => mirrorController.abort(), 8000)
-      fetch(`${supabaseUrl}/functions/v1/generate-mirror-insight`, {
+      backgroundTasks.push(fetch(`${supabaseUrl}/functions/v1/generate-mirror-insight`, {
         method: 'POST',
         signal: mirrorController.signal,
         headers: {
@@ -287,13 +295,13 @@ serve(async (req) => {
           journal_snippet: todayResponse?.journal_text ?? null,
           previous_answer_text: previousAnswerText,
         }),
-      }).catch(() => { /* non-fatal */ })
+      }).catch(() => { /* non-fatal */ }))
 
       // 9b. update-identity-vector (always, non-blocking) — the system's
       // long-term memory of this user, recomputed after every check-in.
       const identityController = new AbortController()
       setTimeout(() => identityController.abort(), 8000)
-      fetch(`${supabaseUrl}/functions/v1/update-identity-vector`, {
+      backgroundTasks.push(fetch(`${supabaseUrl}/functions/v1/update-identity-vector`, {
         method: 'POST',
         signal: identityController.signal,
         headers: {
@@ -301,12 +309,12 @@ serve(async (req) => {
           'Authorization': `Bearer ${serviceKey}`,
         },
         body: JSON.stringify({ user_id }),
-      }).catch(() => { /* non-fatal */ })
+      }).catch(() => { /* non-fatal */ }))
 
       // 10. sync-user-state (always, non-blocking)
       const syncController = new AbortController()
       setTimeout(() => syncController.abort(), 8000)
-      fetch(`${supabaseUrl}/functions/v1/sync-user-state`, {
+      backgroundTasks.push(fetch(`${supabaseUrl}/functions/v1/sync-user-state`, {
         method: 'POST',
         signal: syncController.signal,
         headers: {
@@ -319,7 +327,7 @@ serve(async (req) => {
           cycle_number: null, // sync-user-state will derive from user_state if available
           day_number,
         }),
-      }).catch(() => { /* non-fatal */ })
+      }).catch(() => { /* non-fatal */ }))
 
       // 11. check-unlocks (always, non-blocking)
       // Compute total_reflections to evaluate milestone thresholds
@@ -340,7 +348,7 @@ serve(async (req) => {
 
       const unlockController = new AbortController()
       setTimeout(() => unlockController.abort(), 8000)
-      fetch(`${supabaseUrl}/functions/v1/check-unlocks`, {
+      backgroundTasks.push(fetch(`${supabaseUrl}/functions/v1/check-unlocks`, {
         method: 'POST',
         signal: unlockController.signal,
         headers: {
@@ -348,14 +356,14 @@ serve(async (req) => {
           'Authorization': `Bearer ${serviceKey}`,
         },
         body: JSON.stringify({ user_id, total_reflections: totalReflections, cycle_number: cycleNumber }),
-      }).catch(() => { /* non-fatal */ })
+      }).catch(() => { /* non-fatal */ }))
 
       // 12. generate-weekly-signal — only on every 7th reflection
       if (totalReflections > 0 && totalReflections % 7 === 0) {
         const weekNumber = Math.ceil(day_number / 7)
         const weeklyController = new AbortController()
         setTimeout(() => weeklyController.abort(), 15000)
-        fetch(`${supabaseUrl}/functions/v1/generate-weekly-signal`, {
+        backgroundTasks.push(fetch(`${supabaseUrl}/functions/v1/generate-weekly-signal`, {
           method: 'POST',
           signal: weeklyController.signal,
           headers: {
@@ -368,7 +376,7 @@ serve(async (req) => {
             cycle_number: cycleNumber,
             week_number:  weekNumber,
           }),
-        }).catch(() => { /* non-fatal */ })
+        }).catch(() => { /* non-fatal */ }))
       }
 
       // 13. generate-report — fire when user first checks in on stage-opening day
@@ -390,7 +398,7 @@ serve(async (req) => {
         if (!reportExists || reportExists === 0) {
           const reportController = new AbortController()
           setTimeout(() => reportController.abort(), 20000)
-          fetch(`${supabaseUrl}/functions/v1/generate-report`, {
+          backgroundTasks.push(fetch(`${supabaseUrl}/functions/v1/generate-report`, {
             method: 'POST',
             signal: reportController.signal,
             headers: {
@@ -398,7 +406,7 @@ serve(async (req) => {
               'Authorization': `Bearer ${serviceKey}`,
             },
             body: JSON.stringify({ user_id, cycle_id, stage: completedStage }),
-          }).catch(() => { /* non-fatal */ })
+          }).catch(() => { /* non-fatal */ }))
         }
       }
     }
@@ -420,6 +428,13 @@ serve(async (req) => {
       const flags = identityVector?.pattern_flags ?? {}
       theme1PatternFlag = flags[chosenOption.theme_1_code] ?? null
       theme2PatternFlag = flags[chosenOption.theme_2_code] ?? null
+    }
+
+    // Keep the isolate alive until background jobs finish (or their own
+    // timeouts fire) instead of letting the runtime tear it down the moment
+    // this response is sent.
+    if (backgroundTasks.length > 0 && typeof EdgeRuntime !== 'undefined') {
+      EdgeRuntime.waitUntil(Promise.all(backgroundTasks))
     }
 
     return new Response(

@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
@@ -60,6 +61,10 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   const handleSubmit = async () => {
     if (!session?.user?.id || !activeCycle?.id || !selectedOptionId) return;
     const result = await submitCheckIn(session.user.id, activeCycle.id);
+    if (result.error) {
+      Alert.alert(t('common.submit_error_title'), t('common.submit_error_body'));
+      return;
+    }
     if (!result.error) {
       const signal = useCheckInStore.getState().submittedSignal;
       const currentDayNum = useCycleStore.getState().currentDay;

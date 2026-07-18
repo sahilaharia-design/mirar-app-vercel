@@ -32,6 +32,9 @@ export default {
     signal_ready: "Today's mirror is ready.",
     chapter_label: 'Chapter {{n}}',
     day_label: 'Day {{day}}',
+    submit_error_title: "Couldn't record that",
+    submit_error_body: 'Something went wrong reaching the server. Please try again.',
+    try_again: 'Try again',
   },
 
   // ─── Daily check-in ─────────────────────────────────────────────────────────
