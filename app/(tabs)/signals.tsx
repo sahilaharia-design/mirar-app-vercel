@@ -15,7 +15,6 @@ import { useCycleStore } from '../../stores/cycle-store';
 import { useDevStore } from '../../stores/dev-store';
 import { ThemeSignalRow } from '../../components/dashboard/ThemeSignalRow';
 import { StageProgress } from '../../components/dashboard/StageProgress';
-import { CycleArc } from '../../components/dashboard/CycleArc';
 import { CoverageBar } from '../../components/dashboard/CoverageBar';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
@@ -244,13 +243,6 @@ export default function SignalsScreen() {
               currentStage={effectiveStage}
               currentDay={effectiveDay}
             />
-          </View>
-        </View>
-
-        {/* ── Cycle arc ──────────────────────────────────────────────────── */}
-        <View style={styles.section}>
-          <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
-            <CycleArc currentDay={effectiveDay} />
           </View>
         </View>
 

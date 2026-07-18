@@ -212,15 +212,6 @@ export default {
     body: 'Mirar पल नहीं, पैटर्न पढ़ता है। कुछ दैनिक विराम उस चीज़ को नोटिस करना आसान बनाते हैं जो धीरे-धीरे बदल रही है।',
   },
 
-  cycle_arc: {
-    label: 'प्रतिबिंब पैटर्न',
-    forming: 'आपका पैटर्न बन रहा है',
-    legend_notice: 'नोटिस',
-    legend_adjust: 'समायोजन',
-    legend_move: 'गति',
-    legend_reflect: 'प्रतिबिंब',
-  },
-
   stages: {
     awareness: 'पहले संकेत',
     realignment: 'पैटर्न उभर रहे हैं',

@@ -212,15 +212,6 @@ export default {
     body: 'Mirar ક્ષણ નહીં, પૅટર્ન વાંચે છે. થોડા દૈનિક વિરામો એ વસ્તુને નોંધવાનું સરળ બનાવે છે જે ધીરે ધીરે બદલાઈ રહી છે.',
   },
 
-  cycle_arc: {
-    label: 'પ્રતિબિંબ પૅટર્ન',
-    forming: 'તમારું પૅટર્ન બની રહ્યું છે',
-    legend_notice: 'નોંધ',
-    legend_adjust: 'ગોઠવણ',
-    legend_move: 'ગતિ',
-    legend_reflect: 'પ્રતિબિંબ',
-  },
-
   stages: {
     awareness: 'પ્રથમ સંકેત',
     realignment: 'પૅટર્ન ઉભર રહ્યા છે',

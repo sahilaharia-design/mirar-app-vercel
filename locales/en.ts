@@ -230,15 +230,6 @@ export default {
   },
 
   // ─── Cycle arc (28-day grid on signals tab) ────────────────────────────────
-  cycle_arc: {
-    label: 'Reflection pattern',
-    forming: 'Your pattern is forming',
-    legend_notice: 'Notice',
-    legend_adjust: 'Adjust',
-    legend_move: 'Move',
-    legend_reflect: 'Reflect',
-  },
-
   // ─── Stage Labels (internal — not shown as "Stage N" to user) ────────────────
   stages: {
     awareness: 'First Signals',

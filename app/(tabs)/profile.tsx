@@ -24,7 +24,6 @@ import { withTimeout } from '../../lib/with-timeout';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
-import { CycleArc } from '../../components/dashboard/CycleArc';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../../lib/i18n';
 
@@ -181,13 +180,6 @@ export default function ProfileScreen() {
               value={stageName}
               colors={colors}
             />
-          </View>
-        </Animated.View>
-
-        {/* Cycle arc */}
-        <Animated.View entering={FadeInDown.duration(400).delay(190)} style={styles.section}>
-          <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
-            <CycleArc currentDay={currentDay} />
           </View>
         </Animated.View>
 
