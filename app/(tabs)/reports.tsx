@@ -16,7 +16,7 @@ import { useCycleStore } from '../../stores/cycle-store';
 import { supabase } from '../../lib/supabase';
 import { ReportRow } from '../../types/mirar';
 import { ReportCard } from '../../components/reports/ReportCard';
-import { MirarLogo } from '../../components/ui/MirarLogo';
+import { AppHeader } from '../../components/ui/AppHeader';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
@@ -66,9 +66,7 @@ export default function ReportsScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
-        <MirarLogo size="sm" />
-      </View>
+      <AppHeader />
 
       {isLoading ? (
         <View style={styles.loading}>
@@ -156,11 +154,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
   },
   scroll: {
     flex: 1,

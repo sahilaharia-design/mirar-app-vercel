@@ -20,7 +20,8 @@ import { useDevStore } from '../../stores/dev-store';
 import { PromptCard } from '../../components/check-in/PromptCard';
 import { OptionSelector } from '../../components/check-in/OptionSelector';
 import { JournalExpander } from '../../components/check-in/JournalExpander';
-import { MirarLogo } from '../../components/ui/MirarLogo';
+import { SettleScreen } from '../../components/check-in/SettleScreen';
+import { AppHeader } from '../../components/ui/AppHeader';
 import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
 import { AwarenessCard } from '../../components/home/AwarenessCard';
@@ -52,8 +53,9 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
     submitCheckIn,
   } = useCheckInStore();
 
-  // V3: two-step flow — step 1 = question+options, step 2 = journal
-  const [checkInStep, setCheckInStep] = React.useState<1 | 2>(1);
+  // Step 0 = settle (calm pause before the question, shown every day),
+  // step 1 = question+options, step 2 = journal
+  const [checkInStep, setCheckInStep] = React.useState<0 | 1 | 2>(0);
 
   // Derive selected option data for journal echo
   const selectedOption = question?.options?.find((o) => o.id === selectedOptionId) ?? null;
@@ -88,6 +90,15 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
       });
     }
   };
+
+  // Step 0 renders immediately, independent of the question load — the
+  // pause is instant, and the question has a moment to finish loading in
+  // the background while the user settles in.
+  if (checkInStep === 0) {
+    return (
+      <SettleScreen onContinue={() => setCheckInStep(1)} />
+    );
+  }
 
   if (!question) {
     return (
@@ -282,8 +293,8 @@ export default function TodayScreen() {
   // ─── Home dashboard ─────────────────────────────────────────────────────────
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
-      <Animated.View entering={FadeIn.duration(300)} style={styles.header}>
-        <MirarLogo size="sm" />
+      <Animated.View entering={FadeIn.duration(300)}>
+        <AppHeader />
         {simulatedDay !== null && (
           <Text style={[styles.dayChip, { color: colors.slateLight }]}>
             Simulated day {effectiveDay}
@@ -482,6 +493,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     fontWeight: '500',
     textTransform: 'uppercase',
+    paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.xs,
   },
   backLink: {
     fontSize: FONT_SIZE.sm,

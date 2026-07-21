@@ -21,7 +21,7 @@ import { useSettingsStore } from '../../stores/settings-store';
 import { useTheme, useColors } from '../../contexts/theme-context';
 import { supabase } from '../../lib/supabase';
 import { withTimeout } from '../../lib/with-timeout';
-import { MirarLogo } from '../../components/ui/MirarLogo';
+import { AppHeader } from '../../components/ui/AppHeader';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
@@ -120,9 +120,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
-      <View style={styles.header}>
-        <MirarLogo size="sm" />
-      </View>
+      <AppHeader />
 
       <ScrollView
         style={styles.scroll}
@@ -338,11 +336,6 @@ const styles = StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: COLORS.cream,
-  },
-  header: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
   },
   scroll: {
     flex: 1,

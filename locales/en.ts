@@ -35,6 +35,14 @@ export default {
     submit_error_title: "Couldn't record that",
     submit_error_body: 'Something went wrong reaching the server. Please try again.',
     try_again: 'Try again',
+    contact_help_a11y: 'Contact Mirar',
+  },
+
+  // ─── Pre-check-in settle screen ─────────────────────────────────────────────
+  settle: {
+    title: 'Two minutes, just for you.',
+    body: 'Headphones on, if that helps you settle. Take a breath before you begin.',
+    tap_hint: 'Tap anywhere when you’re ready',
   },
 
   // ─── Daily check-in ─────────────────────────────────────────────────────────

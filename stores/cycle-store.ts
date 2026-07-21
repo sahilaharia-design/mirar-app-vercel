@@ -23,6 +23,10 @@ interface CycleStore {
   alignmentScore: AlignmentScoreRow | null;
   alignmentHistory: AlignmentScoreRow[]; // last 14 days for sparkline
   rollingThemeScores: ThemeScore[];
+  // Count of responses in the real last-7-calendar-day window — the
+  // continuous counterpart to stageOverviews' per-stage coverage, which
+  // resets to 0 every time a new 7-day stage begins. This never resets.
+  rollingCoverage: number;
 
   // ── user_state derived fields ──────────────────────────────────────────────
   streakLength: number;
@@ -50,6 +54,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
   alignmentScore: null,
   alignmentHistory: [],
   rollingThemeScores: [],
+  rollingCoverage: 0,
 
   // user_state fields (default values)
   streakLength: 0,
@@ -197,6 +202,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         (r: any) => new Date(r.submitted_at) >= sevenDaysAgo
       );
       const rollingThemeScores = computeThemeScores(recentResponses, optionsMap);
+      const rollingCoverage = recentResponses.length;
 
       // Per-theme 7-day trend histories
       const themeHistories = computeThemeHistories(
@@ -218,6 +224,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         currentStage,
         stageOverviews,
         rollingThemeScores,
+        rollingCoverage,
         themeHistories,
         streakLength,
         patternReading,

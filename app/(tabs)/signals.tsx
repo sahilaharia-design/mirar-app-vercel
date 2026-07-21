@@ -16,7 +16,7 @@ import { useDevStore } from '../../stores/dev-store';
 import { ThemeSignalRow } from '../../components/dashboard/ThemeSignalRow';
 import { StageProgress } from '../../components/dashboard/StageProgress';
 import { CoverageBar } from '../../components/dashboard/CoverageBar';
-import { MirarLogo } from '../../components/ui/MirarLogo';
+import { AppHeader } from '../../components/ui/AppHeader';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { ThemeScore, ThemeCode } from '../../types/mirar';
@@ -62,6 +62,7 @@ export default function SignalsScreen() {
     stageOverviews,
     alignmentHistory,
     rollingThemeScores,
+    rollingCoverage,
     themeHistories,
     patternReading,
     isLoading,
@@ -103,13 +104,14 @@ export default function SignalsScreen() {
 
   const effectiveDay = simulatedDay ?? currentDay;
   const effectiveStage = simulatedDay ? getStageFromDay(simulatedDay) : currentStage;
-  const currentStageOverview = stageOverviews.find((s) => s.stage === effectiveStage);
-  const currentStageCoverage = currentStageOverview?.coverage ?? 0;
-  const crossThemeNote = currentStageOverview
-    ? getCrossThemeObservation(t, currentStageOverview.themeScores)
-    : null;
+  // Rolling 7-real-calendar-day view — never resets, unlike the per-stage
+  // overview below (which stays around only to drive the weekly-report
+  // timeline further down the screen).
+  const crossThemeNote = getCrossThemeObservation(t, rollingThemeScores);
 
-  // Build previous-stage theme statuses for delta labels
+  // Build previous-week theme statuses for delta labels — the most recent
+  // completed stage window, used only as a "compared to before" reference,
+  // not as the primary reading (rollingThemeScores is).
   const prevStageOverview = effectiveStage > 1
     ? stageOverviews.find((s) => s.stage === effectiveStage - 1)
     : null;
@@ -120,9 +122,7 @@ export default function SignalsScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
-      <View style={[styles.header, { borderBottomColor: colors.borderLight }]}>
-        <MirarLogo size="sm" />
-      </View>
+      <AppHeader />
 
       <ScrollView
         style={styles.scroll}
@@ -150,7 +150,7 @@ export default function SignalsScreen() {
           <Text style={[styles.guideText, { color: colors.slateMid }]}>
             {t('signals_tab.guide_text')}
           </Text>
-          {currentStageCoverage < 3 && (
+          {rollingCoverage < 3 && (
             <Text style={[styles.guideHint, { color: colors.slateLight }]}>
               {t('signals_tab.guide_hint')}
             </Text>
@@ -175,7 +175,7 @@ export default function SignalsScreen() {
               </Text>
             </View>
             <CoverageBar
-              coverage={currentStageCoverage}
+              coverage={rollingCoverage}
               total={7}
               label={t('signals_tab.reflections_in_window')}
             />
@@ -183,7 +183,7 @@ export default function SignalsScreen() {
         </View>
 
         {/* ── Theme signal rows with 7-day sparklines ────────────────────── */}
-        {currentStageOverview && currentStageOverview.themeScores.length > 0 && (
+        {rollingThemeScores.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionLabelRow}>
               <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('signals_tab.recent_signals')}</Text>
@@ -191,7 +191,7 @@ export default function SignalsScreen() {
             </View>
             <View style={styles.themeRows}>
               {THEME_ORDER.map((code, index) => {
-                const score = currentStageOverview.themeScores.find((s) => s.code === code);
+                const score = rollingThemeScores.find((s) => s.code === code);
                 if (!score) return null;
 
                 const history = themeHistories?.[code] ?? [];
@@ -269,12 +269,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
-    borderBottomWidth: 1,
   },
   scroll: { flex: 1 },
   content: {

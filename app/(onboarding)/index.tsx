@@ -12,11 +12,6 @@ import Animated, {
   FadeIn,
   FadeInDown,
   FadeInRight,
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  Easing,
 } from 'react-native-reanimated';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -24,6 +19,7 @@ import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
 import { MirarLogo } from '../../components/ui/MirarLogo';
+import { BreathingMirror } from '../../components/ui/BreathingMirror';
 import { OptionCard } from '../../components/assess/OptionCard';
 import { AlignmentRing } from '../../components/home/AlignmentRing';
 import { useAssessStore } from '../../stores/assess-store';
@@ -31,40 +27,6 @@ import { useAuthStore } from '../../stores/auth-store';
 import { supabase } from '../../lib/supabase';
 import { withTimeout } from '../../lib/with-timeout';
 import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
-
-// ── Welcome motif — a still, breathing mirror surface ──────────────────────
-function WelcomeMirror({ size = 120 }: { size?: number }) {
-  const breathe = useSharedValue(0);
-
-  useEffect(() => {
-    breathe.value = withRepeat(
-      withTiming(1, { duration: 3200, easing: Easing.inOut(Easing.sin) }),
-      -1,
-      true
-    );
-  }, []);
-
-  const glowStyle = useAnimatedStyle(() => ({
-    opacity: 0.5 + breathe.value * 0.3,
-    transform: [{ scale: 1 + breathe.value * 0.035 }],
-  }));
-
-  const r1 = size * 0.467;
-  const r2 = size * 0.35;
-  const r3 = size * 0.233;
-  const c = size / 2;
-
-  return (
-    <Animated.View style={[styles.welcomeMirrorWrap, glowStyle]}>
-      <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <Circle cx={c} cy={c} r={r1} stroke={COLORS.slateXLight} strokeWidth={1} fill="none" opacity={0.35} />
-        <Circle cx={c} cy={c} r={r2} stroke={COLORS.slateXLight} strokeWidth={1} fill="none" opacity={0.5} />
-        <Circle cx={c} cy={c} r={r3} stroke={COLORS.peach} strokeWidth={1.25} fill="none" opacity={0.55} />
-        <Circle cx={c} cy={c} r={size * 0.033} fill={COLORS.peach} opacity={0.8} />
-      </Svg>
-    </Animated.View>
-  );
-}
 
 // ── How-it-works icons — consistent 1.5px stroke, matches landing site ─────
 function IconQuestion() {
@@ -277,7 +239,7 @@ export default function OnboardingWizard() {
         </View>
         <Animated.View entering={FadeIn.duration(500)} style={styles.bodyCenter}>
           <Animated.View entering={FadeIn.duration(700).delay(60)} style={styles.welcomeMirrorRow}>
-            <WelcomeMirror />
+            <BreathingMirror />
           </Animated.View>
           <Animated.Text entering={FadeInDown.duration(600).delay(100)} style={styles.displayTitle}>
             {t('wizard.welcome_title')}
@@ -403,7 +365,7 @@ export default function OnboardingWizard() {
         </View>
         <TouchableOpacity style={styles.bodyCenter} activeOpacity={1} onPress={skipReveal}>
           <Animated.View entering={FadeIn.duration(600)} style={styles.welcomeMirrorRow}>
-            <WelcomeMirror size={84} />
+            <BreathingMirror size={84} />
           </Animated.View>
           <Animated.Text entering={FadeInDown.duration(500).delay(120)} style={styles.bodyText}>
             {revealLine}
@@ -533,10 +495,6 @@ const styles = StyleSheet.create({
   welcomeMirrorRow: {
     alignItems: 'center',
     marginBottom: SPACING.sm,
-  },
-  welcomeMirrorWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   displayTitle: {
     fontSize: FONT_SIZE['3xl'],
