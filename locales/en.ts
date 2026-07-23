@@ -456,7 +456,7 @@ export default {
     chapter_label: 'Chapter {{n}} · {{label}}',
     page_title: 'Reflection summaries',
     page_desc: 'Summaries show what kept repeating across your reflections. Read them as a mirror, not a verdict.',
-    progress_label: 'Day {{day}} of 7 — your first summary generates after 7 check-ins.',
+    progress_label: '{{count}} of 7 check-ins done — your first summary generates after 7.',
     summaries_label: 'Summaries',
     full_pattern_label: 'Full pattern',
     footer_note: 'Reflection summaries only. Mirar reflects — you interpret.',

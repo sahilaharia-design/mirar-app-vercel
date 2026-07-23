@@ -156,13 +156,18 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         reportsByStage[r.stage] = r;
       }
 
-      // Build stage overviews
+      // Build stage overviews. Stages are buckets of 7 REAL check-ins in
+      // submission order — not calendar-day ranges — so a user who skips
+      // days still only unlocks a stage once 7 actual reflections exist for
+      // it, and never gets a "day X of 7" count that outpaces real check-ins.
+      const sortedResponses = [...(responses ?? [])].sort(
+        (a: any, b: any) => new Date(a.submitted_at).getTime() - new Date(b.submitted_at).getTime()
+      );
+
       const stageOverviews: StageOverview[] = STAGES.map((stageDef) => {
         const stage = stageDef.number;
-        const [startDay, endDay] = stageDef.days;
-        const stageResponses = (responses ?? []).filter(
-          (r: any) => r.day_number >= startDay && r.day_number <= endDay
-        );
+        const [startDay] = stageDef.days;
+        const stageResponses = sortedResponses.slice((stage - 1) * 7, stage * 7);
         const themeScores: ThemeScore[] = computeThemeScores(stageResponses, optionsMap);
         const coverage = stageResponses.length;
 
@@ -170,14 +175,12 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         let stageStatus: StageOverview['status'] = 'WAITING';
         if (report?.status === 'generated' || report?.status === 'delivered') {
           stageStatus = 'GENERATED';
-        } else if (elapsedDay >= endDay + 1) {
-          // Use unclamped elapsed day so stage 4 (days 22–28) becomes DUE on day 29+
+        } else if (coverage >= 7) {
           stageStatus = 'DUE';
-        } else if (currentStage >= stage) {
-          stageStatus = 'WAITING';
         }
 
-        // Compute stage start date
+        // Display-only estimate of when this stage's window started — no
+        // longer used to decide whether the stage is due.
         const stageStartDate = new Date(cycle.start_date);
         stageStartDate.setDate(stageStartDate.getDate() + startDay - 1);
 
@@ -294,10 +297,12 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
 }));
 
 // ── Ensure overdue reports exist ────────────────────────────────────────────
-// For every stage whose window has fully passed with at least one reflection
-// but no generated report, invoke the generate-report edge function, then
-// reload once so the Reports tab reflects the new state. Guarded so each
-// cycle only attempts generation once per app session.
+// For every stage that has accumulated 7 real check-ins but no generated
+// report yet (the trigger in process-checkin only fires on the exact
+// check-in that completes a stage, so a client crash/offline gap can miss
+// it), invoke the generate-report edge function, then reload once so the
+// Reports tab reflects the new state. Guarded so each cycle only attempts
+// generation once per app session.
 const reportGenerationAttempted = new Set<string>();
 
 async function ensureReportsGenerated(
@@ -309,7 +314,7 @@ async function ensureReportsGenerated(
   if (reportGenerationAttempted.has(cycleId)) return;
 
   const missing = stageOverviews.filter(
-    (s) => s.status === 'DUE' && s.coverage > 0 && !s.reportId
+    (s) => s.status === 'DUE' && s.coverage >= 7 && !s.reportId
   );
   if (missing.length === 0) return;
 

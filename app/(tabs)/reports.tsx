@@ -24,7 +24,7 @@ import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 export default function ReportsScreen() {
   const { t } = useTranslation();
   const { session } = useAuthStore();
-  const { activeCycle, loadActiveCycle, currentDay } = useCycleStore();
+  const { activeCycle, loadActiveCycle, stageOverviews } = useCycleStore();
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -63,6 +63,8 @@ export default function ReportsScreen() {
   };
 
   const getReport = (stage: number) => reports.find((r) => r.stage === stage) ?? null;
+  const formingStage = stageOverviews.find((s) => s.status !== 'GENERATED');
+  const formingCoverage = formingStage?.coverage ?? 0;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -93,13 +95,13 @@ export default function ReportsScreen() {
             {t('reports.page_desc')}
           </Text>
 
-          {currentDay < 8 && reports.length === 0 && (
+          {formingCoverage < 7 && reports.length === 0 && (
             <View style={styles.progressCard}>
               <View style={styles.progressBarTrack}>
-                <View style={[styles.progressBarFill, { width: `${Math.min((currentDay / 7) * 100, 100)}%` as any }]} />
+                <View style={[styles.progressBarFill, { width: `${Math.min((formingCoverage / 7) * 100, 100)}%` as any }]} />
               </View>
               <Text style={styles.progressLabel}>
-                {t('reports.progress_label', { day: currentDay })}
+                {t('reports.progress_label', { count: formingCoverage })}
               </Text>
             </View>
           )}

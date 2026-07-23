@@ -22,6 +22,65 @@ const THEME_NAMES: Record<Lang, Record<string, string>> = {
 
 const THEME_ORDER = ['IAP', 'EWB', 'FAF', 'RC', 'GAL', 'RA'];
 
+const STATUS_THRESHOLDS = [
+  { max: 1.5, status: 'Under Load' },
+  { max: 2.0, status: 'Stabilizing' },
+  { max: 2.5, status: 'Forming' },
+  { max: Infinity, status: 'Aligned' },
+] as const;
+
+function getStatus(average: number | null, signalCount: number): string {
+  if (average === null || signalCount === 0) return 'No Reading';
+  for (const t of STATUS_THRESHOLDS) {
+    if (average < t.max) return t.status;
+  }
+  return 'Aligned';
+}
+
+// Compute per-theme scores directly from a specific batch of responses —
+// the stage's own 7 real check-ins in submission order, not a calendar-day
+// window — so the report always matches exactly what generated it.
+function computeStageScores(
+  responses: { option_id: string }[],
+  optionsMap: Record<string, any>
+) {
+  const acc: Record<string, { points: number[]; low: number; medium: number; high: number }> = {};
+  for (const code of THEME_ORDER) acc[code] = { points: [], low: 0, medium: 0, high: 0 };
+
+  for (const resp of responses) {
+    const opt = optionsMap[resp.option_id];
+    if (!opt) continue;
+    for (const prefix of ['theme_1', 'theme_2'] as const) {
+      const code = opt[`${prefix}_code`];
+      const level = opt[`${prefix}_level`];
+      const points = opt[`${prefix}_points`];
+      if (acc[code]) {
+        acc[code].points.push(points);
+        if (level === 'Low') acc[code].low++;
+        else if (level === 'Medium') acc[code].medium++;
+        else acc[code].high++;
+      }
+    }
+  }
+
+  return THEME_ORDER.map((code) => {
+    const a = acc[code];
+    const signalCount = a.points.length;
+    const average = signalCount > 0
+      ? parseFloat((a.points.reduce((s, p) => s + p, 0) / signalCount).toFixed(2))
+      : null;
+    return {
+      theme_code: code,
+      signal_count: signalCount,
+      low_count: a.low,
+      medium_count: a.medium,
+      high_count: a.high,
+      average_score: average,
+      status: getStatus(average, signalCount),
+    };
+  });
+}
+
 const STAGE_LABELS: Record<Lang, Record<number, string>> = {
   en: { 1: 'First reflections', 2: 'Pattern forming', 3: 'Movement noticed', 4: 'Reflection summary', 0: 'Full pattern' },
   hi: { 1: 'पहले संकेत', 2: 'पैटर्न बन रहा है', 3: 'बदलाव दिखा', 4: 'संकेत सारांश', 0: 'पूरा पैटर्न' },
@@ -213,30 +272,37 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
-    // Fetch theme scores
-    const { data: scores, error: scoresErr } = await supabase
-      .from('theme_scores')
-      .select('*')
-      .eq('user_id', user_id)
-      .eq('cycle_id', cycle_id)
-      .eq('stage', stage);
-
-    if (scoresErr) throw scoresErr;
-
-    // Count responses for coverage
-    const dayRange = stage === 0 ? [1, 28] : [
-      [1,7],[8,14],[15,21],[22,28]
-    ][stage - 1] ?? [1,7];
-    const { count } = await supabase
+    // Fetch every response in this cycle in submission order, then slice out
+    // this stage's own batch of (up to) 7 real check-ins — the same
+    // sequential grouping the client uses to decide a stage is ready. This
+    // is what makes the report's coverage count and theme scores always
+    // match reality, regardless of calendar gaps between check-ins.
+    const { data: allResponses, error: respErr } = await supabase
       .from('responses')
-      .select('id', { count: 'exact', head: true })
+      .select('option_id, submitted_at')
       .eq('user_id', user_id)
       .eq('cycle_id', cycle_id)
-      .gte('day_number', dayRange[0])
-      .lte('day_number', dayRange[1]);
+      .order('submitted_at', { ascending: true });
 
-    const coverage = count ?? 0;
+    if (respErr) throw respErr;
+
+    const sorted = allResponses ?? [];
+    const stageResponses = stage === 0 ? sorted : sorted.slice((stage - 1) * 7, stage * 7);
     const total = stage === 0 ? 28 : 7;
+    const coverage = stageResponses.length;
+
+    const optionIds = [...new Set(stageResponses.map((r: any) => r.option_id))];
+    let optionsMap: Record<string, any> = {};
+    if (optionIds.length > 0) {
+      const { data: opts, error: optErr } = await supabase
+        .from('options')
+        .select('id, theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points')
+        .in('id', optionIds);
+      if (optErr) throw optErr;
+      for (const opt of opts ?? []) optionsMap[opt.id] = opt;
+    }
+
+    const scores = computeStageScores(stageResponses as any[], optionsMap);
 
     // Fetch user for mirar_id + language
     const { data: userRow } = await supabase

@@ -205,7 +205,6 @@ export default function ProfileScreen() {
         <Animated.View entering={FadeInDown.duration(400).delay(330)} style={styles.section}>
           <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('profile.settings_label')}</Text>
           <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
-            <SettingsRow label={t('profile.daily_reminder')} value="8:00 AM" colors={colors} />
             <SettingsRow label={t('profile.summary_notifications')} value={t('profile.on')} colors={colors} />
             <TouchableOpacity
               style={[rowStyles.row, { justifyContent: 'space-between', borderBottomColor: colors.borderLight }]}

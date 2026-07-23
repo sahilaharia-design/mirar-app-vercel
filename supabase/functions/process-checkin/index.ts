@@ -53,13 +53,9 @@ serve(async (req) => {
       )
     }
 
-    // Pre-compute what background-job payloads will need later so the
-    // "report already exists" check below can be included in the same
-    // parallel batch as everything else (it doesn't depend on any of them).
+    // Pre-compute what background-job payloads will need later.
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
-    const stageCompletedMap: Record<number, number> = { 8: 1, 15: 2, 22: 3, 28: 4 }
-    const completedStage = stageCompletedMap[day_number]
 
     // 2. Every read below is independent of the others — none of them
     // depend on each other's results, only on the insert above having
@@ -74,7 +70,7 @@ serve(async (req) => {
       { data: identityVectorRow },
       { count: totalCount },
       { data: cycleRow },
-      reportExistsResult,
+      { count: cycleResponseCount },
     ] = await Promise.all([
       supabase
         .from('options')
@@ -112,15 +108,35 @@ serve(async (req) => {
         .select('cycle_number')
         .eq('id', cycle_id)
         .maybeSingle(),
-      completedStage
-        ? supabase
-            .from('reports')
-            .select('id', { count: 'exact', head: true })
-            .eq('user_id', user_id)
-            .eq('cycle_id', cycle_id)
-            .eq('stage', completedStage)
-        : Promise.resolve({ count: 0 }),
+      // Real check-ins logged in THIS cycle so far (includes the one just
+      // inserted above) — used to gate report generation on an actual count
+      // of 7 reflections, not on the calendar day having advanced.
+      supabase
+        .from('responses')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user_id)
+        .eq('cycle_id', cycle_id),
     ])
+
+    // A stage completes on exactly the check-in that makes its count a
+    // multiple of 7 — e.g. the 7th real reflection completes stage 1, the
+    // 14th completes stage 2 — regardless of how many calendar days that
+    // took. Only stages 1–4 (28 check-ins) generate a per-stage report here.
+    const completedStage =
+      cycleResponseCount && cycleResponseCount > 0 && cycleResponseCount % 7 === 0 && cycleResponseCount <= 28
+        ? cycleResponseCount / 7
+        : null
+
+    let reportExists = 0
+    if (completedStage) {
+      const { count } = await supabase
+        .from('reports')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user_id)
+        .eq('cycle_id', cycle_id)
+        .eq('stage', completedStage)
+      reportExists = count ?? 0
+    }
 
     // 1b. Signal engine: persist structured signals for this reflection
     // (two rows — one per mapped theme on the chosen option)
@@ -417,16 +433,10 @@ serve(async (req) => {
         }).catch(() => { /* non-fatal */ }))
       }
 
-      // 13. generate-report — fire when user first checks in on stage-opening day
-      // Day 8 = stage 2 opens → generate stage 1 report
-      // Day 15 = stage 3 opens → generate stage 2 report
-      // Day 22 = stage 4 opens → generate stage 3 report
-      // Day 28 = last day of stage 4 → generate stage 4 report after this check-in
-      // (day 29 is unreachable: the client clamps cycle day at 28)
-      // completedStage was computed before the parallel batch above, and
-      // reportExistsResult was fetched there too when it's truthy.
+      // 13. generate-report — fire on the check-in that completes a stage's
+      // 7 real reflections (the 7th, 14th, 21st, 28th check-in in this
+      // cycle). completedStage and reportExists were resolved above.
       if (completedStage) {
-        const reportExists = (reportExistsResult as any)?.count ?? 0
         if (!reportExists || reportExists === 0) {
           const reportController = new AbortController()
           setTimeout(() => reportController.abort(), 20000)
