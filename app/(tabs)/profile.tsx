@@ -205,7 +205,6 @@ export default function ProfileScreen() {
         <Animated.View entering={FadeInDown.duration(400).delay(330)} style={styles.section}>
           <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('profile.settings_label')}</Text>
           <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
-            <SettingsRow label={t('profile.summary_notifications')} value={t('profile.on')} colors={colors} />
             <TouchableOpacity
               style={[rowStyles.row, { justifyContent: 'space-between', borderBottomColor: colors.borderLight }]}
               onPress={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}
@@ -318,15 +317,6 @@ function Row({ label, value, colors }: { label: string; value: string; colors: R
     <View style={[rowStyles.row, { borderBottomColor: colors.borderLight }]}>
       <Text style={[rowStyles.label, { color: colors.slateMid }]}>{label}</Text>
       <Text style={[rowStyles.value, { color: colors.slate }]}>{value}</Text>
-    </View>
-  );
-}
-
-function SettingsRow({ label, value, colors }: { label: string; value: string; colors: ReturnType<typeof useColors> }) {
-  return (
-    <View style={[rowStyles.row, { borderBottomColor: colors.borderLight }]}>
-      <Text style={[rowStyles.label, { color: colors.slateMid }]}>{label}</Text>
-      <Text style={[rowStyles.value, rowStyles.settingsValue, { color: colors.slateLight }]}>{value}</Text>
     </View>
   );
 }

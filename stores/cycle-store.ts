@@ -4,10 +4,7 @@ import { withTimeout } from '../lib/with-timeout';
 import { CycleRow, StageOverview, ThemeScore, AlignmentScoreRow, ThemeCode } from '../types/mirar';
 import {
   getCycleDay,
-  getElapsedCycleDay,
   getStageFromDay,
-  getStageDayRange,
-  getStageCoverage,
   computeThemeScores,
   computeThemeHistories,
   computeStreak,
@@ -83,12 +80,45 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
 
       if (!cycle) return;
 
-      const elapsedDay = getElapsedCycleDay(cycle.start_date);
+      // Load all responses for this cycle up front — used both to decide
+      // whether the cycle has genuinely finished and to build everything
+      // below.
+      const { data: responses = [] } = await withTimeout(
+        supabase.from('responses').select('*').eq('user_id', userId).eq('cycle_id', cycle.id)
+      );
 
-      // Mirar is a continuous practice, not a 28-day program — when a cycle's
-      // window has fully elapsed, roll over to the next one silently. No gate,
-      // no ceremony; the user experiences day 29 exactly like day 28.
-      if (elapsedDay > 28) {
+      // Mirar is a continuous practice, not a 28-day program — a cycle rolls
+      // to the next one once the user has actually completed 28 real
+      // check-ins, not once 28 calendar days have passed. Gating on elapsed
+      // time alone could roll the cycle over while a late stage still had
+      // fewer than 7 check-ins, silently losing that stage's report for good
+      // (the old cycle_id is never visited again once "completed").
+      if ((responses ?? []).length >= 28) {
+        // Belt-and-suspenders: make sure every stage's report actually
+        // exists before this cycle_id becomes unreachable. Awaited (not
+        // fire-and-forget) since this is the last chance to generate them.
+        const { data: existingReports = [] } = await withTimeout(
+          supabase.from('reports').select('id, stage, status').eq('cycle_id', cycle.id)
+        );
+        const existingByStage: Record<number, any> = {};
+        for (const r of existingReports ?? []) existingByStage[r.stage] = r;
+
+        for (let stage = 1; stage <= 4; stage++) {
+          const report = existingByStage[stage];
+          const generated = report?.status === 'generated' || report?.status === 'delivered';
+          if (!generated) {
+            try {
+              await withTimeout(
+                supabase.functions.invoke('generate-report', {
+                  body: { user_id: userId, cycle_id: cycle.id, stage },
+                })
+              );
+            } catch (err) {
+              console.error(`[Mirar] failed to generate stage ${stage} report before rollover:`, err);
+            }
+          }
+        }
+
         const now = new Date().toISOString();
         const newCycleNumber = cycle.cycle_number + 1;
 
@@ -128,11 +158,6 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
 
       const currentDay = getCycleDay(cycle.start_date);
       const currentStage = getStageFromDay(currentDay);
-
-      // Load all responses for this cycle
-      const { data: responses = [] } = await withTimeout(
-        supabase.from('responses').select('*').eq('user_id', userId).eq('cycle_id', cycle.id)
-      );
 
       // Load all options for scoring
       const optionIds = (responses ?? []).map((r: any) => r.option_id);
