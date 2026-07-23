@@ -1,9 +1,10 @@
 import { Tabs } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { COLORS, FONTS, FONT_SIZE } from '../../lib/constants';
+import { FONT_SIZE } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
-function TabIcon({ name, focused }: { name: string; focused: boolean }) {
+function TabIcon({ name, focused, colors }: { name: string; focused: boolean; colors: ReturnType<typeof useColors> }) {
   const icons: Record<string, string> = {
     index: '◎',
     signals: '∿',
@@ -11,20 +12,29 @@ function TabIcon({ name, focused }: { name: string; focused: boolean }) {
     profile: '○',
   };
   return (
-    <Text style={[styles.icon, focused && styles.iconFocused]}>
+    <Text style={[styles.icon, { color: focused ? colors.slate : colors.slateLight }]}>
       {icons[name] ?? '○'}
     </Text>
   );
 }
 
-function TabLabel({ label, focused }: { label: string; focused: boolean }) {
+function TabLabel({ label, focused, colors }: { label: string; focused: boolean; colors: ReturnType<typeof useColors> }) {
   return (
-    <Text style={[styles.label, focused && styles.labelFocused]}>{label}</Text>
+    <Text
+      style={[
+        styles.label,
+        { color: focused ? colors.slate : colors.slateLight },
+        focused && styles.labelFocused,
+      ]}
+    >
+      {label}
+    </Text>
   );
 }
 
 export default function TabsLayout() {
   const { t } = useTranslation();
+  const colors = useColors();
 
   const TAB_CONFIG = [
     { name: 'index', label: t('nav.today') },
@@ -36,9 +46,9 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
-        tabBarActiveTintColor: COLORS.slate,
-        tabBarInactiveTintColor: COLORS.slateLight,
+        tabBarStyle: [styles.tabBar, { backgroundColor: colors.creamLight, borderTopColor: colors.border }],
+        tabBarActiveTintColor: colors.slate,
+        tabBarInactiveTintColor: colors.slateLight,
         tabBarShowLabel: false,
       }}
     >
@@ -49,8 +59,8 @@ export default function TabsLayout() {
           options={{
             tabBarIcon: ({ focused }) => (
               <View style={styles.tabItem}>
-                <TabIcon name={tab.name} focused={focused} />
-                <TabLabel label={tab.label} focused={focused} />
+                <TabIcon name={tab.name} focused={focused} colors={colors} />
+                <TabLabel label={tab.label} focused={focused} colors={colors} />
               </View>
             ),
           }}
@@ -62,8 +72,6 @@ export default function TabsLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: COLORS.creamLight,
-    borderTopColor: COLORS.border,
     borderTopWidth: 1,
     height: 72,
     paddingBottom: 12,
@@ -75,18 +83,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 18,
-    color: COLORS.slateLight,
-  },
-  iconFocused: {
-    color: COLORS.slate,
   },
   label: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     letterSpacing: 0.5,
   },
   labelFocused: {
-    color: COLORS.slate,
     fontWeight: '500',
   },
 });

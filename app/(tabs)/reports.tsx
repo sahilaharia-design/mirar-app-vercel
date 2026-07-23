@@ -19,10 +19,12 @@ import { ReportCard } from '../../components/reports/ReportCard';
 import { AppHeader } from '../../components/ui/AppHeader';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 export default function ReportsScreen() {
   const { t } = useTranslation();
+  const colors = useColors();
   const { session } = useAuthStore();
   const { activeCycle, loadActiveCycle, stageOverviews } = useCycleStore();
   const [reports, setReports] = useState<ReportRow[]>([]);
@@ -67,12 +69,12 @@ export default function ReportsScreen() {
   const formingCoverage = formingStage?.coverage ?? 0;
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <AppHeader />
 
       {isLoading ? (
         <View style={styles.loading}>
-          <ActivityIndicator color={COLORS.slateMid} />
+          <ActivityIndicator color={colors.slateMid} />
         </View>
       ) : (
         <ScrollView
@@ -83,31 +85,31 @@ export default function ReportsScreen() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
-              tintColor={COLORS.slateMid}
+              tintColor={colors.slateMid}
             />
           }
         >
           <View style={styles.titleRow}>
-            <Text style={styles.pageTitle}>{t('reports.page_title')}</Text>
+            <Text style={[styles.pageTitle, { color: colors.slate }]}>{t('reports.page_title')}</Text>
             <InfoTooltipInline helpText={t('guidance_tooltips.reflection_summary')} size={13} />
           </View>
-          <Text style={styles.pageDesc}>
+          <Text style={[styles.pageDesc, { color: colors.slateLight }]}>
             {t('reports.page_desc')}
           </Text>
 
           {formingCoverage < 7 && reports.length === 0 && (
-            <View style={styles.progressCard}>
-              <View style={styles.progressBarTrack}>
-                <View style={[styles.progressBarFill, { width: `${Math.min((formingCoverage / 7) * 100, 100)}%` as any }]} />
+            <View style={[styles.progressCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
+              <View style={[styles.progressBarTrack, { backgroundColor: colors.border }]}>
+                <View style={[styles.progressBarFill, { backgroundColor: colors.accentTeal, width: `${Math.min((formingCoverage / 7) * 100, 100)}%` as any }]} />
               </View>
-              <Text style={styles.progressLabel}>
+              <Text style={[styles.progressLabel, { color: colors.slateLight }]}>
                 {t('reports.progress_label', { count: formingCoverage })}
               </Text>
             </View>
           )}
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>{t('reports.summaries_label')}</Text>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('reports.summaries_label')}</Text>
             {[1, 2, 3, 4].map((stage) => (
               <ReportCard
                 key={stage}
@@ -122,7 +124,7 @@ export default function ReportsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>{t('reports.full_pattern_label')}</Text>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('reports.full_pattern_label')}</Text>
             <ReportCard
               stage={0}
               report={getReport(0)}
@@ -133,8 +135,8 @@ export default function ReportsScreen() {
             />
           </View>
 
-          <View style={styles.note}>
-            <Text style={styles.noteText}>
+          <View style={[styles.note, { backgroundColor: colors.creamDark, borderLeftColor: colors.borderLight }]}>
+            <Text style={[styles.noteText, { color: colors.slateLight }]}>
               {t('reports.footer_note')}
             </Text>
           </View>
@@ -150,7 +152,6 @@ export default function ReportsScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.cream,
   },
   loading: {
     flex: 1,
@@ -171,88 +172,49 @@ const styles = StyleSheet.create({
   },
   pageTitle: {
     fontSize: FONT_SIZE.xl,
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: -0.3,
   },
   pageDesc: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
     lineHeight: 22,
     marginTop: -SPACING.sm,
   },
   progressCard: {
-    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
     padding: SPACING.md,
     gap: SPACING.sm,
   },
   progressBarTrack: {
     height: 4,
-    backgroundColor: COLORS.border,
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressBarFill: {
     height: 4,
-    backgroundColor: COLORS.accentTeal,
     borderRadius: 2,
   },
   progressLabel: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     lineHeight: 18,
-  },
-  valueCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.lg,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    padding: SPACING.md,
-    gap: SPACING.xs,
-  },
-  valueTitle: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-    fontWeight: '500',
-  },
-  valueText: {
-    fontSize: FONT_SIZE.sm,
-    lineHeight: 22,
-    color: COLORS.slateMid,
-  },
-  guideLink: {
-    alignSelf: 'flex-start',
-    paddingTop: SPACING.xs,
-  },
-  guideLinkText: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slate,
-    fontWeight: '500',
-    textDecorationLine: 'underline',
   },
   section: {
     gap: SPACING.sm,
   },
   sectionLabel: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   note: {
     paddingVertical: SPACING.sm,
     paddingHorizontal: SPACING.md,
-    backgroundColor: COLORS.creamDark,
     borderRadius: RADIUS.md,
     borderLeftWidth: 2,
-    borderLeftColor: COLORS.borderLight,
   },
   noteText: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     lineHeight: 18,
     fontStyle: 'italic',
   },

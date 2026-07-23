@@ -16,7 +16,8 @@ import { buildReportDisplay } from '../../lib/report-generator';
 import { ThemeBlock } from '../../components/reports/ThemeBlock';
 import { SignalList } from '../../components/reports/SignalList';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 function softenReportLine(line: string): string {
   return line
@@ -33,6 +34,7 @@ function softenReportLine(line: string): string {
 
 export default function ReportDetailScreen() {
   const { t } = useTranslation();
+  const colors = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [reportDisplay, setReportDisplay] = useState<ReportDisplay | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,9 +82,9 @@ export default function ReportDetailScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
         <View style={styles.loading}>
-          <ActivityIndicator color={COLORS.slateMid} />
+          <ActivityIndicator color={colors.slateMid} />
         </View>
       </SafeAreaView>
     );
@@ -90,9 +92,9 @@ export default function ReportDetailScreen() {
 
   if (!reportDisplay) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
         <View style={styles.loading}>
-          <Text style={styles.errorText}>{t('report_detail.not_found')}</Text>
+          <Text style={[styles.errorText, { color: colors.slateMid }]}>{t('report_detail.not_found')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -103,10 +105,10 @@ export default function ReportDetailScreen() {
   const repeatedSignals = primarySignals.slice(0, 3);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.backText}>← {t('report_detail.back_reports')}</Text>
+          <Text style={[styles.backText, { color: colors.slateMid }]}>← {t('report_detail.back_reports')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -118,34 +120,34 @@ export default function ReportDetailScreen() {
         {/* Report header */}
         <View style={styles.reportHeader}>
           <View style={styles.titleRow}>
-            <Text style={styles.reportTitle}>{stageLabel}</Text>
+            <Text style={[styles.reportTitle, { color: colors.slate }]}>{stageLabel}</Text>
             <InfoTooltipInline helpText={t('guidance_tooltips.reflection_summary')} size={13} />
           </View>
-          <Text style={styles.reportDesc}>"{t(`report_detail.stage_description.${stage}`)}"</Text>
+          <Text style={[styles.reportDesc, { color: colors.slateMid }]}>"{t(`report_detail.stage_description.${stage}`)}"</Text>
           <View style={styles.coverageRow}>
-            <Text style={styles.coverageText}>
+            <Text style={[styles.coverageText, { color: colors.slateLight }]}>
               {t('report_detail.coverage_text', { coverage, total: coverageTotal })}
             </Text>
           </View>
         </View>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: colors.borderLight }]} />
 
         <View style={styles.valueIntro}>
-          <Text style={styles.sectionLabel}>{t('report_detail.your_summary_label')}</Text>
-          <Text style={styles.valueIntroText}>
+          <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('report_detail.your_summary_label')}</Text>
+          <Text style={[styles.valueIntroText, { color: colors.slateMid }]}>
             {t('report_detail.value_intro_text')}
           </Text>
         </View>
 
         {repeatedSignals.length > 0 && (
           <View style={styles.noticeBlock}>
-            <Text style={styles.sectionLabel}>{t('report_detail.what_kept_showing_up')}</Text>
-            <View style={styles.noticeCard}>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('report_detail.what_kept_showing_up')}</Text>
+            <View style={[styles.noticeCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
               {repeatedSignals.map((signal) => (
                 <View key={signal} style={styles.noticeRow}>
-                  <View style={styles.noticeDot} />
-                  <Text style={styles.noticeText}>{softenReportLine(signal)}</Text>
+                  <View style={[styles.noticeDot, { backgroundColor: colors.slateMid }]} />
+                  <Text style={[styles.noticeText, { color: colors.slateMid }]}>{softenReportLine(signal)}</Text>
                 </View>
               ))}
             </View>
@@ -154,23 +156,23 @@ export default function ReportDetailScreen() {
 
         {strongestSignal && (
           <View style={styles.summaryBlock}>
-            <Text style={styles.sectionLabel}>{t('report_detail.strongest_signal_label')}</Text>
-            <Text style={styles.summaryText}>{softenReportLine(strongestSignal)}</Text>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('report_detail.strongest_signal_label')}</Text>
+            <Text style={[styles.summaryText, { color: colors.slateMid }]}>{softenReportLine(strongestSignal)}</Text>
           </View>
         )}
 
         <TouchableOpacity
-          style={styles.meaningCard}
+          style={[styles.meaningCard, { backgroundColor: colors.creamDark, borderColor: colors.borderLight }]}
           onPress={() => setMeaningOpen((v) => !v)}
           activeOpacity={0.75}
           accessibilityRole="button"
         >
           <View style={styles.meaningHeader}>
-            <Text style={styles.meaningTitle}>{t('report_detail.meaning_title')}</Text>
-            <Text style={styles.meaningToggle}>{meaningOpen ? t('checkin.close') : t('report_detail.meaning_toggle_open')}</Text>
+            <Text style={[styles.meaningTitle, { color: colors.slate }]}>{t('report_detail.meaning_title')}</Text>
+            <Text style={[styles.meaningToggle, { color: colors.slateLight }]}>{meaningOpen ? t('checkin.close') : t('report_detail.meaning_toggle_open')}</Text>
           </View>
           {meaningOpen && (
-            <Text style={styles.meaningText}>
+            <Text style={[styles.meaningText, { color: colors.slateMid }]}>
               {t('report_detail.meaning_text')}
             </Text>
           )}
@@ -179,15 +181,15 @@ export default function ReportDetailScreen() {
         {/* Summary */}
         {summaryText && (
           <View style={styles.summaryBlock}>
-            <Text style={styles.sectionLabel}>{t('report_detail.how_to_read_label')}</Text>
-            <Text style={styles.summaryText}>{summaryText}</Text>
+            <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('report_detail.how_to_read_label')}</Text>
+            <Text style={[styles.summaryText, { color: colors.slateMid }]}>{summaryText}</Text>
           </View>
         )}
 
         {/* Theme blocks */}
         <View style={styles.themeSection}>
-          <Text style={styles.sectionLabel}>{t('theme_detail.what_showed_up')}</Text>
-          <View style={styles.themeList}>
+          <Text style={[styles.sectionLabel, { color: colors.slateLight }]}>{t('theme_detail.what_showed_up')}</Text>
+          <View style={[styles.themeList, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
             {themeBlocks.map((block) => (
               <ThemeBlock key={block.code} block={block} />
             ))}
@@ -213,8 +215,8 @@ export default function ReportDetailScreen() {
         )}
 
         {/* Language disclaimer */}
-        <View style={styles.disclaimer}>
-          <Text style={styles.disclaimerText}>
+        <View style={[styles.disclaimer, { backgroundColor: colors.creamDark, borderLeftColor: colors.borderLight }]}>
+          <Text style={[styles.disclaimerText, { color: colors.slateLight }]}>
             {t('report_detail.disclaimer_text')}
           </Text>
         </View>
@@ -228,7 +230,6 @@ export default function ReportDetailScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.cream,
   },
   loading: {
     flex: 1,
@@ -237,7 +238,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
   },
   header: {
     paddingHorizontal: SPACING.lg,
@@ -249,7 +249,6 @@ const styles = StyleSheet.create({
   },
   backText: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
   },
   scroll: {
     flex: 1,
@@ -268,13 +267,11 @@ const styles = StyleSheet.create({
   },
   reportTitle: {
     fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: -0.3,
   },
   reportDesc: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
     fontStyle: 'italic',
   },
   coverageRow: {
@@ -282,15 +279,12 @@ const styles = StyleSheet.create({
   },
   coverageText: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
   },
   divider: {
     height: 1,
-    backgroundColor: COLORS.borderLight,
   },
   sectionLabel: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     letterSpacing: 1,
     textTransform: 'uppercase',
     marginBottom: SPACING.sm,
@@ -303,18 +297,15 @@ const styles = StyleSheet.create({
   },
   valueIntroText: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
     lineHeight: 25,
   },
   noticeBlock: {
     gap: SPACING.xs,
   },
   noticeCard: {
-    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
     gap: SPACING.sm,
   },
   noticeRow: {
@@ -326,25 +317,20 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.slateMid,
     marginTop: 9,
   },
   noticeText: {
     flex: 1,
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     lineHeight: 22,
   },
   summaryText: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
     lineHeight: 26,
   },
   meaningCard: {
-    backgroundColor: COLORS.creamDark,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
     padding: SPACING.md,
     gap: SPACING.xs,
   },
@@ -353,42 +339,34 @@ const styles = StyleSheet.create({
   },
   meaningTitle: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
     fontWeight: '500',
   },
   meaningToggle: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
   meaningText: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     lineHeight: 22,
   },
   themeSection: {
     gap: SPACING.xs,
   },
   themeList: {
-    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
   },
   disclaimer: {
     paddingVertical: SPACING.sm,
     paddingHorizontal: SPACING.md,
-    backgroundColor: COLORS.creamDark,
     borderRadius: RADIUS.md,
     borderLeftWidth: 2,
-    borderLeftColor: COLORS.borderLight,
   },
   disclaimerText: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     lineHeight: 18,
     fontStyle: 'italic',
   },

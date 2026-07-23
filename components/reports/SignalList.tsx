@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 interface SignalListProps {
   title: string;
@@ -9,6 +10,7 @@ interface SignalListProps {
 }
 
 export function SignalList({ title, items, variant = 'primary' }: SignalListProps) {
+  const colors = useColors();
   if (items.length === 0) return null;
 
   const softenItem = (item: string) =>
@@ -23,12 +25,12 @@ export function SignalList({ title, items, variant = 'primary' }: SignalListProp
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, { color: colors.slateLight }]}>{title}</Text>
       <View style={styles.list}>
         {items.map((item, i) => (
           <View key={i} style={styles.item}>
-            <View style={[styles.bullet, variant === 'calibration' && styles.bulletCalibration]} />
-            <Text style={styles.itemText}>{softenItem(item)}</Text>
+            <View style={[styles.bullet, { backgroundColor: variant === 'calibration' ? colors.forming : colors.slateMid }]} />
+            <Text style={[styles.itemText, { color: colors.slateMid }]}>{softenItem(item)}</Text>
           </View>
         ))}
       </View>
@@ -42,7 +44,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     letterSpacing: 1,
     textTransform: 'uppercase',
   },
@@ -58,17 +59,12 @@ const styles = StyleSheet.create({
     width: 4,
     height: 4,
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.slateMid,
     marginTop: 8,
     flexShrink: 0,
-  },
-  bulletCalibration: {
-    backgroundColor: COLORS.forming,
   },
   itemText: {
     flex: 1,
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     lineHeight: 22,
   },
 });
