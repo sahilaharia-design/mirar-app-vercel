@@ -3,6 +3,35 @@ import { supabase } from '../lib/supabase';
 import { QuestionWithOptions, CheckInState, SubmittedSignal } from '../types/mirar';
 import { getCycleDay, getStageFromDay } from '../lib/scoring';
 import { withTimeout } from '../lib/with-timeout';
+import i18n from '../lib/i18n';
+
+// The select-daily-question edge function already returns text localized to
+// the user's language (with English fallback). These two direct-query paths
+// (already-answered-today, and the offline fallback when the edge function
+// itself is unreachable) read the same table directly, so they need the same
+// resolution — otherwise a Hindi/Gujarati user would see raw English here
+// even though the normal path is fully localized.
+const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt'] as const;
+const OPTION_LOCALIZED_FIELDS = ['option_text'] as const;
+
+function localize(row: Record<string, any>, fields: readonly string[]): Record<string, any> {
+  const language = i18n.language;
+  if (!row || language === 'en') return row;
+  for (const field of fields) {
+    const localized = row[`${field}_${language}`];
+    if (typeof localized === 'string' && localized.trim().length > 0) {
+      row[field] = localized;
+    }
+  }
+  return row;
+}
+
+function localizeQuestion(question: any): any {
+  if (!question) return question;
+  localize(question, QUESTION_LOCALIZED_FIELDS);
+  question.options = (question.options ?? []).map((opt: any) => localize(opt, OPTION_LOCALIZED_FIELDS));
+  return question;
+}
 
 interface CheckInStore extends CheckInState {
   loadTodayQuestion: (cycleId: string, cycleStartDate: string) => Promise<void>;
@@ -61,6 +90,7 @@ export const useCheckInStore = create<CheckInStore>((set, get) => ({
             question.options = (question.options ?? []).sort(
               (a: any, b: any) => a.option_number - b.option_number
             );
+            localizeQuestion(question);
             set({
               question: question as QuestionWithOptions,
               questionId: question.id,
@@ -115,6 +145,7 @@ export const useCheckInStore = create<CheckInStore>((set, get) => ({
           question.options = (question.options ?? []).sort(
             (a: any, b: any) => a.option_number - b.option_number
           );
+          localizeQuestion(question);
           set({
             question: question as QuestionWithOptions,
             questionId: question.id,

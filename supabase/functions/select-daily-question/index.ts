@@ -28,6 +28,17 @@ serve(async (req) => {
       )
     }
 
+    // Resolve once — every question/option field this function returns must
+    // respect it, and a curated question generated in one language must
+    // still fall back to English rather than showing blank/broken text.
+    const { data: userRow } = await supabase
+      .from('users')
+      .select('language')
+      .eq('id', user_id)
+      .maybeSingle()
+    const language: 'en' | 'hi' | 'gu' =
+      userRow?.language === 'hi' || userRow?.language === 'gu' ? userRow.language : 'en'
+
     // 1. Check if today's question was already selected (idempotent)
     const { data: todayHistory } = await supabase
       .from('question_history')
@@ -38,7 +49,7 @@ serve(async (req) => {
       .maybeSingle()
 
     if (todayHistory?.question_id) {
-      return serveQuestion(supabase, todayHistory.question_id, corsHeaders)
+      return serveQuestion(supabase, todayHistory.question_id, corsHeaders, language)
     }
 
     // 1b. Attempt a personalized, AI-generated question once the user's identity
@@ -156,10 +167,11 @@ serve(async (req) => {
         journalAffinity,
         velocity_vector: identityVector?.velocity_vector ?? {},
         pattern_flags: identityVector?.pattern_flags ?? {},
+        language,
       })
       if (generated) {
         await recordHistory(supabase, user_id, generated.id, cycle_id, current_day)
-        return serveQuestion(supabase, generated.id, corsHeaders)
+        return serveQuestion(supabase, generated.id, corsHeaders, language)
       }
       // Falls through to curated selection below on any validation/API failure.
     }
@@ -191,7 +203,7 @@ serve(async (req) => {
         )
       }
       await recordHistory(supabase, user_id, fallback.id, cycle_id, current_day)
-      return serveQuestion(supabase, fallback.id, corsHeaders)
+      return serveQuestion(supabase, fallback.id, corsHeaders, language)
     }
 
     // 6. Score candidates
@@ -229,7 +241,7 @@ serve(async (req) => {
     const selected = topN[Math.floor(Math.random() * topN.length)]
 
     await recordHistory(supabase, user_id, selected.id, cycle_id, current_day)
-    return serveQuestion(supabase, selected.id, corsHeaders)
+    return serveQuestion(supabase, selected.id, corsHeaders, language)
 
   } catch (err) {
     return new Response(
@@ -239,7 +251,27 @@ serve(async (req) => {
   }
 })
 
-async function serveQuestion(supabase: any, questionId: string, corsHeaders: any) {
+// Overwrites the base (English) text fields in place with the `_hi`/`_gu`
+// column when one exists for the given language, falling back to the base
+// field otherwise (missing translation, or language is already 'en'). This
+// keeps every caller — client and edge function alike — simple: read
+// `question.prompt_text` / `option.option_text` and trust it's already in
+// the right language.
+function localize<T extends Record<string, any>>(row: T, fields: string[], language: string): T {
+  if (language === 'en') return row
+  for (const field of fields) {
+    const localized = row[`${field}_${language}`]
+    if (typeof localized === 'string' && localized.trim().length > 0) {
+      row[field] = localized
+    }
+  }
+  return row
+}
+
+const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt']
+const OPTION_LOCALIZED_FIELDS = ['option_text']
+
+async function serveQuestion(supabase: any, questionId: string, corsHeaders: any, language: string) {
   const { data: question, error } = await supabase
     .from('questions')
     .select('*, options(*)')
@@ -253,9 +285,10 @@ async function serveQuestion(supabase: any, questionId: string, corsHeaders: any
     )
   }
 
-  question.options = (question.options ?? []).sort(
-    (a: any, b: any) => a.option_number - b.option_number
-  )
+  localize(question, QUESTION_LOCALIZED_FIELDS, language)
+  question.options = (question.options ?? [])
+    .map((opt: any) => localize(opt, OPTION_LOCALIZED_FIELDS, language))
+    .sort((a: any, b: any) => a.option_number - b.option_number)
 
   return new Response(
     JSON.stringify({ question }),
@@ -301,6 +334,7 @@ async function tryGenerateQuestion(
     journalAffinity: boolean
     velocity_vector: Record<string, number>
     pattern_flags: Record<string, string>
+    language: 'en' | 'hi' | 'gu'
   }
 ): Promise<{ id: string } | null> {
   try {
@@ -348,6 +382,11 @@ async function tryGenerateQuestion(
       .filter(Boolean)
       .join('\n')
 
+    const LANGUAGE_NAMES: Record<string, string> = { hi: 'Hindi', gu: 'Gujarati' }
+    const languageInstruction = ctx.language === 'en'
+      ? ''
+      : `\n\nWrite prompt_text and every option_text entirely in ${LANGUAGE_NAMES[ctx.language]} (native script, not transliteration). Keep the same calm, observational tone in that language — do not translate word-for-word from English, write it naturally.`
+
     const systemPrompt = `You are the question-writing engine of Mirar — a daily emotional-hygiene mirror, not a therapy or coaching app.
 
 You write exactly ONE daily check-in question with exactly 5 answer options for a specific returning user, based on what their long-term signal history shows.
@@ -355,7 +394,7 @@ You write exactly ONE daily check-in question with exactly 5 answer options for 
 Use only this vocabulary style: signal, alignment, drift, calibration, check-in, internal state, notice, present, holding, shifting.
 Never use: heal, healing, journal, journaling, therapy, motivational, should, fix, improve, better, worse, coach, advise.
 
-The question must read like a natural continuation of a daily practice — calm, observational, never leading toward a "right" answer. Options must span a real spectrum from low signal to high signal on the focus themes, not just positive-to-negative wording.
+The question must read like a natural continuation of a daily practice — calm, observational, never leading toward a "right" answer. Options must span a real spectrum from low signal to high signal on the focus themes, not just positive-to-negative wording.${languageInstruction}
 
 Respond with ONLY raw JSON, no markdown fences, no prose, matching exactly this shape:
 {"prompt_text": "...", "options": [{"option_text": "...", "theme_1_code": "XXX", "theme_2_code": "XXX"}, ... exactly 5 total]}
