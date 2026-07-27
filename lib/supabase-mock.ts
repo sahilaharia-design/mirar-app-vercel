@@ -13,6 +13,24 @@
 //   - Attention (FAF): mixed
 //   - Connection (RC), Growth (GAL): sparse
 
+import i18n from './i18n';
+
+// Mirrors select-daily-question's server-side localize() so switching
+// language in dev/mock mode actually exercises the same resolution logic
+// real users hit — not just a demo that always shows English.
+const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt'];
+const OPTION_LOCALIZED_FIELDS = ['option_text'];
+function mockLocalize(row: Record<string, any>, fields: string[]): Record<string, any> {
+  const language = i18n.language;
+  if (!row || language === 'en') return row;
+  const out = { ...row };
+  for (const field of fields) {
+    const localized = out[`${field}_${language}`];
+    if (typeof localized === 'string' && localized.trim().length > 0) out[field] = localized;
+  }
+  return out;
+}
+
 const MOCK_USER_ID = 'mock-user-0000-0000-000000000001';
 const MOCK_CYCLE_ID = 'mock-cycle-0000-0000-000000000001';
 const TODAY_DAY_NUMBER = 14;
@@ -46,27 +64,39 @@ const QUESTIONS = [
   {
     id: 'mock-q-1', day_number: 14, stage: 2, active: true,
     prompt_text: 'Right now, inside, I notice...',
+    prompt_text_hi: 'अभी, अंदर से, मुझे महसूस हो रहा है...',
+    prompt_text_gu: 'અત્યારે, અંદરથી, મને લાગે છે...',
     mirror_glimmer: 'Something was named today that wasn’t named yesterday.',
+    mirror_glimmer_hi: 'आज कुछ ऐसा नाम मिला जो कल नहीं मिला था।',
+    mirror_glimmer_gu: 'આજે કંઈક એવું નામ મળ્યું જે ગઈકાલે નહોતું મળ્યું.',
     tomorrow_tease: 'Tomorrow: what your attention keeps returning to.',
+    tomorrow_tease_hi: 'कल: आपका ध्यान बार-बार किस ओर लौटता है।',
+    tomorrow_tease_gu: 'આવતીકાલે: તમારું ધ્યાન વારંવાર ક્યાં પાછું ફરે છે.',
     journal_prompt: null, theme_1: 'IAP', theme_2: 'RA',
     options: [] as MockOption[],
   },
   {
     id: 'mock-q-2', day_number: 13, stage: 2, active: true,
     prompt_text: 'What thought keeps coming back to you?',
+    prompt_text_hi: 'कौन सा विचार बार-बार आता रहता है?',
+    prompt_text_gu: 'કયો વિચાર વારંવાર આવ્યા કરે છે?',
     mirror_glimmer: 'Recurring thoughts are signals waiting to be read.',
+    mirror_glimmer_hi: 'बार-बार आने वाले विचार पढ़े जाने के इंतज़ार में संकेत हैं।',
+    mirror_glimmer_gu: 'વારંવાર આવતા વિચારો વાંચવાની રાહ જોતા સંકેત છે.',
     tomorrow_tease: 'Tomorrow: something you’ve been carrying for others.',
+    tomorrow_tease_hi: 'कल: कुछ जो आप दूसरों के लिए उठाए चल रहे हैं।',
+    tomorrow_tease_gu: 'આવતીકાલે: કંઈક જે તમે બીજા માટે ઉપાડી રહ્યા છો.',
     journal_prompt: null, theme_1: 'FAF', theme_2: 'GAL',
     options: [] as MockOption[],
   },
 ];
 
 QUESTIONS[0].options = [
-  opt('mock-q-1', 1, 'Something doesn’t fit anymore, and I’ve known it for a while.', ['IAP', 'Low', 1], ['RA', 'Medium', 2]),
-  opt('mock-q-1', 2, 'I’m tired from pretending to be who I’m not.', ['IAP', 'Low', 1], ['EWB', 'Low', 1]),
-  opt('mock-q-1', 3, 'I’m waiting for my life to change but not doing anything about it.', ['IAP', 'Medium', 2], ['RA', 'Low', 1]),
-  opt('mock-q-1', 4, 'I’m not sure what I feel — I’m kind of numb.', ['IAP', 'Low', 1], ['EWB', 'Low', 1]),
-  opt('mock-q-1', 5, 'I think something needs to shift, even if I don’t know what yet.', ['IAP', 'Medium', 2], ['RA', 'Low', 1]),
+  { ...opt('mock-q-1', 1, 'Something doesn’t fit anymore, and I’ve known it for a while.', ['IAP', 'Low', 1], ['RA', 'Medium', 2]), option_text_hi: 'कुछ अब फिट नहीं होता, और यह मुझे काफी समय से पता है।', option_text_gu: 'કંઈક હવે બંધબેસતું નથી, અને મને આ ઘણા સમયથી ખબર છે.' },
+  { ...opt('mock-q-1', 2, 'I’m tired from pretending to be who I’m not.', ['IAP', 'Low', 1], ['EWB', 'Low', 1]), option_text_hi: 'जो मैं नहीं हूँ वो बनने का नाटक करते-करते थक गया हूँ।', option_text_gu: 'હું જે નથી તે બનવાનો દેખાડો કરતાં કરતાં થાકી ગયો છું.' },
+  { ...opt('mock-q-1', 3, 'I’m waiting for my life to change but not doing anything about it.', ['IAP', 'Medium', 2], ['RA', 'Low', 1]), option_text_hi: 'ज़िंदगी बदलने का इंतज़ार कर रहा हूँ, पर कुछ कर नहीं रहा।', option_text_gu: 'જીવન બદલાવાની રાહ જોઈ રહ્યો છું, પણ કંઈ કરી નથી રહ્યો.' },
+  { ...opt('mock-q-1', 4, 'I’m not sure what I feel — I’m kind of numb.', ['IAP', 'Low', 1], ['EWB', 'Low', 1]), option_text_hi: 'क्या महसूस हो रहा है ठीक से पता नहीं — एक सुन्नता-सी है।', option_text_gu: 'શું અનુભવાઈ રહ્યું છે બરાબર ખબર નથી — એક બધિરતા જેવું છે.' },
+  { ...opt('mock-q-1', 5, 'I think something needs to shift, even if I don’t know what yet.', ['IAP', 'Medium', 2], ['RA', 'Low', 1]), option_text_hi: 'लगता है कुछ बदलना चाहिए, भले अभी पता न हो क्या।', option_text_gu: 'લાગે છે કંઈક બદલવું જોઈએ, ભલે અત્યારે ખબર ન હોય શું.' },
 ];
 QUESTIONS[1].options = [
   opt('mock-q-2', 1, 'A choice I made that I keep second-guessing.', ['FAF', 'Low', 1], ['GAL', 'Medium', 2]),
@@ -300,7 +330,11 @@ export const mockSupabase: any = {
   functions: {
     invoke: async (name: string, opts?: { body?: any }) => {
       if (name === 'select-daily-question') {
-        return { data: { question: { ...QUESTIONS[0], options: db.options.filter((o) => o.question_id === QUESTIONS[0].id) } }, error: null };
+        const localizedQuestion = mockLocalize(QUESTIONS[0], QUESTION_LOCALIZED_FIELDS);
+        const options = db.options
+          .filter((o) => o.question_id === QUESTIONS[0].id)
+          .map((o) => mockLocalize(o, OPTION_LOCALIZED_FIELDS));
+        return { data: { question: { ...localizedQuestion, options } }, error: null };
       }
       if (name === 'process-checkin') {
         const body = opts?.body ?? {};
