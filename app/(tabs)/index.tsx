@@ -177,11 +177,11 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   );
 }
 
-function getGreeting(): string {
+function getGreetingKey(): string {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning.';
-  if (hour < 17) return 'Good afternoon.';
-  return 'Good evening.';
+  if (hour < 12) return 'common.greeting_morning';
+  if (hour < 17) return 'common.greeting_afternoon';
+  return 'common.greeting_evening';
 }
 
 // ─── Main Home Screen ─────────────────────────────────────────────────────────
@@ -317,7 +317,7 @@ export default function TodayScreen() {
         {/* 1. Greeting — calm, non-metric header */}
         <Animated.View entering={FadeIn.duration(400).delay(80)}>
           <Text style={[styles.greeting, { color: colors.slate }]}>
-            {getGreeting()}
+            {t(getGreetingKey())}
           </Text>
           {streakLength >= 2 && (
             <Text style={[styles.streakLine, { color: colors.slateLight }]}>
@@ -375,8 +375,8 @@ export default function TodayScreen() {
           >
             <Text style={[styles.earlyCardText, { color: colors.slateMid }]}>
               {effectiveDay === 2
-                ? 'Day 2. The practice continues.'
-                : 'Three days of signal. Your first pattern is forming.'}
+                ? t('common.early_day2_note')
+                : t('common.early_day3_note')}
             </Text>
           </Animated.View>
         ) : patternReading ? (
