@@ -26,6 +26,12 @@ function getCycleDay(startDate: string): number {
   return Math.min(Math.max(diff + 1, 1), 28);
 }
 
+const REMINDER_BODY: Record<string, string> = {
+  en: 'Your mirror is ready today. Takes less than 2 minutes.',
+  hi: 'आपका आज का दर्पण तैयार है। दो मिनट से भी कम समय लगता है।',
+  gu: 'તમારો આજનો દર્પણ તૈયાર છે. બે મિનિટથી પણ ઓછો સમય લાગે છે.',
+};
+
 Deno.serve(async (_req) => {
   try {
     const supabase = createClient(
@@ -72,7 +78,13 @@ Deno.serve(async (_req) => {
         continue;
       }
 
-      const body = `Your mirror is ready today. Takes less than 2 minutes.`;
+      const { data: userRow } = await supabase
+        .from('users')
+        .select('language')
+        .eq('id', cycle.user_id)
+        .maybeSingle();
+      const language = userRow?.language === 'hi' || userRow?.language === 'gu' ? userRow.language : 'en';
+      const body = REMINDER_BODY[language];
 
       await Promise.all(
         tokens.map((t: any) => sendExpoPush(t.token, 'Mirar', body))

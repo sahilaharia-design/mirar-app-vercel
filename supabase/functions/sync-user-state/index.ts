@@ -13,34 +13,77 @@ const corsHeaders = {
 
 // Context messages indexed by cycle_day (1-28).
 // Mirror language: observational, no advice, no motivation, no celebration.
-function buildContextMessage(cycleDay: number, cycleNumber: number, streakLength: number): string {
+const CONTEXT_STRINGS: Record<string, Record<string, string>> = {
+  en: {
+    stage1: 'Notice', stage2: 'Adjust', stage3: 'Move', stage4: 'Reflect',
+    firstMirror: 'Your first mirror is forming.',
+    newMirror: 'A new mirror begins.',
+    firstPattern: 'A first pattern is ready to notice.',
+    holdingShape: 'Your recent reflections are beginning to hold a shape.',
+    threeWeeks: 'Three weeks of reflections are now visible.',
+    complete: 'This reflection pattern is complete.',
+    streakLong: (label: string, n: number) => `${label}. ${n} recent reflections in a row.`,
+    streakShort: (label: string) => `${label}. Your recent reflections are holding a thread.`,
+    stageBegins: (label: string) => `${label} begins.`,
+    dailyMirror: (label: string) => `Today’s mirror · ${label}.`,
+  },
+  hi: {
+    stage1: 'नोटिस', stage2: 'समायोजन', stage3: 'गति', stage4: 'चिंतन',
+    firstMirror: 'आपका पहला दर्पण बन रहा है।',
+    newMirror: 'एक नया दर्पण शुरू होता है।',
+    firstPattern: 'पहला पैटर्न देखने के लिए तैयार है।',
+    holdingShape: 'आपके हाल के प्रतिबिंब आकार लेने लगे हैं।',
+    threeWeeks: 'तीन हफ्तों के प्रतिबिंब अब दिखाई दे रहे हैं।',
+    complete: 'यह प्रतिबिंब पैटर्न पूरा हो गया है।',
+    streakLong: (label: string, n: number) => `${label}। लगातार ${n} हाल के प्रतिबिंब।`,
+    streakShort: (label: string) => `${label}। आपके हाल के प्रतिबिंब एक धागा थामे हुए हैं।`,
+    stageBegins: (label: string) => `${label} शुरू होता है।`,
+    dailyMirror: (label: string) => `आज का दर्पण · ${label}।`,
+  },
+  gu: {
+    stage1: 'નોટિસ', stage2: 'ગોઠવણ', stage3: 'ગતિ', stage4: 'ચિંતન',
+    firstMirror: 'તમારો પ્રથમ દર્પણ બની રહ્યો છે.',
+    newMirror: 'એક નવો દર્પણ શરૂ થાય છે.',
+    firstPattern: 'પહેલી પેટર્ન નોંધવા માટે તૈયાર છે.',
+    holdingShape: 'તમારા તાજેતરના પ્રતિબિંબ આકાર લેવા લાગ્યા છે.',
+    threeWeeks: 'ત્રણ અઠવાડિયાના પ્રતિબિંબ હવે દેખાઈ રહ્યા છે.',
+    complete: 'આ પ્રતિબિંબ પેટર્ન પૂર્ણ થઈ ગઈ છે.',
+    streakLong: (label: string, n: number) => `${label}. સતત ${n} તાજેતરના પ્રતિબિંબ.`,
+    streakShort: (label: string) => `${label}. તમારા તાજેતરના પ્રતિબિંબ એક દોરો પકડી રહ્યા છે.`,
+    stageBegins: (label: string) => `${label} શરૂ થાય છે.`,
+    dailyMirror: (label: string) => `આજનો દર્પણ · ${label}.`,
+  },
+}
+
+function buildContextMessage(cycleDay: number, cycleNumber: number, streakLength: number, lang: string): string {
+  const strings = CONTEXT_STRINGS[lang] ?? CONTEXT_STRINGS.en
   const stage =
     cycleDay <= 7  ? 1 :
     cycleDay <= 14 ? 2 :
     cycleDay <= 21 ? 3 : 4
 
-  const stageLabel = ['Notice', 'Adjust', 'Move', 'Reflect'][stage - 1]
+  const stageLabel = strings[`stage${stage}`]
 
-  if (cycleDay === 1 && cycleNumber === 1) return 'Your first mirror is forming.'
-  if (cycleDay === 1) return `A new mirror begins.`
-  if (cycleDay === 7)  return `A first pattern is ready to notice.`
-  if (cycleDay === 14) return `Your recent reflections are beginning to hold a shape.`
-  if (cycleDay === 21) return `Three weeks of reflections are now visible.`
-  if (cycleDay === 28) return `This reflection pattern is complete.`
+  if (cycleDay === 1 && cycleNumber === 1) return strings.firstMirror
+  if (cycleDay === 1) return strings.newMirror
+  if (cycleDay === 7)  return strings.firstPattern
+  if (cycleDay === 14) return strings.holdingShape
+  if (cycleDay === 21) return strings.threeWeeks
+  if (cycleDay === 28) return strings.complete
 
   const stageStart = (stage - 1) * 7 + 1
   const dayInStage = cycleDay - stageStart + 1
 
   if (streakLength >= 7) {
-    return `${stageLabel}. ${streakLength} recent reflections in a row.`
+    return strings.streakLong(stageLabel, streakLength)
   }
   if (streakLength >= 3) {
-    return `${stageLabel}. Your recent reflections are holding a thread.`
+    return strings.streakShort(stageLabel)
   }
   if (dayInStage === 1) {
-    return `${stageLabel} begins.`
+    return strings.stageBegins(stageLabel)
   }
-  return `Today’s mirror · ${stageLabel}.`
+  return strings.dailyMirror(stageLabel)
 }
 
 // Compute consecutive-day streak from a sorted (DESC) list of ISO date strings.
@@ -92,6 +135,13 @@ serve(async (req) => {
     const cycleNum    = Number(cycle_number ?? 1)
     const stage       = cycleDay <= 7 ? 1 : cycleDay <= 14 ? 2 : cycleDay <= 21 ? 3 : 4
 
+    const { data: userRow } = await supabase
+      .from('users')
+      .select('language')
+      .eq('id', user_id)
+      .maybeSingle()
+    const language = userRow?.language ?? 'en'
+
     // ── Total reflections across ALL cycles for this user ────────────────────
     const { count: totalReflections } = await supabase
       .from('responses')
@@ -112,7 +162,7 @@ serve(async (req) => {
     const streakLength = computeStreak(dates)
 
     // ── Context message ───────────────────────────────────────────────────────
-    const contextMessage = buildContextMessage(cycleDay, cycleNum, streakLength)
+    const contextMessage = buildContextMessage(cycleDay, cycleNum, streakLength, language)
 
     // ── Upsert user_state ─────────────────────────────────────────────────────
     await supabase.from('user_state').upsert({

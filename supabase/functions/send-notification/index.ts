@@ -43,6 +43,38 @@ async function sendExpoPush(token: string, title: string, body: string) {
   return res.ok;
 }
 
+type Lang = 'en' | 'hi' | 'gu';
+
+const STAGE_LABEL: Record<Lang, { full: string; single: string }> = {
+  en: { full: 'full reflection summary', single: 'reflection summary' },
+  hi: { full: 'पूर्ण प्रतिबिंब सारांश', single: 'प्रतिबिंब सारांश' },
+  gu: { full: 'સંપૂર્ણ પ્રતિબિંબ સારાંશ', single: 'પ્રતિબિંબ સારાંશ' },
+};
+
+const NOTIF_BODY: Record<Lang, { full: string; single: string }> = {
+  en: { full: 'Your full reflection summary is ready.', single: 'A new reflection summary is ready to view.' },
+  hi: { full: 'आपका पूर्ण प्रतिबिंब सारांश तैयार है।', single: 'एक नया प्रतिबिंब सारांश देखने के लिए तैयार है।' },
+  gu: { full: 'તમારો સંપૂર્ણ પ્રતિબિંબ સારાંશ તૈયાર છે.', single: 'એક નવો પ્રતિબિંબ સારાંશ જોવા માટે તૈયાર છે.' },
+};
+
+const EMAIL_TEXT: Record<Lang, { subject: (label: string) => string; openLine: (label: string) => string; footer: string }> = {
+  en: {
+    subject: (label) => `Mirar: ${label} ready`,
+    openLine: (label) => `Open Mirar to view your ${label}. Read it as a mirror, not a verdict.`,
+    footer: 'This message was sent to the address registered for this ID only.',
+  },
+  hi: {
+    subject: (label) => `Mirar: ${label} तैयार है`,
+    openLine: (label) => `अपना ${label} देखने के लिए Mirar खोलें। इसे एक दर्पण की तरह पढ़ें, फैसले की तरह नहीं।`,
+    footer: 'यह संदेश केवल इस ID के लिए पंजीकृत पते पर भेजा गया था।',
+  },
+  gu: {
+    subject: (label) => `Mirar: ${label} તૈયાર છે`,
+    openLine: (label) => `તમારો ${label} જોવા માટે Mirar ખોલો. તેને દર્પણની જેમ વાંચો, ચુકાદાની જેમ નહીં.`,
+    footer: 'આ સંદેશ ફક્ત આ ID માટે નોંધાયેલ સરનામે મોકલવામાં આવ્યો હતો.',
+  },
+};
+
 Deno.serve(async (req) => {
   try {
     const { user_id, cycle_id, stage, report_id } = await req.json();
@@ -57,10 +89,10 @@ Deno.serve(async (req) => {
 
     const brevoKey = Deno.env.get('BREVO_API_KEY');
 
-    // Get user email
+    // Get user email + language
     const { data: user } = await supabase
       .from('users')
-      .select('email, mirar_id')
+      .select('email, mirar_id, language')
       .eq('id', user_id)
       .single();
 
@@ -68,16 +100,16 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
     }
 
+    const lang: Lang = user.language === 'hi' || user.language === 'gu' ? user.language : 'en';
+
     // Get push tokens
     const { data: tokens } = await supabase
       .from('push_tokens')
       .select('token')
       .eq('user_id', user_id);
 
-    const stageLabel = stage === 0 ? 'full reflection summary' : 'reflection summary';
-    const notifBody = stage === 0
-      ? 'Your full reflection summary is ready.'
-      : 'A new reflection summary is ready to view.';
+    const stageLabel = stage === 0 ? STAGE_LABEL[lang].full : STAGE_LABEL[lang].single;
+    const notifBody = stage === 0 ? NOTIF_BODY[lang].full : NOTIF_BODY[lang].single;
 
     // Push notifications
     const pushResults = await Promise.all(
@@ -89,17 +121,18 @@ Deno.serve(async (req) => {
     // Email notification
     let emailSent = false;
     if (brevoKey && user.email) {
-      const subject = `Mirar: ${stageLabel} ready`;
+      const emailText = EMAIL_TEXT[lang];
+      const subject = emailText.subject(stageLabel);
       const html = `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; color: #4A4A55;">
           <p style="font-size: 16px;">${notifBody}</p>
           <p style="font-size: 13px; color: #9494A0;">
-            Open Mirar to view your ${stageLabel}. Read it as a mirror, not a verdict.
+            ${emailText.openLine(stageLabel)}
           </p>
           <hr style="border: none; border-top: 1px solid #E0DDD8; margin: 24px 0;" />
           <p style="font-size: 11px; color: #C4C4CC;">
             Mirar ID: ${user.mirar_id}<br/>
-            This message was sent to the address registered for this ID only.
+            ${emailText.footer}
           </p>
         </div>
       `;
