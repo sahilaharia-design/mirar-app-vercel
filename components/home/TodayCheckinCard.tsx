@@ -87,7 +87,7 @@ export function TodayCheckinCard({
           </Text>
         </View>
         <Text style={[styles.dayLabel, { color: colors.slateLight }]}>
-          Today's mirror
+          {t('common.your_alignment_today')}
         </Text>
         {completedAt && (
           <Text style={[styles.time, { color: colors.slateXLight }]}>

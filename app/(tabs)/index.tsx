@@ -321,7 +321,7 @@ export default function TodayScreen() {
           </Text>
           {streakLength >= 2 && (
             <Text style={[styles.streakLine, { color: colors.slateLight }]}>
-              {streakLength} days in a row.
+              {t('common.days_in_a_row', { count: streakLength })}
             </Text>
           )}
         </Animated.View>

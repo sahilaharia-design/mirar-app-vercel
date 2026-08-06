@@ -23,6 +23,7 @@ export default {
     calibrating_subtext: 'कुछ प्रतिबिंबों के बाद पैटर्न दिखता है',
     early_day2_note: 'दिन 2। अभ्यास जारी है।',
     early_day3_note: 'तीन दिन का संकेत। आपका पहला पैटर्न बन रहा है।',
+    days_in_a_row: 'लगातार {{count}} दिन।',
     your_alignment_today: 'आज का दर्पण',
     your_signals: 'क्या दिख रहा है',
     record_checkin: 'चेक-इन दर्ज करें',
@@ -163,6 +164,8 @@ export default {
   ],
 
   signals_tab: {
+    recent: 'हाल में',
+    earlier: 'पहले',
     cross_load_many: '{{n}} क्षेत्र एक साथ दबाव झेल रहे हैं। इस पैटर्न को धीरे से समझें।',
     cross_load_two: '{{a}} और {{b}} दोनों दबाव दिखा रहे हैं। ये अक्सर साथ-साथ चलते हैं।',
     cross_aligned_many: '{{n}} क्षेत्र हाल के प्रतिबिंबों में स्थिरता दिखा रहे हैं।',

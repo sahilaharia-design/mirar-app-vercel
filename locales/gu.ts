@@ -23,6 +23,7 @@ export default {
     calibrating_subtext: 'થોડા પ્રતિબિંબો પછી પૅટર્ન દેખાય છે',
     early_day2_note: 'દિવસ 2. અભ્યાસ ચાલુ છે.',
     early_day3_note: 'ત્રણ દિવસનો સંકેત. તમારી પહેલી પેટર્ન બની રહી છે.',
+    days_in_a_row: 'સતત {{count}} દિવસ.',
     your_alignment_today: 'આજનું દર્પણ',
     your_signals: 'શું દેખાઈ રહ્યું છે',
     record_checkin: 'ચેક-ઇન નોંધો',
@@ -163,6 +164,8 @@ export default {
   ],
 
   signals_tab: {
+    recent: 'તાજેતરમાં',
+    earlier: 'અગાઉ',
     cross_load_many: '{{n}} વિસ્તારો એકસાથે ભાર વહન કરી રહ્યા છે. આ પૅટર્નને ધીરેથી સમજો.',
     cross_load_two: '{{a}} અને {{b}} બંને દબાણ બતાવી રહ્યા છે. આ ઘણીવાર સાથે ચાલે છે.',
     cross_aligned_many: '{{n}} વિસ્તારો તાજેતરના પ્રતિબિંબોમાં સ્થિરતા બતાવી રહ્યા છે.',

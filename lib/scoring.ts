@@ -58,6 +58,10 @@ export function computeThemeScores(
         : null;
     return {
       code,
+      // `name` is the raw English label from lib/constants.ts, kept only for
+      // debugging/logging — it is NOT translated. Never render this field
+      // directly; look up t(`themes.${code}`) instead (see ThemeSignalRow.tsx,
+      // ThemeSignalMiniCard.tsx, StatusBadge.tsx for the established pattern).
       name: THEMES[code].name,
       status: getThemeStatus(average, signalCount),
       average,

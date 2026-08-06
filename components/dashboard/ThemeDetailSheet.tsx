@@ -230,6 +230,7 @@ function DailySignature({
   history: ThemeDataPoint[];
   currentDay: number;
 }) {
+  const { t } = useTranslation();
   const W = USABLE_W;
   const H = 72;
   const midY = 36;
@@ -335,7 +336,7 @@ function DailySignature({
         fill={COLORS.slateLight}
         textAnchor="middle"
       >
-        RECENT
+        {t('signals_tab.recent')}
       </SvgText>
       <SvgText
         x={stageLabel2X}
@@ -346,7 +347,7 @@ function DailySignature({
         fill={COLORS.slateLight}
         textAnchor="middle"
       >
-        EARLIER
+        {t('signals_tab.earlier')}
       </SvgText>
     </Svg>
   );

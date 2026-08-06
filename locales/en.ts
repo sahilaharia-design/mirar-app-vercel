@@ -26,6 +26,7 @@ export default {
     calibrating_subtext: 'A few reflections help the pattern appear',
     early_day2_note: 'Day 2. The practice continues.',
     early_day3_note: 'Three days of signal. Your first pattern is forming.',
+    days_in_a_row: '{{count}} days in a row.',
     your_alignment_today: "Today's mirror",
     your_signals: "What's been showing up",
     record_checkin: 'Record check-in',
@@ -175,6 +176,8 @@ export default {
 
   // ─── Signals tab ───────────────────────────────────────────────────────────
   signals_tab: {
+    recent: 'RECENT',
+    earlier: 'EARLIER',
     cross_load_many: '{{n}} areas are carrying load at the same time. The pattern is worth holding gently.',
     cross_load_two: '{{a}} and {{b}} are both showing pressure. These often move together.',
     cross_aligned_many: '{{n}} areas are showing steadiness in recent reflections.',
