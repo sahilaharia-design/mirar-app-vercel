@@ -20,7 +20,7 @@ import { AppHeader } from '../../components/ui/AppHeader';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { ThemeScore, ThemeCode } from '../../types/mirar';
-import { COLORS, FONT_SIZE, SPACING, RADIUS, THEME_ORDER } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS, THEME_ORDER } from '../../lib/constants';
 import { getStageFromDay } from '../../lib/scoring';
 import { signalHelpKeyForStatus } from '../../lib/guidance';
 import { useColors } from '../../contexts/theme-context';

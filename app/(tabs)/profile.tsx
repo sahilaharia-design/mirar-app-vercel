@@ -24,7 +24,7 @@ import { withTimeout } from '../../lib/with-timeout';
 import { AppHeader } from '../../components/ui/AppHeader';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { SUPPORTED_LANGUAGES, SupportedLanguage } from '../../lib/i18n';
 
 interface JournalEntry {
@@ -40,6 +40,7 @@ export default function ProfileScreen() {
   const { language, setLanguage } = useSettingsStore();
   const { colorScheme, setColorScheme } = useTheme();
   const colors = useColors();
+  const styles = getStyles(colors);
 
   const [journals, setJournals] = useState<JournalEntry[]>([]);
   const [journalsLoading, setJournalsLoading] = useState(false);
@@ -321,215 +322,219 @@ function Row({ label, value, colors }: { label: string; value: string; colors: R
   );
 }
 
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: COLORS.cream,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.sm,
-    gap: SPACING.lg,
-  },
-  idCard: {
-    backgroundColor: COLORS.creamDark,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    gap: SPACING.xs,
-  },
-  idLabelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.xs,
-  },
-  idLabel: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-  idValue: {
-    fontSize: FONT_SIZE.md,
-    color: COLORS.slate,
-    fontWeight: '500',
-    letterSpacing: 1.5,
-    fontFamily: 'monospace',
-  },
-  idNote: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    lineHeight: 18,
-    marginTop: SPACING.xs,
-  },
-  section: {
-    gap: SPACING.sm,
-  },
-  guideCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: SPACING.md,
-  },
-  guideTextBlock: {
-    flex: 1,
-    gap: 4,
-  },
-  guideTitle: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-    fontWeight: '500',
-  },
-  guideDesc: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    lineHeight: 20,
-  },
-  guideArrow: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateMid,
-    fontWeight: '600',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-  },
-  sectionLabelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.xs,
-  },
-  sectionLabel: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-  card: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.lg,
-    paddingHorizontal: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-  },
-  supportButton: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.md,
-    paddingVertical: 14,
-    paddingHorizontal: SPACING.md,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    gap: 3,
-  },
-  supportText: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-    fontWeight: '500',
-  },
-  supportSub: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    letterSpacing: 0.2,
-  },
-  signOutButton: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.md,
-    paddingVertical: 14,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-  signOutText: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.underLoad,
-    fontWeight: '500',
-  },
-  version: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateXLight,
-    textAlign: 'center',
-    letterSpacing: 0.5,
-  },
-  journalCount: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.accentTeal,
-    fontWeight: '500',
-  },
-  journalLoading: {
-    paddingVertical: SPACING.md,
-    alignItems: 'center',
-  },
-  journalList: {
-    gap: SPACING.sm,
-  },
-  journalEntry: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    borderLeftWidth: 3,
-    borderLeftColor: COLORS.accentTeal,
-    gap: SPACING.xs,
-  },
-  journalMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: SPACING.sm,
-  },
-  journalDay: {
-    fontSize: 10,
-    color: COLORS.accentTeal,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  journalDate: {
-    fontSize: 10,
-    color: COLORS.slateLight,
-  },
-  journalText: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
-    lineHeight: 20,
-  },
-  journalPreview: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.lg,
-    padding: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    borderLeftWidth: 3,
-    borderLeftColor: COLORS.accentTeal,
-    gap: 4,
-  },
-  journalPreviewDay: {
-    fontSize: 10,
-    color: COLORS.accentTeal,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  journalPreviewText: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
-    lineHeight: 20,
-  },
-  journalMoreHint: {
-    fontSize: 10,
-    color: COLORS.slateLight,
-    marginTop: 2,
-  },
-});
+function getStyles(colors: ReturnType<typeof useColors>) {
+  return StyleSheet.create({
+    safe: {
+      flex: 1,
+      backgroundColor: colors.cream,
+    },
+    scroll: {
+      flex: 1,
+    },
+    content: {
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.sm,
+      gap: SPACING.lg,
+    },
+    idCard: {
+      backgroundColor: colors.creamDark,
+      borderRadius: RADIUS.lg,
+      padding: SPACING.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      gap: SPACING.xs,
+    },
+    idLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SPACING.xs,
+    },
+    idLabel: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+    },
+    idValue: {
+      fontSize: FONT_SIZE.md,
+      color: colors.slate,
+      fontWeight: '500',
+      letterSpacing: 1.5,
+      fontFamily: 'monospace',
+    },
+    idNote: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      lineHeight: 18,
+      marginTop: SPACING.xs,
+    },
+    section: {
+      gap: SPACING.sm,
+    },
+    guideCard: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.lg,
+      padding: SPACING.md,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: SPACING.md,
+    },
+    guideTextBlock: {
+      flex: 1,
+      gap: 4,
+    },
+    guideTitle: {
+      fontSize: FONT_SIZE.base,
+      color: colors.slate,
+      fontWeight: '500',
+    },
+    guideDesc: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      lineHeight: 20,
+    },
+    guideArrow: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateMid,
+      fontWeight: '600',
+      letterSpacing: 0.8,
+      textTransform: 'uppercase',
+    },
+    sectionLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SPACING.xs,
+    },
+    sectionLabel: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+    },
+    card: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.lg,
+      paddingHorizontal: SPACING.md,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+    },
+    supportButton: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.md,
+      paddingVertical: 14,
+      paddingHorizontal: SPACING.md,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      gap: 3,
+    },
+    supportText: {
+      fontSize: FONT_SIZE.base,
+      color: colors.slate,
+      fontWeight: '500',
+    },
+    supportSub: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      letterSpacing: 0.2,
+    },
+    signOutButton: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.md,
+      paddingVertical: 14,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    signOutText: {
+      fontSize: FONT_SIZE.base,
+      color: colors.underLoad,
+      fontWeight: '500',
+    },
+    version: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateXLight,
+      textAlign: 'center',
+      letterSpacing: 0.5,
+    },
+    journalCount: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.accentTeal,
+      fontWeight: '500',
+    },
+    journalLoading: {
+      paddingVertical: SPACING.md,
+      alignItems: 'center',
+    },
+    journalList: {
+      gap: SPACING.sm,
+    },
+    journalEntry: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.lg,
+      padding: SPACING.md,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+      borderLeftWidth: 3,
+      borderLeftColor: colors.accentTeal,
+      gap: SPACING.xs,
+    },
+    journalMeta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: SPACING.sm,
+    },
+    journalDay: {
+      fontSize: 10,
+      color: colors.accentTeal,
+      fontWeight: '600',
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+    },
+    journalDate: {
+      fontSize: 10,
+      color: colors.slateLight,
+    },
+    journalText: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateMid,
+      lineHeight: 20,
+    },
+    journalPreview: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.lg,
+      padding: SPACING.md,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+      borderLeftWidth: 3,
+      borderLeftColor: colors.accentTeal,
+      gap: 4,
+    },
+    journalPreviewDay: {
+      fontSize: 10,
+      color: colors.accentTeal,
+      fontWeight: '600',
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+    },
+    journalPreviewText: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateMid,
+      lineHeight: 20,
+    },
+    journalMoreHint: {
+      fontSize: 10,
+      color: colors.slateLight,
+      marginTop: 2,
+    },
+  });
+}
 
+// Layout-only — every usage site overrides color/border via inline `colors.x`
+// array-style props, so this stays theme-invariant on purpose.
 const rowStyles = StyleSheet.create({
   row: {
     flexDirection: 'row',
@@ -537,20 +542,16 @@ const rowStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
   },
   label: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     flex: 1,
   },
   value: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slate,
     fontWeight: '500',
   },
   settingsValue: {
-    color: COLORS.slateLight,
     fontWeight: '400',
   },
 });

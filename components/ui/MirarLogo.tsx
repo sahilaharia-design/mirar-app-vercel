@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { BrandOval } from './BrandOval';
-import { COLORS, FONT_SIZE } from '../../lib/constants';
+import { FONT_SIZE } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 interface MirarLogoProps {
   variant?: 'mark' | 'wordmark' | 'full';
@@ -16,6 +17,7 @@ const SIZE_MAP = {
 };
 
 export function MirarLogo({ variant = 'full', size = 'md', style }: MirarLogoProps) {
+  const colors = useColors();
   const dims = SIZE_MAP[size];
 
   if (variant === 'mark') {
@@ -27,7 +29,7 @@ export function MirarLogo({ variant = 'full', size = 'md', style }: MirarLogoPro
       {(variant === 'full') && (
         <BrandOval size={dims.oval} style={styles.oval} />
       )}
-      <Text style={[styles.wordmark, { fontSize: dims.text }]}>mirar</Text>
+      <Text style={[styles.wordmark, { color: colors.slate, fontSize: dims.text }]}>mirar</Text>
     </View>
   );
 }
@@ -42,7 +44,6 @@ const styles = StyleSheet.create({
     // intentionally empty — spacing handled by gap
   },
   wordmark: {
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: 3,
     textTransform: 'lowercase',

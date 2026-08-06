@@ -8,12 +8,15 @@ import { useTranslation } from 'react-i18next';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { AssessProgress } from '../../components/assess/AssessProgress';
 import { useAssessStore } from '../../stores/assess-store';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 const MAX_CHARS = 120;
 
 export default function AssessQ4() {
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = getStyles(colors);
   const { q4, setQ4 } = useAssessStore();
   const [localText, setLocalText] = useState(q4);
 
@@ -49,7 +52,7 @@ export default function AssessQ4() {
             value={localText}
             onChangeText={handleChange}
             placeholder={t('assess.q4_input_placeholder')}
-            placeholderTextColor={COLORS.slateXLight}
+            placeholderTextColor={colors.slateXLight}
             multiline
             numberOfLines={4}
             textAlignVertical="top"
@@ -81,85 +84,87 @@ export default function AssessQ4() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
-  flex: { flex: 1 },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    gap: SPACING.md,
-  },
-  step: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  title: {
-    fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
-    fontWeight: '300',
-    lineHeight: 36,
-    letterSpacing: -0.3,
-    marginTop: -SPACING.xs,
-  },
-  sub: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    marginTop: -SPACING.xs,
-  },
-  textarea: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    padding: SPACING.md,
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-    lineHeight: 24,
-    minHeight: 120,
-  },
-  charCount: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateXLight,
-    textAlign: 'right',
-    marginTop: -SPACING.sm,
-  },
-  footer: {
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl,
-    paddingTop: SPACING.sm,
-    gap: SPACING.sm,
-  },
-  cta: {
-    backgroundColor: COLORS.slate,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
-    ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
-  },
-  ctaText: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.white,
-    fontWeight: '500',
-    letterSpacing: 0.3,
-  },
-  skip: {
-    alignItems: 'center',
-    paddingVertical: SPACING.sm,
-  },
-  skipText: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    textDecorationLine: 'underline',
-  },
-});
+function getStyles(colors: ReturnType<typeof useColors>) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: colors.cream },
+    flex: { flex: 1 },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      paddingBottom: SPACING.sm,
+    },
+    content: {
+      flex: 1,
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      gap: SPACING.md,
+    },
+    step: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+    },
+    title: {
+      fontSize: FONT_SIZE['2xl'],
+      color: colors.slate,
+      fontWeight: '300',
+      lineHeight: 36,
+      letterSpacing: -0.3,
+      marginTop: -SPACING.xs,
+    },
+    sub: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      marginTop: -SPACING.xs,
+    },
+    textarea: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.lg,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: SPACING.md,
+      fontSize: FONT_SIZE.base,
+      color: colors.slate,
+      lineHeight: 24,
+      minHeight: 120,
+    },
+    charCount: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateXLight,
+      textAlign: 'right',
+      marginTop: -SPACING.sm,
+    },
+    footer: {
+      paddingHorizontal: SPACING.lg,
+      paddingBottom: SPACING.xl,
+      paddingTop: SPACING.sm,
+      gap: SPACING.sm,
+    },
+    cta: {
+      backgroundColor: colors.slate,
+      borderRadius: RADIUS.md,
+      paddingVertical: 16,
+      alignItems: 'center',
+      ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
+    },
+    ctaText: {
+      fontSize: FONT_SIZE.base,
+      color: colors.white,
+      fontWeight: '500',
+      letterSpacing: 0.3,
+    },
+    skip: {
+      alignItems: 'center',
+      paddingVertical: SPACING.sm,
+    },
+    skipText: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      textDecorationLine: 'underline',
+    },
+  });
+}

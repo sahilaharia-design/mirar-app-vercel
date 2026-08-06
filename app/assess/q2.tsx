@@ -9,7 +9,8 @@ import { MirarLogo } from '../../components/ui/MirarLogo';
 import { OptionCard } from '../../components/assess/OptionCard';
 import { AssessProgress } from '../../components/assess/AssessProgress';
 import { useAssessStore } from '../../stores/assess-store';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 const Q2_CODES = ['IAP', 'EWB', 'FAF', 'RC', 'GAL', 'RA'] as const;
 const Q2_COLORS: Record<string, string> = {
@@ -23,6 +24,8 @@ const Q2_COLORS: Record<string, string> = {
 
 export default function AssessQ2() {
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = getStyles(colors);
   const { q2, setQ2 } = useAssessStore();
 
   const toggle = (code: string) => {
@@ -79,60 +82,62 @@ export default function AssessQ2() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
-  },
-  scroll: { flex: 1 },
-  content: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.xl,
-    gap: SPACING.md,
-  },
-  step: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  title: {
-    fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
-    fontWeight: '300',
-    lineHeight: 36,
-    letterSpacing: -0.3,
-    marginTop: -SPACING.xs,
-  },
-  sub: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    marginTop: -SPACING.xs,
-  },
-  options: { gap: SPACING.sm },
-  footer: {
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl,
-    paddingTop: SPACING.md,
-  },
-  cta: {
-    backgroundColor: COLORS.slate,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
-    ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
-  },
-  ctaDisabled: { opacity: 0.35 },
-  ctaText: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.white,
-    fontWeight: '500',
-    letterSpacing: 0.3,
-  },
-});
+function getStyles(colors: ReturnType<typeof useColors>) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: colors.cream },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      paddingBottom: SPACING.sm,
+    },
+    scroll: { flex: 1 },
+    content: {
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      paddingBottom: SPACING.xl,
+      gap: SPACING.md,
+    },
+    step: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+    },
+    title: {
+      fontSize: FONT_SIZE['2xl'],
+      color: colors.slate,
+      fontWeight: '300',
+      lineHeight: 36,
+      letterSpacing: -0.3,
+      marginTop: -SPACING.xs,
+    },
+    sub: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      marginTop: -SPACING.xs,
+    },
+    options: { gap: SPACING.sm },
+    footer: {
+      paddingHorizontal: SPACING.lg,
+      paddingBottom: SPACING.xl,
+      paddingTop: SPACING.md,
+    },
+    cta: {
+      backgroundColor: colors.slate,
+      borderRadius: RADIUS.md,
+      paddingVertical: 16,
+      alignItems: 'center',
+      ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
+    },
+    ctaDisabled: { opacity: 0.35 },
+    ctaText: {
+      fontSize: FONT_SIZE.base,
+      color: colors.white,
+      fontWeight: '500',
+      letterSpacing: 0.3,
+    },
+  });
+}

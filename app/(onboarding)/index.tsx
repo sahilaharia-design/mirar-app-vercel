@@ -26,24 +26,25 @@ import { useAssessStore } from '../../stores/assess-store';
 import { useAuthStore } from '../../stores/auth-store';
 import { supabase } from '../../lib/supabase';
 import { withTimeout } from '../../lib/with-timeout';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 // ── How-it-works icons — consistent 1.5px stroke, matches landing site ─────
-function IconQuestion() {
+function IconQuestion({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 22 22" fill="none">
-      <Circle cx={11} cy={11} r={2} fill={COLORS.slateMid} />
-      <Circle cx={11} cy={11} r={7} stroke={COLORS.slateMid} strokeWidth={1.25} opacity={0.5} />
-      <Circle cx={11} cy={11} r={10} stroke={COLORS.slateMid} strokeWidth={1.25} opacity={0.22} />
+      <Circle cx={11} cy={11} r={2} fill={color} />
+      <Circle cx={11} cy={11} r={7} stroke={color} strokeWidth={1.25} opacity={0.5} />
+      <Circle cx={11} cy={11} r={10} stroke={color} strokeWidth={1.25} opacity={0.22} />
     </Svg>
   );
 }
-function IconAnswer() {
+function IconAnswer({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 22 22" fill="none">
       <Path
         d="M4 11.5L9 16L18 6"
-        stroke={COLORS.slateMid}
+        stroke={color}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -51,12 +52,12 @@ function IconAnswer() {
     </Svg>
   );
 }
-function IconSignal() {
+function IconSignal({ color }: { color: string }) {
   return (
     <Svg width={22} height={22} viewBox="0 0 22 22" fill="none">
       <Path
         d="M2 11H5.5L8 5L12 17L15 9L17 11H20"
-        stroke={COLORS.slateMid}
+        stroke={color}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -90,12 +91,13 @@ function chapterForStep(step: number): number {
 }
 
 function ProgressDots({ total, current }: { total: number; current: number }) {
+  const colors = useColors();
   return (
     <View style={dotStyles.row}>
       {Array.from({ length: total }).map((_, i) => (
         <View
           key={i}
-          style={[dotStyles.dot, i < current ? dotStyles.dotActive : dotStyles.dotInactive]}
+          style={[dotStyles.dot, { backgroundColor: i < current ? colors.slate : colors.border }]}
         />
       ))}
     </View>
@@ -105,12 +107,12 @@ function ProgressDots({ total, current }: { total: number; current: number }) {
 const dotStyles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 6, alignItems: 'center' },
   dot: { width: 6, height: 6, borderRadius: 3 },
-  dotActive: { backgroundColor: COLORS.slate },
-  dotInactive: { backgroundColor: COLORS.border },
 });
 
 export default function OnboardingWizard() {
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = getStyles(colors);
   const [step, setStep] = useState(1);
   const [q1Selections, setQ1Selections] = useState<string[]>([]);
   const [q2Selections, setQ2Selections] = useState<string[]>([]);
@@ -286,7 +288,7 @@ export default function OnboardingWizard() {
                 style={styles.howRow}
               >
                 <View style={styles.howIconWrap}>
-                  <item.Icon />
+                  <item.Icon color={colors.slateMid} />
                 </View>
                 <View style={styles.howTextBlock}>
                   <Text style={styles.howTitle}>{item.title}</Text>
@@ -465,7 +467,7 @@ export default function OnboardingWizard() {
           activeOpacity={0.82}
         >
           {isSaving ? (
-            <ActivityIndicator color={COLORS.white} />
+            <ActivityIndicator color={colors.white} />
           ) : (
             <Text style={styles.ctaBtnText}>{t('wizard.finish')}</Text>
           )}
@@ -475,209 +477,214 @@ export default function OnboardingWizard() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
-  },
-  bodyCenter: {
-    flex: 1,
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING['2xl'],
-    gap: SPACING.xl,
-    justifyContent: 'center',
-  },
-  welcomeMirrorRow: {
-    alignItems: 'center',
-    marginBottom: SPACING.sm,
-  },
-  displayTitle: {
-    fontSize: FONT_SIZE['3xl'],
-    color: COLORS.slate,
-    fontWeight: '200',
-    letterSpacing: -0.8,
-    lineHeight: 44,
-  },
-  bodyText: {
-    fontSize: FONT_SIZE.xl,
-    color: COLORS.slate,
-    fontWeight: '300',
-    lineHeight: 32,
-    letterSpacing: -0.2,
-    textAlign: 'center',
-  },
-  bodyMuted: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
-    fontWeight: '300',
-    lineHeight: 28,
-  },
-  tapHint: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateXLight,
-    textAlign: 'center',
-    marginTop: SPACING.md,
-  },
-  howList: {
-    gap: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: COLORS.border,
-  },
-  howRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: SPACING.md,
-  },
-  howIconWrap: {
-    width: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 2,
-  },
-  howTextBlock: { flex: 1, gap: 2 },
-  howTitle: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
-    fontWeight: '500',
-  },
-  howDesc: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    lineHeight: 20,
-  },
-  scroll: { flex: 1 },
-  scrollContent: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.xl,
-    paddingBottom: SPACING.xl,
-    gap: SPACING.md,
-  },
-  questionTitle: {
-    fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
-    fontWeight: '300',
-    lineHeight: 36,
-    letterSpacing: -0.3,
-  },
-  questionSub: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    marginTop: -SPACING.xs,
-  },
-  optionsList: { gap: SPACING.sm },
-  // Step 5 — Q2 sequential
-  q2ProgressText: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    textAlign: 'center',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    marginBottom: SPACING.md,
-  },
-  q2Card: {
-    alignItems: 'center',
-    gap: SPACING.sm,
-    paddingHorizontal: SPACING.lg,
-  },
-  q2Dot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    marginBottom: SPACING.xs,
-  },
-  q2Name: {
-    fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
-    fontWeight: '400',
-    letterSpacing: -0.3,
-  },
-  q2Desc: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.slateMid,
-    fontWeight: '300',
-    lineHeight: 26,
-    textAlign: 'center',
-  },
-  skipBtn: {
-    paddingVertical: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  skipBtnText: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    fontWeight: '400',
-  },
-  // Step 6 — signal preview
-  previewRingWrap: {
-    alignItems: 'center',
-    paddingVertical: SPACING.md,
-  },
-  previewCards: {
-    gap: SPACING.sm,
-  },
-  previewCard: {
-    borderRadius: RADIUS.md,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    backgroundColor: COLORS.white,
-    padding: SPACING.md,
-    gap: 4,
-  },
-  previewCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  previewCardName: {
-    fontSize: FONT_SIZE.base,
-    fontWeight: '600',
-  },
-  previewCardTag: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: RADIUS.sm,
-  },
-  previewCardTagText: {
-    fontSize: 10,
-    fontWeight: '600',
-    letterSpacing: 0.4,
-    textTransform: 'uppercase',
-  },
-  previewCardDesc: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    lineHeight: 20,
-  },
-  footer: {
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl,
-    paddingTop: SPACING.md,
-    gap: SPACING.sm,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.borderLight,
-  },
-  ctaBtn: {
-    backgroundColor: COLORS.slate,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 52,
-    ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
-  },
-  ctaBtnDisabled: { opacity: 0.35 },
-  ctaBtnText: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.white,
-    fontWeight: '500',
-    letterSpacing: 0.3,
-  },
-});
+// Built from the live theme colors (not a static StyleSheet.create at module
+// scope) so every screen of the wizard actually re-renders in dark mode
+// instead of staying locked to the light palette.
+function getStyles(colors: ReturnType<typeof useColors>) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: colors.cream },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      paddingBottom: SPACING.sm,
+    },
+    bodyCenter: {
+      flex: 1,
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING['2xl'],
+      gap: SPACING.xl,
+      justifyContent: 'center',
+    },
+    welcomeMirrorRow: {
+      alignItems: 'center',
+      marginBottom: SPACING.sm,
+    },
+    displayTitle: {
+      fontSize: FONT_SIZE['3xl'],
+      color: colors.slate,
+      fontWeight: '200',
+      letterSpacing: -0.8,
+      lineHeight: 44,
+    },
+    bodyText: {
+      fontSize: FONT_SIZE.xl,
+      color: colors.slate,
+      fontWeight: '300',
+      lineHeight: 32,
+      letterSpacing: -0.2,
+      textAlign: 'center',
+    },
+    bodyMuted: {
+      fontSize: FONT_SIZE.base,
+      color: colors.slateMid,
+      fontWeight: '300',
+      lineHeight: 28,
+    },
+    tapHint: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateXLight,
+      textAlign: 'center',
+      marginTop: SPACING.md,
+    },
+    howList: {
+      gap: SPACING.lg,
+      paddingVertical: SPACING.md,
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      borderColor: colors.border,
+    },
+    howRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: SPACING.md,
+    },
+    howIconWrap: {
+      width: 28,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 2,
+    },
+    howTextBlock: { flex: 1, gap: 2 },
+    howTitle: {
+      fontSize: FONT_SIZE.base,
+      color: colors.slate,
+      fontWeight: '500',
+    },
+    howDesc: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      lineHeight: 20,
+    },
+    scroll: { flex: 1 },
+    scrollContent: {
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.xl,
+      paddingBottom: SPACING.xl,
+      gap: SPACING.md,
+    },
+    questionTitle: {
+      fontSize: FONT_SIZE['2xl'],
+      color: colors.slate,
+      fontWeight: '300',
+      lineHeight: 36,
+      letterSpacing: -0.3,
+    },
+    questionSub: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      marginTop: -SPACING.xs,
+    },
+    optionsList: { gap: SPACING.sm },
+    // Step 5 — Q2 sequential
+    q2ProgressText: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      textAlign: 'center',
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+      marginBottom: SPACING.md,
+    },
+    q2Card: {
+      alignItems: 'center',
+      gap: SPACING.sm,
+      paddingHorizontal: SPACING.lg,
+    },
+    q2Dot: {
+      width: 14,
+      height: 14,
+      borderRadius: 7,
+      marginBottom: SPACING.xs,
+    },
+    q2Name: {
+      fontSize: FONT_SIZE['2xl'],
+      color: colors.slate,
+      fontWeight: '400',
+      letterSpacing: -0.3,
+    },
+    q2Desc: {
+      fontSize: FONT_SIZE.base,
+      color: colors.slateMid,
+      fontWeight: '300',
+      lineHeight: 26,
+      textAlign: 'center',
+    },
+    skipBtn: {
+      paddingVertical: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    skipBtnText: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      fontWeight: '400',
+    },
+    // Step 6 — signal preview
+    previewRingWrap: {
+      alignItems: 'center',
+      paddingVertical: SPACING.md,
+    },
+    previewCards: {
+      gap: SPACING.sm,
+    },
+    previewCard: {
+      borderRadius: RADIUS.md,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+      backgroundColor: colors.white,
+      padding: SPACING.md,
+      gap: 4,
+    },
+    previewCardHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    previewCardName: {
+      fontSize: FONT_SIZE.base,
+      fontWeight: '600',
+    },
+    previewCardTag: {
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+      borderRadius: RADIUS.sm,
+    },
+    previewCardTagText: {
+      fontSize: 10,
+      fontWeight: '600',
+      letterSpacing: 0.4,
+      textTransform: 'uppercase',
+    },
+    previewCardDesc: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      lineHeight: 20,
+    },
+    footer: {
+      paddingHorizontal: SPACING.lg,
+      paddingBottom: SPACING.xl,
+      paddingTop: SPACING.md,
+      gap: SPACING.sm,
+      borderTopWidth: 1,
+      borderTopColor: colors.borderLight,
+    },
+    ctaBtn: {
+      backgroundColor: colors.slate,
+      borderRadius: RADIUS.md,
+      paddingVertical: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: 52,
+      ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
+    },
+    ctaBtnDisabled: { opacity: 0.35 },
+    ctaBtnText: {
+      fontSize: FONT_SIZE.base,
+      color: colors.white,
+      fontWeight: '500',
+      letterSpacing: 0.3,
+    },
+  });
+}

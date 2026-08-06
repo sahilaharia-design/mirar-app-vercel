@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { AssessProgress } from '../../components/assess/AssessProgress';
 import { useAssessStore } from '../../stores/assess-store';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 function buildReflection(t: (key: string) => string, q2: string[]): string {
   if (q2.length === 0) return t('assess.reflection_default');
@@ -20,6 +21,8 @@ function buildReflection(t: (key: string) => string, q2: string[]): string {
 
 export default function AssessReflection() {
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = getStyles(colors);
   const { q1, q2 } = useAssessStore();
   const reflection = buildReflection(t, q2);
 
@@ -87,99 +90,101 @@ export default function AssessReflection() {
   );
 }
 
-const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.cream },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.sm,
-  },
-  scroll: { flex: 1 },
-  content: {
-    paddingHorizontal: SPACING.lg,
-    paddingTop: SPACING.md,
-    paddingBottom: SPACING.xl,
-    gap: SPACING.lg,
-  },
-  stepRow: {},
-  step: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  title: {
-    fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
-    fontWeight: '300',
-    lineHeight: 36,
-    letterSpacing: -0.3,
-  },
-  reflectionCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.xl,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    padding: SPACING.xl,
-    gap: SPACING.md,
-  },
-  reflectionDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: COLORS.accentTeal,
-  },
-  reflectionText: {
-    fontSize: FONT_SIZE.md,
-    color: COLORS.slateMid,
-    lineHeight: 28,
-    fontWeight: '300',
-    letterSpacing: -0.1,
-  },
-  closer: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.slateLight,
-    lineHeight: 22,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-    paddingTop: SPACING.md,
-    fontStyle: 'italic',
-  },
-  privacyNote: {
-    paddingHorizontal: SPACING.sm,
-  },
-  privacyText: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateXLight,
-    lineHeight: 18,
-    textAlign: 'center',
-  },
-  footer: {
-    paddingHorizontal: SPACING.lg,
-    paddingBottom: SPACING.xl,
-    paddingTop: SPACING.md,
-    gap: SPACING.sm,
-    alignItems: 'center',
-  },
-  cta: {
-    width: '100%',
-    backgroundColor: COLORS.slate,
-    borderRadius: RADIUS.md,
-    paddingVertical: 16,
-    alignItems: 'center',
-    ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
-  },
-  ctaText: {
-    fontSize: FONT_SIZE.base,
-    color: COLORS.white,
-    fontWeight: '500',
-    letterSpacing: 0.3,
-  },
-  footerNote: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.slateXLight,
-  },
-});
+function getStyles(colors: ReturnType<typeof useColors>) {
+  return StyleSheet.create({
+    safe: { flex: 1, backgroundColor: colors.cream },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      paddingBottom: SPACING.sm,
+    },
+    scroll: { flex: 1 },
+    content: {
+      paddingHorizontal: SPACING.lg,
+      paddingTop: SPACING.md,
+      paddingBottom: SPACING.xl,
+      gap: SPACING.lg,
+    },
+    stepRow: {},
+    step: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateLight,
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+    },
+    title: {
+      fontSize: FONT_SIZE['2xl'],
+      color: colors.slate,
+      fontWeight: '300',
+      lineHeight: 36,
+      letterSpacing: -0.3,
+    },
+    reflectionCard: {
+      backgroundColor: colors.white,
+      borderRadius: RADIUS.xl,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: SPACING.xl,
+      gap: SPACING.md,
+    },
+    reflectionDot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: colors.accentTeal,
+    },
+    reflectionText: {
+      fontSize: FONT_SIZE.md,
+      color: colors.slateMid,
+      lineHeight: 28,
+      fontWeight: '300',
+      letterSpacing: -0.1,
+    },
+    closer: {
+      fontSize: FONT_SIZE.sm,
+      color: colors.slateLight,
+      lineHeight: 22,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      paddingTop: SPACING.md,
+      fontStyle: 'italic',
+    },
+    privacyNote: {
+      paddingHorizontal: SPACING.sm,
+    },
+    privacyText: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateXLight,
+      lineHeight: 18,
+      textAlign: 'center',
+    },
+    footer: {
+      paddingHorizontal: SPACING.lg,
+      paddingBottom: SPACING.xl,
+      paddingTop: SPACING.md,
+      gap: SPACING.sm,
+      alignItems: 'center',
+    },
+    cta: {
+      width: '100%',
+      backgroundColor: colors.slate,
+      borderRadius: RADIUS.md,
+      paddingVertical: 16,
+      alignItems: 'center',
+      ...(Platform.OS === 'web' ? ({ cursor: 'pointer' } as any) : {}),
+    },
+    ctaText: {
+      fontSize: FONT_SIZE.base,
+      color: colors.white,
+      fontWeight: '500',
+      letterSpacing: 0.3,
+    },
+    footerNote: {
+      fontSize: FONT_SIZE.xs,
+      color: colors.slateXLight,
+    },
+  });
+}

@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
-import { COLORS, FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 interface MirrorGuideModalProps {
   visible: boolean;
@@ -23,6 +24,7 @@ interface GuideCard {
 
 export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
   const { t } = useTranslation();
+  const colors = useColors();
   const guideCards = t('guide_cards', { returnObjects: true }) as GuideCard[];
   return (
     <Modal
@@ -31,14 +33,14 @@ export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.safe}>
-        <View style={styles.header}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
+        <View style={[styles.header, { borderBottomColor: colors.borderLight }]}>
           <View>
-            <Text style={styles.eyebrow}>{t('guide_modal.eyebrow')}</Text>
-            <Text style={styles.title}>{t('guide_modal.title')}</Text>
+            <Text style={[styles.eyebrow, { color: colors.slateLight }]}>{t('guide_modal.eyebrow')}</Text>
+            <Text style={[styles.title, { color: colors.slate }]}>{t('guide_modal.title')}</Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeButton} accessibilityRole="button">
-            <Text style={styles.closeText}>{t('checkin.close')}</Text>
+            <Text style={[styles.closeText, { color: colors.slateMid }]}>{t('checkin.close')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -47,16 +49,16 @@ export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.introCard}>
-            <Text style={styles.introText}>
+          <View style={[styles.introCard, { backgroundColor: colors.slate }]}>
+            <Text style={[styles.introText, { color: colors.cream }]}>
               {t('guide_modal.intro_text')}
             </Text>
           </View>
 
           {guideCards.map((card) => (
-            <View key={card.title} style={styles.card}>
-              <Text style={styles.cardTitle}>{card.title}</Text>
-              <Text style={styles.cardBody}>{card.body}</Text>
+            <View key={card.title} style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
+              <Text style={[styles.cardTitle, { color: colors.slate }]}>{card.title}</Text>
+              <Text style={[styles.cardBody, { color: colors.slateMid }]}>{card.body}</Text>
             </View>
           ))}
 
@@ -70,14 +72,12 @@ export function MirrorGuideModal({ visible, onClose }: MirrorGuideModalProps) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.cream,
   },
   header: {
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.md,
     paddingBottom: SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
@@ -85,14 +85,12 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     fontSize: FONT_SIZE.xs,
-    color: COLORS.slateLight,
     letterSpacing: 1.4,
     textTransform: 'uppercase',
   },
   title: {
     marginTop: SPACING.xs,
     fontSize: FONT_SIZE['2xl'],
-    color: COLORS.slate,
     fontWeight: '300',
     letterSpacing: -0.2,
   },
@@ -102,7 +100,6 @@ const styles = StyleSheet.create({
   },
   closeText: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.slateMid,
     fontWeight: '500',
   },
   scroll: {
@@ -113,32 +110,26 @@ const styles = StyleSheet.create({
     gap: SPACING.md,
   },
   introCard: {
-    backgroundColor: COLORS.slate,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
   },
   introText: {
     fontSize: FONT_SIZE.lg,
     lineHeight: 28,
-    color: COLORS.cream,
     fontWeight: '300',
   },
   card: {
-    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     borderWidth: 1,
-    borderColor: COLORS.borderLight,
     padding: SPACING.md,
     gap: SPACING.xs,
   },
   cardTitle: {
     fontSize: FONT_SIZE.base,
-    color: COLORS.slate,
     fontWeight: '500',
   },
   cardBody: {
     fontSize: FONT_SIZE.sm,
     lineHeight: 22,
-    color: COLORS.slateMid,
   },
 });

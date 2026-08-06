@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { supabase } from '../../lib/supabase';
-import { COLORS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 import { withTimeout } from '../../lib/with-timeout';
 
 // Handles the OAuth/magic-link redirect from Supabase.
@@ -12,6 +12,7 @@ export default function AuthCallback() {
   // rather than as a session — without reading this, a stale link silently dumps
   // the user on a blank login form with no explanation.
   const { error_code } = useLocalSearchParams<{ error_code?: string }>();
+  const colors = useColors();
 
   useEffect(() => {
     if (error_code) {
@@ -59,8 +60,8 @@ export default function AuthCallback() {
   }, [error_code]);
 
   return (
-    <View style={styles.center}>
-      <ActivityIndicator color={COLORS.slateMid} />
+    <View style={[styles.center, { backgroundColor: colors.cream }]}>
+      <ActivityIndicator color={colors.slateMid} />
     </View>
   );
 }
@@ -68,7 +69,6 @@ export default function AuthCallback() {
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -8,12 +8,13 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
-import { COLORS } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 
 // A still, breathing mirror surface — the calm motif first built for the
 // onboarding welcome screen, shared here so any screen that wants the same
 // settling atmosphere (e.g. the pre-check-in pause) doesn't reinvent it.
 export function BreathingMirror({ size = 120 }: { size?: number }) {
+  const colors = useColors();
   const breathe = useSharedValue(0);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -45,10 +46,10 @@ export function BreathingMirror({ size = 120 }: { size?: number }) {
 
   const svg = (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <Circle cx={c} cy={c} r={r1} stroke={COLORS.slateXLight} strokeWidth={1} fill="none" opacity={0.35} />
-      <Circle cx={c} cy={c} r={r2} stroke={COLORS.slateXLight} strokeWidth={1} fill="none" opacity={0.5} />
-      <Circle cx={c} cy={c} r={r3} stroke={COLORS.peach} strokeWidth={1.25} fill="none" opacity={0.55} />
-      <Circle cx={c} cy={c} r={size * 0.033} fill={COLORS.peach} opacity={0.8} />
+      <Circle cx={c} cy={c} r={r1} stroke={colors.slateXLight} strokeWidth={1} fill="none" opacity={0.35} />
+      <Circle cx={c} cy={c} r={r2} stroke={colors.slateXLight} strokeWidth={1} fill="none" opacity={0.5} />
+      <Circle cx={c} cy={c} r={r3} stroke={colors.peach} strokeWidth={1.25} fill="none" opacity={0.55} />
+      <Circle cx={c} cy={c} r={size * 0.033} fill={colors.peach} opacity={0.8} />
     </Svg>
   );
 

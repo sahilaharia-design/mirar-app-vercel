@@ -14,8 +14,6 @@
  * ─ Threshold bar (gradient strip, 5 ticks, static marker)
  * ─ 28-day daily signature SVG
  * ─ Observed rows (2–3, derived from data)
- *
- * Light-mode only — uses COLORS directly, no useColors().
  */
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -41,12 +39,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Line, Text as SvgText } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
 import {
-  COLORS,
   FONTS,
   FONT_SIZE,
   SPACING,
   CYCLE_DAYS,
 } from '../../lib/constants';
+import { useColors } from '../../contexts/theme-context';
 import {
   V3_SETTLE_EASING,
   V3_SETTLE_DURATION,
@@ -231,6 +229,7 @@ function DailySignature({
   currentDay: number;
 }) {
   const { t } = useTranslation();
+  const colors = useColors();
   const W = USABLE_W;
   const H = 72;
   const midY = 36;
@@ -257,7 +256,7 @@ function DailySignature({
         y1={midY}
         x2={SCREEN_W - H_PAD}
         y2={midY}
-        stroke={COLORS.ruleLight}
+        stroke={colors.ruleLight}
         strokeWidth={1}
       />
 
@@ -277,7 +276,7 @@ function DailySignature({
               y1={midY - 3}
               x2={x}
               y2={midY + 3}
-              stroke={COLORS.slateXLight}
+              stroke={colors.slateXLight}
               strokeWidth={1}
             />
           );
@@ -292,7 +291,7 @@ function DailySignature({
               y1={midY - 4}
               x2={x}
               y2={midY + 4}
-              stroke={COLORS.rule}
+              stroke={colors.rule}
               strokeWidth={1}
               strokeLinecap="round"
             />
@@ -300,7 +299,7 @@ function DailySignature({
         }
 
         const len = lv === 3 ? 22 : lv === 2 ? 12 : 5;
-        const color = lv === 3 ? COLORS.signalHigh : lv === 2 ? COLORS.slate : COLORS.signalLow;
+        const color = lv === 3 ? colors.signalHigh : lv === 2 ? colors.slate : colors.signalLow;
         return (
           <Line
             key={day}
@@ -321,7 +320,7 @@ function DailySignature({
         y1={8}
         x2={dividerX}
         y2={H - 6}
-        stroke={COLORS.brass}
+        stroke={colors.brass}
         strokeWidth={1}
         strokeDasharray="1,3"
       />
@@ -333,7 +332,7 @@ function DailySignature({
         fontSize={7}
         fontFamily={Platform.OS === 'ios' ? 'System' : 'sans-serif'}
         letterSpacing={1.2}
-        fill={COLORS.slateLight}
+        fill={colors.slateLight}
         textAnchor="middle"
       >
         {t('signals_tab.recent')}
@@ -344,7 +343,7 @@ function DailySignature({
         fontSize={7}
         fontFamily={Platform.OS === 'ios' ? 'System' : 'sans-serif'}
         letterSpacing={1.2}
-        fill={COLORS.slateLight}
+        fill={colors.slateLight}
         textAnchor="middle"
       >
         {t('signals_tab.earlier')}
@@ -356,6 +355,8 @@ function DailySignature({
 // ─── Threshold Bar (static) ───────────────────────────────────────────────────
 
 function ThresholdBar({ average }: { average: number | null }) {
+  const colors = useColors();
+  const styles = getStyles(colors);
   const [barWidth, setBarWidth] = useState(0);
 
   const handleLayout = (e: LayoutChangeEvent) => {
@@ -368,7 +369,7 @@ function ThresholdBar({ average }: { average: number | null }) {
   return (
     <View style={styles.threshBar} onLayout={handleLayout}>
       <LinearGradient
-        colors={[COLORS.signalLow, COLORS.signalCalm, COLORS.signalMid, COLORS.signalHigh]}
+        colors={[colors.signalLow, colors.signalCalm, colors.signalMid, colors.signalHigh]}
         locations={[0, 0.38, 0.5, 1]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
@@ -396,6 +397,8 @@ export function ThemeDetailSheet({
   onClose,
 }: ThemeDetailSheetProps) {
   const { t } = useTranslation();
+  const colors = useColors();
+  const styles = getStyles(colors);
   const reducedMotion = useRef(false);
   const underlineScale = useSharedValue(0);
 
@@ -596,7 +599,7 @@ export function ThemeDetailSheet({
                         <Text
                           style={[
                             styles.obsMeta,
-                            obs.brass && { color: COLORS.brass },
+                            obs.brass && { color: colors.brass },
                           ]}
                         >
                           {obs.meta}
@@ -618,10 +621,11 @@ export function ThemeDetailSheet({
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
-const styles = StyleSheet.create({
+function getStyles(colors: ReturnType<typeof useColors>) {
+  return StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.paper,
+    backgroundColor: colors.paper,
   },
   ambientGradient: {
     position: 'absolute',
@@ -650,7 +654,7 @@ const styles = StyleSheet.create({
   },
   rule: {
     height: 1,
-    backgroundColor: COLORS.ruleLight,
+    backgroundColor: colors.ruleLight,
     marginBottom: 24,
   },
   backButton: {
@@ -662,7 +666,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.2,
     textTransform: 'uppercase',
-    color: COLORS.slateLight,
+    color: colors.slateLight,
   },
 
   // Theme title section
@@ -672,31 +676,31 @@ const styles = StyleSheet.create({
   themeName: {
     fontSize: 36,
     lineHeight: 36 * 1.05,
-    color: COLORS.ink,
+    color: colors.ink,
     letterSpacing: -0.5,
   },
   themeNamePlain: {
     fontFamily: FONTS.display,
     fontSize: 36,
-    color: COLORS.ink,
+    color: colors.ink,
   },
   themeNameAmp: {
     fontFamily: FONTS.displayItalic,
     fontSize: 36,
-    color: COLORS.brass,
+    color: colors.brass,
     fontStyle: 'italic',
   },
   themeDesc: {
     fontFamily: FONTS.body,
     fontSize: 13,
-    color: COLORS.slateMid,
+    color: colors.slateMid,
     marginTop: 6,
     lineHeight: 13 * 1.5,
   },
   brasUnderline: {
     width: 40,
     height: 1,
-    backgroundColor: COLORS.brass,
+    backgroundColor: colors.brass,
     marginTop: 10,
     transformOrigin: 'left',
   },
@@ -726,14 +730,14 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display,
     fontSize: 54,
     lineHeight: 54,
-    color: COLORS.ink,
+    color: colors.ink,
     letterSpacing: -1.5,
   },
   trendBadge: {
     fontFamily: FONTS.bodyMedium,
     fontSize: 10,
     letterSpacing: 1.2,
-    color: COLORS.brass,
+    color: colors.brass,
     textTransform: 'uppercase',
   },
   coverageBlock: {
@@ -744,7 +748,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display,
     fontSize: 26,
     lineHeight: 26,
-    color: COLORS.ink,
+    color: colors.ink,
     marginTop: 4,
   },
 
@@ -772,7 +776,7 @@ const styles = StyleSheet.create({
     top: 5,
     width: 1,
     height: 18,
-    backgroundColor: COLORS.slateMid,
+    backgroundColor: colors.slateMid,
     opacity: 0.45,
   },
   threshMarker: {
@@ -781,9 +785,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: COLORS.paper,
+    backgroundColor: colors.paper,
     borderWidth: 2,
-    borderColor: COLORS.ink,
+    borderColor: colors.ink,
   },
 
   // Signature section
@@ -796,15 +800,15 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   obsCard: {
-    backgroundColor: COLORS.paper,
+    backgroundColor: colors.paper,
     borderRadius: 10,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: COLORS.ruleLight,
+    borderColor: colors.ruleLight,
   },
   obsDivider: {
     height: 1,
-    backgroundColor: COLORS.ruleLight,
+    backgroundColor: colors.ruleLight,
   },
   obsRow: {
     paddingVertical: 14,
@@ -817,7 +821,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display,
     fontSize: 16,
     lineHeight: 16 * 1.35,
-    color: COLORS.ink,
+    color: colors.ink,
   },
   obsTextItalic: {
     fontFamily: FONTS.displayItalic,
@@ -828,7 +832,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 1.1,
     textTransform: 'uppercase',
-    color: COLORS.slateLight,
+    color: colors.slateLight,
     marginTop: 3,
   },
-});
+  });
+}
