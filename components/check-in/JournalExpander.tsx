@@ -7,8 +7,6 @@
  * ─ Optional private note textarea (paper bg, ruleLight border)
  * ─ "Held privately" / char-count footer metadata
  * ─ Footer: Skip pill  +  "Record today's mirror" pill
- *
- * Light-mode only — uses COLORS directly, no useColors().
  */
 
 import React, { useEffect, useRef } from 'react';

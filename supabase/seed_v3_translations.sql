@@ -1,6 +1,6 @@
 -- ─────────────────────────────────────────────────────────────────────────────
 -- MIRAR — Seed v3 Translations: Hindi + Gujarati for the v3 simplified questions
--- Covers Days 9–11 and 13–28 (Day 12 is locked, matching seed_v3_simplified_questions.sql).
+-- Covers Days 9–28, including Day 12 (unlocked — see seed_v3_simplified_questions.sql).
 -- Run AFTER seed_v3_simplified_questions.sql. Native script only — no
 -- Latin-transliteration bleed. Idempotent — safe to run repeatedly.
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -68,7 +68,27 @@ WHERE option_number = 4 AND question_id = (SELECT id FROM questions WHERE day_nu
 UPDATE options SET option_text_hi = 'मैं इन नियमों पर सवाल उठाने लगा हूँ।', option_text_gu = 'હું આ નિયમો પર સવાલ ઉઠાવવા લાગ્યો છું.'
 WHERE option_number = 5 AND question_id = (SELECT id FROM questions WHERE day_number = 11);
 
--- ── Day 12: LOCKED — do not modify ────────────────────────────────────────────
+-- ── Day 12 ───────────────────────────────────────────────────────────────────
+UPDATE questions SET
+  prompt_text_hi = 'जब आपकी सच्चाई किसी को समझ नहीं आई, तो आपने आगे क्या किया?',
+  prompt_text_gu = 'તમારી સચ્ચાઈ કોઈને ન સમજાય ત્યારે, તમે આગળ શું કર્યું?',
+  mirror_glimmer_hi = 'टकराव के बाद हम कैसे प्रतिक्रिया देते हैं, वही बताता है कि हम कहाँ खड़े हैं।',
+  mirror_glimmer_gu = 'ટકરાવ પછી આપણે કેવો પ્રતિભાવ આપીએ છીએ, એ જ બતાવે છે કે આપણે ક્યાં ઊભા છીએ.',
+  tomorrow_tease_hi = 'कल: आपका कौन-सा हिस्सा धीरे-धीरे मद्धम पड़ता जा रहा है।',
+  tomorrow_tease_gu = 'આવતી કાલે: તમારો કયો ભાગ ધીરે ધીરે ઝાંખો પડી રહ્યો છે.'
+WHERE day_number = 12;
+
+UPDATE options SET option_text_hi = 'मैं खुद को छोटा दिखाने लगा। अपनी सच्चाई नरम कर दी।', option_text_gu = 'હું પોતાને નાનો બતાવવા લાગ્યો. મારી સચ્ચાઈ નરમ કરી.'
+WHERE option_number = 1 AND question_id = (SELECT id FROM questions WHERE day_number = 12);
+UPDATE options SET option_text_hi = 'मैं चुप हो गया और कुछ समय दोबारा कोशिश नहीं की।', option_text_gu = 'હું ચૂપ થઈ ગયો અને થોડો સમય ફરી પ્રયત્ન ન કર્યો.'
+WHERE option_number = 2 AND question_id = (SELECT id FROM questions WHERE day_number = 12);
+UPDATE options SET option_text_hi = 'अंदर से आहत होकर भी मैं बचाव में अड़ गया।', option_text_gu = 'અંદરથી દુભાયેલો હોવા છતાં હું બચાવમાં અડગ રહ્યો.'
+WHERE option_number = 3 AND question_id = (SELECT id FROM questions WHERE day_number = 12);
+UPDATE options SET option_text_hi = 'शांत रहा, पर दिनों तक उसे दोहराता रहा दिमाग में।', option_text_gu = 'શાંત રહ્યો, પણ દિવસો સુધી મનમાં એ વાગોળતો રહ્યો.'
+WHERE option_number = 4 AND question_id = (SELECT id FROM questions WHERE day_number = 12);
+UPDATE options SET option_text_hi = 'नरमी से अपनी बात पर टिका रहा, भले असहज लगा।', option_text_gu = 'નમ્રતાથી મારી વાત પર ટકી રહ્યો, ભલે અસ્વસ્થ લાગ્યું.'
+WHERE option_number = 5 AND question_id = (SELECT id FROM questions WHERE day_number = 12);
+
 
 -- ── Day 13 ───────────────────────────────────────────────────────────────────
 UPDATE questions SET

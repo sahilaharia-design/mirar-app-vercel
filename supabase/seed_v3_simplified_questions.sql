@@ -1,12 +1,15 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- MIRAR — Seed v3: Simplified Questions (Days 9–11, 13–28)
+-- MIRAR — Seed v3: Simplified Questions (Days 9–28, full remaining bank)
 -- Continues the simplification started in seed_v2.sql (which covered Days 1–8).
 -- Same rule: shorter stems, shorter options, plain everyday language, so a
 -- user can read and answer in a few seconds — not parse a paragraph.
 -- Theme codes / levels / points / signal_notes are UNCHANGED — only the
 -- user-facing prompt_text and option_text are rewritten. Scoring logic is
 -- untouched.
--- Day 12 is LOCKED — do not modify (per seed_v2.sql).
+-- Day 12 was previously flagged LOCKED in seed_v2.sql ("the identity
+-- threshold... leave it"). Explicitly unlocked and simplified here per direct
+-- instruction: "the simplification needs to be across the board, not just for
+-- a few questions." All 27 open days (1–28, excluding none) are now simplified.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 -- ── Day 9 ────────────────────────────────────────────────────────────────────
@@ -96,7 +99,35 @@ INSERT INTO options (question_id, option_number, option_text, theme_1_code, them
 SELECT id, 5, 'I''m starting to question these rules.', 'RC', 'High', 3, 'GAL', 'Medium', 2, 'Rule examination — active inquiry emerging'
 FROM questions WHERE day_number = 11;
 
--- ── Day 12: LOCKED — do not modify ────────────────────────────────────────────
+-- ── Day 12 ───────────────────────────────────────────────────────────────────
+UPDATE questions
+SET prompt_text = 'When your truth didn''t land with someone, what did you do next?',
+    mirror_glimmer = 'How we respond after friction shows where we stand.',
+    tomorrow_tease = 'Tomorrow: what part of you has been slowly dimming.'
+WHERE day_number = 12;
+
+DELETE FROM options WHERE question_id = (SELECT id FROM questions WHERE day_number = 12);
+
+INSERT INTO options (question_id, option_number, option_text, theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points, signal_note)
+SELECT id, 1, 'I made myself smaller. Softened my truth.', 'RC', 'Low', 1, 'RA', 'Low', 1, 'Truth compression under social pressure'
+FROM questions WHERE day_number = 12;
+
+INSERT INTO options (question_id, option_number, option_text, theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points, signal_note)
+SELECT id, 2, 'I shut down and didn''t try again for a while.', 'RC', 'Low', 1, 'RA', 'Medium', 2, 'Withdrawal after misalignment — protection response'
+FROM questions WHERE day_number = 12;
+
+INSERT INTO options (question_id, option_number, option_text, theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points, signal_note)
+SELECT id, 3, 'I got defensive, even though I was hurt.', 'RC', 'Medium', 2, 'RA', 'Low', 1, 'Defensive armor — hurt masked by resistance'
+FROM questions WHERE day_number = 12;
+
+INSERT INTO options (question_id, option_number, option_text, theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points, signal_note)
+SELECT id, 4, 'I stayed steady, but replayed it for days.', 'RC', 'Medium', 2, 'RA', 'Medium', 2, 'Rumination after boundary held'
+FROM questions WHERE day_number = 12;
+
+INSERT INTO options (question_id, option_number, option_text, theme_1_code, theme_1_level, theme_1_points, theme_2_code, theme_2_level, theme_2_points, signal_note)
+SELECT id, 5, 'I held my ground gently, though it was uncomfortable.', 'RC', 'High', 3, 'RA', 'High', 3, 'Grounded truth-holding — relational integrity'
+FROM questions WHERE day_number = 12;
+
 
 -- ── Day 13 ───────────────────────────────────────────────────────────────────
 UPDATE questions
