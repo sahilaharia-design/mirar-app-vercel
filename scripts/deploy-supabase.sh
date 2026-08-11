@@ -38,6 +38,23 @@ if ! npx supabase db execute --file supabase/seed_v2_translations.sql; then
 fi
 
 echo ""
+echo "▸ Applying v3 simplified questions (Days 9-11, 13-28 — Day 12 stays locked)..."
+if ! npx supabase db execute --file supabase/seed_v3_simplified_questions.sql; then
+  echo "  ⚠  Could not apply seed_v3_simplified_questions.sql via CLI."
+  echo "     Paste its contents into the Supabase SQL editor instead:"
+  echo "     https://supabase.com/dashboard/project/$PROJECT_REF/sql"
+fi
+
+echo ""
+echo "▸ Applying v3 translations (Hindi/Gujarati for the simplified Days 9-11, 13-28)..."
+echo "  Must run AFTER seed_v3_simplified_questions.sql — it re-inserts option rows."
+if ! npx supabase db execute --file supabase/seed_v3_translations.sql; then
+  echo "  ⚠  Could not apply seed_v3_translations.sql via CLI."
+  echo "     Paste its contents into the Supabase SQL editor instead:"
+  echo "     https://supabase.com/dashboard/project/$PROJECT_REF/sql"
+fi
+
+echo ""
 echo "▸ Deploying generate-mirror-insight (updated: multilingual output)..."
 npx supabase functions deploy generate-mirror-insight --no-verify-jwt
 
@@ -77,6 +94,8 @@ echo "✓ Supabase deploy complete."
 echo ""
 echo "  Migrations:              ✓ pushed"
 echo "  Translation seed:        ✓ Days 1-8 hi/gu restored"
+echo "  Simplified questions:    ✓ Days 9-11, 13-28 (Day 12 locked)"
+echo "  v3 translation seed:     ✓ Days 9-11, 13-28 hi/gu"
 echo "  generate-mirror-insight: ✓ deployed (multilingual)"
 echo "  generate-weekly-signal:  ✓ deployed (multilingual)"
 echo "  generate-report:         ✓ deployed (multilingual)"
