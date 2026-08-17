@@ -186,7 +186,7 @@ function getGreetingKey(): string {
 
 // ─── Main Home Screen ─────────────────────────────────────────────────────────
 export default function TodayScreen() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
   const {
@@ -227,7 +227,14 @@ export default function TodayScreen() {
     } else {
       router.replace('/(auth)/onboarding');
     }
-  }, [session?.user?.id, simulatedDay]);
+    // i18n.language is intentionally a dependency, not just read inside —
+    // loadTodayQuestion resolves _hi/_gu fields once at fetch time and
+    // caches the result in checkin-store's Zustand state. Without this
+    // dependency, switching language mid-session (e.g. from Profile) never
+    // re-triggers the fetch, so the already-cached question/options stay in
+    // whatever language was active on first load — a silent stale-language
+    // bug distinct from the static-string i18n gaps fixed earlier.
+  }, [session?.user?.id, simulatedDay, i18n.language]);
 
   useEffect(() => { load(); }, [load]);
 
