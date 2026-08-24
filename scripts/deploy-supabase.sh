@@ -59,7 +59,7 @@ echo "▸ Deploying generate-mirror-insight (updated: multilingual output)..."
 npx supabase functions deploy generate-mirror-insight --no-verify-jwt
 
 echo ""
-echo "▸ Deploying generate-weekly-signal (updated: multilingual output)..."
+echo "▸ Deploying generate-weekly-signal (updated: Drift Alert push notifications)..."
 npx supabase functions deploy generate-weekly-signal --no-verify-jwt
 
 echo ""
@@ -97,7 +97,7 @@ echo "  Translation seed:        ✓ Days 1-8 hi/gu restored"
 echo "  Simplified questions:    ✓ Days 9-11, 13-28 (Day 12 locked)"
 echo "  v3 translation seed:     ✓ Days 9-11, 13-28 hi/gu"
 echo "  generate-mirror-insight: ✓ deployed (multilingual)"
-echo "  generate-weekly-signal:  ✓ deployed (multilingual)"
+echo "  generate-weekly-signal:  ✓ deployed (Drift Alert push notifications)"
 echo "  generate-report:         ✓ deployed (multilingual)"
 echo "  process-checkin:         ✓ deployed (day-28 stage-4 report)"
 echo "  select-daily-question:   ✓ deployed"
