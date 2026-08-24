@@ -25,6 +25,7 @@ import { AppHeader } from '../../components/ui/AppHeader';
 import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
 import { AwarenessCard } from '../../components/home/AwarenessCard';
+import { DriftSignalCard } from '../../components/home/DriftSignalCard';
 import { WelcomeBackBanner } from '../../components/home/WelcomeBackBanner';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
@@ -198,6 +199,8 @@ export default function TodayScreen() {
     streakLength,
     contextMessage,
     patternReading,
+    driftSignal,
+    dismissDriftSignal,
     loadActiveCycle,
     loadAlignmentHistory,
   } = useCycleStore();
@@ -389,6 +392,13 @@ export default function TodayScreen() {
         ) : patternReading ? (
           <AwarenessCard reading={patternReading} />
         ) : null}
+
+        {/* 6. Drift Alert — the weekly signal generate-weekly-signal computes
+            every 7th reflection, surfaced once and dismissed. Sits below the
+            daily awareness card so it never competes with today's check-in. */}
+        {driftSignal && (
+          <DriftSignalCard signal={driftSignal} onDismiss={dismissDriftSignal} />
+        )}
 
         {/* Dev Day Simulator */}
         {__DEV__ && (

@@ -277,6 +277,16 @@ export const THEME_COLORS: Record<ThemeCode, { light: string; dark: string }> = 
   RA:  { light: '#B85A4A', dark: '#D87A6A' }, // red-orange — resilience
 };
 
+// ─── Drift Alert: which weekly-signal types render with attention weight ─────
+// Mirrors CONCERNING_SIGNAL_TYPES in supabase/functions/generate-weekly-signal
+// (a separate Deno runtime — kept in sync manually, not imported). Everything
+// else from VALID_SIGNAL_TYPES there renders as a calm, neutral signal card.
+export const CONCERNING_SIGNAL_TYPES = [
+  'misalignment_repeating',
+  'energy_low',
+  'relational_friction',
+] as const;
+
 // ─── Notification Copy ────────────────────────────────────────────────────────
 export const NOTIFICATION_COPY = {
   dailyReminder: (_day: number) => `Your mirror is ready today. Takes less than 2 minutes.`,

@@ -35,6 +35,55 @@ const VALID_SIGNAL_TYPES = [
   'signals_mixed',
 ]
 
+// Drift Alert system — which signal types are worth a proactive push, not
+// just a passive card the next time the app is opened. Mirrors
+// CONCERNING_SIGNAL_TYPES in lib/constants.ts (separate runtime, kept in
+// sync manually — Deno can't import that React Native file).
+const CONCERNING_SIGNAL_TYPES = ['misalignment_repeating', 'energy_low', 'relational_friction']
+
+async function sendExpoPush(token: string, title: string, body: string) {
+  try {
+    const res = await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: token,
+        title,
+        body,
+        sound: 'default',
+        data: { type: 'drift_alert' },
+      }),
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
+// Fire a push notification using the weekly signal's own display_text —
+// it's already localized and written in the brand's "signal, not verdict"
+// voice, so no separate notification copy is needed. Non-fatal: a failure
+// here must never affect the weekly_signals write, since the in-app
+// DriftSignalCard is the reliable fallback surface regardless.
+async function notifyIfConcerning(
+  supabase: any,
+  userId: string,
+  signalType: string,
+  displayText: string
+) {
+  if (!CONCERNING_SIGNAL_TYPES.includes(signalType)) return
+  try {
+    const { data: tokens } = await supabase
+      .from('push_tokens')
+      .select('token')
+      .eq('user_id', userId)
+    if (!tokens?.length) return
+    await Promise.all(tokens.map((t: any) => sendExpoPush(t.token, 'Mirar', displayText)))
+  } catch (err) {
+    console.error('[Mirar] drift alert push failed:', err)
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -320,6 +369,17 @@ async function storeWeeklySignal(
     .from('user_state')
     .update({ latest_signal_text: displayText, updated_at: new Date().toISOString() })
     .eq('user_id', user_id)
+
+  // Drift Alert: proactive push for signal types worth naming now, not just
+  // whenever the user next opens the app. Fire-and-forget from the response's
+  // perspective, but kept alive via waitUntil so the isolate isn't torn down
+  // before the push actually sends — same pattern as process-checkin's
+  // background tasks. Never blocks or fails the response either way, since
+  // the in-app DriftSignalCard is the reliable fallback surface.
+  const pushTask = notifyIfConcerning(supabase, user_id, signalType, displayText)
+  if (typeof EdgeRuntime !== 'undefined') {
+    EdgeRuntime.waitUntil(pushTask)
+  }
 
   return new Response(
     JSON.stringify({ signal_type: signalType, display_text: displayText }),

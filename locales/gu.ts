@@ -334,6 +334,11 @@ export default {
     forming: 'હજી બની રહ્યું છે.',
   },
 
+  drift_signal: {
+    label: 'આ અઠવાડિયે',
+    dismiss: 'સમજાઈ ગયું',
+  },
+
   auth: {
     title: 'Mirar',
     tagline: 'તમારું આંતરિક સંરેખણ, દૃશ્યમાન બનાવ્યું.',

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { withTimeout } from '../lib/with-timeout';
-import { CycleRow, StageOverview, ThemeScore, AlignmentScoreRow, ThemeCode } from '../types/mirar';
+import { CycleRow, StageOverview, ThemeScore, AlignmentScoreRow, ThemeCode, WeeklySignalRow } from '../types/mirar';
 import {
   getCycleDay,
   getStageFromDay,
@@ -35,12 +35,16 @@ interface CycleStore {
   // ── Pattern engine output: signals → patterns → awareness ─────────────────
   patternReading: PatternReading | null;
 
+  // ── Drift Alert: most recent unshown weekly signal, if any ────────────────
+  driftSignal: WeeklySignalRow | null;
+
   isLoading: boolean;
 
   loadActiveCycle: (userId: string) => Promise<void>;
   loadAlignmentScore: (userId: string) => Promise<void>;
   loadAlignmentHistory: (userId: string, days?: number) => Promise<void>;
   refreshScores: () => Promise<void>;
+  dismissDriftSignal: () => Promise<void>;
 }
 
 export const useCycleStore = create<CycleStore>((set, get) => ({
@@ -60,6 +64,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
   totalReflections: 0,
   themeHistories: null,
   patternReading: null,
+  driftSignal: null,
 
   isLoading: false,
 
@@ -261,6 +266,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       // Load today's alignment score + user_state in parallel
       get().loadAlignmentScore(userId);
       loadUserState(userId, set);
+      loadDriftSignal(userId, set);
 
       // Self-heal: generate any reports whose stage window has passed but which
       // never got created (the day-8/15/22 trigger only fires if the user checks
@@ -317,6 +323,25 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       }
     } catch (err) {
       console.error('[Mirar] refreshScores failed:', err);
+    }
+  },
+
+  dismissDriftSignal: async () => {
+    const signal = get().driftSignal;
+    if (!signal) return;
+    // Optimistic — clear locally first so the card disappears immediately.
+    set({ driftSignal: null });
+    try {
+      await withTimeout(
+        supabase
+          .from('weekly_signals')
+          .update({ shown_to_user: true, shown_at: new Date().toISOString() })
+          .eq('id', signal.id)
+      );
+    } catch (err) {
+      // Non-fatal — worst case the same signal resurfaces next load, which
+      // is a minor repeat, not a broken state.
+      console.error('[Mirar] dismissDriftSignal failed:', err);
     }
   },
 }));
@@ -389,5 +414,34 @@ async function loadUserState(
     }
   } catch (err) {
     console.error('[Mirar] loadUserState failed:', err);
+  }
+}
+
+// ── Load the most recent unshown weekly signal (Drift Alert system) ──────────
+// generate-weekly-signal writes one row here after every 7th reflection —
+// display_text is already localized server-side. shown_to_user gates it to a
+// single appearance; dismissDriftSignal flips that flag once the user has
+// seen it. Fire-and-forget from loadActiveCycle, same pattern as loadUserState.
+async function loadDriftSignal(
+  userId: string,
+  set: (partial: Partial<CycleStore>) => void
+) {
+  try {
+    const { data } = await withTimeout(
+      supabase
+        .from('weekly_signals')
+        .select('id, user_id, cycle_id, cycle_number, week_number, signal_type, display_text, shown_to_user, shown_at, generated_at')
+        .eq('user_id', userId)
+        .eq('shown_to_user', false)
+        .order('generated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+    );
+
+    if (data) {
+      set({ driftSignal: data as WeeklySignalRow });
+    }
+  } catch (err) {
+    console.error('[Mirar] loadDriftSignal failed:', err);
   }
 }

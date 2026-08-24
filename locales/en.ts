@@ -360,6 +360,12 @@ export default {
     forming: 'Still forming.',
   },
 
+  // ─── Drift Alert (weekly signal card) ──────────────────────────────────────────
+  drift_signal: {
+    label: 'This week',
+    dismiss: 'Got it',
+  },
+
   // ─── Auth ─────────────────────────────────────────────────────────────────────
   auth: {
     title: 'Mirar',

@@ -334,6 +334,11 @@ export default {
     forming: 'अभी बन रहा है।',
   },
 
+  drift_signal: {
+    label: 'इस हफ़्ते',
+    dismiss: 'समझ गया',
+  },
+
   auth: {
     title: 'Mirar',
     tagline: 'आपका आंतरिक संरेखण, दृश्यमान बनाया गया।',

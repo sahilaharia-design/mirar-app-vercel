@@ -124,6 +124,23 @@ export interface AlignmentScoreRow {
   computed_at: string;
 }
 
+// A weekly signal computed by generate-weekly-signal (Drift Alert system).
+// signal_type is one of VALID_SIGNAL_TYPES in that function — see
+// CONCERNING_SIGNAL_TYPES in lib/constants.ts for which ones surface as an
+// attention-weighted card vs a calm one.
+export interface WeeklySignalRow {
+  id: string;
+  user_id: string;
+  cycle_id: string | null;
+  cycle_number: number;
+  week_number: number;
+  signal_type: string;
+  display_text: string;
+  shown_to_user: boolean;
+  shown_at: string | null;
+  generated_at: string;
+}
+
 // Submitted option's signal breakdown — for "What Shifted" post-check-in
 export interface SubmittedSignal {
   theme1Code: ThemeCode;
