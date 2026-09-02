@@ -19,10 +19,22 @@ async function sendExpoPush(token: string, title: string, body: string) {
   return res.ok;
 }
 
+// Same fix as lib/scoring.ts's getCycleDay (kept in sync manually — this is a
+// separate Deno runtime, can't import that file): was a rolling 24-hour
+// window from the exact cycle-start clock time, not a calendar-day boundary,
+// so a user's day_number wouldn't advance until the same time-of-day the
+// next day. Normalizing to midnight first fixes it. This function runs in
+// UTC (server time) rather than the user's own timezone, so it can still be
+// off by a few hours right around midnight for non-UTC users — acceptable
+// here since this only decides whether to send a reminder push, not the
+// canonical day_number a check-in gets recorded under (that comes from the
+// client's own getCycleDay, which correctly uses the device's local time).
 function getCycleDay(startDate: string): number {
   const start = new Date(startDate);
   const now = new Date();
-  const diff = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+  const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diff = Math.round((nowMidnight.getTime() - startMidnight.getTime()) / (1000 * 60 * 60 * 24));
   return Math.min(Math.max(diff + 1, 1), 28);
 }
 

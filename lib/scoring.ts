@@ -73,12 +73,31 @@ export function computeThemeScores(
   });
 }
 
+// ─── Calendar-day difference between two dates, in the local timezone ────────
+// BUG THIS FIXES: getCycleDay/getElapsedCycleDay used to do
+// Math.floor((now - start) / 86400000) — a rolling 24-hour window measured
+// from the exact clock time the cycle started, not a calendar-day boundary.
+// A user who first checked in at 4:04 PM would not "advance" to the next day
+// number until 4:04 PM the following day — so opening the app at, say,
+// 2:55 AM the next calendar morning (under 24 hours later) would still find
+// yesterday's response under today's computed day_number and show "Check-in
+// recorded" for a day the user hadn't touched yet. Confirmed live on a real
+// account: checked in at 04:04 PM, still showed "recorded" at 2:55 AM the
+// following morning.
+// Fix: normalize both timestamps to local midnight first, so the difference
+// is always a whole number of actual calendar days, immune to what time of
+// day the cycle happened to start. Math.round (not floor) absorbs the
+// non-24-hour days DST transitions produce.
+function calendarDaysBetween(start: Date, now: Date): number {
+  const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const diffMs = nowMidnight.getTime() - startMidnight.getTime();
+  return Math.round(diffMs / (1000 * 60 * 60 * 24));
+}
+
 // ─── Get current day number (1–28) from cycle start ──────────────────────────
 export function getCycleDay(cycleStartDate: string): number {
-  const start = new Date(cycleStartDate);
-  const now = new Date();
-  const diffMs = now.getTime() - start.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffDays = calendarDaysBetween(new Date(cycleStartDate), new Date());
   return Math.min(Math.max(diffDays + 1, 1), 28);
 }
 
@@ -86,10 +105,7 @@ export function getCycleDay(cycleStartDate: string): number {
 // Unlike getCycleDay, this keeps counting past 28 so stage windows that have
 // fully passed (including stage 4 / day 29+) can be detected for report generation.
 export function getElapsedCycleDay(cycleStartDate: string): number {
-  const start = new Date(cycleStartDate);
-  const now = new Date();
-  const diffMs = now.getTime() - start.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffDays = calendarDaysBetween(new Date(cycleStartDate), new Date());
   return Math.max(diffDays + 1, 1);
 }
 
