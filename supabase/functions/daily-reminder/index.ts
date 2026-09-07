@@ -19,23 +19,29 @@ async function sendExpoPush(token: string, title: string, body: string) {
   return res.ok;
 }
 
-// Same fix as lib/scoring.ts's getCycleDay (kept in sync manually — this is a
-// separate Deno runtime, can't import that file): was a rolling 24-hour
-// window from the exact cycle-start clock time, not a calendar-day boundary,
-// so a user's day_number wouldn't advance until the same time-of-day the
-// next day. Normalizing to midnight first fixes it. This function runs in
-// UTC (server time) rather than the user's own timezone, so it can still be
-// off by a few hours right around midnight for non-UTC users — acceptable
-// here since this only decides whether to send a reminder push, not the
-// canonical day_number a check-in gets recorded under (that comes from the
-// client's own getCycleDay, which correctly uses the device's local time).
-function getCycleDay(startDate: string): number {
-  const start = new Date(startDate);
+// HISTORY: this used to recompute day_number here (mirroring the old
+// calendar-elapsed lib/scoring.ts getCycleDay) and check for an existing
+// response at that day_number. That broke two ways in production: (1) a
+// rolling 24h window instead of a calendar-day boundary, and (2) more
+// seriously, day_number is now driven purely by completed-checkin COUNT
+// (see lib/scoring.ts's getCycleDay), so it no longer corresponds to any
+// particular calendar date at all — there's no day_number here to compute or
+// match against. This function's actual job is calendar-only ("has this
+// user already checked in today"), so it's answered directly against
+// submitted_at, matching lib/scoring.ts's hasCheckedInToday (kept in sync
+// manually — separate Deno runtime, can't import that file). Runs in UTC
+// (server time) rather than the user's own timezone, so it can still be off
+// by a few hours right around midnight for non-UTC users — acceptable here
+// since this only decides whether to send a reminder push, not the
+// canonical day_number a check-in gets recorded under.
+function hasCheckedInToday(responses: { submitted_at: string }[]): boolean {
   const now = new Date();
-  const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-  const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diff = Math.round((nowMidnight.getTime() - startMidnight.getTime()) / (1000 * 60 * 60 * 24));
-  return Math.min(Math.max(diff + 1, 1), 28);
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  return responses.some((r) => {
+    const submitted = new Date(r.submitted_at);
+    const submittedMidnight = new Date(submitted.getFullYear(), submitted.getMonth(), submitted.getDate()).getTime();
+    return submittedMidnight === todayMidnight;
+  });
 }
 
 const REMINDER_BODY: Record<string, string> = {
@@ -63,18 +69,18 @@ Deno.serve(async (_req) => {
     let skipped = 0;
 
     for (const cycle of cycles ?? []) {
-      const dayNumber = getCycleDay(cycle.start_date);
-
-      // Check if already completed today
-      const { data: existing } = await supabase
+      // Check if already completed today — calendar-based, not day_number
+      // matching (see hasCheckedInToday above). Only need recent rows, not
+      // the full cycle history, to answer "did anything land today."
+      const { data: recent } = await supabase
         .from('responses')
-        .select('id')
+        .select('submitted_at')
         .eq('user_id', cycle.user_id)
         .eq('cycle_id', cycle.id)
-        .eq('day_number', dayNumber)
-        .limit(1);
+        .order('submitted_at', { ascending: false })
+        .limit(5);
 
-      if (existing?.length) {
+      if (hasCheckedInToday(recent ?? [])) {
         skipped++;
         continue;
       }

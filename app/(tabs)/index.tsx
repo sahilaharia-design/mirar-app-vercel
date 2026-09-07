@@ -220,13 +220,13 @@ export default function TodayScreen() {
     loadAlignmentHistory(session.user.id, 14);
     const cycle = useCycleStore.getState().activeCycle;
     if (cycle) {
-      if (__DEV__ && simulatedDay) {
-        const fakeStart = new Date();
-        fakeStart.setDate(fakeStart.getDate() - simulatedDay + 1);
-        await loadTodayQuestion(cycle.id, fakeStart.toISOString().split('T')[0]);
-      } else {
-        await loadTodayQuestion(cycle.id, cycle.start_date);
-      }
+      // dayNumber is now completion-count-based (see getCycleDay in
+      // lib/scoring.ts), so the dev Day Simulator just overrides the number
+      // directly instead of faking a calendar start date — there's no
+      // calendar date to fake anymore.
+      const realDay = useCycleStore.getState().currentDay;
+      const dayToLoad = __DEV__ && simulatedDay ? simulatedDay : realDay;
+      await loadTodayQuestion(cycle.id, dayToLoad);
     } else {
       router.replace('/(auth)/onboarding');
     }
@@ -254,9 +254,7 @@ export default function TodayScreen() {
     setSimulatedDay(nextDay);
     const cycle = useCycleStore.getState().activeCycle;
     if (cycle) {
-      const fakeStart = new Date();
-      fakeStart.setDate(fakeStart.getDate() - nextDay + 1);
-      await loadTodayQuestion(cycle.id, fakeStart.toISOString().split('T')[0]);
+      await loadTodayQuestion(cycle.id, nextDay);
     }
   };
 

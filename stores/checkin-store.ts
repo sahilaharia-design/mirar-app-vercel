@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { QuestionWithOptions, CheckInState, SubmittedSignal } from '../types/mirar';
-import { getCycleDay, getStageFromDay } from '../lib/scoring';
+import { getCycleDay, getStageFromDay, hasCheckedInToday } from '../lib/scoring';
 import { withTimeout } from '../lib/with-timeout';
 import i18n from '../lib/i18n';
 
@@ -34,7 +34,10 @@ function localizeQuestion(question: any): any {
 }
 
 interface CheckInStore extends CheckInState {
-  loadTodayQuestion: (cycleId: string, cycleStartDate: string) => Promise<void>;
+  // `dayNumber` is the caller's already-computed getCycleDay(completedCount)
+  // — the next undone day. "Already completed today" is decided separately,
+  // in here, via hasCheckedInToday against actual submitted_at dates.
+  loadTodayQuestion: (cycleId: string, dayNumber: number) => Promise<void>;
   selectOption: (optionId: string) => void;
   setJournalText: (text: string) => void;
   submitCheckIn: (userId: string, cycleId: string) => Promise<{ error: string | null; alignmentScore?: number | null; scoreBefore?: number | null }>;
@@ -56,9 +59,7 @@ const defaultState: CheckInState = {
 export const useCheckInStore = create<CheckInStore>((set, get) => ({
   ...defaultState,
 
-  loadTodayQuestion: async (cycleId: string, cycleStartDate: string) => {
-    const dayNumber = getCycleDay(cycleStartDate);
-
+  loadTodayQuestion: async (cycleId: string, dayNumber: number) => {
     let userId: string | undefined;
     try {
       const { data: { user } } = await withTimeout(supabase.auth.getUser());
@@ -68,18 +69,24 @@ export const useCheckInStore = create<CheckInStore>((set, get) => ({
       // question path below rather than hanging here indefinitely.
     }
 
-    // Check if already completed today
+    // Check if already completed today. This is a genuinely separate,
+    // calendar-based question from "what's the next day_number" (dayNumber,
+    // passed in by the caller) — see hasCheckedInToday in lib/scoring.ts.
+    // day_number can no longer be used to look this up directly since it's
+    // now just a completion counter, not tied to any specific calendar day.
     if (userId) {
       try {
-        const { data: existing } = await withTimeout(
+        const { data: recent } = await withTimeout(
           supabase
             .from('responses')
             .select('option_id, submitted_at, question_id')
             .eq('user_id', userId)
             .eq('cycle_id', cycleId)
-            .eq('day_number', dayNumber)
-            .maybeSingle()
+            .order('submitted_at', { ascending: false })
+            .limit(5)
         );
+
+        const existing = (recent ?? []).find((r: any) => hasCheckedInToday([r]));
 
         if (existing) {
           const { data: question } = await withTimeout(
@@ -176,21 +183,27 @@ export const useCheckInStore = create<CheckInStore>((set, get) => ({
     // which call fails, times out, or throws — the submit button must never
     // stay stuck showing "Recording…" indefinitely.
     try {
-      let cycleData: { start_date: string } | null = null;
+      // Fetch a fresh, authoritative completed-count right before computing
+      // the day number this submission gets — same "don't trust cached
+      // client state" reasoning as before, just pointed at the response
+      // count now instead of cycle.start_date (day_number no longer derives
+      // from calendar time at all — see getCycleDay in lib/scoring.ts).
+      let completedCount: number;
       try {
-        const res = await withTimeout(
-          supabase.from('cycles').select('start_date').eq('id', cycleId).single()
+        const { count, error: countErr } = await withTimeout(
+          supabase
+            .from('responses')
+            .select('id', { count: 'exact', head: true })
+            .eq('user_id', userId)
+            .eq('cycle_id', cycleId)
         );
-        cycleData = res.data;
+        if (countErr) throw countErr;
+        completedCount = count ?? 0;
       } catch (err) {
         return { error: err instanceof Error ? err.message : 'Could not reach the server. Please try again.' };
       }
 
-      if (!cycleData?.start_date) {
-        return { error: 'Cycle not found' };
-      }
-
-      const dayNumber = getCycleDay(cycleData.start_date);
+      const dayNumber = getCycleDay(completedCount);
 
       // Capture score before submission for delta display. Best-effort only —
       // a failure here shouldn't block the actual check-in submission.

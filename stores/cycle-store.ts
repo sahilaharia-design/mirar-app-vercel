@@ -161,7 +161,9 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         }
       }
 
-      const currentDay = getCycleDay(cycle.start_date);
+      // Day number is now driven by completed check-in count, not calendar
+      // elapsed time — see getCycleDay in lib/scoring.ts for why.
+      const currentDay = getCycleDay((responses ?? []).length);
       const currentStage = getStageFromDay(currentDay);
 
       // Load all options for scoring
@@ -246,7 +248,9 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       );
 
       // Streak from responses
-      const streakLength = computeStreak(responses ?? [], currentDay);
+      // computeStreak is now purely calendar-based (submitted_at), decoupled
+      // from day_number — see lib/scoring.ts.
+      const streakLength = computeStreak(responses ?? []);
 
       // Pattern engine: signals → patterns → awareness
       const patternReading = computePatternReading(responses ?? [], optionsMap, currentDay);

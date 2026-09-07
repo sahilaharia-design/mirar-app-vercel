@@ -73,40 +73,52 @@ export function computeThemeScores(
   });
 }
 
-// ─── Calendar-day difference between two dates, in the local timezone ────────
-// BUG THIS FIXES: getCycleDay/getElapsedCycleDay used to do
-// Math.floor((now - start) / 86400000) — a rolling 24-hour window measured
-// from the exact clock time the cycle started, not a calendar-day boundary.
-// A user who first checked in at 4:04 PM would not "advance" to the next day
-// number until 4:04 PM the following day — so opening the app at, say,
-// 2:55 AM the next calendar morning (under 24 hours later) would still find
-// yesterday's response under today's computed day_number and show "Check-in
-// recorded" for a day the user hadn't touched yet. Confirmed live on a real
-// account: checked in at 04:04 PM, still showed "recorded" at 2:55 AM the
-// following morning.
-// Fix: normalize both timestamps to local midnight first, so the difference
-// is always a whole number of actual calendar days, immune to what time of
-// day the cycle happened to start. Math.round (not floor) absorbs the
-// non-24-hour days DST transitions produce.
-function calendarDaysBetween(start: Date, now: Date): number {
-  const startMidnight = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-  const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diffMs = nowMidnight.getTime() - startMidnight.getTime();
-  return Math.round(diffMs / (1000 * 60 * 60 * 24));
+// ─── Get current day number (1–28) from completed check-in count ─────────────
+// HISTORY: this used to be calendar-elapsed — Math.floor/round((now - start)
+// / 86400000) — which had two real bugs in production, both confirmed live:
+//   1. Using a raw 24h rolling window (not a calendar-day boundary) meant a
+//      user who checked in at 4:04 PM wouldn't "advance" to the next day
+//      until 4:04 PM the next day — opening the app at 2:55 AM (a new
+//      calendar day, under 24h later) still showed yesterday's check-in as
+//      covering "today." Normalizing to local midnight before diffing fixed
+//      this specific case.
+//   2. The deeper issue that fix didn't touch: getCycleDay clamps at 28
+//      (Math.min(diffDays + 1, 28)). Mirar is explicitly NOT a 28-day
+//      program (see CLAUDE.md) — it's continuous, and a cycle only rolls
+//      over once 28 real check-ins are completed, not once 28 calendar days
+//      pass (see loadActiveCycle's rollover comment). So any user whose
+//      calendar-elapsed days outran their actual check-in count — trivially
+//      true for anyone who misses even a few days — would hit the day-28
+//      ceiling and get stuck there PERMANENTLY: every day from then on
+//      recomputes to the same clamped day_number 28, colliding with the
+//      same existing response row forever, with no way to ever reach a new
+//      day number again. Confirmed live: "the issue is there across the
+//      board... on a new day instead of showing new check-in it shows
+//      previous day" — every single day, not just once.
+// Fix: day_number is now driven entirely by how many check-ins the user has
+// actually completed this cycle, not by the calendar. It can never race
+// ahead of real usage, never clamps into a collision, and naturally matches
+// the product's own "continuous practice, not a calendar program" model —
+// taking a break for a few days no longer costs you anything, you just pick
+// up at the next number whenever you next check in.
+export function getCycleDay(completedCount: number): number {
+  return Math.min(Math.max(completedCount + 1, 1), 28);
 }
 
-// ─── Get current day number (1–28) from cycle start ──────────────────────────
-export function getCycleDay(cycleStartDate: string): number {
-  const diffDays = calendarDaysBetween(new Date(cycleStartDate), new Date());
-  return Math.min(Math.max(diffDays + 1, 1), 28);
-}
-
-// ─── Get elapsed day since cycle start, unclamped ─────────────────────────────
-// Unlike getCycleDay, this keeps counting past 28 so stage windows that have
-// fully passed (including stage 4 / day 29+) can be detected for report generation.
-export function getElapsedCycleDay(cycleStartDate: string): number {
-  const diffDays = calendarDaysBetween(new Date(cycleStartDate), new Date());
-  return Math.max(diffDays + 1, 1);
+// ─── Has the user already checked in today (real calendar day)? ──────────────
+// This is a genuinely separate question from "what day_number is next" above
+// — it's about calendar time (don't let someone submit twice in one real
+// day), not about sequence. Compares submitted_at timestamps against local
+// midnight, same normalization as the old calendar-boundary fix, but scoped
+// to exactly what it's actually deciding: has anything been submitted since
+// today started, not which day_number that submission happened to land on.
+export function hasCheckedInToday(responses: { submitted_at: string }[], now: Date = new Date()): boolean {
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  return responses.some((r) => {
+    const submitted = new Date(r.submitted_at);
+    const submittedMidnight = new Date(submitted.getFullYear(), submitted.getMonth(), submitted.getDate()).getTime();
+    return submittedMidnight === todayMidnight;
+  });
 }
 
 // ─── Get stage number from day ────────────────────────────────────────────────
@@ -218,22 +230,38 @@ export function computeThemeHistories(
   return result;
 }
 
-// ─── Compute streak from response day_numbers ─────────────────────────────────
-// Returns count of consecutive days with at least one response, counting back
-// from currentDay. A gap of 1 day (yesterday missed) resets the streak.
+// ─── Compute streak from response submission dates ────────────────────────────
+// HISTORY: this used to count back through day_number (currentDay, currentDay-1,
+// ...) looking for gaps. That only worked while day_number tracked calendar
+// days. Now that getCycleDay derives day_number purely from completed-checkin
+// COUNT, day_number is always contiguous (1, 2, 3, ...) by construction —
+// there can never be a "gap" in it to detect, so counting backward through it
+// would always just return responses.length regardless of whether the user
+// actually checked in every real day. A streak is inherently a calendar
+// concept ("did I show up every day"), so it's computed here the same way
+// hasCheckedInToday is — directly off submitted_at calendar dates — fully
+// decoupled from day_number/count sequencing.
+// Counts backward from today; if today has no check-in yet, starts from
+// yesterday instead so an in-progress streak doesn't read as 0 before the
+// user has had a chance to check in today.
 export function computeStreak(
-  responses: ResponseRow[],
-  currentDay: number
+  responses: { submitted_at: string }[],
+  now: Date = new Date()
 ): number {
   if (responses.length === 0) return 0;
-  const daysWithResponse = new Set(responses.map((r) => r.day_number));
+
+  const dateKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  const datesWithResponse = new Set(responses.map((r) => dateKey(new Date(r.submitted_at))));
+
+  const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (!datesWithResponse.has(dateKey(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
   let streak = 0;
-  for (let d = currentDay; d >= 1; d--) {
-    if (daysWithResponse.has(d)) {
-      streak++;
-    } else {
-      break;
-    }
+  while (datesWithResponse.has(dateKey(cursor))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 1);
   }
   return streak;
 }
