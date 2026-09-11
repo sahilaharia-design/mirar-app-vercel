@@ -26,6 +26,7 @@ import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
 import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
 import { AwarenessCard } from '../../components/home/AwarenessCard';
 import { DriftSignalCard } from '../../components/home/DriftSignalCard';
+import { MilestoneCard } from '../../components/home/MilestoneCard';
 import { WelcomeBackBanner } from '../../components/home/WelcomeBackBanner';
 import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
@@ -203,6 +204,8 @@ export default function TodayScreen() {
     patternReading,
     driftSignal,
     dismissDriftSignal,
+    pendingMilestone,
+    dismissMilestone,
     loadActiveCycle,
     loadAlignmentHistory,
   } = useCycleStore();
@@ -393,7 +396,16 @@ export default function TodayScreen() {
           <AwarenessCard reading={patternReading} />
         ) : null}
 
-        {/* 6. Drift Alert — the weekly signal generate-weekly-signal computes
+        {/* 6. Milestone Reflection — unlock_events was already being written
+            on every check-in with no UI consumer (see lib/milestones.ts).
+            Sits above the drift card: a milestone is rarer and more
+            significant than the weekly note, but still never competes with
+            today's check-in itself. */}
+        {pendingMilestone && (
+          <MilestoneCard milestone={pendingMilestone} onDismiss={dismissMilestone} />
+        )}
+
+        {/* 7. Drift Alert — the weekly signal generate-weekly-signal computes
             every 7th reflection, surfaced once and dismissed. Sits below the
             daily awareness card so it never competes with today's check-in. */}
         {driftSignal && (

@@ -133,6 +133,16 @@ export interface AlignmentScoreRow {
 // signal_type is one of VALID_SIGNAL_TYPES in that function — see
 // CONCERNING_SIGNAL_TYPES in lib/constants.ts for which ones surface as an
 // attention-weighted card vs a calm one.
+export interface UnlockEventRow {
+  id: string;
+  user_id: string;
+  unlock_key: string;
+  unlocked_at: string;
+  metadata: Record<string, unknown> | null;
+  shown_to_user: boolean;
+  shown_at: string | null;
+}
+
 export interface WeeklySignalRow {
   id: string;
   user_id: string;

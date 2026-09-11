@@ -366,6 +366,12 @@ export default {
     dismiss: 'Got it',
   },
 
+  // ─── Milestone Reflections (see lib/milestones.ts) ─────────────────────────────
+  milestone: {
+    label: 'Signal history',
+    dismiss: 'Got it',
+  },
+
   // ─── Auth ─────────────────────────────────────────────────────────────────────
   auth: {
     title: 'Mirar',

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 import { withTimeout } from '../lib/with-timeout';
-import { CycleRow, StageOverview, ThemeScore, AlignmentScoreRow, ThemeCode, WeeklySignalRow } from '../types/mirar';
+import { CycleRow, StageOverview, ThemeScore, AlignmentScoreRow, ThemeCode, WeeklySignalRow, UnlockEventRow, ResponseRow, OptionRow } from '../types/mirar';
 import {
   getCycleDay,
   getStageFromDay,
@@ -11,6 +11,13 @@ import {
 } from '../lib/scoring';
 import { STAGES, THEME_ORDER, THEMES } from '../lib/constants';
 import { computePatternReading, PatternReading } from '../lib/patterns';
+import { getMilestoneCopy, computeMilestoneInsight, themeDisplayName, MILESTONE_ORDER } from '../lib/milestones';
+
+export interface PendingMilestone {
+  event: UnlockEventRow;
+  title: string;
+  body: string;
+}
 
 interface CycleStore {
   activeCycle: CycleRow | null;
@@ -38,6 +45,10 @@ interface CycleStore {
   // ── Drift Alert: most recent unshown weekly signal, if any ────────────────
   driftSignal: WeeklySignalRow | null;
 
+  // ── Milestone Reflections: most advanced unshown unlock_events row, if
+  // any, plus the copy computed for it. See lib/milestones.ts. ─────────────
+  pendingMilestone: PendingMilestone | null;
+
   isLoading: boolean;
 
   loadActiveCycle: (userId: string) => Promise<void>;
@@ -45,6 +56,7 @@ interface CycleStore {
   loadAlignmentHistory: (userId: string, days?: number) => Promise<void>;
   refreshScores: () => Promise<void>;
   dismissDriftSignal: () => Promise<void>;
+  dismissMilestone: () => Promise<void>;
 }
 
 export const useCycleStore = create<CycleStore>((set, get) => ({
@@ -65,6 +77,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
   themeHistories: null,
   patternReading: null,
   driftSignal: null,
+  pendingMilestone: null,
 
   isLoading: false,
 
@@ -271,6 +284,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       get().loadAlignmentScore(userId);
       loadUserState(userId, set);
       loadDriftSignal(userId, set);
+      loadPendingMilestone(userId, responses ?? [], optionsMap, set);
 
       // Self-heal: generate any reports whose stage window has passed but which
       // never got created (the day-8/15/22 trigger only fires if the user checks
@@ -346,6 +360,24 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
       // Non-fatal — worst case the same signal resurfaces next load, which
       // is a minor repeat, not a broken state.
       console.error('[Mirar] dismissDriftSignal failed:', err);
+    }
+  },
+
+  dismissMilestone: async () => {
+    const pending = get().pendingMilestone;
+    if (!pending) return;
+    // Optimistic — clear locally first so the card disappears immediately.
+    set({ pendingMilestone: null });
+    try {
+      await withTimeout(
+        supabase
+          .from('unlock_events')
+          .update({ shown_to_user: true, shown_at: new Date().toISOString() })
+          .eq('id', pending.event.id)
+      );
+    } catch (err) {
+      // Non-fatal — worst case the same milestone resurfaces next load.
+      console.error('[Mirar] dismissMilestone failed:', err);
     }
   },
 }));
@@ -447,5 +479,60 @@ async function loadDriftSignal(
     }
   } catch (err) {
     console.error('[Mirar] loadDriftSignal failed:', err);
+  }
+}
+
+// ── Load the most advanced unshown milestone (Milestone Reflections) ─────────
+// unlock_events is written by check-unlocks on every check-in (fire-and-
+// forget from process-checkin) — this only reads what's already there and
+// unshown. If more than one is unshown at once (e.g. a user who was offline
+// for a while and crossed two thresholds), show only the most advanced one
+// — the earlier ones are still marked read implicitly by never surfacing,
+// which is the right call here: a stacked queue of "you unlocked X, now Y"
+// cards would be the exact gamification-notification pattern this feature
+// is deliberately avoiding.
+async function loadPendingMilestone(
+  userId: string,
+  responses: ResponseRow[],
+  optionsMap: Record<string, OptionRow>,
+  set: (partial: Partial<CycleStore>) => void
+) {
+  try {
+    const { data } = await withTimeout(
+      supabase
+        .from('unlock_events')
+        .select('id, user_id, unlock_key, unlocked_at, metadata, shown_to_user, shown_at')
+        .eq('user_id', userId)
+        .eq('shown_to_user', false)
+    );
+
+    const rows = (data ?? []) as UnlockEventRow[];
+    if (rows.length === 0) return;
+
+    // Pick the most advanced by MILESTONE_ORDER position, not by unlocked_at
+    // — a user who jumps straight to 14+ reflections (e.g. imported history)
+    // should see the 14-day reflection, not the 3-day one.
+    let best: UnlockEventRow | null = null;
+    let bestRank = -1;
+    for (const row of rows) {
+      const rank = MILESTONE_ORDER.indexOf(row.unlock_key as any);
+      if (rank > bestRank) {
+        bestRank = rank;
+        best = row;
+      }
+    }
+    if (!best) return;
+
+    const copy = getMilestoneCopy(best.unlock_key);
+    if (!copy) return;
+
+    const insight = computeMilestoneInsight(responses, optionsMap);
+    const body = insight
+      ? `${themeDisplayName(insight.themeCode)} has moved from ${insight.fromStatus} to ${insight.toStatus} since you started.`
+      : copy.fallbackBody;
+
+    set({ pendingMilestone: { event: best, title: copy.title, body } });
+  } catch (err) {
+    console.error('[Mirar] loadPendingMilestone failed:', err);
   }
 }
