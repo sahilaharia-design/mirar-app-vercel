@@ -18,7 +18,7 @@ import { useCheckInStore } from '../../stores/checkin-store';
 import { useCycleStore } from '../../stores/cycle-store';
 import { useDevStore } from '../../stores/dev-store';
 import { PromptCard } from '../../components/check-in/PromptCard';
-import { OptionSelector } from '../../components/check-in/OptionSelector';
+import { SignalSlider } from '../../components/check-in/SignalSlider';
 import { JournalExpander } from '../../components/check-in/JournalExpander';
 import { SettleScreen } from '../../components/check-in/SettleScreen';
 import { AppHeader } from '../../components/ui/AppHeader';
@@ -150,8 +150,10 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
           promptText={question.prompt_text}
         />
         <View style={[styles.divider, { backgroundColor: colors.ruleLight }]} />
-        <OptionSelector
+        <SignalSlider
           options={question.options ?? []}
+          poleLowLabel={question.pole_low_label}
+          poleHighLabel={question.pole_high_label}
           selectedOptionId={selectedOptionId}
           onSelect={selectOption}
           disabled={isSubmitting}

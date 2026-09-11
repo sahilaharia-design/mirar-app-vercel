@@ -11,7 +11,7 @@ import i18n from '../lib/i18n';
 // itself is unreachable) read the same table directly, so they need the same
 // resolution — otherwise a Hindi/Gujarati user would see raw English here
 // even though the normal path is fully localized.
-const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt'] as const;
+const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt', 'pole_low_label', 'pole_high_label'] as const;
 const OPTION_LOCALIZED_FIELDS = ['option_text'] as const;
 
 function localize(row: Record<string, any>, fields: readonly string[]): Record<string, any> {

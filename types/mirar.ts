@@ -70,6 +70,11 @@ export interface QuestionRow {
   stage_affinity: StageAffinity;
   active: boolean;
   created_at: string;
+  // Signal Slider poles — the two words shown at the ends of the drag
+  // track (see migration 011_signal_slider.sql). Optional/nullable since
+  // older or generated questions may not have them set.
+  pole_low_label?: string | null;
+  pole_high_label?: string | null;
 }
 
 export interface OptionRow {

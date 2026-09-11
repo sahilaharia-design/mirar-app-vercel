@@ -268,7 +268,7 @@ function localize<T extends Record<string, any>>(row: T, fields: string[], langu
   return row
 }
 
-const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt']
+const QUESTION_LOCALIZED_FIELDS = ['prompt_text', 'tomorrow_tease', 'mirror_glimmer', 'journal_prompt', 'pole_low_label', 'pole_high_label']
 const OPTION_LOCALIZED_FIELDS = ['option_text']
 
 async function serveQuestion(supabase: any, questionId: string, corsHeaders: any, language: string) {
@@ -385,7 +385,7 @@ async function tryGenerateQuestion(
     const LANGUAGE_NAMES: Record<string, string> = { hi: 'Hindi', gu: 'Gujarati' }
     const languageInstruction = ctx.language === 'en'
       ? ''
-      : `\n\nWrite prompt_text and every option_text entirely in ${LANGUAGE_NAMES[ctx.language]} (native script, not transliteration). Keep the same calm, observational tone in that language — do not translate word-for-word from English, write it naturally.`
+      : `\n\nWrite prompt_text, every option_text, and both pole labels entirely in ${LANGUAGE_NAMES[ctx.language]} (native script, not transliteration). Keep the same calm, observational tone in that language — do not translate word-for-word from English, write it naturally.`
 
     const systemPrompt = `You are the question-writing engine of Mirar — a daily emotional-hygiene mirror, not a therapy or coaching app.
 
@@ -394,10 +394,12 @@ You write exactly ONE daily check-in question with exactly 5 answer options for 
 Use only this vocabulary style: signal, alignment, drift, calibration, check-in, internal state, notice, present, holding, shifting.
 Never use: heal, healing, journal, journaling, therapy, motivational, should, fix, improve, better, worse, coach, advise.
 
-The question must read like a natural continuation of a daily practice — calm, observational, never leading toward a "right" answer. Options must span a real spectrum from low signal to high signal on the focus themes, not just positive-to-negative wording.${languageInstruction}
+The question must read like a natural continuation of a daily practice — calm, observational, never leading toward a "right" answer. Options must span a real spectrum from low signal to high signal on the focus themes, not just positive-to-negative wording. The 5 options must already be written in that low-to-high order (option 1 = lowest signal, option 5 = highest) — the app renders them as a single drag slider, not a list to read in full, so order matters and users will mostly see only the ends and whichever one they land on.
+
+Also write pole_low_label and pole_high_label — one to three words each, shown at the two ends of the slider (e.g. "Running on Empty" / "Waking Up"). They must capture the spectrum's two extremes without needing the full option text — a user should be able to place themselves roughly from the pole words alone.${languageInstruction}
 
 Respond with ONLY raw JSON, no markdown fences, no prose, matching exactly this shape:
-{"prompt_text": "...", "options": [{"option_text": "...", "theme_1_code": "XXX", "theme_2_code": "XXX"}, ... exactly 5 total]}
+{"prompt_text": "...", "pole_low_label": "...", "pole_high_label": "...", "options": [{"option_text": "...", "theme_1_code": "XXX", "theme_2_code": "XXX"}, ... exactly 5 total, already ordered low to high]}
 
 theme codes must be exactly one of: IAP, EWB, FAF, RC, GAL, RA.`
 
@@ -457,6 +459,17 @@ Return the JSON now.`
     if (!Array.isArray(parsed.options) || parsed.options.length !== 5) {
       return null
     }
+    // Pole labels are the two words shown at the slider's ends — fall back to
+    // null (SignalSlider falls back to the option text itself) rather than
+    // failing the whole generation if the model omits or malforms them.
+    const poleLowLabel =
+      typeof parsed.pole_low_label === 'string' && parsed.pole_low_label.length > 0 && parsed.pole_low_label.length <= 40
+        ? parsed.pole_low_label
+        : null
+    const poleHighLabel =
+      typeof parsed.pole_high_label === 'string' && parsed.pole_high_label.length > 0 && parsed.pole_high_label.length <= 40
+        ? parsed.pole_high_label
+        : null
     const validatedOptions: Array<{
       option_text: string
       theme_1_code: string
@@ -505,6 +518,8 @@ Return the JSON now.`
         depth_level: depthLevel,
         active: true,
         prompt_text: parsed.prompt_text,
+        pole_low_label: poleLowLabel,
+        pole_high_label: poleHighLabel,
         theme_1: focusTheme1,
         theme_2: focusTheme2,
       })
