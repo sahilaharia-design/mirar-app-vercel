@@ -9,7 +9,16 @@
 -- 2) Sets pole_low_label / pole_high_label per question — the two words shown
 --    at the ends of the slider track.
 -- Run after migration 011_signal_slider.sql.
+--
+-- The offset step (101-105) also needs option_number's own CHECK constraint
+-- (BETWEEN 1 AND 5) out of the way temporarily — dropped here, re-added at
+-- the very end once every row is back in 1-5. Safe to re-run this whole
+-- file from the top at any point: every UPDATE below matches by option_text
+-- (not by assuming current numbering), so rows already corrected just get
+-- set to the same value again.
 -- ─────────────────────────────────────────────────────────────────────────────
+
+ALTER TABLE options DROP CONSTRAINT IF EXISTS options_option_number_check;
 
 -- ── Day 1 ────────────────────────────────────────────────────────────────
 -- Phase 1: offset to avoid transient unique-constraint collisions
@@ -430,4 +439,7 @@ UPDATE options SET option_number = 3 WHERE question_id = (SELECT id FROM questio
 UPDATE options SET option_number = 4 WHERE question_id = (SELECT id FROM questions WHERE day_number = 28) AND option_text = 'Trusting that I know more than I give myself credit for.';
 UPDATE options SET option_number = 5 WHERE question_id = (SELECT id FROM questions WHERE day_number = 28) AND option_text = 'All of it — the mess, the clarity, the doubts. It''s all real.';
 UPDATE questions SET pole_low_label = 'Staying Honest', pole_high_label = 'All of It, Real' WHERE day_number = 28;
+
+-- ── Restore the constraint now that every row is back in 1-5 ─────────────────
+ALTER TABLE options ADD CONSTRAINT options_option_number_check CHECK (option_number BETWEEN 1 AND 5);
 
