@@ -117,10 +117,18 @@ export function SignalSlider({
   return (
     <View style={styles.container} accessibilityRole="adjustable">
       <View style={styles.poleRow}>
-        <Text style={[styles.poleLabel, { color: colors.slateLight }]} numberOfLines={1}>
+        {/* numberOfLines=2 (not 1) — the real pole_low_label/pole_high_label
+            are always short (see migration 011/seed_v4), but the fallback
+            here is a full option sentence for any question that hasn't had
+            the SQL content migration run yet, or a rare AI-generated
+            question where the model omitted a pole label. On narrow
+            screens a 1-line truncation of two long fallback strings sitting
+            side-by-side reads as crowded/overlapping — 2 lines plus the gap
+            below keeps both legible either way. */}
+        <Text style={[styles.poleLabel, { color: colors.slateLight }]} numberOfLines={2}>
           {poleLowLabel ?? sorted[0]?.option_text ?? ''}
         </Text>
-        <Text style={[styles.poleLabel, { color: colors.slateLight, textAlign: 'right' }]} numberOfLines={1}>
+        <Text style={[styles.poleLabel, { color: colors.slateLight, textAlign: 'right' }]} numberOfLines={2}>
           {poleHighLabel ?? sorted[sorted.length - 1]?.option_text ?? ''}
         </Text>
       </View>
@@ -187,6 +195,7 @@ const styles = StyleSheet.create({
   poleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: 12,
   },
   poleLabel: {
     flex: 1,
