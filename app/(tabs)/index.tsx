@@ -62,6 +62,19 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   // Derive selected option data for journal echo
   const selectedOption = question?.options?.find((o) => o.id === selectedOptionId) ?? null;
 
+  // Auto-advance to the journal step shortly after a slider selection —
+  // part of the "cut the remaining tap" pass (see the pivot plan). The
+  // explicit Continue button below still works immediately for anyone who
+  // wants it; this just means most people never need to reach for it.
+  // "Undo" is just re-dragging the slider: any change to selectedOptionId
+  // resets the timer, and leaving step 1 (via the manual tap) cancels it
+  // via the effect cleanup, so it can never double-fire.
+  React.useEffect(() => {
+    if (checkInStep !== 1 || !selectedOptionId) return;
+    const timer = setTimeout(() => setCheckInStep(2), 1100);
+    return () => clearTimeout(timer);
+  }, [checkInStep, selectedOptionId]);
+
   const handleSubmit = async () => {
     if (!session?.user?.id || !activeCycle?.id || !selectedOptionId) return;
     const result = await submitCheckIn(session.user.id, activeCycle.id);
@@ -348,6 +361,7 @@ export default function TodayScreen() {
           promptPreview={question?.prompt_text ?? t('common.signal_ready')}
           isCompleted={isCompleted}
           completedAt={completedAt}
+          tomorrowTease={question?.tomorrow_tease}
           onPress={() => setShowCheckin(true)}
         />
 

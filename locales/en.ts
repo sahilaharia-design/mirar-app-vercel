@@ -332,6 +332,7 @@ export default {
     pattern_hint: 'Your pattern will appear after a few reflections.',
     how_link: 'How Mirar works',
     daily_pause: 'Daily pause',
+    tomorrow_teaser_label: 'Tomorrow',
     recent_pattern: 'Recent pattern',
     context_with_count: "Today's mirror · {{count}} recent reflections",
     trend_steady: 'Steady',

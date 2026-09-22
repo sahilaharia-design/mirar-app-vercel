@@ -57,6 +57,15 @@ interface TodayCheckinCardProps {
   promptPreview: string;
   isCompleted: boolean;
   completedAt?: string | null;
+  /** tomorrow_tease from today's completed question — an anticipation
+   * hook that already existed in the data model but was previously only
+   * shown once, on the post-submit Mirror screen. Surfacing it here too
+   * means it's visible on every return visit for the rest of the day,
+   * not just in the seconds right after submitting. Part of the
+   * "strengthen the payoff, not just the input" pass (see the pivot
+   * plan) — the goal is a live reason to come back tomorrow, not a new
+   * mechanic. */
+  tomorrowTease?: string | null;
   onPress: () => void;
 }
 
@@ -65,6 +74,7 @@ export function TodayCheckinCard({
   promptPreview,
   isCompleted,
   completedAt,
+  tomorrowTease,
   onPress,
 }: TodayCheckinCardProps) {
   const { t } = useTranslation();
@@ -93,6 +103,16 @@ export function TodayCheckinCard({
           <Text style={[styles.time, { color: colors.slateXLight }]}>
             {new Date(completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </Text>
+        )}
+        {tomorrowTease && (
+          <View style={[styles.teaserRow, { borderTopColor: colors.border }]}>
+            <Text style={[styles.teaserLabel, { color: colors.slateLight }]}>
+              {t('today.tomorrow_teaser_label')}
+            </Text>
+            <Text style={[styles.teaserText, { color: colors.slateMid }]} numberOfLines={2}>
+              {tomorrowTease}
+            </Text>
+          </View>
         )}
       </Animated.View>
     );
@@ -236,5 +256,21 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: FONT_SIZE.xs,
+  },
+  teaserRow: {
+    marginTop: SPACING.sm,
+    paddingTop: SPACING.sm,
+    borderTopWidth: 1,
+    gap: 2,
+  },
+  teaserLabel: {
+    fontSize: FONT_SIZE.xs,
+    letterSpacing: 0.5,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+  },
+  teaserText: {
+    fontSize: FONT_SIZE.sm,
+    lineHeight: 20,
   },
 });
