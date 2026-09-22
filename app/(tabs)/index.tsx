@@ -43,7 +43,7 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   const { t } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
-  const { activeCycle } = useCycleStore();
+  const { activeCycle, currentDay } = useCycleStore();
   const {
     question,
     selectedOptionId,
@@ -126,8 +126,15 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
   // When completed, we navigate to the mirror screen — nothing to render here
   if (isCompleted) return null;
 
-  const stage = getStageFromDay(question.day_number ?? 1);
-  const dayNum = question.day_number ?? 1;
+  // Use the cycle's actual completed-count day (currentDay, from
+  // cycle-store) for display — not question.day_number. That field is the
+  // SELECTED question's own row and was never guaranteed to match the
+  // user's real day even before this pass (the curated-selection query in
+  // select-daily-question has always picked adaptively by theme coverage,
+  // not by matching day_number), and definitely won't once the curated
+  // bank is 6 evergreen per-theme questions reused across many real days.
+  const dayNum = currentDay;
+  const stage = getStageFromDay(dayNum);
 
   // ── Step 2: Journal ─────────────────────────────────────────────────────────
   if (checkInStep === 2) {
