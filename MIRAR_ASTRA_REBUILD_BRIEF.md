@@ -12,16 +12,80 @@ taking the current app down.
 
 ---
 
-## 1. Product identity
+## 1. The pivot — read this section first
 
-Mirar is a continuous internal alignment system — think **WHOOP, but for
-your inner state instead of your body**. WHOOP never stops reading your
-biometrics; Mirar never stops reading your internal signals.
+Everything below this point in an earlier draft of this brief carried
+the current app's framework forward almost unchanged: six named themes,
+an "alignment/signal/drift/calibration" vocabulary, status labels like
+"Under Load." Called out directly this session: that's not a fresh
+approach, it's the same approach in different clothes — and it's the
+actual reason the current app doesn't pull people back. Worth stating
+plainly rather than glossing over: **the framework itself was the
+problem, not its packaging.**
+
+Nobody wakes up thinking *"I should check my inner alignment today."*
+That's an outside-in framework, not a felt problem. What people actually
+feel, in their own words:
+
+- "Something's off and I can't explain why."
+- "I keep snapping at people lately."
+- "I said yes to something again when I meant to say no."
+- "I don't feel like myself and I don't know when that started."
+
+Nobody says *"my Relational Capital theme is Under Load."* That gap —
+between how the app talks and how a real person describes their own
+inner life — is the actual product problem this rebuild needs to solve.
+Fast interactions and nice visuals don't fix it if the user never has
+the moment of *"oh, this is exactly my problem."*
+
+**The pivot, concretely:**
+
+1. **Lead with the felt problem, not the framework.** The hook isn't "a
+   continuous alignment system." It's *"You know when something feels
+   off and you can't put your finger on it? We'll help you find out."*
+2. **The six themes (or whatever taxonomy Astra's scoring engine uses)
+   stay backend-only scaffolding.** They can keep powering the scoring
+   logic in §7 below — that machinery is legitimately reusable — but the
+   user never needs to learn a taxonomy, and the app should never show
+   them a theme name, a status label, or the word "signal." A user
+   should never need to know what "Relational Capital" means to get
+   value.
+3. **Kill the internal jargon from anything the user reads.** Not
+   *signal, alignment, drift, calibration.* Plain words instead:
+   *feeling, pattern, been building up, noticed.* This isn't dumbing the
+   product down — it's the product finally speaking in the language the
+   problem actually lives in.
+4. **The payoff is a specific, countable, undeniable truth — never a
+   status label.** Not "Energy: Under Load." Instead: *"You've said
+   you're exhausted 4 days this week."* *"You've mentioned feeling
+   unheard three times this month — you hadn't noticed that pattern."*
+   Concrete and specific is what makes a WHOOP number ("recovery: 43%")
+   land — the poetic status word never did that work on its own.
+5. **Answer "how does someone realize they have this problem" outside
+   the app too** — the very first thing anyone sees, before opening it,
+   needs to name the felt experience, not the mission statement:
+   *"Most people can't tell you why they feel the way they do. This app
+   can — because it's been paying attention."*
+6. **The brushing-teeth analogy gets stronger under this pivot, not
+   weaker.** Nobody needs to understand plaque chemistry to brush their
+   teeth — they just do it and trust it works. Mirar should feel the
+   same: answer one plain-language question a day, trust the app, and
+   eventually it tells you something true about yourself in words you'd
+   actually use — not a framework you had to learn first.
+
+---
+
+## 2. Product identity (what it does, in the language above)
+
+Mirar is the thing that notices what you're too close to see about your
+own inner life — think **WHOOP, but for how you feel instead of how your
+body performs**. WHOOP never stops reading your biometrics; Mirar never
+stops paying attention to how you're actually doing.
 
 It is **daily emotional hygiene** — as routine and non-negotiable as
 brushing your teeth. Not a 28-day program you complete, not a challenge
 with an end date, not something you "finish." Something you do every
-single day because your internal state shifts every single day, the same
+single day because how you're doing changes every single day, the same
 way your teeth need brushing every single day regardless of how clean
 they were yesterday.
 
@@ -34,15 +98,15 @@ interaction system:
 - A visual sense of **built-up "residue" that gets cleared** by showing
   up — not guilt-based (missing a day doesn't mean something is now
   "dirty" or "broken"), but a satisfying moment of clarity/freshness each
-  time the user completes today's signal.
+  time the user completes today's check-in.
 - The payoff is cumulative and physical-feeling: "emotional fitness"
   that visibly strengthens over weeks of consistent small check-ins,
   the same way physical fitness does, not a score you're chasing but a
   state you're building.
 
-**The core question the whole product exists to answer**: *"Am I still
-aligned with who I actually am, or have I been making decisions from an
-outdated version of myself?"*
+**The core question the whole product exists to answer, in the user's
+own words, not ours**: *"Why do I feel the way I do — and would I even
+notice if that started changing?"*
 
 **What Mirar explicitly is NOT** (preserve this positioning — it's the
 thing that differentiates the product):
@@ -58,27 +122,33 @@ thing that differentiates the product):
   present every day, catching drift before it becomes a crisis
 - Not dependent on another human like coaching
 
-**The six themes it reads continuously** (not in stages — these are the
-six vital signs of the "emotional fitness" metaphor):
+**The six themes it reads continuously, backend-only** (not in stages —
+internal scaffolding for the scoring engine, per the pivot in §1: these
+names and codes power the machinery in §7, but a user should never see
+"Relational Capital" or "Under Load" anywhere in the product):
 
-| Code | Theme | What it tracks |
-|---|---|---|
-| IAP | Direction (Inner Alignment & Purpose) | What feels true, chosen, and internally clear |
-| EWB | Energy (Energy & Well-being) | Capacity, heaviness, steadiness, recovery |
-| FAF | Attention (Focus & Flow) | Where the mind keeps returning |
-| RC | Connection (Relational Capital) | How honest and spacious relationships feel |
-| GAL | Growth (Growth & Learning) | Openness, change, what's becoming visible |
-| RA | Movement (Resilience & Action) | Small steps, hesitation, follow-through |
+| Code | Backend theme name | What it tracks | How the USER would hear this instead |
+|---|---|---|---|
+| IAP | Direction (Inner Alignment & Purpose) | What feels true, chosen, and internally clear | "whether your choices feel like yours" |
+| EWB | Energy (Energy & Well-being) | Capacity, heaviness, steadiness, recovery | "how much you've got in the tank" |
+| FAF | Attention (Focus & Flow) | Where the mind keeps returning | "what your mind keeps going back to" |
+| RC | Connection (Relational Capital) | How honest and spacious relationships feel | "how close you feel to people" |
+| GAL | Growth (Growth & Learning) | Openness, change, what's becoming visible | "how open you are to things changing" |
+| RA | Movement (Resilience & Action) | Small steps, hesitation, follow-through | "whether you're doing the things you say matter" |
 
 **The AI Mirror layer**: after each daily check-in, an AI reflects back a
-short synthesis — not advice, not coaching, just a mirror: *"Here is
-what your signals showed today."* It tracks drift across days and
-surfaces patterns the user can't see themselves ("If your energy has
-been dropping for 6 days, Mirar notices before you do"). Language
-register throughout the product: **signal, alignment, drift, calibration,
-check-in, internal state, notice, holding, shifting** — never *heal,
-healing, journal, journaling, therapy, motivational, should, fix,
-improve, coach, advise*.
+short, specific, plain-language observation — not advice, not coaching,
+just what it noticed: *"You've said you're exhausted four days this
+week"* — not *"Energy: Under Load."* It tracks patterns across days and
+surfaces what the user can't see themselves purely from being inside
+their own days ("your energy's been dropping most evenings this week —
+you might not have clocked that yet"). Internal/backend concept names
+(signal, alignment, drift, calibration) can stay as engineering
+vocabulary in code and schema — **none of them should appear in copy the
+user reads.** User-facing language should read like something a
+thoughtful friend would actually say, never *heal, healing, journal,
+journaling, therapy, motivational, should, fix, improve, coach, advise* —
+and never abstract status jargon either.
 
 Design principles to carry forward: soft dark mode with warm undertones,
 mirror/water/light visual metaphors, calm and generous whitespace,
@@ -86,7 +156,7 @@ poetic but not heavy, calm but not cold.
 
 ---
 
-## 2. The retention goal — stated precisely
+## 3. The retention goal — stated precisely
 
 The brief that produced this document was explicit: **not** "get the
 user to open the app every 2-4 minutes." The actual goal is —
@@ -105,7 +175,7 @@ the goal and would actually work against the brushing-teeth framing
 
 ---
 
-## 3. The gamification synthesis — "a mix of both"
+## 4. The gamification synthesis — "a mix of both"
 
 Directly resolving the brief: not literal competitive gamification
 (leaderboards, social comparison, points-as-currency), but real gamified
@@ -114,26 +184,27 @@ Fitness rings, not Duolingo leaderboards.**
 
 Build toward:
 
-- **Six theme rings** (or an equivalent unified visual), one per theme,
-  filling based on recent signal strength — a literal "emotional fitness
-  dashboard" the user watches build over time, entirely personal, never
-  compared to anyone else.
-- **Streak, reframed as consistency, not competition.** The current app
-  already made this exact framing shift mid-session — see §5's language
-  note. Carry it forward: the visual/copy language should read as *"you
-  showed up"*, not *"don't break your streak"* — no loss-aversion
-  pressure, no guilt state for a missed day. A missed day should be
-  recoverable and gentle in the new visual system, not punished.
+- **Six rings behind the scenes, one unified feel in front.** The rings
+  can be driven by the backend's six-theme scoring, but the user should
+  never need to know they're looking at "themes" — present it as one
+  build-up-over-time fitness picture, entirely personal, never compared
+  to anyone else. Per §1: no theme names, no status jargon in the UI.
+- **Streak, reframed as consistency, not competition** (already made
+  this exact framing shift mid-session — see §6's lessons below). The
+  visual/copy language should read as *"you showed up"*, not *"don't
+  break your streak"* — no loss-aversion pressure, no guilt state for a
+  missed day. A missed day should be recoverable and gentle in the new
+  visual system, not punished.
 - **Milestone-style rewards that are earned reflections, not badges.**
   The current app has a shipped feature called Milestone Reflections
   worth preserving conceptually: at real usage thresholds (first few
   check-ins, a week in, a full month, etc.), the app surfaces a short,
-  data-grounded retrospective about the user's *own* signal history
-  ("your Energy has moved from Under Load to Stabilizing since you
-  started") — not an icon, not "Achievement Unlocked," a genuine
-  moment of the mirror showing you something true about yourself. This
-  is the version of "reward" that fits the product; a trophy case does
-  not.
+  specific, plain-language retrospective about the user's own recent
+  history — *"you've said you're exhausted four days this week"*, never
+  *"Energy has moved from Under Load to Stabilizing"* — not an icon,
+  not "Achievement Unlocked," a genuine moment of the app showing you
+  something true about yourself, in words you'd use. This is the
+  version of "reward" that fits the product; a trophy case does not.
 - **The brushing-teeth completion moment** as the core daily "gamified"
   beat: a satisfying, almost physical sense of clearing/freshness when
   today's check-in is done — this is the dopamine moment to design for,
@@ -147,52 +218,58 @@ Build toward:
 
 ---
 
-## 4. Functional requirements (technology-agnostic)
+## 5. Functional requirements (technology-agnostic)
 
 State these as *what the product must do*, not how the current app
 happens to do it — Astra should feel free to rebuild the how entirely.
 
-1. **One daily signal input.** A single low-friction interaction per
-   day that captures where the user is on one theme, on a low↔high
-   spectrum. (The current app arrived at a drag-slider gesture after
-   iterating away from a 5-option multiple-choice list — the lesson
-   there, see §5, is about *friction*, not about the slider specifically
-   being sacred.)
-2. **Six-theme scoring engine.** Every answer maps to signal on 1-2
-   themes, at a Low/Medium/High intensity, accumulating into a
-   continuous alignment score and per-theme status (see §6 for the exact
-   current formulas, offered as a reusable starting point).
+1. **One daily plain-language check-in.** A single low-friction
+   interaction per day that captures how the user's doing on one thing,
+   on a low↔high spectrum, asked the way a person would actually ask it
+   — not a theme name in sight. (The current app arrived at a
+   drag-slider gesture after iterating away from a 5-option
+   multiple-choice list — the lesson there, see §6, is about *friction*,
+   not about the slider specifically being sacred.)
+2. **Six-theme scoring engine, backend-only.** Every answer maps to 1-2
+   themes at a Low/Medium/High intensity, accumulating into a continuous
+   score and per-theme status (see §7 for the exact current formulas,
+   offered as a reusable starting point) — this machinery drives what
+   the user sees, but the theme names and status labels themselves are
+   never shown; see §1.
 3. **Adaptive question selection.** Not every user sees the same
    question source forever — the engine should prefer content that fills
-   gaps in a user's recent theme coverage, adapts depth/gentleness based
-   on whether a theme is currently "Under Load," and can transition a
-   user from a small curated set of questions toward increasingly
-   personalized ones as their history deepens.
-4. **AI Mirror reflection.** After each check-in, a short AI-generated
-   synthesis of that specific answer plus what it means in the context
-   of recent history — signal, not advice.
-5. **Pattern/drift detection.** Recurring signals across the last N
-   check-ins get surfaced as gentle awareness ("this keeps showing up"),
-   and a sustained decline in one theme triggers a soft alert before it
-   becomes a crisis.
+   gaps in what's been asked recently, go gentler on whatever's
+   currently running low, and can transition a user from a small curated
+   set of questions toward increasingly personalized ones as their
+   history deepens.
+4. **The AI reflection.** After each check-in, a short AI-generated,
+   specific, plain-language observation about that answer plus what it
+   means next to recent history — something noticed, never advice.
+5. **Pattern detection.** Things that keep coming up across the last N
+   check-ins get surfaced as a gentle, specific observation ("this keeps
+   showing up"), and a sustained decline in one area triggers a soft,
+   plain-language heads-up before it becomes a crisis — never a jargon
+   alert.
 6. **Milestone reflections.** Real usage thresholds trigger a one-time,
-   data-grounded retrospective (see §3).
+   specific, data-grounded retrospective in plain language (see §4).
 7. **Multi-language.** English, Hindi, Gujarati at minimum — full parity,
    not just UI chrome; check-in questions, AI reflections, and app copy
-   all need translation paths.
-8. **Historical trend review.** A way to see theme trends over time
-   (weekly/monthly), and a periodic (roughly every ~7 real check-ins)
-   written reflection/report summarizing what's shown up.
+   all need translation paths, and the plain-language pivot in §1 has to
+   hold in every language, not just English.
+8. **Historical trend review.** A way to see how things have been
+   trending over time (weekly/monthly), in plain language, and a
+   periodic (roughly every ~7 real check-ins) written reflection
+   summarizing what's shown up.
 9. **Frictionless auth.** Passwordless (magic-link style) sign-in — no
    password to remember, consistent with "no passwords, no tracking,
-   your signal belongs to you" as a stated trust promise.
+   what you share stays yours" as a stated trust promise.
 10. **Privacy-first framing throughout** — this is a trust-sensitive,
     mental-health-adjacent product; privacy language should be visible
     and genuine, not just a settings-page checkbox.
 
 ---
 
-## 5. Non-negotiable lessons from this session — read before writing any data model
+## 6. Non-negotiable lessons from this session — read before writing any data model
 
 These are real production incidents this session found and fixed, each
 with real user impact. A ground-up rebuild is exactly the kind of change
@@ -250,7 +327,7 @@ likely to reintroduce them if this isn't read first.
 
 ---
 
-## 6. Reference: current scoring model (reusable starting point, not a mandate)
+## 7. Reference: current scoring model (reusable starting point, not a mandate)
 
 Preserve the underlying *logic* even if the implementation is rebuilt
 from scratch — this is genuinely tuned IP, not incidental code:
@@ -267,7 +344,7 @@ from scratch — this is genuinely tuned IP, not incidental code:
   that — never fabricate a score from insufficient data).
 - **Streak** (consistency count): count backward from today (or
   yesterday, if today isn't done yet) through consecutive calendar dates
-  with at least one submission — see §5.3, this must stay calendar-based.
+  with at least one submission — see §6.3, this must stay calendar-based.
 - **Pattern detection**: compare an early window of recent responses
   against a later window; when one theme's average shifts by a
   meaningful margin between the two windows, that's worth surfacing as
@@ -281,42 +358,48 @@ from scratch — this is genuinely tuned IP, not incidental code:
 
 ---
 
-## 7. Screen inventory (functional description, not visual spec — Astra should reimagine the visuals freely)
+## 8. Screen inventory (functional description, not visual spec — Astra should reimagine the visuals freely)
 
 - **Sign-in**: passwordless, email magic-link. Copy emphasizes "no
-  passwords, no tracking, your signal belongs to you."
-- **Onboarding**: what Mirar is, how the daily check-in works, the
-  privacy promise — 2-3 short screens.
-- **Home ("Today")**: greeting, consistency indicator, the day's signal
-  action (prominent, single primary CTA), a rolling "what's been showing
-  up" awareness summary once enough history exists, occasional gentle
-  milestone/pattern cards below the primary action (never competing with
-  it for attention), a dev-only day simulator for testing.
+  passwords, no tracking, what you share stays yours."
+- **Onboarding**: names the felt problem first (per §1 — "you know when
+  something feels off and can't explain why"), then how the daily
+  check-in works, then the privacy promise — 2-3 short screens.
+- **Home ("Today")**: greeting, a consistency indicator (plain language
+  — "you've shown up 6 days," not a status label), today's check-in
+  action (prominent, single primary CTA), a rolling "here's what we've
+  noticed" summary in plain language once enough history exists,
+  occasional gentle milestone/pattern cards below the primary action
+  (never competing with it for attention), a dev-only day simulator for
+  testing.
 - **Daily check-in flow**: a brief calming pause screen before the
   question (tap-anywhere to continue, no timer), the question itself
-  with the low-friction signal input, an optional private note step
-  (skippable, never required), then the submit.
-- **AI Mirror reflection**: shown immediately after submitting — the
-  echoed answer, the alignment score with delta from before, the AI's
-  short synthesis, a light preview of what tomorrow might explore.
-- **Signals tab**: recent-pattern summary ("what repeats / what's
-  changing / what's building / what's holding"), a rolling coverage
-  indicator, and a per-theme breakdown (status badge + recent signal
-  count + trend direction) for all six themes.
-- **Reports/Mirror tab**: a list of periodic written reflections (one
+  (plain language, no theme name visible) with the low-friction input,
+  an optional private note step (skippable, never required), then the
+  submit.
+- **The reflection screen**: shown immediately after submitting — the
+  echoed answer, a plain-language read of where things stand and how
+  that's changed, a short specific observation, a light preview of what
+  tomorrow might explore.
+- **Patterns tab**: a plain-language recent-pattern summary ("what keeps
+  coming up / what's changing / what's building / what's holding
+  steady"), a rolling consistency indicator, and a plain-language
+  breakdown of how things have been trending across the areas the app
+  tracks (no theme names or status badges — see §1).
+- **Reflections tab**: a list of periodic written reflections (one
   roughly every ~7 check-ins, plus a longer synthesis at bigger
-  milestones), each showing completion status and, once ready, a
-  detail view with what kept showing up, the strongest signal, and a
-  short interpretive note.
+  milestones), each showing completion status and, once ready, a detail
+  view with what kept showing up, the clearest observation, and a short
+  interpretive note — all in plain language.
 - **Profile**: a privacy-preserving user ID (not email, shown in
   analytics/exports), practice stats (since when, days practiced,
   current pattern stage), language switcher, a short in-app guide
-  ("how Mirar works" — FAQ-style), theme (light/dark) setting, private
+  ("how this works" — FAQ-style), theme (light/dark) setting, private
   note history.
 
 ---
 
-## 8. Data & continuity — a decision for Sahil, not assumed here
+## 9. Data & continuity — a decision for Sahil, not assumed here
 
 The current app has **real accounts with real historical data**,
 including weeks of the founder's own daily check-ins. Before Astra's
@@ -337,7 +420,7 @@ his own historical signal data is worth keeping.
 
 ---
 
-## 9. Logistics
+## 10. Logistics
 
 - The current production app (mirar-app.vercel.app) **stays live and
   untouched** throughout the rebuild — this brief and the rebuild it
@@ -358,4 +441,4 @@ his own historical signal data is worth keeping.
   `daily-reminder`, `trial-lifecycle`, `send-notification`,
   `admin-analytics`, `admin-user-list`), `lib/scoring.ts` and
   `lib/patterns.ts` (current scoring/pattern-detection logic, matching
-  §6 above), `locales/{en,hi,gu}.ts` (current translation structure).
+  §7 above), `locales/{en,hi,gu}.ts` (current translation structure).
