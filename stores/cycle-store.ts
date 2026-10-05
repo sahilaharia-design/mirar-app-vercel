@@ -11,6 +11,7 @@ import {
 } from '../lib/scoring';
 import { STAGES, THEME_ORDER, THEMES } from '../lib/constants';
 import { computePatternReading, PatternReading } from '../lib/patterns';
+import { buildDailyScores, DayScore } from '../lib/everyday';
 import { getMilestoneCopy, computeMilestoneInsight, themeDisplayName, MILESTONE_ORDER } from '../lib/milestones';
 
 export interface PendingMilestone {
@@ -38,6 +39,10 @@ interface CycleStore {
   latestSignalText: string | null;
   totalReflections: number;
   themeHistories: Record<ThemeCode, { day: number; average: number | null }[]> | null;
+
+  // Average score per local calendar day (last 14 days), 0–100, derived from
+  // already-fetched responses — powers the home number / week strip.
+  dailyScores: DayScore[];
 
   // ── Pattern engine output: signals → patterns → awareness ─────────────────
   patternReading: PatternReading | null;
@@ -75,6 +80,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
   latestSignalText: null,
   totalReflections: 0,
   themeHistories: null,
+  dailyScores: [],
   patternReading: null,
   driftSignal: null,
   pendingMilestone: null,
@@ -278,6 +284,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         themeHistories,
         streakLength,
         patternReading,
+        dailyScores: buildDailyScores(responses ?? [], optionsMap),
       });
 
       // Load today's alignment score + user_state in parallel

@@ -2,9 +2,9 @@ export default {
   // ─── Navigation ──────────────────────────────────────────────────────────────
   nav: {
     today: 'Today',
-    signals: 'Signals',
-    mirror: 'Mirror',
-    profile: 'Profile',
+    signals: 'Trends',
+    mirror: 'Weekly',
+    profile: 'Me',
   },
 
   // ─── Welcome-back banner (shown once after the rebuild) ────────────────────────
@@ -19,29 +19,44 @@ export default {
   common: {
     day: 'Day {{n}}',
     cycle: 'Cycle {{n}}',
-    calibrating: 'Still forming',
+    calibrating: 'Getting started',
     greeting_morning: 'Good morning.',
     greeting_afternoon: 'Good afternoon.',
     greeting_evening: 'Good evening.',
-    calibrating_subtext: 'A few reflections help the pattern appear',
-    early_day2_note: 'Day 2. The practice continues.',
-    early_day3_note: 'Three days of signal. Your first pattern is forming.',
+    calibrating_subtext: 'A few more days and your week takes shape',
+    early_day2_note: 'Day 2. Nice — keep going.',
+    early_day3_note: 'Three days in. Your week is taking shape.',
     days_in_a_row: '{{count}} days in a row.',
-    your_alignment_today: "Today's mirror",
-    your_signals: "What's been showing up",
+    your_alignment_today: 'Today',
+    your_signals: 'Your week',
     record_checkin: 'Record check-in',
-    start_checkin: "Start today's mirror",
+    start_checkin: "Answer today's question",
     back_to_today: 'Back to today',
-    checkin_recorded: 'Check-in recorded',
+    checkin_recorded: 'Done for today',
     recorded: 'Recorded',
     loading: 'Loading...',
-    signal_ready: "Today's mirror is ready.",
+    signal_ready: "Today's question is ready.",
     chapter_label: 'Chapter {{n}}',
     day_label: 'Day {{day}}',
     submit_error_title: "Couldn't record that",
     submit_error_body: 'Something went wrong reaching the server. Please try again.',
     try_again: 'Try again',
     contact_help_a11y: 'Contact Mirar',
+  },
+
+  // ─── Home (everyday layer) ──────────────────────────────────────────────────
+  home: {
+    your_week: 'Your week',
+    word_rough: 'Rough',
+    word_low: 'Low',
+    word_okay: 'Okay',
+    word_good: 'Good',
+    word_great: 'Great',
+    since_yesterday: 'since yesterday',
+    first_label: 'Day one',
+    done_today: 'Done for today',
+    tap_to_answer: 'Tap to answer',
+    first_question: "How's today?",
   },
 
   // ─── Pre-check-in settle screen ─────────────────────────────────────────────
@@ -53,7 +68,11 @@ export default {
 
   // ─── Daily check-in ─────────────────────────────────────────────────────────
   checkin: {
-    helper_text: 'Choose what feels closest. There is no right answer.',
+    helper_text: 'Tap what feels closer. There is no right answer.',
+    in_between: 'In between',
+    saving: 'Saving…',
+    saving_soon: 'Saving — tap another to change',
+    hint: 'Tap one',
     zone_under_load: 'Under load',
     zone_settling: 'Settling',
     zone_forming: 'Forming',
@@ -95,12 +114,12 @@ export default {
 
   // ─── Status Labels ────────────────────────────────────────────────────────────
   status: {
-    aligned: 'Aligned',
-    forming: 'Forming',
-    stabilizing: 'Stabilizing',
-    under_load: 'Under Load',
-    no_reading: 'No Reading',
-    calibrating: 'Still forming',
+    aligned: 'Good',
+    forming: 'Okay',
+    stabilizing: 'Low',
+    under_load: 'Rough',
+    no_reading: 'Not enough yet',
+    calibrating: 'Getting started',
   },
 
   // ─── Theme detail sheet ────────────────────────────────────────────────────
@@ -129,13 +148,13 @@ export default {
 
   // ─── Alignment/signal status labels (distinct domain from per-theme `status`) ─
   signal_labels: {
-    under_load: 'Under Load',
-    aligned: 'Aligned',
+    under_load: 'Rough',
+    aligned: 'Good',
     steady: 'Steady',
-    settling: 'Settling',
-    still_forming: 'Still forming',
-    drifting: 'Drifting',
-    listening: 'Listening',
+    settling: 'Okay',
+    still_forming: 'Getting started',
+    drifting: 'Slipping',
+    listening: 'Getting started',
   },
 
   // ─── Guidance tooltips ─────────────────────────────────────────────────────
@@ -158,20 +177,17 @@ export default {
   guide_modal: {
     eyebrow: 'The Mirror Guide',
     title: 'How Mirar works',
-    intro_text: 'One answer becomes a signal. Repeated signals become a pattern. Patterns become a mirror.',
+    intro_text: 'One tap a day. A few days make a pattern. Patterns show you what’s really going on.',
   },
 
   // ─── Guide modal FAQ cards ─────────────────────────────────────────────────
   guide_cards: [
-    { title: 'What is Mirar?', body: 'Mirar is a 2-minute daily mirror for your inner state. Each day, it asks one simple question and reflects back a small signal.' },
-    { title: 'What is a daily mirror?', body: 'A daily mirror is a small pause where you choose what feels closest today. You do not need to write, explain, or fix anything.' },
-    { title: 'What is a signal?', body: 'A signal is a small reflection based on your answer. It is not a score, diagnosis, or advice.' },
-    { title: 'What is a pattern?', body: 'A pattern is what starts to repeat across your signals. One answer shows a moment. Repeated answers can show what has been quietly building.' },
-    { title: 'Why one question a day?', body: 'Because Mirar is designed to be light enough to return to. The value is not in answering more. The value is in noticing a little, consistently.' },
-    { title: 'Is this therapy?', body: 'No. Mirar is not therapy, diagnosis, or mental health treatment. It is a reflection system that helps you notice your internal patterns.' },
-    { title: 'What happens if I miss a day?', body: 'Nothing breaks. There are no streaks to protect and no days to catch up. When you return, Mirar continues from where you left off.' },
-    { title: 'How should I read my summary?', body: 'Read it as a mirror, not a verdict. Your summary reflects what your recent answers have been pointing toward.' },
-    { title: 'How does Mirar help over time?', body: 'Mirar helps you notice the states you keep returning to: where you feel steady, where you feel stretched, where you feel unclear, and where something may be asking for attention.' },
+    { title: 'What is Mirar?', body: 'A five-second daily check-in. You tap how today feels, and your week turns into one number you can watch move.' },
+    { title: 'What do I do each day?', body: 'Answer one this-or-that. That is it. No writing, no explaining, nothing to fix.' },
+    { title: 'What is the number?', body: 'Your week, 0 to 100 — the average of your recent days. It changes every day, so it is worth a look.' },
+    { title: 'What are the lines under it?', body: 'Short, counted facts about your own days — like “4 low days in the last 7.” Never advice.' },
+    { title: 'Is this therapy?', body: 'No. Mirar is not therapy or treatment. It just shows you what your own days have been like.' },
+    { title: 'What if I miss a day?', body: 'Nothing breaks. Just check in when you are back — your week keeps going.' },
   ],
 
   // ─── Signals tab ───────────────────────────────────────────────────────────
@@ -182,25 +198,25 @@ export default {
     cross_load_two: '{{a}} and {{b}} are both showing pressure. These often move together.',
     cross_aligned_many: '{{n}} areas are showing steadiness in recent reflections.',
     cross_aligned_two: '{{a}} and {{b}} are both holding steady right now.',
-    guide_title: 'Signals are small reflections from your daily mirrors.',
-    guide_text: 'When they repeat, they start to show a pattern.',
-    guide_hint: 'Your signals are still forming. A few more reflections will make this clearer.',
+    guide_title: 'Your days, in one place.',
+    guide_text: 'Check in a few days and trends start to show.',
+    guide_hint: 'A few more check-ins and this fills in.',
     how_this_works: 'How this works',
-    whats_showing_up: 'What’s showing up',
-    recent_reflections: 'Recent reflections',
-    reflections_in_window: 'Reflections in this window',
-    recent_signals: 'Recent signals',
+    whats_showing_up: 'This week',
+    recent_reflections: 'Recent check-ins',
+    reflections_in_window: 'Check-ins this week',
+    recent_signals: 'Recent days',
     view_detail_a11y: 'View {{name}} detail',
-    your_pattern: 'Your pattern',
+    your_pattern: 'Your week',
   },
 
   // ─── Theme signal row (signals tab list item) ──────────────────────────────
   theme_signal_row: {
-    signal_area: 'signal area',
-    delta_more_steady: 'showing more steadiness',
-    delta_more_pressure: 'showing more pressure',
-    reflection_count_one: '{{count}} reflection',
-    reflection_count_other: '{{count}} reflections',
+    signal_area: 'area',
+    delta_more_steady: 'getting better',
+    delta_more_pressure: 'getting harder',
+    reflection_count_one: '{{count}} check-in',
+    reflection_count_other: '{{count}} check-ins',
   },
 
   // ─── Theme block (report detail theme list) ────────────────────────────────
@@ -248,23 +264,23 @@ export default {
   // ─── Cycle arc (28-day grid on signals tab) ────────────────────────────────
   // ─── Stage Labels (internal — not shown as "Stage N" to user) ────────────────
   stages: {
-    awareness: 'First Signals',
-    realignment: 'Patterns Emerge',
-    action: 'Signal in Action',
-    reflection: 'Mirror Deepens',
+    awareness: 'Week 1',
+    realignment: 'Week 2',
+    action: 'Week 3',
+    reflection: 'Week 4',
   },
 
   // ─── Report detail screen ──────────────────────────────────────────────────
   report_detail: {
-    full_cycle_label: 'Full Cycle Mirror',
+    full_cycle_label: 'The big picture',
     stage_description: {
-      '0': 'Full pattern summary',
-      '1': 'What became noticeable',
-      '2': 'Where adjustment signals appeared',
-      '3': 'Where movement occurred',
-      '4': 'What remained visible by the end of the cycle',
+      '0': 'The whole picture',
+      '1': 'What stood out',
+      '2': 'What started to shift',
+      '3': 'Where things moved',
+      '4': 'What stayed true to the end',
     },
-    back_reports: 'Reports',
+    back_reports: 'Weekly',
     not_found: 'Report not found.',
     coverage_text: '{{coverage}} of {{total}} reflections included',
     your_summary_label: 'Your reflection summary',
@@ -282,18 +298,18 @@ export default {
 
   // ─── Theme Names ──────────────────────────────────────────────────────────────
   themes: {
-    IAP: 'Direction',
+    IAP: 'Feeling like yourself',
     EWB: 'Energy',
-    FAF: 'Attention',
-    RC: 'Connection',
-    GAL: 'Growth',
-    RA: 'Movement',
-    IAP_short: 'What feels true, chosen, and internally clear',
-    EWB_short: 'Capacity, heaviness, steadiness, and recovery',
-    FAF_short: 'Where your mind keeps returning',
-    RC_short: 'How honest and spacious relationships feel',
-    GAL_short: 'Openness, change, and what is becoming visible',
-    RA_short: 'Small steps, hesitation, and follow-through',
+    FAF: 'Focus',
+    RC: 'People',
+    GAL: 'Openness',
+    RA: 'Getting things done',
+    IAP_short: 'Whether your choices feel like yours',
+    EWB_short: 'How much you have in the tank',
+    FAF_short: 'What your mind keeps going back to',
+    RC_short: 'How close you feel to people',
+    GAL_short: 'How open you are to things changing',
+    RA_short: 'Whether you are doing what matters',
   },
 
   // ─── Tooltips ─────────────────────────────────────────────────────────────────
@@ -369,16 +385,16 @@ export default {
 
   // ─── Milestone Reflections (see lib/milestones.ts) ─────────────────────────────
   milestone: {
-    label: 'Signal history',
+    label: 'Looking back',
     dismiss: 'Got it',
   },
 
   // ─── Auth ─────────────────────────────────────────────────────────────────────
   auth: {
     title: 'Mirar',
-    tagline: 'Your internal alignment, made visible.',
-    tagline_short: 'Two minutes a day. A mirror for your inner state.',
-    subtitle: 'Daily emotional hygiene for your mind — a two-minute reading of your inner state. Not advice, not therapy. Just an honest mirror, every day.',
+    tagline: 'Know how you really are, every day.',
+    tagline_short: 'Five seconds a day. See your week.',
+    subtitle: 'A five-second daily check-in. See how your week is really going — and what keeps coming up. No advice, no therapy.',
     heading: 'Sign in to Mirar.',
     login_subtitle: "Enter your email. We'll send you a link — no password needed.",
     email_placeholder: 'Your email address',
@@ -391,31 +407,31 @@ export default {
     open_email: 'Open email app',
     try_again: 'Try a different email',
     disclaimer: 'No password needed. One tap to sign in.',
-    cta_label: 'Begin your daily mirror',
+    cta_label: 'Start today',
     cta_early_access: 'Get early access',
-    privacy_note: 'Your email is used only for delivery. It never appears in your signal data.',
-    privacy_badge: 'No passwords. No tracking. Your signal belongs to you.',
+    privacy_note: 'Your email is used only for delivery. It never appears with your check-ins.',
+    privacy_badge: 'No passwords. No tracking. What you share stays yours.',
     beta_tag: 'Private Beta',
     feature_1_title: 'A daily habit, like brushing your teeth',
-    feature_1_desc: 'One question a day. Two minutes. Small daily upkeep that keeps drift from quietly building.',
-    feature_2_title: 'Six dimensions of alignment',
-    feature_2_desc: 'Purpose, energy, focus, relationships, growth, and resilience — tracked continuously.',
-    feature_3_title: 'See patterns before they become problems',
-    feature_3_desc: 'Daily signal data reveals drift, alignment, and where your internal state is actually heading.',
+    feature_1_desc: 'One tap a day. Five seconds. Easy to keep up.',
+    feature_2_title: 'Six parts of everyday life',
+    feature_2_desc: 'Energy, focus, people, getting things done, feeling like yourself, openness.',
+    feature_3_title: 'Notice patterns before they pile up',
+    feature_3_desc: 'See how your week is really going, and what keeps coming up.',
   },
 
   // ─── Onboarding ───────────────────────────────────────────────────────────────
   onboarding: {
     language_prompt: 'Choose your language',
-    slide1_title: 'Your inner state shifts every day.',
-    slide1_body: 'Most days, you never notice. Mirar does — two minutes at a time.',
-    slide2_title: 'Signal, not journal.',
-    slide2_body: 'A few questions. A mirror that shows what\'s forming, what\'s steady, and what\'s quietly changing.',
+    slide1_title: 'How you feel changes every day.',
+    slide1_body: 'Most days you don’t notice. Mirar does — five seconds at a time.',
+    slide2_title: 'One tap, not a journal.',
+    slide2_body: 'One simple this-or-that a day. Your week becomes one number you can watch move.',
     slide3_title: 'Not advice. Not coaching.',
-    slide3_body: 'A clean read of your internal signals. Private. Yours alone. Gets sharper the longer you use it.',
+    slide3_body: 'A clear read of how you’re doing. Private. Gets sharper the longer you use it.',
     slide4_title: 'A mirror. Not a mentor.',
-    slide4_body: 'After each check-in, you get one short reflection. Not advice — recognition.',
-    slide5_title: 'Your signal belongs to you.',
+    slide4_body: 'After each check-in, one short, specific line. Not advice — just what’s true.',
+    slide5_title: 'What you share stays yours.',
     slide5_body: 'Your Mirar ID helps keep your reflection history separate inside the app.',
     begin: 'Start',
     beginning: 'Setting up...',
@@ -470,17 +486,17 @@ export default {
 
   // ─── Reports ─────────────────────────────────────────────────────────────────
   reports: {
-    title: 'Mirror',
-    no_reports: 'Reflection summaries appear after a few daily pauses.',
-    locked: 'Still forming',
+    title: 'Weekly',
+    no_reports: 'Summaries appear after a week of check-ins.',
+    locked: 'Not yet',
     coverage: '{{n}} of 7 days',
     chapter_label: 'Chapter {{n}} · {{label}}',
-    page_title: 'Reflection summaries',
-    page_desc: 'Summaries show what kept repeating across your reflections. Read them as a mirror, not a verdict.',
+    page_title: 'Your weekly summaries',
+    page_desc: 'A short look back each week. Not a verdict.',
     progress_label: '{{count}} of 7 check-ins done — your first summary generates after 7.',
     summaries_label: 'Summaries',
     full_pattern_label: 'Full pattern',
-    footer_note: 'Reflection summaries only. Mirar reflects — you interpret.',
+    footer_note: 'Summaries only — you decide what they mean.',
     ready_date: 'Ready {{date}}',
   },
 

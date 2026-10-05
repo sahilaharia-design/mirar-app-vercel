@@ -17,103 +17,45 @@ import { useAuthStore } from '../../stores/auth-store';
 import { useCheckInStore } from '../../stores/checkin-store';
 import { useCycleStore } from '../../stores/cycle-store';
 import { useDevStore } from '../../stores/dev-store';
-import { PromptCard } from '../../components/check-in/PromptCard';
-import { SignalSlider } from '../../components/check-in/SignalSlider';
-import { JournalExpander } from '../../components/check-in/JournalExpander';
-import { SettleScreen } from '../../components/check-in/SettleScreen';
+import { ThisOrThat } from '../../components/check-in/ThisOrThat';
+import { DayScoreCard } from '../../components/home/DayScoreCard';
+import { EVERYDAY_AREAS } from '../../lib/everyday';
+import { FONTS } from '../../lib/constants';
 import { AppHeader } from '../../components/ui/AppHeader';
-import { AlignmentCompass } from '../../components/ui/AlignmentCompass';
-import { TodayCheckinCard } from '../../components/home/TodayCheckinCard';
-import { AwarenessCard } from '../../components/home/AwarenessCard';
-import { DriftSignalCard } from '../../components/home/DriftSignalCard';
 import { MilestoneCard } from '../../components/home/MilestoneCard';
-import { WelcomeBackBanner } from '../../components/home/WelcomeBackBanner';
-import { FirstDayWelcome } from '../../components/home/FirstDayWelcome';
-import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { useTranslation } from 'react-i18next';
 import { useColors } from '../../contexts/theme-context';
 import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
-import { getAlignmentStatus } from '../../lib/constants';
-import { getStageFromDay } from '../../lib/scoring';
-import { mirrorSignalLabelKey } from '../../lib/guidance';
 
-// ─── Check-in Flow (modal-style within the tab) ───────────────────────────────
+// ─── Check-in Flow ────────────────────────────────────────────────────────────
+// One plain this-or-that. Tap a side (or "in between"); it saves itself after
+// a beat — tap something else in that beat to change your mind. No settle
+// screen, no journal step, no Continue button: nothing to read, nothing to
+// press twice. Saving uses the same submitCheckIn as before, so the day
+// count, one-per-day gate and scoring are untouched.
 function CheckInFlow({ onDone }: { onDone: () => void }) {
   const { t } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
-  const { activeCycle, currentDay } = useCycleStore();
-  const {
-    question,
-    selectedOptionId,
-    journalText,
-    isSubmitting,
-    isCompleted,
-    selectOption,
-    setJournalText,
-    submitCheckIn,
-  } = useCheckInStore();
+  const { activeCycle } = useCycleStore();
+  const { question, selectedOptionId, isSubmitting, isCompleted, selectOption, submitCheckIn } = useCheckInStore();
 
-  // Step 0 = settle (calm pause before the question, shown every day),
-  // step 1 = question+options, step 2 = journal
-  const [checkInStep, setCheckInStep] = React.useState<0 | 1 | 2>(0);
-
-  // Derive selected option data for journal echo
-  const selectedOption = question?.options?.find((o) => o.id === selectedOptionId) ?? null;
-
-  // Auto-advance to the journal step shortly after a slider selection —
-  // part of the "cut the remaining tap" pass (see the pivot plan). The
-  // explicit Continue button below still works immediately for anyone who
-  // wants it; this just means most people never need to reach for it.
-  // "Undo" is just re-dragging the slider: any change to selectedOptionId
-  // resets the timer, and leaving step 1 (via the manual tap) cancels it
-  // via the effect cleanup, so it can never double-fire.
   React.useEffect(() => {
-    if (checkInStep !== 1 || !selectedOptionId) return;
-    const timer = setTimeout(() => setCheckInStep(2), 1100);
+    if (!selectedOptionId || isSubmitting || isCompleted) return;
+    const timer = setTimeout(async () => {
+      if (!session?.user?.id || !activeCycle?.id) return;
+      const result = await submitCheckIn(session.user.id, activeCycle.id);
+      if (result.error) {
+        selectOption('');
+        Alert.alert(t('common.submit_error_title'), t('common.submit_error_body'));
+        return;
+      }
+      useCycleStore.getState().refreshScores();
+      onDone();
+    }, 1100);
     return () => clearTimeout(timer);
-  }, [checkInStep, selectedOptionId]);
-
-  const handleSubmit = async () => {
-    if (!session?.user?.id || !activeCycle?.id || !selectedOptionId) return;
-    const result = await submitCheckIn(session.user.id, activeCycle.id);
-    if (result.error) {
-      Alert.alert(t('common.submit_error_title'), t('common.submit_error_body'));
-      return;
-    }
-    if (!result.error) {
-      const signal = useCheckInStore.getState().submittedSignal;
-      const currentDayNum = useCycleStore.getState().currentDay;
-      const cycleNum = activeCycle.cycle_number ?? 1;
-
-      router.push({
-        pathname: '/(checkin)/mirror',
-        params: {
-          day_number: String(currentDayNum),
-          cycle_number: String(cycleNum),
-          alignment_score: result.alignmentScore != null ? String(result.alignmentScore) : '',
-          score_before: result.scoreBefore != null ? String(result.scoreBefore) : '',
-          theme1_code: signal?.theme1Code ?? 'IAP',
-          theme1_level: signal?.theme1Level ?? 'Medium',
-          theme2_code: signal?.theme2Code ?? 'EWB',
-          theme2_level: signal?.theme2Level ?? 'Medium',
-          theme1_pattern_flag: signal?.theme1PatternFlag ?? '',
-          theme2_pattern_flag: signal?.theme2PatternFlag ?? '',
-          tomorrow_tease: signal?.tomorrowTease ?? '',
-        },
-      });
-    }
-  };
-
-  // Step 0 renders immediately, independent of the question load — the
-  // pause is instant, and the question has a moment to finish loading in
-  // the background while the user settles in.
-  if (checkInStep === 0) {
-    return (
-      <SettleScreen onContinue={() => setCheckInStep(1)} />
-    );
-  }
+  }, [selectedOptionId]);
 
   if (!question) {
     return (
@@ -123,81 +65,32 @@ function CheckInFlow({ onDone }: { onDone: () => void }) {
     );
   }
 
-  // When completed, we navigate to the mirror screen — nothing to render here
-  if (isCompleted) return null;
+  // Plain everyday wording by area; fall back to whatever the question
+  // itself carries (e.g. a personalised question for an unmapped theme).
+  const area = EVERYDAY_AREAS[question.theme_1 as keyof typeof EVERYDAY_AREAS];
+  const sortedOptions = [...(question.options ?? [])].sort((a, b) => a.option_number - b.option_number);
+  const heading = area?.question ?? question.prompt_text;
+  const left = area?.left ?? question.pole_low_label ?? sortedOptions[0]?.option_text ?? '';
+  const right = area?.right ?? question.pole_high_label ?? sortedOptions[sortedOptions.length - 1]?.option_text ?? '';
 
-  // Use the cycle's actual completed-count day (currentDay, from
-  // cycle-store) for display — not question.day_number. That field is the
-  // SELECTED question's own row and was never guaranteed to match the
-  // user's real day even before this pass (the curated-selection query in
-  // select-daily-question has always picked adaptively by theme coverage,
-  // not by matching day_number), and definitely won't once the curated
-  // bank is 6 evergreen per-theme questions reused across many real days.
-  const dayNum = currentDay;
-  const stage = getStageFromDay(dayNum);
-
-  // ── Step 2: Journal ─────────────────────────────────────────────────────────
-  if (checkInStep === 2) {
-    return (
-      <JournalExpander
-        dayNumber={dayNum}
-        selectedOptionText={selectedOption?.option_text ?? undefined}
-        theme1Code={selectedOption?.theme_1_code ?? undefined}
-        theme1Level={selectedOption?.theme_1_level ?? undefined}
-        theme2Code={selectedOption?.theme_2_code ?? undefined}
-        theme2Level={selectedOption?.theme_2_level ?? undefined}
-        value={journalText}
-        onChangeText={setJournalText}
-        disabled={isSubmitting}
-        isSubmitting={isSubmitting}
-        onSubmit={handleSubmit}
-        onSkip={handleSubmit}
-      />
-    );
-  }
-
-  // ── Step 1: Question + Options ──────────────────────────────────────────────
   return (
-    <>
-      <ScrollView
-        style={{ flex: 1, backgroundColor: colors.paper }}
-        contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <PromptCard
-          dayNumber={dayNum}
-          stage={stage}
-          promptText={question.prompt_text}
-        />
-        <View style={[styles.divider, { backgroundColor: colors.ruleLight }]} />
-        <SignalSlider
-          options={question.options ?? []}
-          poleLowLabel={question.pole_low_label}
-          poleHighLabel={question.pole_high_label}
-          selectedOptionId={selectedOptionId}
-          onSelect={selectOption}
-          disabled={isSubmitting}
-        />
-      </ScrollView>
-
-      <View style={[styles.submitContainer, { backgroundColor: colors.paper, borderTopColor: colors.ruleLight }]}>
-        <TouchableOpacity
-          style={[
-            styles.submitButton,
-            { backgroundColor: colors.slate },
-            !selectedOptionId && styles.submitButtonDisabled,
-          ]}
-          onPress={() => setCheckInStep(2)}
-          disabled={!selectedOptionId}
-          activeOpacity={0.85}
-        >
-          <Text style={[styles.submitButtonText, { color: colors.cream }]}>
-            {t('onboarding.continue')} →
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </>
+    <View style={[styles.checkinWrap, { backgroundColor: colors.paper }]}>
+      <Text style={[styles.checkinQuestion, { color: colors.ink }]} accessibilityRole="header">
+        {heading}
+      </Text>
+      <ThisOrThat
+        options={sortedOptions}
+        left={left}
+        right={right}
+        inBetween={t('checkin.in_between')}
+        selectedOptionId={selectedOptionId || null}
+        onSelect={selectOption}
+        disabled={isSubmitting}
+      />
+      <Text style={[styles.checkinHint, { color: colors.slateLight }]}>
+        {isSubmitting ? t('checkin.saving') : selectedOptionId ? t('checkin.saving_soon') : t('checkin.hint')}
+      </Text>
+    </View>
   );
 }
 
@@ -216,14 +109,8 @@ export default function TodayScreen() {
   const {
     activeCycle,
     currentDay,
-    currentStage,
-    alignmentScore,
-    alignmentHistory,
+    dailyScores,
     streakLength,
-    contextMessage,
-    patternReading,
-    driftSignal,
-    dismissDriftSignal,
     pendingMilestone,
     dismissMilestone,
     loadActiveCycle,
@@ -304,10 +191,6 @@ export default function TodayScreen() {
     );
   }
 
-  const cycleNumber = activeCycle?.cycle_number ?? 1;
-  const score = alignmentScore?.score ?? null;
-  const status = getAlignmentStatus(score);
-  const trendValue = alignmentScore?.trend ?? null;
 
   // ─── Check-in flow active ───────────────────────────────────────────────────
   if (showCheckin && !isCompleted) {
@@ -359,78 +242,22 @@ export default function TodayScreen() {
           )}
         </Animated.View>
 
-        {/* Welcome-back — one-time notice that the app was rebuilt, inviting feedback */}
-        <WelcomeBackBanner />
-
-        {/* 2. Today's check-in card — primary action */}
-        <TodayCheckinCard
-          dayNumber={effectiveDay}
-          promptPreview={question?.prompt_text ?? t('common.signal_ready')}
+        {/* The one card: your week as a number (or today's question) */}
+        <DayScoreCard
+          scores={dailyScores}
           isCompleted={isCompleted}
-          completedAt={completedAt}
+          question={
+            (question && EVERYDAY_AREAS[question.theme_1 as keyof typeof EVERYDAY_AREAS]?.question) ||
+            question?.prompt_text ||
+            t('home.first_question')
+          }
           tomorrowTease={question?.tomorrow_tease}
-          onPress={() => setShowCheckin(true)}
+          onStart={() => setShowCheckin(true)}
         />
 
-        {/* 3. Early-days card — human text for days 1–3 before data accumulates */}
-        {effectiveDay === 1 && !isCompleted && score === null && (
-          <FirstDayWelcome />
-        )}
-
-        {/* 4. Alignment compass — same visual as the post-check-in Mirror screen.
-            The single "today" focus of this screen; deeper history and the
-            6-theme breakdown live exclusively on the Signals tab now, so this
-            screen guides one thing at a time instead of showing everything
-            at once. */}
-        {score !== null && (
-          <View style={styles.ringSection}>
-            <AlignmentCompass
-              score={score}
-              previousScore={null}
-              statusLabel={t(`signal_labels.${mirrorSignalLabelKey(status)}`)}
-              deltaLabel={trendValue === 'up' ? '↑' : trendValue === 'down' ? '↓' : trendValue === 'steady' ? '→' : null}
-              deltaColor={colors.slateLight}
-              reduceMotion
-            />
-            <View style={styles.ringLabelRow}>
-              <Text style={[styles.ringLabel, { color: colors.slateLight }]}>
-                {t('common.your_alignment_today')}
-              </Text>
-              <InfoTooltipInline helpText={t('guidance_tooltips.signal')} size={13} />
-            </View>
-          </View>
-        )}
-
-        {/* 5. Pattern-of-the-week note — appears after today's reading, not competing with it */}
-        {effectiveDay > 1 && effectiveDay <= 3 && !isCompleted && score === null ? (
-          <Animated.View
-            entering={FadeInDown.duration(400).delay(120)}
-            style={[styles.earlyCard, { backgroundColor: colors.white, borderColor: colors.borderLight }]}
-          >
-            <Text style={[styles.earlyCardText, { color: colors.slateMid }]}>
-              {effectiveDay === 2
-                ? t('common.early_day2_note')
-                : t('common.early_day3_note')}
-            </Text>
-          </Animated.View>
-        ) : patternReading ? (
-          <AwarenessCard reading={patternReading} />
-        ) : null}
-
-        {/* 6. Milestone Reflection — unlock_events was already being written
-            on every check-in with no UI consumer (see lib/milestones.ts).
-            Sits above the drift card: a milestone is rarer and more
-            significant than the weekly note, but still never competes with
-            today's check-in itself. */}
+        {/* Milestone — rare, once, specific; never competes with the card */}
         {pendingMilestone && (
           <MilestoneCard milestone={pendingMilestone} onDismiss={dismissMilestone} />
-        )}
-
-        {/* 7. Drift Alert — the weekly signal generate-weekly-signal computes
-            every 7th reflection, surfaced once and dismissed. Sits below the
-            daily awareness card so it never competes with today's check-in. */}
-        {driftSignal && (
-          <DriftSignalCard signal={driftSignal} onDismiss={dismissDriftSignal} />
         )}
 
         {/* Dev Day Simulator */}
@@ -471,6 +298,9 @@ export default function TodayScreen() {
 }
 
 const styles = StyleSheet.create({
+  checkinWrap: { flex: 1, paddingHorizontal: 20, paddingTop: 36, gap: 28 },
+  checkinQuestion: { fontFamily: FONTS.display, fontSize: 32, lineHeight: 38, letterSpacing: -0.3 },
+  checkinHint: { textAlign: 'center', fontSize: 13 },
   safe: { flex: 1 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
