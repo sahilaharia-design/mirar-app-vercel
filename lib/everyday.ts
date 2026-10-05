@@ -167,3 +167,56 @@ export function specificLine(scores: DayScore[], now: Date = new Date()): string
   }
   return null;
 }
+
+// ─── Recovery (the "fitness" half) ────────────────────────────────────────────
+// Emotional fitness isn't being happy — it's how fast you come back from a low
+// day. A DIP starts on a low day (score <= 25) and ends on the first later
+// check-in at "okay" or better (score >= 50). Recovery time = calendar days
+// from the dip's first day to that day. Computed from the overall daily score,
+// so with rotating areas it's a rough estimate, not a precise measurement — it
+// stays silent until there's at least one completed dip, and never shows a
+// countdown for a dip still in progress (no pressure).
+export interface RecoveryStats {
+  /** completed dips */
+  count: number;
+  /** average days to bounce back (>= 1) */
+  avgDays: number;
+  /** needs 4+ dips: compare the latest two with the ones before */
+  trend: 'faster' | 'slower' | null;
+}
+
+const daysBetween = (a: string, b: string) =>
+  Math.round((new Date(b + 'T00:00:00').getTime() - new Date(a + 'T00:00:00').getTime()) / 86400000);
+
+export function recoveryStats(scores: DayScore[]): RecoveryStats | null {
+  const sorted = [...scores].sort((a, b) => (a.date < b.date ? -1 : 1));
+  const lengths: number[] = [];
+  let dipStart: string | null = null;
+  for (const s of sorted) {
+    if (dipStart === null) {
+      if (s.score <= 25) dipStart = s.date;
+    } else if (s.score >= 50) {
+      lengths.push(Math.max(1, daysBetween(dipStart, s.date)));
+      dipStart = null;
+    }
+  }
+  if (lengths.length === 0) return null;
+  const avg = (xs: number[]) => xs.reduce((a, x) => a + x, 0) / xs.length;
+  let trend: RecoveryStats['trend'] = null;
+  if (lengths.length >= 4) {
+    const recent = avg(lengths.slice(-2));
+    const before = avg(lengths.slice(0, -2));
+    if (recent < before) trend = 'faster';
+    else if (recent > before) trend = 'slower';
+  }
+  return { count: lengths.length, avgDays: Math.max(1, Math.round(avg(lengths))), trend };
+}
+
+/** One quiet line for Home, or null. Plain words, no advice. */
+export function recoveryLine(scores: DayScore[]): string | null {
+  const r = recoveryStats(scores);
+  if (!r) return null;
+  const days = r.avgDays === 1 ? 'a day' : `${r.avgDays} days`;
+  const base = r.count === 1 ? `You bounced back from a dip in ${days}.` : `Your dips last about ${days}.`;
+  return r.trend === 'faster' ? `${base} Shorter lately.` : r.trend === 'slower' ? `${base} Longer lately.` : base;
+}

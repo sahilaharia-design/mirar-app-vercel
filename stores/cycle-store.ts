@@ -284,7 +284,7 @@ export const useCycleStore = create<CycleStore>((set, get) => ({
         themeHistories,
         streakLength,
         patternReading,
-        dailyScores: buildDailyScores(responses ?? [], optionsMap),
+        dailyScores: buildDailyScores(responses ?? [], optionsMap, new Date(), 60),
       });
 
       // Load today's alignment score + user_state in parallel

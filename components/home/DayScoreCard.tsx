@@ -11,6 +11,7 @@ import {
   weekStrip,
   scoreWord,
   specificLine,
+  recoveryLine,
 } from '../../lib/everyday';
 
 interface Props {
@@ -31,6 +32,7 @@ export function DayScoreCard({ scores, isCompleted, question, tomorrowTease, onS
   const delta = weekDelta(scores);
   const strip = weekStrip(scores);
   const line = specificLine(scores);
+  const recovery = recoveryLine(scores);
 
   const dotColor = (s: number | null) =>
     s === null ? colors.ruleLight : s < 40 ? colors.underLoad : s < 65 ? colors.slateLight : colors.aligned;
@@ -63,6 +65,7 @@ export function DayScoreCard({ scores, isCompleted, question, tomorrowTease, onS
             ))}
           </View>
           {line && <Text style={[styles.line, { color: colors.slate }]}>{line}</Text>}
+          {recovery && <Text style={[styles.recovery, { color: colors.slateMid }]}>{recovery}</Text>}
         </>
       ) : (
         <Text style={[styles.label, { color: colors.slateLight }]}>{t('home.first_label')}</Text>
@@ -103,6 +106,7 @@ const styles = StyleSheet.create({
   dot: { width: 14, height: 14, borderRadius: 7 },
   letter: { fontSize: 11 },
   line: { fontSize: FONT_SIZE.md, lineHeight: 24, marginTop: SPACING.xs },
+  recovery: { fontSize: FONT_SIZE.sm, lineHeight: 20 },
   done: { fontSize: FONT_SIZE.sm, fontWeight: '500', marginTop: SPACING.xs },
   tease: { fontSize: FONT_SIZE.sm, lineHeight: 20 },
   cta: { borderRadius: RADIUS.lg, padding: SPACING.md, gap: 4, marginTop: SPACING.xs },
