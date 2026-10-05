@@ -44,6 +44,21 @@ export default {
     contact_help_a11y: 'Contact Mirar',
   },
 
+  // ─── Morning WhatsApp nudge (Me tab) ──────────────────────────────────────
+  nudge: {
+    title: 'Morning nudge on WhatsApp',
+    body: 'One message each morning at 8:00 with a link to check in. Nothing else — no promotions.',
+    placeholder: 'WhatsApp number, e.g. 98765 43210',
+    consent: 'Yes, send me one WhatsApp message each morning at 8:00 AM. I can turn this off any time here.',
+    turn_on: 'Turn on',
+    turn_off: 'Turn off',
+    saving: 'Saving…',
+    on_label: 'On — sending to {{number}}',
+    error_number: 'Enter a valid mobile number.',
+    error_consent: 'Tick the box to agree first.',
+    error_save: "Couldn't save that. Try again.",
+  },
+
   // ─── Home (everyday layer) ──────────────────────────────────────────────────
   home: {
     your_week: 'Your week',

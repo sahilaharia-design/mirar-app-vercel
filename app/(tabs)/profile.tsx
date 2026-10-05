@@ -22,6 +22,7 @@ import { useTheme, useColors } from '../../contexts/theme-context';
 import { supabase } from '../../lib/supabase';
 import { withTimeout } from '../../lib/with-timeout';
 import { AppHeader } from '../../components/ui/AppHeader';
+import { MorningNudgeCard } from '../../components/profile/MorningNudgeCard';
 import { InfoTooltipInline } from '../../components/ui/InfoTooltip';
 import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
@@ -201,6 +202,13 @@ export default function ProfileScreen() {
             ))}
           </View>
         </Animated.View>
+
+        {/* Morning nudge — the daily cue (explicit-consent WhatsApp) */}
+        {session?.user?.id && (
+          <Animated.View entering={FadeInDown.duration(400).delay(300)} style={styles.section}>
+            <MorningNudgeCard userId={session.user.id} />
+          </Animated.View>
+        )}
 
         {/* Settings */}
         <Animated.View entering={FadeInDown.duration(400).delay(330)} style={styles.section}>
