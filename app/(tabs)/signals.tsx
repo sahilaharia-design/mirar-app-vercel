@@ -26,6 +26,7 @@ import { signalHelpKeyForStatus } from '../../lib/guidance';
 import { useColors } from '../../contexts/theme-context';
 import { ThemeDetailSheet } from '../../components/dashboard/ThemeDetailSheet';
 import { PatternsPanel } from '../../components/dashboard/PatternsPanel';
+import { RecoveryCard } from '../../components/dashboard/RecoveryCard';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -65,6 +66,7 @@ export default function SignalsScreen() {
     rollingCoverage,
     themeHistories,
     patternReading,
+    dailyScores,
     isLoading,
     loadActiveCycle,
     loadAlignmentHistory,
@@ -136,6 +138,9 @@ export default function SignalsScreen() {
           />
         }
       >
+        {/* ── Bounce-back: how fast you come back from a low day ─────────── */}
+        <RecoveryCard scores={dailyScores} />
+
         {/* ── Patterns: what repeats, changes, builds, holds ─────────────── */}
         {patternReading && <PatternsPanel reading={patternReading} />}
 
