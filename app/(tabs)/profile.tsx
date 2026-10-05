@@ -206,7 +206,7 @@ export default function ProfileScreen() {
         {/* Morning nudge — the daily cue (explicit-consent WhatsApp) */}
         {session?.user?.id && (
           <Animated.View entering={FadeInDown.duration(400).delay(300)} style={styles.section}>
-            <MorningNudgeCard userId={session.user.id} />
+            <MorningNudgeCard userId={session.user.id} email={session.user.email ?? ''} />
           </Animated.View>
         )}
 

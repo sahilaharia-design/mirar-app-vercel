@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../../lib/supabase';
 import { withTimeout } from '../../lib/with-timeout';
 import { useColors } from '../../contexts/theme-context';
 import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
-import { normalizePhone } from '../../lib/phone';
 
-// The daily cue: one WhatsApp message each morning with a link to check in.
-// Consent is an explicit, un-pre-ticked choice (Meta policy + India's DPDP
-// Act), recorded with a timestamp, and turning it off clears the number.
-export function MorningNudgeCard({ userId }: { userId: string }) {
+// The daily cue: one email each morning with a link to check in. Free to run
+// (Brevo free plan), uses the account email, no phone number needed. Consent
+// is an explicit, un-pre-ticked choice recorded with a timestamp; every email
+// also carries a one-click unsubscribe (see supabase/functions/email-nudge).
+export function MorningNudgeCard({ userId, email }: { userId: string; email: string }) {
   const { t } = useTranslation();
   const colors = useColors();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [enabled, setEnabled] = useState(false);
-  const [savedNumber, setSavedNumber] = useState<string | null>(null);
-  const [phone, setPhone] = useState('');
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,14 +24,11 @@ export function MorningNudgeCard({ userId }: { userId: string }) {
     (async () => {
       try {
         const { data } = await withTimeout(
-          supabase.from('users').select('whatsapp_number, whatsapp_opt_in').eq('id', userId).maybeSingle()
+          supabase.from('users').select('email_nudge_opt_in').eq('id', userId).maybeSingle()
         );
-        if (mounted && data) {
-          setEnabled(!!data.whatsapp_opt_in);
-          setSavedNumber(data.whatsapp_number ?? null);
-        }
+        if (mounted && data) setEnabled(!!data.email_nudge_opt_in);
       } catch {
-        // Column may not exist yet (migration 013 not run) — card stays in its "off" state.
+        // Column may not exist yet (migration 015 not run) — card stays "off".
       } finally {
         if (mounted) setLoading(false);
       }
@@ -41,46 +36,27 @@ export function MorningNudgeCard({ userId }: { userId: string }) {
     return () => { mounted = false; };
   }, [userId]);
 
-  const turnOn = async () => {
+  const save = async (on: boolean) => {
     setError(null);
-    const normalized = normalizePhone(phone);
-    if (!normalized) { setError(t('nudge.error_number')); return; }
-    if (!consent) { setError(t('nudge.error_consent')); return; }
+    if (on && !consent) { setError(t('nudge.error_consent')); return; }
     setSaving(true);
     try {
       const { error: err } = await withTimeout(
-        supabase.from('users').update({
-          whatsapp_number: normalized,
-          whatsapp_opt_in: true,
-          whatsapp_opt_in_at: new Date().toISOString(),
-        }).eq('id', userId)
+        supabase.from('users').update(
+          on
+            ? { email_nudge_opt_in: true, email_nudge_opt_in_at: new Date().toISOString() }
+            : { email_nudge_opt_in: false }
+        ).eq('id', userId)
       );
       if (err) throw err;
-      setEnabled(true); setSavedNumber(normalized); setPhone(''); setConsent(false);
+      setEnabled(on);
+      if (on) setConsent(false);
     } catch {
       setError(t('nudge.error_save'));
     } finally {
       setSaving(false);
     }
   };
-
-  const turnOff = async () => {
-    setError(null);
-    setSaving(true);
-    try {
-      const { error: err } = await withTimeout(
-        supabase.from('users').update({ whatsapp_opt_in: false, whatsapp_number: null }).eq('id', userId)
-      );
-      if (err) throw err;
-      setEnabled(false); setSavedNumber(null);
-    } catch {
-      setError(t('nudge.error_save'));
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const masked = savedNumber ? savedNumber.slice(0, 3) + ' •••••• ' + savedNumber.slice(-3) : '';
 
   return (
     <View style={[styles.card, { backgroundColor: colors.white, borderColor: colors.borderLight }]}>
@@ -91,22 +67,13 @@ export function MorningNudgeCard({ userId }: { userId: string }) {
         <ActivityIndicator color={colors.slateMid} />
       ) : enabled ? (
         <>
-          <Text style={[styles.on, { color: colors.aligned }]}>● {t('nudge.on_label', { number: masked })}</Text>
-          <TouchableOpacity onPress={turnOff} disabled={saving} style={[styles.btnGhost, { borderColor: colors.border }]}>
+          <Text style={[styles.on, { color: colors.aligned }]}>● {t('nudge.on_label', { email })}</Text>
+          <TouchableOpacity onPress={() => save(false)} disabled={saving} style={[styles.btnGhost, { borderColor: colors.border }]}>
             <Text style={[styles.btnGhostText, { color: colors.slateMid }]}>{t('nudge.turn_off')}</Text>
           </TouchableOpacity>
         </>
       ) : (
         <>
-          <TextInput
-            value={phone}
-            onChangeText={setPhone}
-            placeholder={t('nudge.placeholder')}
-            placeholderTextColor={colors.slateLight}
-            keyboardType="phone-pad"
-            style={[styles.input, { borderColor: colors.border, color: colors.slate, backgroundColor: colors.cream }]}
-            accessibilityLabel={t('nudge.title')}
-          />
           <TouchableOpacity
             onPress={() => setConsent((c) => !c)}
             style={styles.consentRow}
@@ -119,7 +86,7 @@ export function MorningNudgeCard({ userId }: { userId: string }) {
             <Text style={[styles.consentText, { color: colors.slateMid }]}>{t('nudge.consent')}</Text>
           </TouchableOpacity>
           {error && <Text style={[styles.error, { color: colors.underLoad }]}>{error}</Text>}
-          <TouchableOpacity onPress={turnOn} disabled={saving} style={[styles.btn, { backgroundColor: colors.slate }]}>
+          <TouchableOpacity onPress={() => save(true)} disabled={saving} style={[styles.btn, { backgroundColor: colors.slate }]}>
             <Text style={[styles.btnText, { color: colors.cream }]}>{saving ? t('nudge.saving') : t('nudge.turn_on')}</Text>
           </TouchableOpacity>
         </>
@@ -133,7 +100,6 @@ const styles = StyleSheet.create({
   card: { borderRadius: RADIUS.lg, borderWidth: 1, padding: SPACING.md, gap: SPACING.sm },
   title: { fontSize: FONT_SIZE.base, fontWeight: '600' },
   body: { fontSize: FONT_SIZE.sm, lineHeight: 20 },
-  input: { borderWidth: 1, borderRadius: RADIUS.md, paddingHorizontal: SPACING.md, paddingVertical: 12, fontSize: FONT_SIZE.base },
   consentRow: { flexDirection: 'row', gap: SPACING.sm, alignItems: 'flex-start' },
   box: { width: 20, height: 20, borderWidth: 1.5, borderRadius: 5, alignItems: 'center', justifyContent: 'center', marginTop: 1 },
   consentText: { flex: 1, fontSize: FONT_SIZE.xs, lineHeight: 18 },

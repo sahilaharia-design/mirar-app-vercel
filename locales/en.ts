@@ -45,7 +45,8 @@ export default {
   },
 
   // ─── Morning WhatsApp nudge (Me tab) ──────────────────────────────────────
-  nudge: {
+  // Parked (WhatsApp isn't the cue right now) — kept so the card still compiles.
+  nudge_wa: {
     title: 'Morning nudge on WhatsApp',
     body: 'One message each morning at 8:00 with a link to check in. Nothing else — no promotions.',
     placeholder: 'WhatsApp number, e.g. 98765 43210',
@@ -55,6 +56,17 @@ export default {
     saving: 'Saving…',
     on_label: 'On — sending to {{number}}',
     error_number: 'Enter a valid mobile number.',
+    error_consent: 'Tick the box to agree first.',
+    error_save: "Couldn't save that. Try again.",
+  },
+  nudge: {
+    title: 'Morning email',
+    body: 'One short email each morning at 8:00 with a link to check in. Nothing else — no promotions.',
+    consent: 'Yes, email me once each morning at 8:00 AM. I can turn this off any time here or with the link in the email.',
+    turn_on: 'Turn on',
+    turn_off: 'Turn off',
+    saving: 'Saving…',
+    on_label: 'On — sending to {{email}}',
     error_consent: 'Tick the box to agree first.',
     error_save: "Couldn't save that. Try again.",
   },
