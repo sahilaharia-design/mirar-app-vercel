@@ -71,6 +71,17 @@ export default {
     error_save: "Couldn't save that. Try again.",
   },
 
+  // ─── Try-it-first (public, before any account) ────────────────────────────
+  try: {
+    eyebrow: 'Try it — five seconds',
+    hint: 'Tap one. No account needed.',
+    result_eyebrow: 'Your first read',
+    result_body: 'Do this each morning and your week becomes one number you can watch — plus how fast you bounce back from a low day.',
+    cta: 'Keep going — create your free account',
+    cta_note: 'No password. Just your email.',
+    again: 'Try again',
+  },
+
   // ─── Home (everyday layer) ──────────────────────────────────────────────────
   home: {
     your_week: 'Your week',

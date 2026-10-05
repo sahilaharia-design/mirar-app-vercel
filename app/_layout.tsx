@@ -73,7 +73,7 @@ function AppShell() {
     if (!isInitialized || isUserLoading) return;
 
     const inAuthGroup = segments[0] === '(auth)';
-    const inAssessGroup = segments[0] === 'assess';
+    const inAssessGroup = segments[0] === 'assess' || segments[0] === 'try';
     const inOnboardingGroup = segments[0] === '(onboarding)';
 
     if (!session) {
@@ -92,7 +92,7 @@ function AppShell() {
     // Existing user on login/assess screen — redirect to their dashboard
     // (does NOT fire during onboarding.tsx account-creation, which uses segment 'onboarding')
     const onLoginScreen = segments[0] === '(auth)' && (segments as string[])[1] === 'login';
-    const onAssessScreen = segments[0] === 'assess';
+    const onAssessScreen = segments[0] === 'assess' || segments[0] === 'try';
     if (user && (onLoginScreen || onAssessScreen)) {
       router.replace('/(tabs)/');
     }
@@ -105,6 +105,7 @@ function AppShell() {
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
         <Stack.Screen name="assess" options={{ headerShown: false }} />
+        <Stack.Screen name="try" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="auth/callback" options={{ headerShown: false }} />
         <Stack.Screen
