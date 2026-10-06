@@ -1,5 +1,5 @@
 import { V2, V2Config } from './config';
-import { CAPACITIES, Capacity, Domain, Evidence, EvidenceKind, Observation, Refusal, State } from './types';
+import { CAPACITIES, Capacity, Domain, Evidence, EvidenceKind, FeedbackMemory, Observation, Refusal, State } from './types';
 
 // ─── Evidence (INFERRED) ──────────────────────────────────────────────────────
 // Eight typed claims, each with its own rule. Counts are by origin, never one
@@ -23,6 +23,21 @@ export function tentativeModeOf(s: State, cfg: V2Config = V2): boolean {
   return recent.length >= 4 && recent.filter((i) => i.unknownPrimary || i.skippedAll).length / recent.length >= cfg.disengage.threshold;
 }
 
+/**
+ * The user's feedback that applies to an evidence object. For a domain claim (repeated signal OR convergence) the evidence-key memory and
+ * the domain memory are MERGED (latest day wins per kind of feedback): an empty entry left by "Accurate" on one kind must never shadow a
+ * "Partly"/"No" given on the other kind.
+ */
+export function feedbackFor(s: State, e: Pick<Evidence, 'key' | 'kind' | 'subject'>): FeedbackMemory | undefined {
+  const own = s.feedbackMem[e.key];
+  if (!(e.kind === 'repeated_signal' || e.kind === 'cross_capacity_convergence')) return own;
+  const dom = s.feedbackMem[`domain:${e.subject}`];
+  if (!own || !dom) return own ?? dom;
+  const later = (a?: number, b?: number) => (a === undefined ? b : b === undefined ? a : Math.max(a, b));
+  const partlyDay = later(own.partlyDay, dom.partlyDay);
+  return { key: e.key, noDay: later(own.noDay, dom.noDay), unsureDay: later(own.unsureDay, dom.unsureDay), partlyDay, partlyReason: (dom.partlyDay ?? -1) >= (own.partlyDay ?? -1) ? dom.partlyReason ?? own.partlyReason : own.partlyReason ?? dom.partlyReason, independentAtNo: own.independentAtNo ?? dom.independentAtNo };
+}
+
 export function independentPresent(s: State, d: Domain, day: number, win: number): Observation[] {
   const seen = new Set<number>();
   return s.observations.filter((o) => o.domainRole === 'issue' && o.domain === d && o.polarity === 'present' && INDEPENDENT.has(o.domainOrigin ?? '') && inWin(o, day, win) && !seen.has(o.day) && (seen.add(o.day), true));
@@ -38,8 +53,10 @@ export function computeEvidence(s: State, day: number, cfg: V2Config = V2): Evid
   const mk = (kind: EvidenceKind, subject: string, p: Partial<Evidence>): Evidence => ({ key: `${kind}:${subject}`, kind, subject, independentN: 0, promptedN: 0, introducedN: 0, continuationN: 0, negativeN: 0, unknownN: 0, offeredN: 0, presentOfferedN: 0, capacities: [], days: [], support: 'tentative', status: 'active', ...p });
 
   for (const d of issueDomains(s)) {
-    const win = s.observations.filter((o) => o.domainRole === 'issue' && inWin(o, day, W));
-    const ind = independentPresent(s, d, day, W);
+    // "That was true, but it has changed": the evidence window restarts at the correction; older observations no longer count for this subject
+    const fbd = feedbackFor(s, { key: `repeated_signal:${d}`, kind: 'repeated_signal', subject: d }); const since = fbd?.partlyReason === 'changed_since' && fbd.noDay === undefined ? fbd.partlyDay : undefined;
+    const win = s.observations.filter((o) => o.domainRole === 'issue' && inWin(o, day, W) && (since === undefined || o.day > since));
+    const ind = independentPresent(s, d, day, W).filter((o) => since === undefined || o.day > since);
     const introduced = ind.filter((o) => o.domainOrigin === 'user_introduced').length;
     const prompted = ind.length - introduced;
     const continuation = win.filter((o) => o.domain === d && o.polarity === 'present' && o.domainOrigin === 'thread_continuation').length;
@@ -145,12 +162,24 @@ export function computeEvidence(s: State, day: number, cfg: V2Config = V2): Evid
 
   // ── apply the user's corrections
   for (const e of ev) {
-    const fb = s.feedbackMem[e.key] ?? (e.kind === 'repeated_signal' || e.kind === 'cross_capacity_convergence' ? s.feedbackMem[`domain:${e.subject}`] : undefined);
+    const fb = feedbackFor(s, e);
     if (!fb) continue;
     if (fb.noDay !== undefined) {
       const newInd = e.kind === 'repeated_signal' || e.kind === 'cross_capacity_convergence' ? independentPresent(s, e.subject as Domain, day, W).filter((o) => o.day > fb.noDay!).length : 0;
       if (newInd < cfg.feedback.newEvidenceAfterNo) { e.status = 'withheld'; e.note = `user said "No"; ${newInd}/${cfg.feedback.newEvidenceAfterNo} new independent observations since`; }
       else { e.support = 'tentative'; e.note = 'user disagreed earlier; shown only with new evidence and hedged'; }
+    }
+    if (fb.partlyDay !== undefined && fb.noDay === undefined) {
+      const reason = fb.partlyReason ?? 'generic';
+      if (reason === 'changed_since') { e.support = 'tentative'; e.note = 'user said it has changed since; only newer observations count'; }
+      else {
+        const need = cfg.feedback.partlyNewEvidence[reason];
+        const domainKind = e.kind === 'repeated_signal' || e.kind === 'cross_capacity_convergence';
+        const newObs = domainKind ? independentPresent(s, e.subject as Domain, day, W).filter((o) => o.day > fb.partlyDay!).length
+          : s.observations.filter((o) => o.step === 'primary' && !o.unknown && o.domainOrigin !== 'thread_continuation' && o.day > fb.partlyDay!).length;
+        if (newObs < need) { e.status = 'withheld'; e.note = `user said "Partly" (${reason}); ${newObs}/${need} new independent observations since`; }
+        else { e.support = 'tentative'; e.note = `user said "Partly" (${reason}); shown only with new evidence and hedged`; }
+      }
     }
     if (fb.unsureDay !== undefined && day - fb.unsureDay < cfg.feedback.suppressDaysUnsure) { e.status = 'withheld'; e.note = 'user was unsure; waiting'; }
   }

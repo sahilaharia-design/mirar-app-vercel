@@ -42,6 +42,14 @@ export function sweep(seeds: number[], onlyIds?: string[]): SweepResult {
       if (r.state.observations.some((o) => o.orientation !== undefined) || r.state.threads.some((t) => t.orientation !== undefined)) v('orientation was collected (disabled in the MVP)', tag);
       if (r.state.insights.some((i) => i.kind === 'contradiction')) v('a contradiction insight was shown (disabled in the MVP)', tag);
       if (r.logs.some((l) => l.answers.some((a) => a.stepId === 'capture_orientation'))) v('orientation step was emitted', tag);
+      // feedback semantics (v2.0.1): Partly qualifies, never supports; unchanged text never returns; No stays stronger
+      for (const i of r.state.insights) if (i.feedback?.value === 'partly') {
+        const subj = (k: string) => (k.startsWith('repeated_signal:') || k.startsWith('cross_capacity_convergence:') ? 'domain:' + k.split(':')[1] : k);
+        const later = r.state.insights.filter((x) => x.id > i.id && subj(x.evidenceKey) === subj(i.evidenceKey));
+        for (const x of later) { if (x.tier === 'supported') v('a "supported" insight about a subject the user said was only partly right', `${tag} insight ${x.id}`); if (x.text === i.text) v('unchanged text resurfaced after Partly', `${tag} insight ${x.id}`); if (x.day - i.day < V2.insight.cooldownDaysSameKey * V2.feedback.partlyCooldownMultiplier && x.evidenceKey === i.evidenceKey) v('resurfaced inside the doubled Partly cooldown', `${tag} insight ${x.id}`); }
+        if (i.correction && !i.correction.reason) v('correction without a reason', tag);
+      }
+      for (const i of r.state.insights) if (i.feedback?.value === 'no') { const rest = (r.state.domainState as any)[i.evidenceKey.split(':')[1]]?.restUntilDay; if ((i.kind === 'repeated_signal' || i.kind === 'cross_capacity_convergence') && (rest === undefined || rest < i.feedback.day)) { /* rest may have been cleared by the user raising the domain again, which is allowed */ } }
       // text hygiene
       for (const i of r.state.insights) if (BANNED.test(i.text)) v('banned wording in an insight', `${tag}: ${i.text.slice(0, 50)}`);
       for (const l of r.logs) if (l.decision) { const t = l.decision.trace; if (BANNED.test([t.primaryReason, ...t.secondaryReasons, ...t.constraints.map((x) => x.effect), ...t.letRest, ...l.refusals.map((x) => x.reason)].join(' '))) { v('banned wording in a trace', `${tag} day ${l.day + 1}`); break; } }

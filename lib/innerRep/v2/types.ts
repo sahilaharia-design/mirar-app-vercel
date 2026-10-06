@@ -19,6 +19,9 @@ export type Mechanism =
 /** Who set the topic. Governs how much a domain observation can prove. */
 export type Origin = 'prompted_choice' | 'prompted_text' | 'user_introduced' | 'thread_continuation' | 'commitment' | 'correction';
 
+/** Why a user said an insight was only PARTLY right. About Mirar's interpretation, never about the person. */
+export type CorrectionReason = 'situation_right_meaning_off' | 'importance_overstated' | 'something_missing' | 'changed_since' | 'something_else' | 'prefer_not_to_say';
+
 export type CommitKind = 'reach_out' | 'start' | 'finish' | 'decide' | 'rest' | 'other';
 
 export interface Option {
@@ -34,6 +37,8 @@ export interface Option {
   stance?: { key: string; side: string; durable?: boolean };
   creates?: 'commitment';
   commitKind?: CommitKind;
+  /** authored copy shown when this commitment is revisited, so the user knows which one Mirar means */
+  commitLabel?: string;
   flagEvent?: boolean;
 }
 
@@ -131,6 +136,11 @@ export interface Commitment {
   asks: number;
   lastAskDay?: number;
   noneRevisits: number;
+  /** authored copy identifying the commitment (never user-written text) */
+  label?: string;
+  /** calendar dates, set by the runtime (the engine counts abstract days) */
+  dueDate?: string;
+  postponedUntilDate?: string;
   events: { day: number; from: CommitStatus | null; to: CommitStatus; by: 'user' | 'system' }[];
 }
 
@@ -169,9 +179,11 @@ export interface InsightRecord {
   text: string;
   snapshot: { independentN: number; introducedN: number; promptedN: number };
   feedback?: { day: number; value: 'accurate' | 'partly' | 'no' | 'unsure' };
+  /** structured reason given after "Partly" (no free text) */
+  correction?: { day: number; reason: CorrectionReason };
 }
 
-export interface FeedbackMemory { key: string; noDay?: number; partlyDay?: number; unsureDay?: number; independentAtNo?: number }
+export interface FeedbackMemory { key: string; noDay?: number; partlyDay?: number; partlyReason?: CorrectionReason; unsureDay?: number; independentAtNo?: number }
 
 export interface DomainState {
   negStreak: number;

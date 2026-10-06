@@ -46,6 +46,10 @@ export const V2 = {
   },
   feedback: {
     suppressDaysNo: 21, suppressDaysUnsure: 7, newEvidenceAfterNo: 2,
+    // "Partly" qualifies the interpretation; it does not reject it. New independent observations needed before the same subject may
+    // resurface (always hedged, never "supported"), by structured reason. changed_since restarts the evidence window instead (see evidence.ts).
+    partlyNewEvidence: { generic: 1, situation_right_meaning_off: 1, importance_overstated: 2, something_missing: 1, changed_since: 0, something_else: 1, prefer_not_to_say: 1 },
+    partlyCooldownMultiplier: 2,
     tentativeModeWindow: 3, tentativeModeNo: 2, // ≥2 "No" in last 3 → tentative mode
   },
   insight: { cooldownDaysSameKey: 14, maxPer7Days: 2, contradictionEnabled: false },  // contradiction stays an evidence concept; no user-facing insight in the MVP
@@ -61,4 +65,4 @@ export const V2 = {
 };
 export type V2Config = typeof V2;
 /** Frozen engine identity. Bump deliberately; every stored decision records it. */
-export const ENGINE_VERSION = 'v2.0.0-mvp';
+export const ENGINE_VERSION = 'v2.0.1-correction-fix';

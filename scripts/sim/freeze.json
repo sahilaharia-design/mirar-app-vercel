@@ -1,5 +1,5 @@
 {
- "ENGINE_VERSION": "v2.0.0-mvp",
+ "ENGINE_VERSION": "v2.0.1-correction-fix",
  "config": {
   "templateWindowReps": 14,
   "lensWindowReps": 5,
@@ -100,6 +100,16 @@
    "suppressDaysNo": 21,
    "suppressDaysUnsure": 7,
    "newEvidenceAfterNo": 2,
+   "partlyNewEvidence": {
+    "generic": 1,
+    "situation_right_meaning_off": 1,
+    "importance_overstated": 2,
+    "something_missing": 1,
+    "changed_since": 0,
+    "something_else": 1,
+    "prefer_not_to_say": 1
+   },
+   "partlyCooldownMultiplier": 2,
    "tentativeModeWindow": 3,
    "tentativeModeNo": 2
   },

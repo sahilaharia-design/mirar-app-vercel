@@ -1,5 +1,5 @@
 import { V2, V2Config } from './config';
-import { FlowContext, StepAnswer, chosenOption, primaryOptions } from './contracts';
+import { COMMIT_KIND_LABEL, CommitmentContext, FlowContext, StepAnswer, chosenOption, primaryOptions } from './contracts';
 import { TEMPLATE_BY_ID } from './templates';
 import { Commitment, Domain, DomainState, Instance, Observation, Orientation, State, Thread, Timeframe } from './types';
 
@@ -17,9 +17,12 @@ export const completed = (s: State) => s.instances.filter((i) => i.completed);
 export const lastInstance = (s: State) => s.instances[s.instances.length - 1];
 export const daysSinceLast = (s: State, day: number) => (s.instances.length ? day - lastInstance(s).day : Infinity);
 
-export function flowContext(s: State, day: number, t: Instance['templateId'], frame: Instance['frame'], bound: Domain | undefined, cfg: V2Config = V2, variant = 0): FlowContext {
+export function flowContext(s: State, day: number, t: Instance['templateId'], frame: Instance['frame'], bound: Domain | undefined, cfg: V2Config = V2, variant = 0, intentRef?: number): FlowContext {
+  const c = frame === 'commitment_check' && intentRef !== undefined ? s.commitments.find((x) => x.id === intentRef) : undefined;
+  const due = c ? (c.status === 'postponed' ? c.postponedUntil : c.dueDay) : undefined;
+  const commitment: CommitmentContext | undefined = c ? { label: c.label ?? COMMIT_KIND_LABEL[c.kind], timeframe: c.status === 'postponed' && c.postponedUntil !== undefined ? 'specific_date' : c.timeframe, ...(due !== undefined ? { dueInDays: due - day } : {}) } : undefined;
   return {
-    template: TEMPLATE_BY_ID[t], frame, bound, variant,
+    template: TEMPLATE_BY_ID[t], frame, bound, variant, ...(commitment ? { commitment } : {}),
     captureCooledDown: s.lastCaptureDay === undefined || day - s.lastCaptureDay >= cfg.capture.cooldownDays,
     openThreadDomains: s.threads.filter((x) => x.state === 'open' || x.state === 'resting').map((x) => x.domain),
     threadDeclinedDomains: (Object.entries(s.domainState) as [Domain, DomainState][]).filter(([, v]) => (v.threadDeclinedUntil ?? -1) > day).map(([k]) => k),
@@ -146,7 +149,7 @@ export function applyRep(s: State, inst: Instance, ctx: FlowContext, answers: St
   if (chosen.creates === 'commitment' && ctx.frame === 'base') {
     const tf = ans('timeframe');
     const timeframe: Timeframe = tf && tf.kind === 'timeframe' ? tf.timeframe : 'none';
-    const c: Commitment = { id: ++s.seq.commit, kind: chosen.commitKind ?? 'other', domain: domain, timeframe, createdDay: day, dueDay: timeframeDue(day, timeframe, tf && tf.kind === 'timeframe' ? tf.inDays : undefined, cfg), status: 'open', statusSource: 'user', asks: 0, noneRevisits: 0, events: [{ day, from: null, to: 'open', by: 'user' }] };
+    const c: Commitment = { id: ++s.seq.commit, kind: chosen.commitKind ?? 'other', domain: domain, timeframe, label: chosen.commitLabel, createdDay: day, dueDay: timeframeDue(day, timeframe, tf && tf.kind === 'timeframe' ? tf.inDays : undefined, cfg), status: 'open', statusSource: 'user', asks: 0, noneRevisits: 0, events: [{ day, from: null, to: 'open', by: 'user' }] };
     s.commitments.push(c);
   }
 

@@ -2,7 +2,8 @@ import { V2, V2Config } from '../../lib/innerRep/v2/config';
 import { FlowContext, Step, StepAnswer, nextStep, primaryOptions } from '../../lib/innerRep/v2/contracts';
 import { Decision, decide, label } from '../../lib/innerRep/v2/engine';
 import { computeEvidence } from '../../lib/innerRep/v2/evidence';
-import { applyFeedback, chooseInsight } from '../../lib/innerRep/v2/insights';
+import { applyCorrection, applyFeedback, chooseInsight } from '../../lib/innerRep/v2/insights';
+import { CORRECTION_REASONS } from '../../lib/innerRep/v2/contracts';
 import { applyRep, createState, flowContext } from '../../lib/innerRep/v2/state';
 import { TEMPLATE_BY_ID } from '../../lib/innerRep/v2/templates';
 import { Domain, Instance, InsightRecord, Observation, Refusal, State } from '../../lib/innerRep/v2/types';
@@ -96,7 +97,7 @@ export function runProfile(p: Profile, over: Partial<V2Config> = {}, restEnabled
     if (shown && inst.completed && !inst.unknownPrimary) {
       insight = { ...shown, id: ++s.seq.insight, day: d }; s.insights.push(insight);
       const f = p.feedback ? p.feedback(insight, r) : (r() < 0.6 ? 'accurate' : r() < 0.5 ? 'partly' : 'unsure');
-      if (f) { fb = f; applyFeedback(s, insight.id, f, d, cfg); }
+      if (f) { fb = f; applyFeedback(s, insight.id, f, d, cfg); if (f === 'partly') applyCorrection(s, insight.id, CORRECTION_REASONS[insight.id % CORRECTION_REASONS.length].id, d); } // reason cycled deterministically so every reason is exercised without disturbing the random stream
     }
     const keys = new Set(ev.evidence.map((e) => e.key));
     const newEvidence = [...keys].filter((k) => !prevEvidence.has(k));

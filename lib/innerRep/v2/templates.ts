@@ -47,7 +47,7 @@ export const TEMPLATES: Template[] = [
     options: [o('yes', 'Yes', { polarity: 'present' }), nothing('Not today')] },
   { ...base, id: 'rel_connect', capacity: 'relationships', sub_capacity: 'connection', mechanism: 'acknowledgment', interaction: 'acknowledge', domainRole: 'issue', seconds: 25, tags: ['connection'],
     prompt: 'Is there someone you\'ve been meaning to reach out to?',
-    options: [o('partner', 'My partner', { domain: 'partner', creates: 'commitment', commitKind: 'reach_out' }), o('family', 'Family', { domain: 'family', creates: 'commitment', commitKind: 'reach_out' }), o('friends', 'A friend', { domain: 'friends', creates: 'commitment', commitKind: 'reach_out' }), nothing('No one right now', 'no_one')] },
+    options: [o('partner', 'My partner', { commitLabel: 'Reach out to your partner', domain: 'partner', creates: 'commitment', commitKind: 'reach_out' }), o('family', 'Family', { commitLabel: 'Reach out to your family', domain: 'family', creates: 'commitment', commitKind: 'reach_out' }), o('friends', 'A friend', { commitLabel: 'Reach out to a friend', domain: 'friends', creates: 'commitment', commitKind: 'reach_out' }), nothing('No one right now', 'no_one')] },
   // ── Growth ──
   { ...base, id: 'gro_update', capacity: 'growth', sub_capacity: 'updating_beliefs', mechanism: 'reappraisal', interaction: 'choice', domainRole: 'issue', hasLens: true, seconds: 30, tags: ['belief'],
     capture: { domain: 'if_present', orientation: 'never' },
@@ -75,7 +75,7 @@ export const TEMPLATES: Template[] = [
   // ── Action ──
   { ...base, id: 'act_tiny', capacity: 'action', sub_capacity: 'intentional_choice', mechanism: 'micro_commit', interaction: 'choice', seconds: 25, tags: ['action'],
     prompt: 'Pick one small thing for the next day, or choose none.',
-    options: [o('reply', 'Reply to one message', { creates: 'commitment', commitKind: 'reach_out' }), o('outside', 'Five minutes outside', { creates: 'commitment', commitKind: 'start' }), o('start', 'Start something for two minutes', { creates: 'commitment', commitKind: 'start' }), nothing('Nothing — I am resting, on purpose', 'rest_on_purpose')] },
+    options: [o('reply', 'Reply to one message', { commitLabel: 'Reply to one message', creates: 'commitment', commitKind: 'reach_out' }), o('outside', 'Five minutes outside', { commitLabel: 'Five minutes outside', creates: 'commitment', commitKind: 'start' }), o('start', 'Start something for two minutes', { commitLabel: 'Start something for two minutes', creates: 'commitment', commitKind: 'start' }), nothing('Nothing — I am resting, on purpose', 'rest_on_purpose')] },
   { ...base, id: 'act_credit', capacity: 'action', sub_capacity: 'agency', mechanism: 'appreciation', interaction: 'choice', seconds: 20, tags: ['positive'],
     prompt: 'Did you do something today you can give yourself credit for?',
     options: [o('yes', 'Yes'), o('maybe', 'Maybe'), nothing('Not today', 'no')],

@@ -1,6 +1,7 @@
 import { V2, V2Config } from './config';
 import { DOMAIN_PHRASE, TEMPLATES } from './templates';
-import { Evidence, InsightRecord, State } from './types';
+import { feedbackFor } from './evidence';
+import { CorrectionReason, Evidence, InsightRecord, State } from './types';
 
 // ─── Insights (what is SHOWN) and the user's corrections ──────────────────────
 // An insight is only ever built from an Evidence object, so it carries its own
@@ -14,7 +15,7 @@ const STANCE_LABEL: Record<string, string> = Object.fromEntries(TEMPLATES.flatMa
 export interface InsightDecision { evidenceKey: string; verdict: 'shown' | 'eligible_not_shown' | 'not_eligible'; reason: string; insight?: Omit<InsightRecord, 'id' | 'day'> }
 
 /** feedback on a domain claim (repeated signal OR convergence) applies to the domain, whichever kind carried it */
-export const fbFor = (s: State, e: Pick<Evidence, 'key' | 'kind' | 'subject'>) => s.feedbackMem[e.key] ?? (e.kind === 'repeated_signal' || e.kind === 'cross_capacity_convergence' ? s.feedbackMem[`domain:${e.subject}`] : undefined);
+export const fbFor = feedbackFor;
 
 export function buildInsight(s: State, e: Evidence, tentativeMode: boolean, cfg: V2Config = V2): Omit<InsightRecord, 'id' | 'day'> | null {
   if (e.kind === 'contradiction' && !cfg.insight.contradictionEnabled) return null; // evidence concept kept; no user-facing contradiction in the MVP
@@ -25,13 +26,23 @@ export function buildInsight(s: State, e: Evidence, tentativeMode: boolean, cfg:
   if (e.kind === 'repeated_signal') {
     if (e.support === 'supported' && !tentativeMode && !prior)
       return { evidenceKey: e.key, kind: e.kind, tier: 'supported', text: `${subj} has come up ${e.independentN} times${e.promptedN ? ` (${e.promptedN} chosen from a list` : ' ('}${e.promptedN ? ', ' : ''}${e.introducedN} raised by you).`, snapshot: snap };
+    if (fb?.partlyDay !== undefined && fb.noDay === undefined && e.independentN >= V2.evidence.repeated.minIndependent) {
+      // qualified, never supported: states what was counted, and the part the user said was off
+      const R = fb.partlyReason;
+      const tail = R === 'situation_right_meaning_off' ? ' This is only the count: you said the situation was right but not what it means.'
+        : R === 'importance_overstated' ? ' You said an earlier reading made it sound more important than it is.'
+        : R === 'something_missing' ? ' You said an earlier reading was missing something, so this may be only part of the picture.'
+        : R === 'changed_since' ? ' This counts only what has happened since you said things had changed.'
+        : ' You said an earlier version was only partly right, so treat this as a question.';
+      return { evidenceKey: e.key, kind: e.kind, tier: 'hedged', text: `${subj} has come up ${e.independentN} times${e.introducedN ? `, ${e.introducedN} raised by you` : ''}.${tail}`, snapshot: snap };
+    }
     if (fb?.noDay !== undefined && e.independentN >= V2.evidence.repeated.minIndependent)
       return { evidenceKey: e.key, kind: e.kind, tier: 'hedged', text: `${subj} has come up ${e.independentN} times${e.introducedN ? `, ${e.introducedN} of them raised by you` : ''}. Treat this as a question, not a reading.${prior}`, snapshot: snap };
     if (e.promptedN >= V2.evidence.repeated.hedgedMinIndependent && e.introducedN === 0)
       return { evidenceKey: e.key, kind: e.kind, tier: 'hedged', text: `You picked ${DOMAIN_PHRASE[e.subject as keyof typeof DOMAIN_PHRASE] ?? e.subject} ${e.presentOfferedN || e.independentN} of the ${e.offeredN || e.independentN} times it was an option. That may reflect what you were asked about. Is it actually on your mind?${prior}`, snapshot: snap };
     return null;
   }
-  if (e.kind === 'cross_capacity_convergence' && e.support === 'supported' && !tentativeMode)
+  if (e.kind === 'cross_capacity_convergence' && e.support === 'supported' && !tentativeMode && fb?.partlyDay === undefined)
     return { evidenceKey: e.key, kind: e.kind, tier: 'supported', text: `${subj} came up while Mirar was asking about ${e.capacities.join(' and ')}. ${e.introducedN === 1 ? 'Once' : `${e.introducedN} times`} you brought it up yourself, without being asked about it.${prior}`, snapshot: snap };
   if (e.kind === 'change') {
     const heavier = (e.note ?? '').startsWith('heavier');
@@ -64,7 +75,8 @@ export function chooseInsight(s: State, evidence: Evidence[], day: number, tenta
     const ins = buildInsight(s, e, tentativeMode, cfg);
     if (!ins) { decisions.push({ evidenceKey: e.key, verdict: 'not_eligible', reason: 'drives continuity, not an insight' }); continue; }
     const prev = [...s.insights].reverse().find((i) => i.evidenceKey === e.key);
-    if (prev && day - prev.day < cooldown) { decisions.push({ evidenceKey: e.key, verdict: 'eligible_not_shown', reason: `shown ${day - prev.day}d ago (cooldown ${cooldown}d)` }); continue; }
+    const cd = cooldown * (fbFor(s, e)?.partlyDay !== undefined ? cfg.feedback.partlyCooldownMultiplier : 1);
+    if (prev && day - prev.day < cd) { decisions.push({ evidenceKey: e.key, verdict: 'eligible_not_shown', reason: `shown ${day - prev.day}d ago (cooldown ${cd}d)` }); continue; }
     if (prev && prev.text === ins.text) { decisions.push({ evidenceKey: e.key, verdict: 'eligible_not_shown', reason: 'would repeat unchanged text' }); continue; }
     if (last7 >= cfg.insight.maxPer7Days) { decisions.push({ evidenceKey: e.key, verdict: 'eligible_not_shown', reason: `weekly cap ${cfg.insight.maxPer7Days}` }); continue; }
     if (shown) { decisions.push({ evidenceKey: e.key, verdict: 'eligible_not_shown', reason: 'one insight per rep' }); continue; }
@@ -91,4 +103,16 @@ export function applyFeedback(s: State, insightId: number, value: 'accurate' | '
     const st = (s.domainState[d] ??= { negStreak: 0, lastLensDay: {} });
     st.restUntilDay = Math.max(st.restUntilDay ?? 0, day + cfg.feedback.suppressDaysNo); st.restReason = 'user said the reading did not fit';
   }
+}
+
+/**
+ * After "Partly": the user's structured reason. This qualifies MIRAR'S interpretation of the evidence; it is stored as feedback
+ * about the insight and never creates evidence or a statement about the person.
+ */
+export function applyCorrection(s: State, insightId: number, reason: CorrectionReason, day: number) {
+  const ins = s.insights.find((i) => i.id === insightId);
+  if (!ins || ins.feedback?.value !== 'partly' || ins.correction) return;
+  ins.correction = { day, reason };
+  const keys = [ins.evidenceKey, ...(ins.kind === 'repeated_signal' || ins.kind === 'cross_capacity_convergence' ? [`domain:${ins.evidenceKey.split(':')[1]}`] : [])];
+  for (const k of keys) { const mem = (s.feedbackMem[k] ??= { key: k }); mem.partlyReason = reason; }
 }

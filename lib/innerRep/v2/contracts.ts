@@ -1,4 +1,4 @@
-import { Domain, Frame, Option, Orientation, Template } from './types';
+import { CommitKind, CorrectionReason, Domain, Frame, Option, Orientation, Template } from './types';
 import { DOMAIN_PHRASE, LENS_OPTIONS, LENS_PROMPT } from './templates';
 import { V2 } from './config';
 
@@ -10,8 +10,35 @@ import { V2 } from './config';
 
 export interface StepOption { id: string; label: string }
 
+/** What a revisited commitment is, in words the renderer can show. No internal ids. */
+export interface CommitmentContext {
+  /** authored copy, e.g. "Five minutes outside" */
+  label: string;
+  timeframe: 'today' | 'tomorrow' | 'this_week' | 'specific_date' | 'none';
+  /** whole days from today until the date the user set; negative if that date has passed; absent for "No deadline" */
+  dueInDays?: number;
+}
+export interface StepContext { commitment?: CommitmentContext }
+
+// Labels the renderer must use verbatim (contract copy).
+export const TIMEFRAME_LABEL = { today: 'Today', tomorrow: 'Tomorrow', this_week: 'This week', pick_date: 'Pick a date', none: 'No deadline' } as const;
+/** The control that returns to the Today view must NOT be named "Today" (that is also a timeframe option). */
+export const NAV_LABEL = { backToToday: 'Back to Today' } as const;
+export const COMMIT_KIND_LABEL: Record<CommitKind, string> = { reach_out: 'Reach out to someone', start: 'Start something small', finish: 'Finish something', decide: 'Make a decision', rest: 'Rest', other: 'Something you mentioned' };
+
+/** Structured answers to "What's off?" after Partly. Labels are verbatim copy. `words` = may offer an optional, unsaved note. */
+export const CORRECTION_PROMPT = "What's off?";
+export const CORRECTION_REASONS: { id: CorrectionReason; label: string; words?: boolean }[] = [
+  { id: 'situation_right_meaning_off', label: "The situation is right, but what it means isn't" },
+  { id: 'importance_overstated', label: "It matters, but not as much as that sounds" },
+  { id: 'something_missing', label: 'Something important is missing' },
+  { id: 'changed_since', label: "That was true, but it has changed" },
+  { id: 'something_else', label: 'Something else', words: true },
+  { id: 'prefer_not_to_say', label: "I'd rather not say" },
+];
+
 export type Step =
-  | { id: 'primary' | 'follow_up'; type: 'choice'; prompt: string; layout: 'list' | 'compare'; options: StepOption[]; allowUnknown: true }
+  | { id: 'primary' | 'follow_up'; type: 'choice'; prompt: string; layout: 'list' | 'compare'; options: StepOption[]; allowUnknown: true; /** present when the question is about a specific commitment */ context?: StepContext }
   | { id: 'words'; type: 'words'; prompt: string; maxChars: number; optional: true; saved: false; safetyCheck: true }
   | { id: 'capture_domain'; type: 'domain_chips'; prompt: string; domains: Domain[]; optional: true }
   /** DISABLED in the MVP: never emitted while V2.orientation.enabled is false. Safe for the UI to ignore. */
@@ -25,7 +52,8 @@ export type StepAnswer =
   | { stepId: string; kind: 'skip' }             // any optional step can be skipped
   | { stepId: string; kind: 'domain'; domain: Domain }
   | { stepId: string; kind: 'orientation'; orientation: Orientation }
-  | { stepId: string; kind: 'timeframe'; timeframe: 'today' | 'tomorrow' | 'this_week' | 'specific_date' | 'none'; inDays?: number }
+  // specific_date: the UI sends `date` (YYYY-MM-DD, a real FUTURE calendar date). `inDays` is ENGINE-INTERNAL: derived by the runtime from `date`; the UI never sends it.
+  | { stepId: string; kind: 'timeframe'; timeframe: 'today' | 'tomorrow' | 'this_week' | 'specific_date' | 'none'; date?: string; inDays?: number }
   | { stepId: string; kind: 'yes' | 'no' }
   | { stepId: string; kind: 'words' };            // text itself is deliberately NOT part of the contract
 
@@ -34,7 +62,8 @@ export interface RepPayload {
   templateId: string;
   frame: Frame;
   bound?: Domain;
-  capacityLabel: string;
+  /** presentation metadata, OPTIONAL: set only for training reps. Renderers need not show it. Continuity/open-question/presence reps omit it. */
+  capacityLabel?: string;
   intensity: 'light' | 'medium';
   estimatedSeconds: number;
   /** the user can always leave without answering */
@@ -66,6 +95,8 @@ export interface FlowContext {
   bound?: Domain;
   /** which wording of the question to show (engine-chosen; the UI never picks) */
   variant?: number;
+  /** present for commitment checks */
+  commitment?: CommitmentContext;
   /** engine-provided facts the flow needs (no UI logic) */
   captureCooledDown: boolean;
   openThreadDomains: Domain[];
@@ -87,7 +118,9 @@ export function nextStep(ctx: FlowContext, answers: StepAnswer[]): Step | null {
   const answered = (id: string) => answers.find((a) => a.stepId === id);
   const prim = primaryOptions(t, ctx.frame, ctx.bound, ctx.variant);
 
-  if (!has('primary')) return { id: 'primary', type: 'choice', prompt: prim.prompt, layout: prim.layout, options: prim.options.map(({ id, label }) => ({ id, label })), allowUnknown: true };
+  // A commitment check always says WHICH commitment it is about (authored label only; never an id).
+  const promptText = ctx.commitment ? `You mentioned: ${ctx.commitment.label}. How is that going?` : prim.prompt;
+  if (!has('primary')) return { id: 'primary', type: 'choice', prompt: promptText, layout: prim.layout, options: prim.options.map(({ id, label }) => ({ id, label })), allowUnknown: true, ...(ctx.commitment ? { context: { commitment: ctx.commitment } } : {}) };
   const chosen = chosenOption(ctx, answers);
   if (chosen === 'unknown' || chosen === null) return null; // "I don't know" ends the rep: nothing else is asked
 
