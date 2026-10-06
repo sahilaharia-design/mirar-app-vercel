@@ -14,7 +14,7 @@ const greetingKey = () => { const h = new Date().getHours(); return h < 12 ? 'co
 export function DailyInnerRepHost() {
   const { t } = useTranslation();
   const userId = useAuthStore((s) => s.session?.user?.id);
-  const { status, today, dayKey, practiceDays, load, progress, complete, discardForSafety, feedback } = useInnerRepV2Store();
+  const { status, today, dayKey, practiceDays, load, progress, complete, discardForSafety, feedback, correction } = useInnerRepV2Store();
   // reload on focus: picks up a new calendar day without a full app restart
   useFocusEffect(useCallback(() => { if (userId) void load(userId); }, [userId, load]));
 
@@ -28,5 +28,6 @@ export function DailyInnerRepHost() {
     onComplete={complete}
     onSafety={() => { void discardForSafety(); }}
     onFeedback={feedback}
+    onCorrection={correction}
   />;
 }

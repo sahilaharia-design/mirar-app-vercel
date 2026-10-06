@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import type { Domain } from '../../../lib/innerRep/v2/types';
-import { DOMAIN_CHIP_LABEL } from '../../../lib/innerRep/v2/contracts';
+import { View, StyleSheet, TextInput } from 'react-native';
+import type { CorrectionReason } from '../../../lib/innerRep/v2/types';
+import { CORRECTION_PROMPT, CORRECTION_REASONS } from '../../../lib/innerRep/v2/contracts';
+import { containsCrisisLanguage } from '../../../lib/innerRep/safety';
 import { MIRAR as M } from '../../../design-system/native';
 import { Action, Body, Eyebrow, Prompt } from './Foundation';
 
@@ -11,11 +12,15 @@ export interface ShownInsight {
  id: number; tier: 'supported' | 'tentative' | 'hedged'; text: string;
  evidence: { independentN: number; promptedN: number; introducedN: number };
 }
-export function HonestMirror({ insight, onFeedback, onCorrection }: { insight: ShownInsight; onFeedback: (feedback: InsightFeedback) => Promise<void>; onCorrection?: (domain: Domain) => Promise<void> }) {
+export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { insight: ShownInsight; onFeedback: (feedback: InsightFeedback) => Promise<void>; onCorrection?: (reason: CorrectionReason) => Promise<void>; onSafety?: () => void }) {
  const [given, setGiven] = useState<InsightFeedback | null>(null); const [pending, setPending] = useState(false);
  const [evidence, setEvidence] = useState(false); const [error, setError] = useState(false); const [corrected, setCorrected] = useState(false);
  const [correcting, setCorrecting] = useState(false);
+ // structured correction. Free text, if offered, lives only in this field: it is safety-checked, cleared, and never passed on.
+ const [pendingReason, setPendingReason] = useState<CorrectionReason | null>(null); const [note, setNote] = useState('');
  const give = async (value: InsightFeedback) => { if (pending) return; setPending(true); setError(false); try { await onFeedback(value); setGiven(value); } catch { setError(true); } finally { setPending(false); } };
+ const send = async (reason: CorrectionReason) => { if (!onCorrection) return; setPending(true); setError(false); try { await onCorrection(reason); setCorrected(true); setPendingReason(null); } catch { setError(true); } finally { setPending(false); } };
+ const finishNote = async (use: boolean) => { const crisis = use && containsCrisisLanguage(note); setNote(''); if (crisis) { setPendingReason(null); onSafety?.(); return; } if (pendingReason) await send(pendingReason); };
  return <View style={styles.mirror}>
   <Eyebrow>{insight.tier === 'hedged' ? 'Something to consider' : 'Worth noticing'}</Eyebrow>
   <Prompt label="mirror-prompt">{insight.text}</Prompt>
@@ -26,10 +31,17 @@ export function HonestMirror({ insight, onFeedback, onCorrection }: { insight: S
    {!given && <View style={styles.wrap}>{([['accurate','Accurate'],['partly','Partly'],['no','No'],['unsure','Not sure']] as const).map(([value,label]) => <Action key={value} secondary disabled={pending} onPress={() => void give(value)}>{label}</Action>)}</View>}
    {error && <Body accessibilityRole="alert">Couldn't record that. Please try again.</Body>}
    {given === 'partly' && onCorrection && !corrected && <View style={styles.feedback}>
-    <Action secondary expanded={correcting} onPress={() => setCorrecting(!correcting)}>What's off?</Action>
-    {correcting && <View style={styles.wrap}>{(['work','partner','family','friends','self','body_health','money','time','technology','other'] as Domain[]).map(domain => <Action key={domain} secondary disabled={pending} onPress={async () => { setPending(true); setError(false); try { await onCorrection(domain); setCorrected(true); } catch { setError(true); } finally { setPending(false); } }}>{DOMAIN_CHIP_LABEL[domain]}</Action>)}<Action secondary onPress={() => setCorrecting(false)}>Skip</Action></View>}
+    <Action secondary expanded={correcting} onPress={() => setCorrecting(!correcting)}>{CORRECTION_PROMPT}</Action>
+    {correcting && !pendingReason && <View style={styles.wrap}>{CORRECTION_REASONS.map(r => <Action key={r.id} secondary disabled={pending} onPress={() => (r.words ? setPendingReason(r.id) : void send(r.id))}>{r.label}</Action>)}<Action secondary onPress={() => setCorrecting(false)}>Skip</Action></View>}
+    {correcting && pendingReason && <View style={styles.feedback}>
+     <TextInput multiline value={note} onChangeText={setNote} maxLength={80} autoComplete="off" autoCorrect={false} spellCheck={false} importantForAutofill="no" textContentType="none" accessibilityLabel="Tell Mirar more (optional)" aria-describedby="correction-privacy" style={styles.input} />
+     <Body nativeID="correction-privacy" style={styles.hint}>Optional. Not saved in this version.</Body>
+     <View style={styles.wrap}><Action secondary disabled={pending} onPress={() => void finishNote(true)}>Continue</Action><Action secondary disabled={pending} onPress={() => void finishNote(false)}>Skip</Action></View>
+    </View>}
    </View>}
   </View>
  </View>;
 }
-const styles = StyleSheet.create({ mirror: { gap: M.space.lg, paddingTop: M.space.xl, borderTopWidth: 1, borderTopColor: M.color.warmInk }, feedback: { gap: M.space.base, marginTop: M.space.lg }, wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md }, evidence: { gap: M.space.sm } });
+const styles = StyleSheet.create({ mirror: { gap: M.space.lg, paddingTop: M.space.xl, borderTopWidth: 1, borderTopColor: M.color.warmInk }, feedback: { gap: M.space.base, marginTop: M.space.lg }, wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md }, evidence: { gap: M.space.sm },
+ input: { fontFamily: M.font.body, fontSize: 18, lineHeight: 28, minHeight: 96, padding: M.space.base, backgroundColor: M.color.paper, color: M.color.ink, borderBottomWidth: 1, borderColor: M.color.warmInk, borderRadius: M.radius.control, textAlignVertical: 'top' },
+ hint: { fontSize: 14, lineHeight: 22 } });

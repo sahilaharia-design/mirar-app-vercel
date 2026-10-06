@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View, TextInput, StyleSheet, Platform, useWindowDimensions } from 'react-native';
 import type { Step, StepAnswer } from '../../../lib/innerRep/v2/contracts';
-import { DOMAIN_CHIP_LABEL } from '../../../lib/innerRep/v2/contracts';
+import { DOMAIN_CHIP_LABEL, TIMEFRAME_LABEL } from '../../../lib/innerRep/v2/contracts';
 import { containsCrisisLanguage } from '../../../lib/innerRep/safety';
 import { MIRAR as M } from '../../../design-system/native';
 import { Action, Body, Prompt, SelectionSurface } from './Foundation';
@@ -40,7 +40,7 @@ export function ContextInteraction({ step, answer }: { step: Extract<Step, { typ
 export function CheckInOffer({ step, answer }: { step: Extract<Step, { type: 'yes_no' }>; answer: Answer }) {
  return <View><Prompt>{step.prompt}</Prompt><View style={styles.wrap}>{(['yes','no'] as const).map(kind => <Action secondary key={kind} onPress={() => answer({ stepId: step.id, kind })}>{kind === 'yes' ? 'Yes' : 'No'}</Action>)}</View><View style={styles.actions}><Action secondary onPress={() => answer({ stepId: step.id, kind: 'skip' })}>Skip</Action></View></View>;
 }
-const timeframeLabels = { today: 'Today', tomorrow: 'Tomorrow', this_week: 'This week', pick_date: 'Choose a date', none: 'No timeframe' };
+const timeframeLabels = TIMEFRAME_LABEL; // contract copy, verbatim
 // Civil-day arithmetic avoids daylight-saving errors; no engine due-date rules here.
 export function dateOffset(value: string, now = new Date()): number | null {
  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
@@ -48,13 +48,17 @@ export function dateOffset(value: string, now = new Date()): number | null {
  if (chosen.getUTCFullYear() !== year || chosen.getUTCMonth() !== month-1 || chosen.getUTCDate() !== day) return null;
  return (chosen.getTime() - Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())) / 86400000;
 }
+const iso = (d: Date) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 export function TimeframeInteraction({ step, answer }: { step: Extract<Step, { type: 'timeframe' }>; answer: Answer }) {
- const [picking, setPicking] = useState(false); const [date, setDate] = useState(''); const inDays = dateOffset(date);
+ const [picking, setPicking] = useState(false); const [date, setDate] = useState(''); const offset = dateOffset(date);
+ const future = offset !== null && offset >= 1; // MVP contract: a real calendar date, after today
+ const tomorrow = (() => { const d = new Date(); d.setDate(d.getDate() + 1); return iso(d); })();
  return <View><Prompt>{step.prompt}</Prompt><View style={styles.wrap}>{step.options.map(value => <Action secondary selected={value === 'pick_date' && picking ? true : undefined} key={value} onPress={() => value === 'pick_date' ? setPicking(true) : answer({ stepId: step.id, kind: 'timeframe', timeframe: value })}>{timeframeLabels[value]}</Action>)}</View>
   {picking && <View style={styles.date}>
-   <Body>Choose a date</Body>
-   {Platform.OS === 'web' ? React.createElement('input', { type: 'date', 'aria-label': 'Choose a date', value: date, onChange: (event: React.ChangeEvent<HTMLInputElement>) => setDate(event.target.value), style: { minHeight: 48, maxWidth: '100%', border: '1px solid '+M.color.border, borderRadius: M.radius.control, padding: 12, background: M.color.paper, color: M.color.ink, font: 'inherit' } }) : <TextInput value={date} onChangeText={setDate} placeholder="YYYY-MM-DD" accessibilityLabel="Choose a date, YYYY-MM-DD" autoCorrect={false} style={styles.input} />}
-   <Action disabled={inDays === null} onPress={() => { if (inDays !== null) answer({ stepId: step.id, kind: 'timeframe', timeframe: 'specific_date', inDays }); }}>Use this date</Action>
+   <Body>{timeframeLabels.pick_date}</Body>
+   {Platform.OS === 'web' ? React.createElement('input', { type: 'date', 'aria-label': timeframeLabels.pick_date, min: tomorrow, value: date, onChange: (event: React.ChangeEvent<HTMLInputElement>) => setDate(event.target.value), style: { minHeight: 48, maxWidth: '100%', border: '1px solid '+M.color.border, borderRadius: M.radius.control, padding: 12, background: M.color.paper, color: M.color.ink, font: 'inherit' } }) : <TextInput value={date} onChangeText={setDate} placeholder="YYYY-MM-DD" accessibilityLabel="Pick a date, YYYY-MM-DD" autoCorrect={false} style={styles.input} />}
+   <Body style={styles.hint}>Choose a day after today.</Body>
+   <Action disabled={!future} onPress={() => { if (future) answer({ stepId: step.id, kind: 'timeframe', timeframe: 'specific_date', date }); }}>Use this date</Action>
   </View>}
   <View style={styles.actions}><Action secondary onPress={() => answer({ stepId: step.id, kind: 'skip' })}>Skip</Action></View>
  </View>;

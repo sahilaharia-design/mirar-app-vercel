@@ -6,7 +6,7 @@ import { Action, Body, BrandAsset, Eyebrow, PageTransition, Prompt, VisualFounda
 import { HonestMirror, type ShownInsight, type InsightFeedback } from './HonestMirror';
 import { V2RepFlow } from './RepFlow';
 import { SAFETY_RESOURCES } from '../../../lib/innerRep/safety';
-import type { Domain } from '../../../lib/innerRep/v2/types';
+import type { CorrectionReason } from '../../../lib/innerRep/v2/types';
 
 export interface Completion { closing?: string; insight?: ShownInsight }
 export interface DailyExperienceProps {
@@ -18,7 +18,7 @@ export interface DailyExperienceProps {
  onComplete: (answers: StepAnswer[], durationMs: number) => Promise<Completion>;
  onSafety: (answers: StepAnswer[]) => void;
  onFeedback: (insightId: number, feedback: InsightFeedback) => Promise<void>;
- onCorrection?: (insightId: number, domain: Domain) => Promise<void>;
+ onCorrection?: (insightId: number, reason: CorrectionReason) => Promise<void>;
 }
 /** Production supplies payload/context and callbacks. This component owns presentation, not persistence. */
 export function DailyInnerRep(props: DailyExperienceProps) {
@@ -43,7 +43,7 @@ function Experience({ today, greeting, continuityCue, practiceDays, draft = [], 
     <Body>{SAFETY_RESOURCES.note}</Body><View style={styles.bottom}><Action onPress={dismiss}>Back to Today</Action></View>
    </PageTransition> : complete ? <PageTransition>
     <Eyebrow>Today</Eyebrow><View style={styles.title}><Prompt>{stage === 'completed' && complete.closing ? complete.closing : 'Done for today.'}</Prompt></View>
-    {insight && <HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? domain => onCorrection(insight.id,domain) : undefined} />}
+    {insight && <HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? reason => onCorrection(insight.id,reason) : undefined} onSafety={() => { setAnswers([]); onSafety([]); setStage('safety'); }} />}
     {stage === 'completed' && <View style={styles.bottom}><Action secondary onPress={() => setStage('today')}>Return to Today</Action></View>}
    </PageTransition> : today.kind === 'rep' ? <PageTransition>
     <Eyebrow>Today</Eyebrow><View style={styles.title}><Prompt display>{greeting}</Prompt><Body style={styles.invitation}>Your inner rep for today.</Body></View>
