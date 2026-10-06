@@ -11,7 +11,8 @@ import { Exercise, Insight, RepAnswer, RepRecord } from '../lib/innerRep/types';
 // History is the source of truth in Supabase (`inner_rep_responses`). A local
 // copy (AsyncStorage) keeps Home working offline and holds any rep that failed
 // to sync; pending reps are retried on the next load. One rep per calendar day.
-const LOCAL_KEY = 'mirar_inner_reps_v1';
+// Keyed per user: a shared device must never show, or sync, someone else's reps.
+const localKey = (userId: string) => `mirar_inner_reps_v1:${userId}`;
 
 interface InnerRepState {
   history: RepRecord[];
@@ -56,15 +57,16 @@ const recordToRow = (userId: string, r: RepRecord, durationMs?: number) => ({
   insight: r.insight ?? null,
 });
 
-async function readLocal(): Promise<{ records: RepRecord[]; pending: string[] }> {
+async function readLocal(userId: string): Promise<{ records: RepRecord[]; pending: string[] }> {
   try {
-    const raw = await AsyncStorage.getItem(LOCAL_KEY);
+    const raw = await AsyncStorage.getItem(localKey(userId));
     if (raw) return JSON.parse(raw);
   } catch {}
   return { records: [], pending: [] };
 }
-async function writeLocal(records: RepRecord[], pending: string[]) {
-  try { await AsyncStorage.setItem(LOCAL_KEY, JSON.stringify({ records: records.slice(-200), pending })); } catch {}
+async function writeLocal(userId: string, records: RepRecord[], pending: string[]) {
+  // records are newest-first: keep the newest 200
+  try { await AsyncStorage.setItem(localKey(userId), JSON.stringify({ records: records.slice(0, 200), pending })); } catch {}
 }
 
 function derive(history: RepRecord[], now = new Date()) {
@@ -85,7 +87,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
   history: [], isLoaded: false, today: null, doneToday: false, lastRecord: null, insight: null, practiceDays: 0, cue: null,
 
   load: async (userId) => {
-    const local = await readLocal();
+    const local = await readLocal(userId);
     let remote: RepRecord[] = [];
     let remoteOk = false;
     try {
@@ -114,7 +116,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
       ? [...remote, ...local.records.filter((l) => pending.includes(l.completedAt))]
       : [...local.records];
     merged.sort((a, b) => (a.completedAt < b.completedAt ? 1 : -1));
-    await writeLocal(merged, pending);
+    await writeLocal(userId, merged, pending);
     set({ history: merged, isLoaded: true, ...derive(merged) });
   },
 
@@ -140,7 +142,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     const record: RepRecord = { ...base, insight };
 
     const next = [record, ...history];
-    let pending = (await readLocal()).pending;
+    let pending = (await readLocal(userId)).pending;
     try {
       const { data, error } = await withTimeout(
         supabase.from('inner_rep_responses').insert(recordToRow(userId, record, durationMs)).select('id').single()
@@ -150,7 +152,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     } catch {
       pending = [...pending, record.completedAt];
     }
-    await writeLocal(next, pending);
+    await writeLocal(userId, next, pending);
     set({ history: next, ...derive(next, now), lastRecord: record, insight });
     return { safety };
   },
@@ -161,7 +163,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     const updated = { ...lastRecord, insightFeedback: feedback };
     const next = history.map((r) => (r.completedAt === lastRecord.completedAt ? updated : r));
     set({ history: next, lastRecord: updated });
-    await writeLocal(next, (await readLocal()).pending);
+    await writeLocal(userId, next, (await readLocal(userId)).pending);
     if (lastRecord.id) {
       try { await withTimeout(supabase.from('inner_rep_responses').update({ insight_feedback: feedback }).eq('id', lastRecord.id).eq('user_id', userId)); } catch {}
     }

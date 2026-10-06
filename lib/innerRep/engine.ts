@@ -1,12 +1,12 @@
 import { CATALOG, CATALOG_BY_ID } from './catalog';
+import { ENGINE_CONFIG, EngineConfig } from './config';
 import { Exercise, RepRecord } from './types';
 
-// ─── Exercise selection engine (spec §10–11) ──────────────────────────────────
-// Not "random question of the day": scores every eligible exercise against what
-// the user has recently exercised, how heavy it's been, what's unresolved, and
-// avoids repetition fatigue. Pure + deterministic for a given (history, day) so
-// reopening the app the same day shows the same rep. It prefers rest over
-// escalation: after a heavy rep it offers a light, positive-compatible one.
+// ─── Today's decision ─────────────────────────────────────────────────────────
+// The question is not "which rep next?" but "what, if anything, is most useful
+// to exercise today?". decideToday returns a Decision, which may be "no rep".
+// Every candidate carries its score terms so the choice can be explained.
+// Pure + deterministic per (history, day). All numbers come from config.ts.
 
 const pad = (n: number) => String(n).padStart(2, '0');
 export const dayKey = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -18,100 +18,159 @@ function hash01(s: string): number {
   return ((h >>> 0) % 1000) / 1000;
 }
 
+const chosenIds = (rec: RepRecord) => [rec.answer.primary, rec.answer.followUp].filter(Boolean) as string[];
+
 /** Did this completed rep involve an option marked as a burden? */
 export function repHadBurden(rec: RepRecord): boolean {
   const ex = CATALOG_BY_ID[rec.exerciseId];
   if (!ex) return false;
   const opts = [...(ex.options ?? []), ...(ex.statements ?? []), ...(ex.follow_up?.options ?? [])];
-  const chosen = [rec.answer.primary, rec.answer.followUp].filter(Boolean) as string[];
+  const chosen = chosenIds(rec);
   return opts.some((o) => o.burden && chosen.includes(o.id));
 }
 
-export interface Selection {
-  exercise: Exercise;
-  score: number;
-  reasons: string[];
+export interface ScoreTerm { factor: string; delta: number }
+export interface Candidate { exercise: Exercise; score: number; terms: ScoreTerm[] }
+
+export type DecisionKind =
+  | 'fresh'          // nothing recent argues for anything in particular
+  | 'continuation'   // recent days point at this capacity — stay with it
+  | 'follow_through' // an open commitment is due to be revisited
+  | 'recovery'       // go light after a heavy day or "I don't know" run
+  | 'rest';          // nothing needs examining today (no exercise served)
+
+export type Decision =
+  | { kind: Exclude<DecisionKind, 'rest'>; exercise: Exercise; score: number; reasons: string[]; candidates: Candidate[] }
+  | { kind: 'rest'; reasons: string[] };
+
+/** Open commitment state, derived from history only. */
+export function openCommitment(sorted: RepRecord[], now: Date, cfg: EngineConfig = ENGINE_CONFIG) {
+  const ft = cfg.followThrough;
+  const idx = sorted.findIndex((r) => r.exerciseId === ft.exerciseId);
+  if (idx === -1) return null;
+  const rec = sorted[idx]; // the most recent follow-through answer decides
+  if (!rec.answer.primary || !ft.openAnswerIds.includes(rec.answer.primary)) return null;
+  const ageDays = Math.floor((now.getTime() - new Date(rec.completedAt).getTime()) / DAY_MS);
+  return { rec, ageDays, due: ageDays >= ft.minDaysBeforeResurface };
 }
 
-export function selectExercise(history: RepRecord[], now: Date = new Date(), catalog: Exercise[] = CATALOG): Selection {
+/** Count of recent reps (within relevance.recentDays) carrying a burden in `capacity`. */
+function recentBurdenReps(sorted: RepRecord[], capacity: string, now: Date, cfg: EngineConfig) {
+  const cutoff = now.getTime() - cfg.relevance.recentDays * DAY_MS;
+  return sorted.filter((r) => r.capacity === capacity && new Date(r.completedAt).getTime() >= cutoff && repHadBurden(r)).length;
+}
+
+function consecutiveSameCapacity(sorted: RepRecord[]) {
+  let n = 0;
+  for (const r of sorted) { if (sorted[0] && r.capacity === sorted[0].capacity) n++; else break; }
+  return n;
+}
+
+export function decideToday(
+  history: RepRecord[],
+  now: Date = new Date(),
+  catalog: Exercise[] = CATALOG,
+  cfg: EngineConfig = ENGINE_CONFIG
+): Decision {
+  const w = cfg.weights;
   const sorted = [...history].sort((a, b) => (a.completedAt < b.completedAt ? 1 : -1)); // newest first
   const n = sorted.length;
   const last = sorted[0];
   const today = dayKey(now);
-
   const lastIndexOf = (pred: (r: RepRecord) => boolean) => sorted.findIndex(pred);
-  const ageDays = (r: RepRecord) => Math.floor((now.getTime() - new Date(r.completedAt).getTime()) / DAY_MS);
 
   const lastHeavy = !!last && repHadBurden(last);
-  const lastTwoUnknown = sorted.slice(0, 2).length === 2 && sorted.slice(0, 2).every((r) => r.answer.unknown);
-  const needsEase = lastHeavy || lastTwoUnknown;
+  const unknownRun = sorted.slice(0, cfg.ease.unknownRunLength);
+  const unknownStreak = unknownRun.length === cfg.ease.unknownRunLength && unknownRun.every((r) => r.answer.unknown);
+  const needsEase = lastHeavy || unknownStreak;
 
-  // An open commitment named ≥3 days ago and not revisited since.
-  const openCommit = sorted.find((r) => r.exerciseId === 'act_followthrough' && r.answer.primary === 'yes');
-  const revisitedSince = openCommit
-    ? sorted.slice(0, sorted.indexOf(openCommit)).some((r) => r.exerciseId === 'act_followthrough')
-    : false;
-  const wantsFollowUp = !!openCommit && !revisitedSince && ageDays(openCommit) >= 3;
+  const commit = openCommitment(sorted, now, cfg);
+  const commitDue = !!commit?.due;
 
-  const score = (ex: Exercise) => {
-    const reasons: string[] = [];
-    let s = 0;
+  // Relevance: which capacity do the last few days point at?
+  let relevantCapacity: string | null = null;
+  if (last && consecutiveSameCapacity(sorted) < cfg.relevance.maxConsecutiveSameCapacity) {
+    if (recentBurdenReps(sorted, last.capacity, now, cfg) >= cfg.relevance.minBurdenReps) relevantCapacity = last.capacity;
+  }
 
-    // capacity recency — never the same capacity twice in a row
+  // "Nothing needs examining today": calm run, nothing open, nothing continuing.
+  if (cfg.rest.enabled && n >= cfg.rest.calmRunLength && !commitDue && !relevantCapacity) {
+    const calm = sorted.slice(0, cfg.rest.calmRunLength).every((r) => !repHadBurden(r) && !r.answer.unknown);
+    if (calm) return { kind: 'rest', reasons: [`last ${cfg.rest.calmRunLength} reps carried no burden`, 'no open commitment', 'nothing continuing'] };
+  }
+
+  const score = (ex: Exercise): Candidate => {
+    const terms: ScoreTerm[] = [];
+    const add = (factor: string, delta: number) => { if (delta !== 0) terms.push({ factor, delta }); };
+
     const capPos = lastIndexOf((r) => r.capacity === ex.capacity);
-    if (capPos === -1) { s += 4; reasons.push('capacity not yet exercised'); }
-    else if (capPos === 0) { s -= 6; reasons.push('same capacity as last rep'); }
-    else if (capPos === 1) { s += 0; }
-    else if (capPos === 2) { s += 1; }
-    else { s += 2; reasons.push('capacity rested'); }
+    if (capPos === -1) add('capacity not yet practised', w.capacityFresh);
+    else if (capPos === 0) {
+      if (relevantCapacity === ex.capacity) add('recent days point here (continuation)', w.continuation);
+      else add('same capacity as last rep (nothing makes it relevant)', w.capacitySameAsLast);
+    } else if (capPos === 2) add('capacity rested 3 reps', w.capacityRested3);
+    else if (capPos >= 3) add('capacity rested 4+ reps', w.capacityRested4plus);
 
-    // interaction variety / repetition fatigue
-    if (last && last.interactionType === ex.interaction_type) { s -= 3; reasons.push('same format as last rep'); }
-    else if (sorted[1] && sorted[1].interactionType === ex.interaction_type) s -= 1;
-    if (sorted.slice(0, 4).filter((r) => r.interactionType === ex.interaction_type).length >= 3) s -= 2;
+    if (last && last.interactionType === ex.interaction_type) add('same format as last rep', w.formatSameAsLast);
+    else if (sorted[1] && sorted[1].interactionType === ex.interaction_type) add('same format two reps ago', w.formatSameTwoBack);
+    if (sorted.slice(0, cfg.windows.formatLookback).filter((r) => r.interactionType === ex.interaction_type).length >= cfg.windows.formatSaturationCount)
+      add('format saturated lately', w.formatSaturated);
 
-    // intensity: don't keep escalating
-    const recentHeavier = sorted.slice(0, 2).filter((r) => r.intensity !== 'light').length;
-    if (recentHeavier >= 1 && ex.intensity === 'light') { s += 2; reasons.push('lighter after a heavier rep'); }
-    if (recentHeavier === 0 && ex.intensity === 'medium') s += 1;
-    if (ex.intensity === 'deep' && n < 10) s -= 10;
+    const recentHeavier = sorted.slice(0, cfg.windows.intensityLookback).filter((r) => r.intensity !== 'light').length;
+    if (recentHeavier >= 1 && ex.intensity === 'light') add('lighter after a heavier rep', w.lighterAfterHeavier);
+    if (recentHeavier === 0 && ex.intensity === 'medium') add('medium when nothing recent was heavy', w.mediumWhenFresh);
+    if (ex.intensity === 'deep' && n < cfg.windows.deepMinHistory) add('deep rep too early', w.deepTooEarly);
 
-    // ease: after a burden or two "I don't know"s, offer something gentle
     if (needsEase) {
-      if (ex.positive_state_compatible && ex.intensity === 'light') { s += 3; reasons.push('gentle after a heavy day'); }
-      if (ex.sensitivity !== 'low') s -= 2;
-      if (ex.action_oriented && !wantsFollowUp) s -= 1;
+      if (ex.positive_state_compatible && ex.intensity === 'light') add('gentle after a heavy day / "I don\'t know" run', w.easeGentle);
+      if (ex.sensitivity !== 'low') add('sensitive rep during ease', w.easeSensitivePenalty);
+      if (ex.action_oriented && !commitDue) add('action-oriented rep during ease', w.easeActionPenalty);
     }
 
-    // keep a regular share of positive / neutral reps
-    const recentPositive = sorted.slice(0, 5).some((r) => (CATALOG_BY_ID[r.exerciseId]?.tags ?? []).includes('positive'));
-    if (!recentPositive && ex.tags.includes('positive')) { s += 2; reasons.push('keeps positives in the mix'); }
+    const recentPositive = sorted.slice(0, cfg.windows.positiveLookback).some((r) => (CATALOG_BY_ID[r.exerciseId]?.tags ?? []).includes('positive'));
+    if (!recentPositive && ex.tags.includes('positive')) add('no positive rep lately', w.positiveMix);
 
-    // unresolved commitment, revisited after a few days
-    if (wantsFollowUp && ex.id === 'act_followthrough') { s += 5; reasons.push('revisit an open commitment'); }
+    if (commitDue && ex.id === cfg.followThrough.exerciseId) add('open commitment is due', w.followThroughRevisit);
 
-    // cold start: a light, concrete first rep
-    if (n === 0 && ex.id === 'foc_attention') s += 3;
-    if (n < 3 && ex.id === 'neutral_nothing') s -= 4; // not a first impression
+    if (n === 0 && ex.id === cfg.coldStart.preferredExerciseId) add('cold start: preferred first rep', w.coldStartPreferred);
+    if (n < cfg.windows.coldStartReps && ex.id === cfg.coldStart.neutralExerciseId) add('cold start: not a first impression', w.coldStartNeutralPenalty);
 
-    // deterministic daily jitter (<0.1) so ties break the same way all day
-    s += hash01(today + ex.id) / 10;
-    return { s, reasons };
+    add('daily tie-break', (hash01(today + ex.id) * cfg.jitterMax));
+    return { exercise: ex, score: terms.reduce((a, t) => a + t.delta, 0), terms };
   };
 
   const inWindow = (ex: Exercise) => {
     const pos = lastIndexOf((r) => r.exerciseId === ex.id);
     if (pos === -1 || pos >= ex.repetition_window) return false;
-    // an open commitment may return before its window ends
-    if (ex.id === 'act_followthrough' && wantsFollowUp) return false;
+    if (ex.id === cfg.followThrough.exerciseId && commitDue) return false; // due follow-up may return early
     return true;
   };
 
   let pool = catalog.filter((ex) => ex.minimum_history <= n && !inWindow(ex));
-  if (pool.length === 0) pool = catalog.filter((ex) => ex.minimum_history <= n); // tiny catalog fallback
+  if (pool.length === 0) pool = catalog.filter((ex) => ex.minimum_history <= n);
   if (pool.length === 0) pool = catalog;
 
-  const ranked = pool.map((ex) => ({ ex, ...score(ex) })).sort((a, b) => b.s - a.s);
-  const top = ranked[0];
-  return { exercise: top.ex, score: Math.round(top.s * 100) / 100, reasons: top.reasons };
+  const candidates = pool.map(score).sort((a, b) => b.score - a.score);
+  const top = candidates[0];
+  const has = (f: string) => top.terms.some((t) => t.factor.startsWith(f));
+  const kind: Exclude<DecisionKind, 'rest'> =
+    has('open commitment') ? 'follow_through'
+    : has('recent days point here') ? 'continuation'
+    : has('gentle after') ? 'recovery'
+    : 'fresh';
+  return {
+    kind, exercise: top.exercise, score: Math.round(top.score * 100) / 100,
+    reasons: top.terms.filter((t) => t.factor !== 'daily tie-break' && t.delta !== 0).map((t) => `${t.delta > 0 ? '+' : ''}${t.delta} ${t.factor}`),
+    candidates,
+  };
+}
+
+// Back-compat wrapper for the store: always returns a rep (rest is disabled in
+// the UI until its UX is reviewed). If the engine ever says "rest", fall back
+// to the best candidate with rest turned off.
+export interface Selection { exercise: Exercise; score: number; reasons: string[] }
+export function selectExercise(history: RepRecord[], now: Date = new Date(), catalog: Exercise[] = CATALOG): Selection {
+  const d = decideToday(history, now, catalog, { ...ENGINE_CONFIG, rest: { ...ENGINE_CONFIG.rest, enabled: false } });
+  if (d.kind === 'rest') throw new Error('unreachable: rest disabled');
+  return { exercise: d.exercise, score: d.score, reasons: d.reasons };
 }
