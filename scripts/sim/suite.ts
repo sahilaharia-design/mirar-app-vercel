@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { V2 } from '../../lib/innerRep/v2/config';
+import { ENGINE_VERSION, V2 } from '../../lib/innerRep/v2/config';
 import { flowContext, applyRep, advanceDay, createState } from '../../lib/innerRep/v2/state';
 import { decide } from '../../lib/innerRep/v2/engine';
 import { computeEvidence } from '../../lib/innerRep/v2/evidence';
@@ -297,6 +297,42 @@ test('18 Applied heuristics', 'internal terms never reach users: no "probe", "bi
   for (const c of ['focus', 'energy', 'relationships', 'growth', 'direction', 'action'] as const) for (const d of ['work', 'partner', 'family', 'friends', 'self', 'body_health', 'money', 'time', 'technology', 'rest', 'other'] as Domain[]) { const t = TEMPLATES.find((x) => x.hasLens && x.capacity === c)!; strings.push(primaryOptionsFor(t, 'lens', d)); }
   const hits = strings.filter((x) => banned.test(x)); const ins = ALL.flatMap((r) => r.state.insights.map((i) => i.text)).filter((x) => banned.test(x));
   return ok(hits.length === 0 && ins.length === 0, `${strings.length} authored strings and ${ALL.reduce((a, r) => a + r.state.insights.length, 0)} generated insights scanned; hits ${hits.length + ins.length}${hits[0] ? ' e.g. ' + hits[0] : ''}${ins[0] ? ' e.g. ' + ins[0] : ''}`);
+});
+
+// ═══ COMMITMENT FOLLOW-UP BUDGET (final adjustment before integration) ═══
+const rolling3 = (insts: Instance[]) => { const cc = insts.filter((i) => i.completed).map((i) => (i.frame === 'commitment_check' ? 1 : 0)); let w = 0; for (let k = 0; k + 3 <= cc.length; k++) w = Math.max(w, cc[k] + cc[k + 1] + cc[k + 2]); return w; };
+test('17 Commitments', 'follow-up budget: at most 1 commitment check in any rolling 3 completed reps (all runs)', () => { let worst = 0, who = ''; for (const r of ALL) { const w = rolling3(r.state.instances); if (w > worst) { worst = w; who = r.profile.id; } } return ok(worst <= 1, `worst window ${worst} (${who}) across ${ALL.length} runs`); });
+test('17 Commitments', 'several commitments due at once: one rep, one commitment, deterministic order, nothing combined into a list', () => {
+  const s = createState(); const mk = (id: number, tf: Commitment['timeframe'], due: number | undefined, created: number, asks = 0, lastAsk?: number) => { const c: Commitment = { id, kind: 'reach_out', timeframe: tf, createdDay: created, dueDay: due, status: 'open', statusSource: 'user', asks, lastAskDay: lastAsk, noneRevisits: 0, events: [{ day: created, from: null, to: 'open', by: 'user' }] }; s.commitments.push(c); s.seq.commit = Math.max(s.seq.commit, id); return c; };
+  const A = mk(1, 'specific_date', 15, 10); const B = mk(2, 'today', 20, 20); const C = mk(3, 'today', 20, 17, 1, 17); const D = mk(4, 'none', undefined, 0); const E = mk(5, 'tomorrow', 19, 18);
+  const cfg = { ...V2, rest: { ...V2.rest, enabled: false } }; const order: number[] = []; const dayOf: Record<number, number> = {}; const seenReps: number[] = [];
+  inst(s, 19, 'foc_loops'); // the user was here yesterday (otherwise Mirar would treat past-due items as a long absence and lapse them quietly)
+  for (let d = 20; d < 34; d++) { const dec = decide(s, d, cfg); const t = TEMPLATE_BY_ID[dec.templateId!]; const i = inst(s, d, t.id, { frame: dec.frame, bound: dec.bound, layer: dec.layer, intent: dec.intent, intentRef: dec.intentRef });
+    if (dec.frame === 'commitment_check') { order.push(dec.intentRef!); dayOf[dec.intentRef!] = d; applyRep(s, i, flowContext(s, d, t.id, 'commitment_check', undefined), [{ stepId: 'primary', kind: 'unknown' }]); seenReps.push(1); }
+    else { applyRep(s, i, flowContext(s, d, t.id, dec.frame!, dec.bound), [{ stepId: 'primary', kind: 'option', optionId: (t.options[0] ?? { id: 'x' }).id }]); seenReps.push(0); } }
+  const first = order[0]; const second = order[1]; const idxA = order.indexOf(A.id), idxB = order.indexOf(B.id), idxE = order.indexOf(E.id);
+  const askDays: number[] = []; s.instances.forEach((x) => { if (x.frame === 'commitment_check') askDays.push(x.day); }); const gapsOk = askDays.every((d2, k) => k === 0 || d2 - askDays[k - 1] >= 3);
+  const statuses = s.commitments.map((c) => `#${c.id}:${c.status}(${c.statusSource})`);
+  const noFailure = s.commitments.every((c) => ['open', 'unconfirmed', 'postponed', 'done', 'partly_done', 'changed_mind', 'dropped_on_purpose'].includes(c.status)) && s.commitments.filter((c) => c.status === 'unconfirmed').every((c) => c.statusSource === 'system') && s.commitments.every((c) => !c.events.some((e) => e.by === 'user' && e.to === 'unconfirmed'));
+  const overdueNotPrivileged = idxA === -1 || (idxB !== -1 && idxB < idxA) && (idxE === -1 || idxE < idxA);
+  return ok(first === B.id && second === E.id && gapsOk && overdueNotPrivileged && noFailure && rolling3(s.instances) <= 1, `asked in order [${order.join(', ')}] (expected B=#${B.id} first: due today and never asked; then E=#${E.id}: never asked, 1 day overdue); ask days ${askDays.join(',')}; the item 5 days overdue (#${A.id}) ${idxA === -1 ? 'was never asked (it lapsed to unconfirmed)' : 'was asked after the fresher ones'}; end states ${statuses.join(' ')}`);
+});
+test('17 Commitments', 'a waiting commitment is never marked failed and never gains priority for being overdue: only the system status "unconfirmed" can appear, set by the system', () => {
+  const s = createState(); const c: Commitment = { id: ++s.seq.commit, kind: 'start', timeframe: 'today', createdDay: 0, dueDay: 0, status: 'open', statusSource: 'user', asks: 0, noneRevisits: 0, events: [] }; s.commitments.push(c);
+  const c2: Commitment = { ...c, id: ++s.seq.commit, dueDay: 12, createdDay: 10, events: [] }; s.commitments.push(c2);
+  advanceDay(s, 9); const early = c.status; const dec = decide(s, 12, { ...V2, rest: { ...V2.rest, enabled: false } });
+  return ok(early === 'unconfirmed' && c.statusSource === 'system' && dec.intentRef === c2.id, `item overdue 9 days: ${early} (${c.statusSource}); on day 12 the fresh one (#${c2.id}) is chosen, not the overdue one: asked #${dec.intentRef}`);
+});
+test('17 Commitments', 'committer profile exercises the budget: several commitments are due together and the rest wait with a recorded reason', () => {
+  let multi = 0, deferred = 0, runs = 0; for (const r of RS['committer']) { runs++; for (const l of r.logs) if (l.decision) { if (l.decision.trace.dueCommitments.length >= 2) multi++; if (l.decision.trace.letRest.some((x) => /commitment #\d+/.test(x) && /(budget|also eligible)/.test(x))) deferred++; } }
+  return ok(multi > 0 && deferred > 0, `${multi} decision-days with ≥2 commitments due, ${deferred} with a recorded deferral, across ${runs} seeds`);
+});
+
+// ═══ ENGINE FREEZE ═══
+test('Freeze', 'engine configuration matches the frozen snapshot (any tuning must be a deliberate, reviewed change)', () => {
+  const fs2 = require('fs'); const path2 = require('path'); const snap = path2.join(__dirname, 'freeze.json'); const now = JSON.stringify({ ENGINE_VERSION, config: V2 }, null, 1);
+  if (process.env.UPDATE_FREEZE === '1') { fs2.writeFileSync(snap, now); return ok(true, 'snapshot rewritten'); }
+  const frozen = fs2.existsSync(snap) ? fs2.readFileSync(snap, 'utf8') : ''; return ok(frozen === now, frozen === now ? `config identical to freeze.json (${ENGINE_VERSION})` : 'config differs from scripts/sim/freeze.json — re-run with UPDATE_FREEZE=1 only after review');
 });
 
 // ═══ contract + structural ═══

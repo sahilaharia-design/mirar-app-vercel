@@ -31,6 +31,8 @@ export function sweep(seeds: number[], onlyIds?: string[]): SweepResult {
       let nl = 0; for (const i of a) { nl = i.intensity !== 'light' ? nl + 1 : 0; if (nl > V2.intensity.maxNonLightRun) { v('hard reps stacked', `${tag} day ${i.day + 1}`); break; } }
       // one thread cannot take over
       for (const t of r.state.threads) for (const d of t.checkDays) if (t.checkDays.filter((x) => x >= d && x < d + V2.thread.windowDays).length > V2.thread.maxPerWindow + (t.kind === 'event' ? 2 : 0)) { v('thread over-asked', `${tag} ${t.domain}`); break; }
+      // commitment follow-up budget: ≤1 commitment check in any rolling 3 completed reps
+      { const cc = a.filter((i) => i.completed).map((i) => (i.frame === 'commitment_check' ? 1 : 0)); for (let k = 0; k + 3 <= cc.length; k++) if (cc[k] + cc[k + 1] + cc[k + 2] > 1) { v('commitment follow-up budget exceeded', `${tag} reps ${k + 1}-${k + 3}`); break; } }
       // authority: only the user closes things
       for (const t of r.state.threads) if (t.state === 'resolved' && t.stateSource !== 'user') v('thread resolved by system', `${tag} ${t.domain}`);
       for (const cm of r.state.commitments) for (const e of cm.events) { if (e.by === 'system' && e.to !== 'unconfirmed') v('system set a user-only commitment status', `${tag} #${cm.id}`); if (e.by === 'user' && e.to === 'unconfirmed') v('user event marked unconfirmed', `${tag} #${cm.id}`); }

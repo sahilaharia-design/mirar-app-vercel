@@ -129,6 +129,29 @@ export function decide(s: State, day: number, cfg: V2Config = V2): Decision {
     if (!spacingOk) { letRest.push(`commitment #${c.id}: asked ${day - (c.lastAskDay as number)}d ago; spacing ${cfg.commitment.askSpacingDays}d`); continue; }
     due.push({ c, why: `due d${dueDay}, ask ${c.asks + 1} of ${cfg.commitment.maxAsks}` });
   }
+  // ── COMMITMENT FOLLOW-UP BUDGET + deterministic selection ───────────────────────────────────────────────
+  // Budget: at most followUpBudget.max commitment-focused reps in any rolling perReps COMPLETED reps. Exempt from the general
+  // continuity budget, but not from this one. Deferred commitments stay eligible; nothing is marked failed for waiting.
+  // Selection among eligible (explicit, deterministic, no checklist, no unlimited priority for being overdue):
+  //   1. dated before undated ("no deadline" revisits are always last)
+  //   2. never-asked before already-asked
+  //   3. due date closest to TODAY by absolute distance (an item 6 days overdue does NOT outrank one due today)
+  //   4. lowest id (oldest commitment)
+  if (due.length) {
+    const FB = cfg.commitment.followUpBudget;
+    const recentChecks = insts.filter((i) => i.completed).slice(-(FB.perReps - 1)).filter((i) => i.frame === 'commitment_check').length;
+    const dueOf = (c: Commitment) => (c.status === 'postponed' ? c.postponedUntil : c.dueDay);
+    if (recentChecks >= FB.max) {
+      for (const x of due) letRest.push(`commitment #${x.c.id}: eligible, but a commitment check was served within the last ${FB.perReps - 1} reps (budget ${FB.max} per ${FB.perReps}); it stays eligible and nothing is marked failed`);
+      due.length = 0;
+    } else {
+      due.sort((a, b) => (dueOf(a.c) === undefined ? 1 : 0) - (dueOf(b.c) === undefined ? 1 : 0)
+        || (a.c.asks > 0 ? 1 : 0) - (b.c.asks > 0 ? 1 : 0)
+        || Math.abs(day - (dueOf(a.c) ?? day)) - Math.abs(day - (dueOf(b.c) ?? day))
+        || a.c.id - b.c.id);
+      for (const x of due.slice(1)) letRest.push(`commitment #${x.c.id}: also eligible; #${due[0].c.id} was chosen (rule: dated first, never-asked first, due date nearest today, oldest); it waits, not combined into a list`);
+    }
+  }
   if (!returnMode || rejected.length) {
     if (due.length) {
       const { c, why } = due[0];

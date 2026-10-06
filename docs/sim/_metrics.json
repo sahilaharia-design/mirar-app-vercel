@@ -123,47 +123,46 @@
    "continuity": 6,
    "context": 3
   },
-  "templatesUsed": 18,
+  "templatesUsed": 17,
   "templateCounts": {
    "foc_attention": 2,
-   "rel_appreciation": 2,
-   "gro_update": 2,
-   "dir_know_act": 1,
+   "rel_appreciation": 1,
+   "gro_update": 1,
+   "dir_know_act": 2,
    "probe_anchor": 3,
    "en_helped": 2,
-   "act_tiny": 1,
+   "act_tiny": 2,
    "foc_settle": 1,
-   "rel_boundary": 2,
+   "rel_boundary": 3,
    "presence": 2,
    "cont_commitment": 2,
    "rel_connect": 1,
    "gro_noticed": 1,
+   "en_pace": 1,
    "cont_thread": 4,
-   "en_drain": 1,
-   "dir_time": 1,
    "act_credit": 1,
-   "foc_loops": 1
+   "gro_mistake": 1
   },
-  "earliestExactRepeat": 22,
+  "earliestExactRepeat": 20,
   "earliestMechanismFatigue": null,
   "capShare": {
    "direction": 0.10526315789473684,
    "energy": 0.15789473684210525,
-   "focus": 0.21052631578947367,
+   "focus": 0.15789473684210525,
    "relationships": 0.2631578947368421,
    "growth": 0.15789473684210525,
-   "action": 0.10526315789473684
+   "action": 0.15789473684210525
   },
   "maxConsecutiveContext": 1,
   "maxThreadReps": 4,
-  "insights": 2,
+  "insights": 1,
   "insightsByTier": {
-   "supported": 2
+   "supported": 1
   },
-  "maxSameCapStreak": 2,
+  "maxSameCapStreak": 4,
   "unknownShare": 0.13333333333333333,
   "commitments": {
-   "partly_done": 1
+   "done": 1
   },
   "threads": {
    "resolved": 1
@@ -434,9 +433,9 @@
    "act_tiny": 1,
    "dir_know_act": 1,
    "foc_settle": 1,
-   "cont_commitment": 4,
+   "cont_commitment": 3,
    "en_drain": 1,
-   "cont_thread": 1,
+   "cont_thread": 2,
    "gro_noticed": 1
   },
   "earliestExactRepeat": 26,
@@ -450,17 +449,17 @@
    "action": 0.14285714285714285
   },
   "maxConsecutiveContext": 2,
-  "maxThreadReps": 1,
+  "maxThreadReps": 2,
   "insights": 0,
   "insightsByTier": {},
   "maxSameCapStreak": 2,
   "unknownShare": 0.03333333333333333,
   "commitments": {
-   "partly_done": 1,
+   "open": 1,
    "dropped_on_purpose": 1
   },
   "threads": {
-   "open": 1
+   "resting": 1
   }
  },
  {
@@ -847,6 +846,62 @@
   "threads": {}
  },
  {
+  "id": "committer",
+  "days": 30,
+  "reps": 28,
+  "opened": 30,
+  "rest": 2,
+  "layers": {
+   "training": 23,
+   "probe": 3,
+   "continuity": 2,
+   "rest": 2
+  },
+  "templatesUsed": 19,
+  "templateCounts": {
+   "foc_attention": 1,
+   "rel_appreciation": 2,
+   "gro_update": 2,
+   "dir_know_act": 2,
+   "probe_anchor": 3,
+   "en_helped": 2,
+   "act_tiny": 2,
+   "cont_commitment": 2,
+   "foc_settle": 2,
+   "rel_connect": 1,
+   "gro_noticed": 1,
+   "en_pace": 1,
+   "dir_time": 1,
+   "act_friction": 1,
+   "foc_loops": 1,
+   "en_drain": 1,
+   "presence": 1,
+   "act_credit": 1,
+   "rel_boundary": 1
+  },
+  "earliestExactRepeat": 18,
+  "earliestMechanismFatigue": null,
+  "capShare": {
+   "direction": 0.13636363636363635,
+   "energy": 0.18181818181818182,
+   "focus": 0.18181818181818182,
+   "relationships": 0.18181818181818182,
+   "growth": 0.13636363636363635,
+   "action": 0.18181818181818182
+  },
+  "maxConsecutiveContext": 0,
+  "maxThreadReps": 0,
+  "insights": 0,
+  "insightsByTier": {},
+  "maxSameCapStreak": 2,
+  "unknownShare": 0.03571428571428571,
+  "commitments": {
+   "dropped_on_purpose": 1,
+   "postponed": 1
+  },
+  "threads": {}
+ },
+ {
   "id": "stable_60",
   "days": 60,
   "reps": 55,
@@ -1029,9 +1084,9 @@
   "rest": 0,
   "layers": {
    "training": 34,
-   "probe": 5,
+   "probe": 6,
    "context": 12,
-   "continuity": 9
+   "continuity": 8
   },
   "templatesUsed": 21,
   "templateCounts": {
@@ -1039,10 +1094,10 @@
    "rel_appreciation": 4,
    "dir_know_act": 2,
    "act_tiny": 3,
-   "probe_anchor": 5,
+   "probe_anchor": 6,
    "rel_boundary": 3,
    "rel_connect": 3,
-   "cont_commitment": 7,
+   "cont_commitment": 6,
    "en_helped": 3,
    "gro_update": 5,
    "presence": 2,
@@ -1055,10 +1110,10 @@
    "dir_fits": 1,
    "en_drain": 1,
    "foc_loops": 1,
-   "gro_noticed": 1
+   "gro_mistake": 1
   },
   "earliestExactRepeat": 17,
-  "earliestMechanismFatigue": 51,
+  "earliestMechanismFatigue": null,
   "capShare": {
    "direction": 0.1590909090909091,
    "energy": 0.1590909090909091,
@@ -1073,7 +1128,7 @@
   "insightsByTier": {
    "supported": 5
   },
-  "maxSameCapStreak": 3,
+  "maxSameCapStreak": 2,
   "unknownShare": 0.1,
   "commitments": {
    "done": 4,
@@ -1095,33 +1150,32 @@
    "probe": 2,
    "continuity": 4
   },
-  "templatesUsed": 19,
+  "templatesUsed": 18,
   "templateCounts": {
    "foc_attention": 1,
    "rel_connect": 2,
-   "rel_boundary": 2,
-   "en_pace": 1,
+   "rel_boundary": 1,
+   "en_pace": 2,
    "probe_anchor": 2,
    "act_credit": 2,
    "gro_mistake": 2,
    "cont_commitment": 2,
    "cont_thread": 2,
-   "presence": 1,
-   "dir_fits": 1,
+   "dir_time": 2,
    "foc_settle": 1,
    "en_helped": 1,
-   "gro_noticed": 1,
-   "act_tiny": 1,
-   "dir_know_act": 1,
+   "rel_appreciation": 1,
+   "act_friction": 1,
+   "gro_update": 1,
    "foc_loops": 1,
    "en_drain": 1,
-   "dir_time": 1
+   "presence": 1
   },
-  "earliestExactRepeat": 56,
+  "earliestExactRepeat": 53,
   "earliestMechanismFatigue": null,
   "capShare": {
-   "direction": 0.15789473684210525,
-   "energy": 0.15789473684210525,
+   "direction": 0.10526315789473684,
+   "energy": 0.21052631578947367,
    "focus": 0.15789473684210525,
    "relationships": 0.21052631578947367,
    "growth": 0.15789473684210525,
@@ -1129,14 +1183,12 @@
   },
   "maxConsecutiveContext": 2,
   "maxThreadReps": 2,
-  "insights": 1,
-  "insightsByTier": {
-   "supported": 1
-  },
+  "insights": 0,
+  "insightsByTier": {},
   "maxSameCapStreak": 2,
-  "unknownShare": 0.038461538461538464,
+  "unknownShare": 0.07692307692307693,
   "commitments": {
-   "unconfirmed": 1
+   "done": 1
   },
   "threads": {
    "dormant": 1

@@ -1,0 +1,131 @@
+{
+ "ENGINE_VERSION": "v2.0.0-mvp",
+ "config": {
+  "templateWindowReps": 14,
+  "lensWindowReps": 5,
+  "budget": {
+   "lookbackReps": 5,
+   "cap": 2,
+   "maxConsecutive": 2
+  },
+  "intensity": {
+   "maxNonLightRun": 2,
+   "lightAfterBurden": true
+  },
+  "ease": {
+   "unknownRun": 2
+  },
+  "disengage": {
+   "window": 6,
+   "threshold": 0.5
+  },
+  "gaps": {
+   "returnDays": 7,
+   "dormantDays": 30
+  },
+  "probe": {
+   "everyReps": 10,
+   "minBetweenReps": 4,
+   "firstAfterReps": 4,
+   "unexplainedBurden": {
+    "window": 6,
+    "minBurdenReps": 2
+   }
+  },
+  "capture": {
+   "cooldownDays": 3
+  },
+  "thread": {
+   "checkEveryReps": 3,
+   "maxPerWindow": 3,
+   "windowDays": 10,
+   "negStreakToRest": 2,
+   "unknownStreakToRest": 2,
+   "restDays": 14,
+   "staleDays": 14,
+   "offerCooldownDays": 21
+  },
+  "event": {
+   "askAtDays": [
+    2,
+    7
+   ],
+   "expiresDays": 14
+  },
+  "commitment": {
+   "maxAsks": 2,
+   "askSpacingDays": 2,
+   "unconfirmedAfterDays": 2,
+   "followUpBudget": {
+    "perReps": 3,
+    "max": 1
+   },
+   "noneRevisitDays": 14,
+   "maxNoneRevisits": 1,
+   "silentAfterAbsenceDays": 30,
+   "thisWeekDays": 6
+  },
+  "evidence": {
+   "windowDays": 28,
+   "activeDays": 21,
+   "repeated": {
+    "minIndependent": 3,
+    "minDistinctDays": 3,
+    "blockShareBelow": 0.4,
+    "blockMinOpportunities": 4,
+    "hedgedMinIndependent": 4
+   },
+   "convergence": {
+    "minCapacities": 2,
+    "minIndependent": 3
+   },
+   "change": {
+    "baselineMin": 8,
+    "recentMin": 4,
+    "minDelta": 0.4,
+    "recentDays": 7
+   },
+   "contradiction": {
+    "windowDays": 14
+   },
+   "resolution": {
+    "minNegatives": 3
+   },
+   "active": {
+    "minIndependent": 2
+   },
+   "closedSetMax": 8
+  },
+  "feedback": {
+   "suppressDaysNo": 21,
+   "suppressDaysUnsure": 7,
+   "newEvidenceAfterNo": 2,
+   "tentativeModeWindow": 3,
+   "tentativeModeNo": 2
+  },
+  "insight": {
+   "cooldownDaysSameKey": 14,
+   "maxPer7Days": 2,
+   "contradictionEnabled": false
+  },
+  "orientation": {
+   "enabled": false
+  },
+  "rest": {
+   "enabled": false,
+   "minHistoryReps": 10,
+   "issueLookbackDays": 28,
+   "calmRun": 8,
+   "maxBurdenShare14": 0.15,
+   "minAnsweredShare": 0.7,
+   "minGapDays": 10,
+   "coverageWindowReps": 14,
+   "nothingWithinReps": 6,
+   "maxShareLast10": 0.1
+  },
+  "coldStartTemplate": "foc_attention",
+  "uncertaintyMode": {
+   "raiseMinIndependentBy": 1
+  }
+ }
+}

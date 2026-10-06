@@ -27,6 +27,9 @@ export const V2 = {
   event: { askAtDays: [2, 7], expiresDays: 14 },
   commitment: {
     maxAsks: 2, askSpacingDays: 2, unconfirmedAfterDays: 2,
+    // Mirar remembers commitments; it is not a reminder app. At most `max` commitment-focused reps in any rolling `perReps`
+    // completed reps, however many commitments are due. Deferred commitments stay eligible; nothing is marked failed for waiting.
+    followUpBudget: { perReps: 3, max: 1 },
     noneRevisitDays: 14, maxNoneRevisits: 1,
     silentAfterAbsenceDays: 30, // returning after a long gap: past-due items lapse quietly, no guilt ask
     thisWeekDays: 6,
@@ -57,3 +60,5 @@ export const V2 = {
   uncertaintyMode: { raiseMinIndependentBy: 1 },
 };
 export type V2Config = typeof V2;
+/** Frozen engine identity. Bump deliberately; every stored decision records it. */
+export const ENGINE_VERSION = 'v2.0.0-mvp';

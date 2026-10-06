@@ -8,7 +8,7 @@ export interface Traits {
   unknownRate: number; skipRate: number; tapProb: number; orientTap: number; threadYes: number; abandon: number; notThisBias: number;
   commit: { done: number; partly: number; not_yet: number; changed_mind: number; dropped: number; unknown: number };
   timeframe: Record<'today' | 'tomorrow' | 'this_week' | 'specific_date' | 'none', number>;
-  stanceBurden: number; acquiesce?: Domain; probeNothing?: boolean;
+  stanceBurden: number; acquiesce?: Domain; probeNothing?: boolean; commitBias?: number;
 }
 export type FB = 'accurate' | 'partly' | 'no' | 'unsure';
 export interface Profile {
@@ -48,6 +48,7 @@ export const PROFILES: Profile[] = [
   { id: 'sel_bias_A', name: 'Selection bias A: Focus served, Partner is the real issue', days: 30, seed: 13, blurb: 'Mirar starts with Focus; the real context is Partner.', engage: daily, latent: () => ({ domains: { partner: 0.9 }, burden: 0.6, orientation: 'present' }), traits: { tapProb: 0.95 } },
   { id: 'sel_bias_B', name: 'Selection bias B: asked about Work, says "not this"', days: 30, seed: 14, blurb: 'Work is touched on at the start; it is not what is on their mind.', engage: daily, latent: (d) => (d < 2 ? { domains: { work: 0.5 }, burden: 0.3 } : { domains: {}, burden: 0.15 }), traits: { notThisBias: 1 } },
   { id: 'sel_bias_C', name: 'Selection bias C: prompted Family answers only', days: 30, seed: 15, blurb: 'Picks Family whenever it is listed; never raises it, never taps chips.', engage: daily, latent: () => ({ domains: {}, burden: 0.3 }), traits: { acquiesce: 'family', tapProb: 0, probeNothing: true } },
+  { id: 'committer', name: 'Makes many commitments (several due at once)', days: 30, seed: 26, blurb: 'Keeps naming small intentions, mostly for today or tomorrow, so several come due together.', engage: daily, latent: () => ({ domains: {}, burden: 0.15 }), traits: { commitBias: 8, probeNothing: true, timeframe: { today: 0.35, tomorrow: 0.4, this_week: 0.2, specific_date: 0.05, none: 0 }, commit: { done: 0.2, partly: 0.1, not_yet: 0.35, changed_mind: 0.15, dropped: 0.05, unknown: 0.15 } } },
   // ── 60-day
   { id: 'stable_60', name: 'Stable (60 days)', days: 60, seed: 21, blurb: 'Rest-frequency and catalog fatigue.', engage: daily, latent: () => calm, traits: { probeNothing: true } },
   { id: 'stable_blip', name: 'Stable, one passing worry', days: 30, seed: 25, blurb: 'Stable, but days 9–11 a work worry passes. Does Mirar build a thread out of a blip?', engage: daily, latent: (d) => (d >= 9 && d <= 11 ? { domains: { work: 0.7 }, burden: 0.4, orientation: 'present' } : calm), traits: { tapProb: 0.9, threadYes: 1 } },

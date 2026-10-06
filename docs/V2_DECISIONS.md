@@ -27,3 +27,40 @@ Approved after the simulator review. Applied in `lib/innerRep/v2/` and verified 
 - Selection-bias A: partner-driven Relationships rep by day 2 in 12/20 seeds, by day 8 in 19/20; one seed at **day 24** (was two at 18 and 20). Tail is small-sample noise-sized but not zero.
 - Rest: stable 0.8 days per 30 (3%), stable_60 2.3 per 58 (4%; max 4).
 - Insights shown per run 1.55; **no contradiction insight in any run**; wording tiers: 533 supported, 86 hedged.
+
+---
+
+## Final adjustment before integration: commitment follow-up budget
+
+**Problem.** Due commitments were exempt from the general continuity budget, so several due at once could produce 3 commitment checks in 5 reps. Mirar must remember commitments without becoming a reminder app, accountability software, a habit tracker or a task manager.
+
+**Rule (config: `commitment.followUpBudget = { perReps: 3, max: 1 }`).** At most **1 commitment-focused rep in any rolling 3 completed reps**. In practice: if either of the last 2 completed reps was a commitment check, no commitment check is served today, however many are due.
+
+**Selection among eligible commitments** (explicit, deterministic, no score):
+1. dated before undated (a "no deadline" revisit is always last);
+2. never-asked before already-asked;
+3. due date closest to **today** by absolute distance, so an item 6 days overdue does **not** outrank one due today (overdue never creates unlimited priority);
+4. lowest id (oldest).
+
+**Behaviour that follows.**
+- One rep, one commitment. Never combined into a checklist; each check is the same single-question rep as before.
+- Commitments that wait stay eligible. The trace records, for each, that it was deferred and why (`Deliberately let rest`). They still follow the existing lapse rule: if nothing is asked within 7 days of the date, the system records **`unconfirmed`** (neutral; set only by the system; never a failure, never shown as one).
+- Only the user sets done / partly done / postponed / changed my mind / decided not to. Absence of a follow-up changes nothing the user said.
+- Ask limits are unchanged (2 asks per user-set date; one gentle revisit for "no deadline").
+
+**Not changed:** context share, open-question cadence, exercise window, capacity selection, orientation, contradiction, rest, catalog size, `docs/V2_CONTRACTS.md` (verified unchanged by `git diff`) and `lib/innerRep/v2/contracts.ts`.
+
+**Measured (all 420 runs = 21 profiles × 20 seeds, incl. the new multi-commitment profile `committer`):**
+
+| | Before | After |
+|---|---|---|
+| Commitment checks | 700 (5.2% of reps) | 677 (5.0%) |
+| Worst count in any 3 consecutive reps | **3** | **1** |
+| Worst count in any 5 consecutive reps | 3 | 2 |
+| 3-rep windows with more than one check | **130** | **0** |
+| Gap of 1–2 reps between checks | 108 | 0 |
+| Asks per commitment (mean / max) | 0.86 / 2 | 0.83 / 2 |
+
+Overall volume barely moves (−3%); the change removes the clustering. Full distribution: `docs/V2_ANALYSIS.md` §9.
+
+**Honest side effect.** When many commitments come due together, some will now lapse to `unconfirmed` without ever being asked about. That is the intended trade for not nagging, and it is recorded neutrally; it is not a failure of the user or of the commitment.

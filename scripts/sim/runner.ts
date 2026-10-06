@@ -44,7 +44,7 @@ export function respond(step: Step, ctx: FlowContext, latent: Latent, tr: Traits
       else if (o.domain && t.domainRole === 'issue') w = latent.domains[o.domain] ?? 0.03;
       else if (o.burden) w = 0.1 + latent.burden * 0.5;
       else w = 0.2 + (1 - latent.burden) * 0.5;
-      return { v: o.id, w };
+      return { v: o.id, w: o.creates ? w * (tr.commitBias ?? 1) : w };
     });
     return { stepId: sid, kind: 'option', optionId: pickWeighted(r, weights) };
   }
