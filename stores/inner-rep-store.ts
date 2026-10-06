@@ -7,14 +7,25 @@ import { buildInsight, continuityCue, practiceDaysThisMonth } from '../lib/inner
 import { containsCrisisLanguage } from '../lib/innerRep/safety';
 import { CATALOG_BY_ID } from '../lib/innerRep/catalog';
 import { Exercise, Insight, RepAnswer, RepRecord } from '../lib/innerRep/types';
+import { createLocalStore, scrub } from '../lib/innerRep/local-store';
 
 // History is the source of truth in Supabase (`inner_rep_responses`). A local
-// copy (AsyncStorage) keeps Home working offline and holds any rep that failed
-// to sync; pending reps are retried on the next load. One rep per calendar day.
-// Keyed per user: a shared device must never show, or sync, someone else's reps.
-const localKey = (userId: string) => `mirar_inner_reps_v1:${userId}`;
+// copy keeps Home working offline and holds any rep that failed to sync; pending
+// reps are retried on the next load. One rep per calendar day.
+// PRIVACY: only structured answers are persisted anywhere. Raw free text is used
+// for the safety check and then dropped — it is not written to Supabase or to
+// local storage until the separate free-text store is designed and approved
+// (docs/ARCHITECTURE_V2.md §8). Local data is per-user and cleared on sign-out.
+const localStore = createLocalStore(AsyncStorage);
+
+/** Called on sign-out: wipes local Inner Rep data and in-memory state. */
+export async function clearInnerRepData() {
+  await localStore.clearAll();
+  useInnerRepStore.setState({ history: [], isLoaded: false, today: null, doneToday: false, lastRecord: null, insight: null, practiceDays: 0, cue: null, userId: null });
+}
 
 interface InnerRepState {
+  userId: string | null;
   history: RepRecord[];
   isLoaded: boolean;
   today: Exercise | null;
@@ -57,18 +68,6 @@ const recordToRow = (userId: string, r: RepRecord, durationMs?: number) => ({
   insight: r.insight ?? null,
 });
 
-async function readLocal(userId: string): Promise<{ records: RepRecord[]; pending: string[] }> {
-  try {
-    const raw = await AsyncStorage.getItem(localKey(userId));
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return { records: [], pending: [] };
-}
-async function writeLocal(userId: string, records: RepRecord[], pending: string[]) {
-  // records are newest-first: keep the newest 200
-  try { await AsyncStorage.setItem(localKey(userId), JSON.stringify({ records: records.slice(0, 200), pending })); } catch {}
-}
-
 function derive(history: RepRecord[], now = new Date()) {
   const todayKey = dayKey(now);
   const todays = history.find((r) => dayKey(new Date(r.completedAt)) === todayKey) ?? null;
@@ -84,10 +83,12 @@ function derive(history: RepRecord[], now = new Date()) {
 }
 
 export const useInnerRepStore = create<InnerRepState>((set, get) => ({
-  history: [], isLoaded: false, today: null, doneToday: false, lastRecord: null, insight: null, practiceDays: 0, cue: null,
+  userId: null, history: [], isLoaded: false, today: null, doneToday: false, lastRecord: null, insight: null, practiceDays: 0, cue: null,
 
   load: async (userId) => {
-    const local = await readLocal(userId);
+    if (get().userId && get().userId !== userId) await clearInnerRepData(); // never carry one user's state to another
+    set({ userId });
+    const local = await localStore.read(userId);
     let remote: RepRecord[] = [];
     let remoteOk = false;
     try {
@@ -116,7 +117,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
       ? [...remote, ...local.records.filter((l) => pending.includes(l.completedAt))]
       : [...local.records];
     merged.sort((a, b) => (a.completedAt < b.completedAt ? 1 : -1));
-    await writeLocal(userId, merged, pending);
+    await localStore.write(userId, merged, pending);
     set({ history: merged, isLoaded: true, ...derive(merged) });
   },
 
@@ -125,9 +126,11 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     if (!today || get().doneToday) return { safety: false };
 
     // Safety first: free text that trips the check is never stored.
-    let safe = answer;
+    // Raw text is checked, then dropped: it is never persisted or kept in state.
+    const { words, ...structured } = answer;
+    let safe: RepAnswer = structured;
     let safety = false;
-    if (answer.words && containsCrisisLanguage(answer.words)) {
+    if (words && containsCrisisLanguage(words)) {
       safe = { unknown: false };
       safety = true;
     }
@@ -142,7 +145,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     const record: RepRecord = { ...base, insight };
 
     const next = [record, ...history];
-    let pending = (await readLocal(userId)).pending;
+    let pending = (await localStore.read(userId)).pending;
     try {
       const { data, error } = await withTimeout(
         supabase.from('inner_rep_responses').insert(recordToRow(userId, record, durationMs)).select('id').single()
@@ -152,7 +155,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     } catch {
       pending = [...pending, record.completedAt];
     }
-    await writeLocal(userId, next, pending);
+    await localStore.write(userId, next, pending);
     set({ history: next, ...derive(next, now), lastRecord: record, insight });
     return { safety };
   },
@@ -163,7 +166,7 @@ export const useInnerRepStore = create<InnerRepState>((set, get) => ({
     const updated = { ...lastRecord, insightFeedback: feedback };
     const next = history.map((r) => (r.completedAt === lastRecord.completedAt ? updated : r));
     set({ history: next, lastRecord: updated });
-    await writeLocal(userId, next, (await readLocal(userId)).pending);
+    await localStore.write(userId, next, (await localStore.read(userId)).pending);
     if (lastRecord.id) {
       try { await withTimeout(supabase.from('inner_rep_responses').update({ insight_feedback: feedback }).eq('id', lastRecord.id).eq('user_id', userId)); } catch {}
     }

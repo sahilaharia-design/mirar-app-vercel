@@ -1,6 +1,7 @@
 # Inner Rep engine review (pre-Phase 2)
 
 Branch `mirar-emotional-fitness`. Nothing here is deployed. The Supabase migration has **not** been applied and should not be (see §12).
+**Update:** §10's privacy findings (free text in local storage, not cleared on sign-out) were fixed afterwards; see `docs/ARCHITECTURE_V2.md` §12. The v2 schema in §6 is superseded by v3 (`docs/proposed/017_v3_inner_rep_PROPOSAL.sql`).
 Evidence for the behavioural claims: `docs/ENGINE_SIMULATIONS.md` (regenerate with `npx tsx scripts/simulate-inner-rep.ts`).
 
 ## 0. What the review found

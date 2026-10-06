@@ -1,3 +1,4 @@
+import { clearInnerRepData } from './inner-rep-store';
 import { create } from 'zustand';
 import { Platform } from 'react-native';
 import { supabase } from '../lib/supabase';
@@ -143,6 +144,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // ignore — local state is cleared in finally regardless
     } finally {
       set({ session: null, user: null });
+      await clearInnerRepData(); // local retry data + in-memory Inner Rep state
     }
   },
 

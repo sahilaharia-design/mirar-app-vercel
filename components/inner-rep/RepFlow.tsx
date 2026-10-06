@@ -69,6 +69,10 @@ export function RepFlow({ exercise, onComplete }: Props) {
           placeholder={t('innerRep.words_placeholder')}
           placeholderTextColor={colors.slateLight}
           maxLength={80}
+          autoComplete="off"
+          autoCorrect={false}
+          spellCheck={false}
+          importantForAutofill="no"
           style={[styles.input, { color: colors.ink, borderColor: colors.border, backgroundColor: colors.white }]}
           accessibilityLabel={exercise.prompt}
         />

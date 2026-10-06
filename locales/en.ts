@@ -93,7 +93,7 @@ export default {
     done: 'Done for today',
     back_home: 'Back to today',
     words_placeholder: 'A few words',
-    words_hint: 'Optional. Not saved if you skip.',
+    words_hint: 'Optional. Not saved in this version.',
     which_true: 'Which is more true today?',
     practice_days_one: '{{count}} day of practice this month',
     practice_days_other: '{{count}} days of practice this month',
