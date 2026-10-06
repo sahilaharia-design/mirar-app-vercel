@@ -1,5 +1,7 @@
 # Mirar Inner Rep — architecture v2 (design, pre-implementation)
 
+> **Update:** the context taxonomy in §3 was **superseded**: domain and orientation are now two independent vocabularies, and the engine, thresholds and schema changed after simulation. See `docs/V2_SIMULATION_REPORT.md`, `docs/V2_CONTRACTS.md`, and `docs/proposed/017_v3_FINAL_after_simulation.sql`.
+
 Status: **design only.** No v2 code, no migration, no deploy. The one exception is the privacy fixes in §12, which are done and verified.
 Companion files: `docs/proposed/017_v3_inner_rep_PROPOSAL.sql` (schema, not runnable from `migrations/`), `docs/ENGINE_REVIEW.md` (why this pass exists).
 
