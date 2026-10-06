@@ -1,6 +1,6 @@
 # Inner Rep v2 engine — freeze
 
-**Engine version:** `v2.0.0-mvp` (`ENGINE_VERSION` in `lib/innerRep/v2/config.ts`). **Frozen** for the first integrated MVP, pending the Codex Daily Inner Rep implementation.
+**Engine version:** `v2.0.1-correction-fix` (a minimal post-freeze contract fix over `v2.0.0-mvp`; see `docs/V2_DECISIONS.md`) (`ENGINE_VERSION` in `lib/innerRep/v2/config.ts`; tags `inner-rep-engine-v2.0.0-mvp-freeze` and `inner-rep-engine-v2.0.1-correction-fix`). **Frozen** for the first integrated MVP, pending the Codex Daily Inner Rep implementation.
 
 ## What is frozen
 - All values in `lib/innerRep/v2/config.ts` (snapshot: `scripts/sim/freeze.json`; the suite fails if they drift).

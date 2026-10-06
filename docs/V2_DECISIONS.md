@@ -64,3 +64,21 @@ Approved after the simulator review. Applied in `lib/innerRep/v2/` and verified 
 Overall volume barely moves (−3%); the change removes the clustering. Full distribution: `docs/V2_ANALYSIS.md` §9.
 
 **Honest side effect.** When many commitments come due together, some will now lapse to `unconfirmed` without ever being asked about. That is the intended trade for not nagging, and it is recorded neutrally; it is not a failure of the user or of the commitment.
+
+---
+
+## v2.0.1 — post-freeze contract fix (correction flow, date contract, commitment context)
+
+Not a heuristic change. Genuine contract defects found during integration (docs/INTEGRATION_V2.md §9) and fixed minimally. Version `v2.0.1-correction-fix`, tag `inner-rep-engine-v2.0.1-correction-fix`; the original freeze tag `inner-rep-engine-v2.0.0-mvp-freeze` is untouched.
+
+| Change | Where |
+|---|---|
+| Structured correction after "Partly" (six reasons) and its effect on eligibility | `insights.ts` (`applyCorrection`, wording, cooldown), `evidence.ts` (Partly handling, `feedbackFor`), `config.ts` (`feedback.partlyNewEvidence`, `partlyCooldownMultiplier`), `docs/V2_FEEDBACK_SEMANTICS.md` |
+| Feedback memory merge (a regression the new sweep invariant exposed: an "Accurate" entry on one claim shadowed a Partly/No given on another claim about the same domain) | `evidence.ts` `feedbackFor` |
+| Timeframe contract: five choices; custom date = real future `date`, not a numeric offset | `contracts.ts`, runtime adapter (validation, stored `dueDate`) |
+| Commitment context + the prompt names the commitment; commitments keep an authored label | `contracts.ts`, `state.ts`, `types.ts`, `templates.ts` (copy only) |
+| `capacityLabel` optional | `contracts.ts`, runtime adapter |
+
+**Config diff against the freeze:** only `ENGINE_VERSION` and the two new `feedback` keys (`partlyNewEvidence`, `partlyCooldownMultiplier`). No existing value changed (`scripts/sim/freeze.json` re-snapshotted deliberately; the diff is in the commit).
+**Not touched:** selection heuristics, exercise selection, context and commitment budgets, catalog size, orientation, contradiction, rest, open-question cadence. The frozen 85-check suite is unmodified and passes; the sweep's one pre-existing open rule (selection-bias A, day 18) is unchanged.
+**Measured side effect:** because "Partly" now withholds a subject until new evidence arrives, insights shown per run fell from 1.50 to 1.35 in the simulator (supported wording 540 → 470).

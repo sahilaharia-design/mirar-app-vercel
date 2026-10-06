@@ -22,7 +22,7 @@ interface RepPayload {
   templateId: string;          // opaque to the UI
   frame: 'base' | 'lens' | 'thread_check' | 'resolution' | 'event_check' | 'commitment_check';
   bound?: Domain;              // set for context-bound frames; the prompt text already contains it
-  capacityLabel: string;       // user-facing: Direction / Energy / Focus / Relationships / Growth / Action
+  capacityLabel?: string;      // OPTIONAL presentation metadata (v2.0.1): present only for training reps; renderers need not show it
   intensity: 'light' | 'medium';
   estimatedSeconds: number;
   dismissible: true;           // the user can always leave without answering
@@ -35,7 +35,8 @@ interface RepPayload {
 ```ts
 type Step =
   | { id: 'primary' | 'follow_up'; type: 'choice'; prompt: string; layout: 'list' | 'compare';
-      options: { id: string; label: string }[]; allowUnknown: true }
+      options: { id: string; label: string }[]; allowUnknown: true;
+      context?: { commitment?: { label: string; timeframe: 'today'|'tomorrow'|'this_week'|'specific_date'|'none'; dueInDays?: number } } }  // v2.0.1: present on commitment checks
   | { id: 'words'; type: 'words'; prompt: string; maxChars: number; optional: true; saved: false; safetyCheck: true }
   | { id: 'capture_domain'; type: 'domain_chips'; prompt: "What's this mostly connected to?"; domains: Domain[]; optional: true }
   | { id: 'capture_orientation'; type: 'orientation_chips'; prompt: 'Is it more about…'; orientations: Orientation[]; optional: true }  // DISABLED: never emitted in the MVP
@@ -49,7 +50,7 @@ type Step =
 | `words` | Optional and skippable. **Not saved in this build** (`saved: false`): say so ("Optional. Not saved in this version."). The text is only passed to the safety check; the answer sent to the engine is `{kind:'words'}` with **no payload** |
 | `capture_domain` | Chips, skippable, never shown on neutral/positive answers (the engine only requests it when warranted). Copy is exactly the engine's prompt |
 | `capture_orientation` | **DISABLED in the MVP. The engine never emits it** (`V2.orientation.enabled = false`). The type stays in the union so a future rule can reuse it; the UI can ignore it entirely and need not build it |
-| `timeframe` | Only after an option that creates a commitment, or when postponing. `pick_date` returns `specific_date` + `inDays`. Skipping = "no timeframe" |
+| `timeframe` | Only after an option that creates a commitment, or when postponing. The five supported choices, with these exact labels (`TIMEFRAME_LABEL`): **Today · Tomorrow · This week · Pick a date · No deadline**. `pick_date` returns `specific_date` + `date` (`YYYY-MM-DD`): a real calendar date, **strictly in the future** (the control must not accept today or the past). Skipping = no deadline |
 | `thread_offer` | Yes/No, equally weighted, no default selection, no persuasion copy. "No" is final for ~3 weeks |
 
 ## 3. What the UI sends back
@@ -61,7 +62,7 @@ type StepAnswer =
   | { stepId: string; kind: 'skip' }
   | { stepId: string; kind: 'domain'; domain: Domain }
   | { stepId: string; kind: 'orientation'; orientation: Orientation }
-  | { stepId: string; kind: 'timeframe'; timeframe: 'today'|'tomorrow'|'this_week'|'specific_date'|'none'; inDays?: number }
+  | { stepId: string; kind: 'timeframe'; timeframe: 'today'|'tomorrow'|'this_week'|'specific_date'|'none'; date?: string /* YYYY-MM-DD, future only, required for specific_date */ }  // the UI never sends a numeric offset
   | { stepId: string; kind: 'yes' | 'no' }
   | { stepId: string; kind: 'words' };   // no text. Ever.
 ```
@@ -74,20 +75,37 @@ Orientation = 'past'|'present'|'future'|'uncertainty'|'none'|'unknown'
 ```
 Independent dimensions. Neither is required. Labels come from locale files (`en/hi/gu`); ids are language-neutral. The chip list for `capture_domain` excludes `rest` and `unknown`.
 
-## 5. Insight card (after a rep, at most one)
+## 5. Insight card (after a rep, at most one) and the correction flow
 
 ```ts
 interface ShownInsight {
   id: number;
   tier: 'supported' | 'tentative' | 'hedged';
   text: string;                  // exact wording from the engine; the UI must not rephrase it
-  evidence: { independentN: number; promptedN: number; introducedN: number }; // for the "Why am I seeing this?" view
-  feedback: 'accurate' | 'partly' | 'no' | 'unsure';  // four equal chips; none preselected
+  evidence: { independentN: number; promptedN: number; introducedN: number }; // for "Why am I seeing this?"
 }
+feedback: 'accurate' | 'partly' | 'no' | 'unsure';     // four equal chips; none preselected
+onFeedback(insightId, feedback)
+onCorrection(insightId, reason: CorrectionReason)       // only after 'partly'
 ```
+
+**"What's off?" (v2.0.1).** Only after **Partly**, offer one structured question, `CORRECTION_PROMPT` = "What's off?", with `CORRECTION_REASONS` rendered verbatim and in this order:
+
+| id | label |
+|---|---|
+| `situation_right_meaning_off` | The situation is right, but what it means isn't |
+| `importance_overstated` | It matters, but not as much as that sounds |
+| `something_missing` | Something important is missing |
+| `changed_since` | That was true, but it has changed |
+| `something_else` | Something else *(may offer an optional note — see below)* |
+| `prefer_not_to_say` | I'd rather not say |
+
+It is skippable (Skip = Partly with no reason). A correction is feedback about **Mirar's interpretation**; it is never shown or treated as a statement about the person. After **Accurate**, **No** and **Not sure** there is **no** correction step.
+Optional note: only on `something_else`; the field says "Optional. Not saved in this version."; the text goes only to the safety check, is cleared on Continue/Skip, and is never passed on (a safety hit stops the flow and shows the safety panel; nothing is stored). Exactly how each feedback value changes what may be shown later: `docs/V2_FEEDBACK_SEMANTICS.md`.
+
 - Show the counts if the user opens "Why am I seeing this?". Never show a score or a percentage.
 - `hedged` text is a question or a comparison; do not style it as a finding.
-- After **No**: no "are you sure?", no follow-up persuasion. After **Partly**: optional "What's off?" with the domain chips (the answer returns as a `correction` observation).
+- After **No**: no "are you sure?", no follow-up persuasion.
 - Never display wording about the person's psychology that is not in `text`.
 
 ## 6. Home states (visual polish is yours; semantics are fixed)
@@ -97,6 +115,7 @@ interface ShownInsight {
 | Rep today | greeting, capacity label, seconds, **Begin** | a score, a streak, a "day N of 28" |
 | In-progress | resume | a nag |
 | Done | "Done for today" + optional one insight | next-day teasers framed as obligation |
+| Commitment check | the commitment named in the prompt (and, optionally, `context.commitment` rendered as a quiet line) | an abstract status question with no indication of what it is about; any internal id |
 | Rest *(proposed)* | the engine's one-line reason | a reward treatment, confetti, a streak, any "you earned it" |
 | Continuity cue *(optional)* | one quiet line, only if the engine supplies it | more than one; a guilt line |
 | Practice days | "N days of practice this month" | consecutive-day framing |
@@ -125,3 +144,8 @@ The engine's decision trace (`Trace` in `types.ts`) is already stored per decisi
 | 2026-10-06 | Orientation removed from the MVP collection path: `capture_orientation` is never emitted; no thread-level orientation question after accepting a check-in; no option carries an orientation | **None for a UI that implemented the six steps listed.** The step type remains in the union and may be ignored |
 | 2026-10-06 | The open question has 3 phrasings, chosen by the engine per user (`variant`), never the same wording twice in a row | None: the wording arrives in `prompt` as before; do not hard-code it |
 | 2026-10-06 | Contradiction is not a user-facing insight in the MVP (config switch) | None: `ShownInsight.kind` will simply never be `contradiction` |
+| 2026-10-06 (v2.0.1) | **Correction flow**: after Partly, `CORRECTION_PROMPT` + six structured `CORRECTION_REASONS`; `onCorrection` now takes a reason (was a domain) | Renderer change: reasons instead of domain chips |
+| 2026-10-06 (v2.0.1) | **Timeframe**: labels fixed (Today · Tomorrow · This week · Pick a date · No deadline); `specific_date` carries a real future `date` (`YYYY-MM-DD`), not `inDays` | Renderer change: emit `date`; reject today/past |
+| 2026-10-06 (v2.0.1) | **Commitment context**: commitment-check steps carry `context.commitment {label, timeframe, dueInDays?}` and the prompt names the commitment | Optional for the renderer; the prompt already names it |
+| 2026-10-06 (v2.0.1) | **`capacityLabel` is optional** presentation metadata, only on training reps | Renderers must not require it |
+| 2026-10-06 (v2.0.1) | `NAV_LABEL.backToToday` = "Back to Today": the control that returns to Today must not be named "Today" (clashes with the "Today" timeframe option) | Codex follow-up |

@@ -131,7 +131,10 @@ States scanned at **each** of 320×568, 390×844, 768×1024, 1024×768, 1440×90
 
 At all five sizes: no horizontal overflow, no sub-44px targets, prompt receives focus on each step, Begin/Resume, options, chips, offer, Honest Mirror and feedback all operable. Compare statements sit **side by side at 768px and above** (312×167 each at 768) and stack below. The date input fits at 320 (272px wide). Long-copy stress was Codex's own and not repeated.
 
-## 9. Genuine contract defects and gaps (reported, nothing changed)
+## 9. Genuine contract defects and gaps — RESOLVED in v2.0.1 (see `docs/V2_DECISIONS.md`)
+
+*Original report (all three below were then fixed or clarified in the v2.0.1 patch; the Today/capacity-label/commitment-context presentation items moved to `docs/CODEX_FOLLOWUPS.md`):*
+
 
 1. **Correction path (contract §5 vs frozen engine).** The contract says "Partly → optional 'What's off?' → returns as a `correction` observation". The frozen engine (`lib/innerRep/v2`) has no function that creates or consumes one; `Observation.origin = 'correction'` exists only as a type value. The adapter therefore does not offer the control. **Decision needed:** either (a) a reviewed engine change adding a correction reducer (and deciding what it counts as), or (b) amend the contract to say the control is not part of the MVP.
 2. **Date range policy** (Codex flagged it): the adapter accepts any integer day offset exactly as stated (past dates become due immediately; far-future dates are never due). An out-of-range rule would need to live in the contract.
