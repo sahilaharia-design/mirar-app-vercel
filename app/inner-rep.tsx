@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
+import { INNER_REP_V2 } from '../lib/innerRep/runtime/flag';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../stores/auth-store';
 import { useInnerRepStore } from '../stores/inner-rep-store';
@@ -15,6 +16,10 @@ import { RepAnswer } from '../lib/innerRep/types';
 // The whole rep, one screen: do it → "Done for today" (+ one honest line only
 // if the evidence supports it). Reopening after completion shows the closing.
 export default function InnerRepScreen() {
+  if (INNER_REP_V2) return <Redirect href="/(tabs)" />; // the v2 experience lives on Today
+  return <LegacyInnerRepScreen />;
+}
+function LegacyInnerRepScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();

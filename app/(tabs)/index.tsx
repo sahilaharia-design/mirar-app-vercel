@@ -19,6 +19,9 @@ import { useCycleStore } from '../../stores/cycle-store';
 import { useDevStore } from '../../stores/dev-store';
 import { ThisOrThat } from '../../components/check-in/ThisOrThat';
 import { InnerRepCard } from '../../components/home/InnerRepCard';
+import { DailyInnerRepHost } from '../../components/inner-rep/v2/DailyInnerRepHost';
+import { MIRAR as M } from '../../design-system/native';
+import { INNER_REP_V2 } from '../../lib/innerRep/runtime/flag';
 import { useInnerRepStore } from '../../stores/inner-rep-store';
 import { EVERYDAY_AREAS } from '../../lib/everyday';
 import { FONTS } from '../../lib/constants';
@@ -103,7 +106,17 @@ function getGreetingKey(): string {
 }
 
 // ─── Main Home Screen ─────────────────────────────────────────────────────────
-export default function TodayScreen() {
+// v2: Today IS the Daily Inner Rep experience (frozen engine → runtime adapter → Codex presentation).
+export default function TodayRoute() {
+  if (INNER_REP_V2) return <V2Today />;
+  return <LegacyTodayScreen />;
+}
+function V2Today() {
+  // role="main": the Today content is the page's main landmark (the tab bar is the shell's navigation)
+  return <SafeAreaView style={{ flex: 1, backgroundColor: M.color.surface }} edges={['top']}><View role="main" style={{ flex: 1 }}><DailyInnerRepHost /></View></SafeAreaView>;
+}
+
+function LegacyTodayScreen() {
   const { t, i18n } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
