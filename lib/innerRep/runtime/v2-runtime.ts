@@ -2,10 +2,11 @@ import { V2, ENGINE_VERSION } from '../v2/config';
 import { FlowContext, RepPayload, Step, StepAnswer, nextStep } from '../v2/contracts';
 import { decide } from '../v2/engine';
 import { computeEvidence } from '../v2/evidence';
-import { applyFeedback, chooseInsight } from '../v2/insights';
+import { applyCorrection, applyFeedback, chooseInsight } from '../v2/insights';
 import { applyRep, createState, flowContext } from '../v2/state';
 import { TEMPLATE_BY_ID } from '../v2/templates';
-import { Capacity, Instance, State } from '../v2/types';
+import { Capacity, CorrectionReason, Instance, State } from '../v2/types';
+import { CORRECTION_REASONS } from '../v2/contracts';
 
 // ─── Inner Rep v2 runtime adapter ─────────────────────────────────────────────
 // Sits between the FROZEN engine (lib/innerRep/v2, tag inner-rep-engine-v2.0.0-mvp-freeze) and the presentation layer
@@ -53,6 +54,10 @@ export interface RuntimeDeps {
 }
 
 export const civilDay = (d: Date) => Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+/** ISO calendar date for a civil day number */
+const isoOfDay = (n: number) => new Date(n * 86400000).toISOString().slice(0, 10);
+/** civil day number of a YYYY-MM-DD string, or null if it is not a real calendar date */
+const dayOfIso = (v: unknown): number | null => { if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return null; const [y, m, d] = v.split('-').map(Number); const t = Date.UTC(y, m - 1, d); const x = new Date(t); return x.getUTCFullYear() === y && x.getUTCMonth() === m - 1 && x.getUTCDate() === d ? t / 86400000 : null; };
 const hashSeed = (s: string) => { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
 
 const MAX_INSTANCES = 300, MAX_TRACES = 30, MAX_INSIGHTS = 100, OBS_KEEP_DAYS = 120;
@@ -64,7 +69,7 @@ export function createRuntime(deps: RuntimeDeps) {
   let s: State = createState(0);
   let draft: StepAnswer[] = [];
 
-  const ctxFor = (i: Instance): FlowContext => flowContext(s, i.day, i.templateId, i.frame, i.bound, V2, i.variant ?? 0);
+  const ctxFor = (i: Instance): FlowContext => flowContext(s, i.day, i.templateId, i.frame, i.bound, V2, i.variant ?? 0, i.intentRef);
   const pending = () => s.instances.find((i) => !i.completed && !i.skippedAll && i.day === dayOf(now()))
     ?? undefined;
   const todayInstance = () => s.instances.find((i) => i.day === dayOf(now()));
@@ -90,8 +95,11 @@ export function createRuntime(deps: RuntimeDeps) {
       case 'timeframe': {
         if (step.type !== 'timeframe') throw new InvalidAnswerError(`timeframe not requested at ${id}`);
         if (a.timeframe === 'specific_date') {
-          if (!step.options.includes('pick_date') || typeof a.inDays !== 'number' || !Number.isInteger(a.inDays)) throw new InvalidAnswerError('a specific date needs an integer day offset');
-          return { stepId: id, kind: 'timeframe', timeframe: 'specific_date', inDays: a.inDays }; // accepted exactly as stated (past or far-future dates are the user's)
+          if (!step.options.includes('pick_date')) throw new InvalidAnswerError('a date was not offered');
+          // MVP date contract: a real calendar date, strictly in the future. The UI never sends a numeric offset (any `inDays` it sends is ignored).
+          const target = dayOfIso(a.date); if (target === null) throw new InvalidAnswerError('invalid calendar date');
+          const inDays = target - civilDay(now()); if (inDays < 1) throw new InvalidAnswerError('date must be after today');
+          return { stepId: id, kind: 'timeframe', timeframe: 'specific_date', date: a.date, inDays };
         }
         if (!(step.options as string[]).includes(a.timeframe)) throw new InvalidAnswerError(`timeframe ${a.timeframe} not offered`);
         return { stepId: id, kind: 'timeframe', timeframe: a.timeframe };
@@ -113,6 +121,15 @@ export function createRuntime(deps: RuntimeDeps) {
     return clean;
   }
 
+  /** The engine counts abstract days; keep the real calendar dates alongside (structured, no text). */
+  function stampCommitmentDates() {
+    for (const c of s.commitments) {
+      // engine day n → calendar date, relative to today (correct whatever day numbering the engine was given)
+      const dateFor = (n: number) => isoOfDay(civilDay(now()) + (n - dayOf(now())));
+      if (c.dueDay !== undefined && c.dueDate === undefined) c.dueDate = dateFor(c.dueDay);
+      if (c.postponedUntil !== undefined && c.status === 'postponed') c.postponedUntilDate = dateFor(c.postponedUntil);
+    }
+  }
   const toView = (i: { id: number; tier: ShownInsightView['tier']; text: string; snapshot: { independentN: number; promptedN: number; introducedN: number } }): ShownInsightView =>
     ({ id: i.id, tier: i.tier, text: i.text, evidence: { independentN: i.snapshot.independentN, promptedN: i.snapshot.promptedN, introducedN: i.snapshot.introducedN } });
 
@@ -153,7 +170,7 @@ export function createRuntime(deps: RuntimeDeps) {
         s.instances.push(inst); draft = [];
       }
       const t = TEMPLATE_BY_ID[inst.templateId];
-      const payload: RepPayload = { instanceId: inst.id, templateId: t.id, frame: inst.frame, bound: inst.bound, capacityLabel: CAPACITY_LABEL[t.capacity], intensity: t.intensity, estimatedSeconds: t.seconds, dismissible: true };
+      const payload: RepPayload = { instanceId: inst.id, templateId: t.id, frame: inst.frame, bound: inst.bound, ...(t.role === 'training' ? { capacityLabel: CAPACITY_LABEL[t.capacity] } : {}), intensity: t.intensity, estimatedSeconds: t.seconds, dismissible: true };
       return { kind: 'rep', payload, context: ctxFor(inst), draft: [...draft] };
     },
 
@@ -171,6 +188,7 @@ export function createRuntime(deps: RuntimeDeps) {
       if (nextStep(ctx, clean)) throw new InvalidAnswerError('rep is not complete');
       const day = inst.day;
       applyRep(s, inst, ctx, clean, V2);
+      stampCommitmentDates();
       draft = [];
       // same insight policy the simulator uses: at most one, only after a real (non-"I don't know") answer
       const ev = computeEvidence(s, day, V2);
@@ -193,6 +211,19 @@ export function createRuntime(deps: RuntimeDeps) {
       if (ins.feedback) return; // first answer stands
       if (!['accurate', 'partly', 'no', 'unsure'].includes(value)) throw new InvalidAnswerError('invalid feedback');
       applyFeedback(s, insightId, value, dayOf(now()), V2);
+      await persist();
+    },
+
+    /**
+     * Structured reason after "Partly". Qualifies Mirar's interpretation only. No text is accepted or stored.
+     * Only valid once, only after Partly was recorded for that insight.
+     */
+    async correction(insightId: number, reason: CorrectionReason) {
+      const ins = s.insights.find((x) => x.id === insightId); if (!ins) throw new Error('unknown insight');
+      if (!CORRECTION_REASONS.some((r) => r.id === reason)) throw new InvalidAnswerError('invalid correction reason');
+      if (ins.feedback?.value !== 'partly') throw new InvalidAnswerError('a correction only follows "Partly"');
+      if (ins.correction) return;
+      applyCorrection(s, insightId, reason, dayOf(now()));
       await persist();
     },
 

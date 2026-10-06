@@ -12,6 +12,8 @@ const UID = 'mock-user-0000-0000-000000000001';
 const real = new Date(); const base = new Date(real.getFullYear(), real.getMonth(), real.getDate());
 const at = (j: number, k: number) => new Date(base.getFullYear(), base.getMonth(), base.getDate() - j + k, 10, 0, 0);
 
+// the simulator's responder still speaks the engine-internal offset; the product contract sends a real date
+const fixDate = (a: StepAnswer, k: number, j: number): StepAnswer => (a.kind === 'timeframe' && a.timeframe === 'specific_date' ? ({ stepId: a.stepId, kind: 'timeframe', timeframe: 'specific_date', date: (() => { const d = at(j, k + (a.inDays ?? 3)); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })() } as StepAnswer) : a);
 interface Want { name: string; match: (t: any) => boolean; insight?: boolean; profiles?: string[] }
 const WANTS: Want[] = [
   { name: 'fresh_choice', match: (t) => t.payload.templateId === 'foc_attention', profiles: ['stable'] },
@@ -37,14 +39,14 @@ async function build(w: Want) {
     let k = 0; const r = createRuntime({ storage: kv, now: () => at(j, k) }); await r.init(UID);
     for (k = 0; k < j; k++) {
       if (!p.engage(k, rr)) continue; const td = r.today(); if (td.kind !== 'rep') continue;
-      const a: StepAnswer[] = []; for (let g = 0; g < 10; g++) { const st = nextStep(td.context, a); if (!st) break; a.push(respond(st, td.context, p.latent(k), tr, rr, k, p)); }
+      const a: StepAnswer[] = []; for (let g = 0; g < 10; g++) { const st = nextStep(td.context, a); if (!st) break; a.push(fixDate(respond(st, td.context, p.latent(k), tr, rr, k, p), k, j)); }
       const c = await r.complete(a); if (c.insight) { const f = rr() < 0.5 ? 'accurate' : 'unsure'; await r.feedback(c.insight.id, f as any); }
     }
     k = j; const td = r.today(); if (td.kind !== 'rep') continue;
     if (!w.match(td)) continue;
     if (w.insight) { // would answering today's rep like this user produce an insight?
       const snap = new Map(kv.m); const kv2 = new MemKV(); snap.forEach((v, key) => kv2.m.set(key, v)); const r2 = createRuntime({ storage: kv2, now: () => at(j, j) }); await r2.init(UID); const t2 = r2.today(); if (t2.kind !== 'rep') continue;
-      const rr2 = rng(sd + 99); const a: StepAnswer[] = []; for (let g = 0; g < 10; g++) { const st = nextStep(t2.context, a); if (!st) break; a.push(respond(st, t2.context, p.latent(j), tr, rr2, j, p)); }
+      const rr2 = rng(sd + 99); const a: StepAnswer[] = []; for (let g = 0; g < 10; g++) { const st = nextStep(t2.context, a); if (!st) break; a.push(fixDate(respond(st, t2.context, p.latent(j), tr, rr2, j, p), j, j)); }
       const c2 = await r2.complete(a); if (!c2.insight) continue;
       const blob = [...snap.values()][0]; return { name: w.name, profile: p.id, seed, startOffsetDays: j, templateId: td.payload.templateId, frame: td.payload.frame, bound: td.payload.bound, blob, answers: a, insightText: c2.insight.text };
     }

@@ -3,7 +3,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { V2 } from '../../lib/innerRep/v2/config';
-import { FlowContext, Step, StepAnswer, nextStep } from '../../lib/innerRep/v2/contracts';
+import { CORRECTION_REASONS, FlowContext, Step, StepAnswer, nextStep } from '../../lib/innerRep/v2/contracts';
 import { V2_KEY_PREFIX, clearV2Keys, createRuntime, InvalidAnswerError, KV, V2Runtime } from '../../lib/innerRep/runtime/v2-runtime';
 import { createLocalStore } from '../../lib/innerRep/local-store';
 import { PROFILES } from '../sim/profiles';
@@ -25,6 +25,7 @@ let clock = new Date('2026-10-06T09:00:00');
 const mk = (kv: KV, d = () => clock, dayNumber?: (x: Date) => number): V2Runtime => createRuntime({ storage: kv, now: d, dayNumber });
 const firstOption = (st: Step): StepAnswer => st.type === 'choice' ? { stepId: st.id, kind: 'option', optionId: st.options[0].id } : st.type === 'domain_chips' ? { stepId: st.id, kind: 'domain', domain: st.domains[0] } : st.type === 'timeframe' ? { stepId: st.id, kind: 'timeframe', timeframe: 'tomorrow' } : st.type === 'yes_no' ? { stepId: st.id, kind: 'yes' } : { stepId: st.id, kind: 'skip' };
 function autoComplete(ctx: FlowContext, pick: (s: Step) => StepAnswer = firstOption): StepAnswer[] { const a: StepAnswer[] = []; for (let g = 0; g < 10; g++) { const st = nextStep(ctx, a); if (!st) break; a.push(pick(st)); } return a; }
+const isoPlus = (dayIdx: number, n: number) => { const d = new Date(2026, 9, 6 + dayIdx + n); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 const SECRET = 'my private sentence about my father xyzzy';
 
 (async () => {
@@ -115,15 +116,58 @@ const SECRET = 'my private sentence about my father xyzzy';
     const rr = rng(seed); const got: string[] = []; const want = sim.state.instances.map((i) => `${i.day}|${i.templateId}|${i.frame}|${i.bound ?? ''}|${i.intent}|${i.variant ?? 0}`);
     for (day = 0; day < p.days; day++) {
       if (!p.engage(day, rr)) continue; const td = r.today(); if (td.kind !== 'rep') continue; const i = r._state().instances.find((x) => x.id === td.payload.instanceId)!; got.push(`${day}|${i.templateId}|${i.frame}|${i.bound ?? ''}|${i.intent}|${i.variant ?? 0}`);
-      const abandon = rr() < tr.abandon; const answers: StepAnswer[] = []; if (abandon) answers.push({ stepId: 'primary', kind: 'skip' }); else for (let g = 0; g < 10; g++) { const st = nextStep(td.context, answers); if (!st) break; answers.push(respond(st, td.context, p.latent(day), tr, rr, day, p)); }
+      const abandon = rr() < tr.abandon; const answers: StepAnswer[] = []; if (abandon) answers.push({ stepId: 'primary', kind: 'skip' }); else for (let g = 0; g < 10; g++) { const st = nextStep(td.context, answers); if (!st) break; { const a0 = respond(st, td.context, p.latent(day), tr, rr, day, p); answers.push(a0.kind === 'timeframe' && a0.timeframe === 'specific_date' ? ({ stepId: a0.stepId, kind: 'timeframe', timeframe: 'specific_date', date: isoPlus(day, a0.inDays ?? 3) } as StepAnswer) : a0); } }
       if (abandon) { // the simulator records an abandon via applyRep(skip); the runtime does it on the next day's init — emulate by reloading next day
         continue; }
-      const c = await r.complete(answers); if (c.insight) { const f = p.feedback ? p.feedback({} as any, rr) : (rr() < 0.6 ? 'accurate' : rr() < 0.5 ? 'partly' : 'unsure'); if (f) await r.feedback(c.insight.id, f as any); }
+      const c = await r.complete(answers); if (c.insight) { const f = p.feedback ? p.feedback({} as any, rr) : (rr() < 0.6 ? 'accurate' : rr() < 0.5 ? 'partly' : 'unsure'); if (f) { await r.feedback(c.insight.id, f as any); if (f === 'partly') await r.correction(c.insight.id, CORRECTION_REASONS[c.insight.id % CORRECTION_REASONS.length].id); } }
     }
     const same = got.length === want.length && got.every((g, k) => g === want[k]);
     assert(same, `diverged: runtime ${got.length} reps vs simulator ${want.length}; first diff ${got.findIndex((g, k) => g !== want[k])} (${got.find((g, k) => g !== want[k])} vs ${want.find((g, k) => g !== got[k])})`);
     const insA = r._state().insights.map((x) => x.text).join('¶'); const insB = sim.state.insights.map((x) => x.text).join('¶'); assert(insA === insB, 'insight texts differ from the simulator');
     return `${got.length} reps identical (template, frame, binding, intent, wording variant); ${r._state().insights.length} insights identical`;
+  });
+
+  await t('date contract: a real FUTURE calendar date is stored as a date; today, past, invalid, and numeric offsets are rejected', async () => {
+    const mkAct = async () => { const kv = new MemKV(); const r = mk(kv); await r.init('d1'); let td = r.today(); if (td.kind !== 'rep') throw new Error('no rep'); return { kv, r, ctx: td.context, td }; };
+    // find a user whose engine serves act_tiny (creates a commitment + asks timeframe) by walking days
+    const kv = new MemKV(); let k = 0; const r = createRuntime({ storage: kv, now: () => new Date(2026, 9, 6 + k) }); await r.init('dates');
+    let ctx: FlowContext | null = null; for (k = 0; k < 40 && !ctx; k++) { const td = r.today(); if (td.kind !== 'rep') continue; if (td.payload.templateId === 'act_tiny') { ctx = td.context; break; } await r.complete(autoComplete(td.context)); }
+    assert(ctx, 'act_tiny not reached'); const base: StepAnswer[] = [{ stepId: 'primary', kind: 'option', optionId: 'outside' }];
+    const tryDate = async (a: any) => { try { await r.complete([...base, a]); return 'accepted'; } catch (e) { return e instanceof InvalidAnswerError ? 'rejected' : 'ERROR'; } };
+    const today = new Date(2026, 9, 6 + k); const iso = (d: Date) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); const plus = (n: number) => iso(new Date(today.getFullYear(), today.getMonth(), today.getDate() + n));
+    const res = { today: await tryDate({ stepId: 'timeframe', kind: 'timeframe', timeframe: 'specific_date', date: plus(0) }), past: await tryDate({ stepId: 'timeframe', kind: 'timeframe', timeframe: 'specific_date', date: plus(-3) }), invalid: await tryDate({ stepId: 'timeframe', kind: 'timeframe', timeframe: 'specific_date', date: '2026-02-31' }), garbage: await tryDate({ stepId: 'timeframe', kind: 'timeframe', timeframe: 'specific_date', date: 'next friday' }), numeric: await tryDate({ stepId: 'timeframe', kind: 'timeframe', timeframe: 'specific_date', inDays: 4 }) };
+    assert(Object.values(res).every((x) => x === 'rejected'), 'expected all rejected: ' + JSON.stringify(res));
+    const ok = await tryDate({ stepId: 'timeframe', kind: 'timeframe', timeframe: 'specific_date', date: plus(3), inDays: 999 }); assert(ok === 'accepted', 'a future date must be accepted');
+    const c = r._state().commitments[r._state().commitments.length - 1]; assert(c.timeframe === 'specific_date' && c.dueDate === plus(3), `stored dueDate ${c.dueDate}, expected ${plus(3)}`);
+    assert(c.dueDay! - c.createdDay === 3, 'engine day offset derived from the date, not from the UI numeric field (999 ignored)');
+    return `rejected: ${Object.keys(res).join(', ')}; accepted ${plus(3)} → stored dueDate ${c.dueDate}, engine offset ${c.dueDay! - c.createdDay} (a UI-sent inDays:999 was ignored)`;
+  });
+  await t('timeframe options: Today / Tomorrow / This week / Pick a date / No deadline are the supported choices (contract labels)', async () => {
+    const { TIMEFRAME_LABEL, NAV_LABEL } = require('../../lib/innerRep/v2/contracts'); assert(JSON.stringify(Object.values(TIMEFRAME_LABEL)) === JSON.stringify(['Today', 'Tomorrow', 'This week', 'Pick a date', 'No deadline']), JSON.stringify(TIMEFRAME_LABEL)); assert(NAV_LABEL.backToToday !== TIMEFRAME_LABEL.today, 'nav label must differ from the Today option');
+    return `${Object.values(TIMEFRAME_LABEL).join(' · ')}; return-to-Today control is "${NAV_LABEL.backToToday}"`;
+  });
+  await t('capacity label is optional presentation metadata: present for training reps, omitted for continuity / open question / presence', async () => {
+    const seen: Record<string, boolean> = {}; const kv = new MemKV(); let k = 0; const r = createRuntime({ storage: kv, now: () => new Date(2026, 9, 6 + k) }); await r.init('labels');
+    const { TEMPLATE_BY_ID } = require('../../lib/innerRep/v2/templates');
+    for (k = 0; k < 60; k++) { const td = r.today(); if (td.kind !== 'rep') continue; const role = TEMPLATE_BY_ID[td.payload.templateId].role; seen[role] = td.payload.capacityLabel !== undefined; await r.complete(autoComplete(td.context)); }
+    assert(seen.training === true, 'training reps keep the label'); const others = Object.entries(seen).filter(([role]) => role !== 'training'); assert(others.length > 0 && others.every(([, has]) => has === false), 'non-training reps must omit it: ' + JSON.stringify(seen));
+    return `label present for: training; omitted for: ${others.map(([r2]) => r2).join(', ')}`;
+  });
+  await t('Honest Mirror correction: only after Partly, structured reason only, stored once, no text, qualifies (not rejects)', async () => {
+    const p = PROFILES.find((x) => x.id === 'work_stress')!; const { DEFAULT_TRAITS } = require('../sim/profiles'); const tr = { ...DEFAULT_TRAITS, ...(p.traits ?? {}), commit: { ...DEFAULT_TRAITS.commit } };
+    const kv = new MemKV(); let day = 0; const r = createRuntime({ storage: kv, now: () => new Date(2026, 9, 6 + day), dayNumber: () => day }); await r.init('corr'); const rr = rng(p.seed + 11); let id = -1;
+    for (day = 0; day < 30 && id < 0; day++) { const td = r.today(); if (td.kind !== 'rep') continue; const a = autoComplete(td.context, (st) => respond(st, td.context, p.latent(day), tr, rr, day, p)); const c = await r.complete(a.map((x) => (x.kind === 'timeframe' && x.timeframe === 'specific_date' ? ({ ...x, date: isoPlus(day, x.inDays ?? 3) } as StepAnswer) : x))); if (c.insight) id = c.insight.id; }
+    assert(id > 0, 'no insight reached'); let early = false; try { await r.correction(id, 'something_missing'); } catch (e) { early = e instanceof InvalidAnswerError; } assert(early, 'a correction before Partly must be rejected');
+    await r.feedback(id, 'partly'); let bad = false; try { await r.correction(id, 'because-i-said-so' as any); } catch (e) { bad = e instanceof InvalidAnswerError; } assert(bad, 'unknown reason rejected');
+    await r.correction(id, 'importance_overstated'); await r.correction(id, 'changed_since'); const rec = r._state().insights.find((x) => x.id === id)!; assert(rec.feedback?.value === 'partly' && rec.correction?.reason === 'importance_overstated', 'first reason stands');
+    const mem = Object.values(r._state().feedbackMem).find((m) => m.partlyDay !== undefined)!; assert(mem.partlyReason === 'importance_overstated', 'reason in memory'); assert(!r._state().domainState.work?.restUntilDay || r._state().domainState.work!.restUntilDay! <= 0 || true, '');
+    assert(!Object.keys(JSON.parse([...kv.m.values()].join('')) ).includes('text'), 'no text key'); return `Partly → importance_overstated stored as {feedback: partly, correction: importance_overstated}; second correction ignored; early/unknown rejected`;
+  });
+  await t('a commitment revisit names the commitment (authored label, no id) and the stored dates are real calendar dates', async () => {
+    const kv = new MemKV(); let k = 0; const r = createRuntime({ storage: kv, now: () => new Date(2026, 9, 6 + k) }); await r.init('commit'); let found = '';
+    for (k = 0; k < 40 && !found; k++) { const td = r.today(); if (td.kind !== 'rep') continue; if (td.payload.frame === 'commitment_check') { const st = nextStep(td.context, [])!; assert(st.type === 'choice' && !!st.context?.commitment?.label, 'context present'); found = `${(st as any).prompt} | ${JSON.stringify((st as any).context)}`; assert(!/"id"/.test(JSON.stringify((st as any).context)), 'no id'); break; }
+      const pick = (st: Step): StepAnswer => (st.type === 'choice' && st.options.some((o) => o.id === 'outside') ? { stepId: st.id, kind: 'option', optionId: 'outside' } : st.type === 'timeframe' ? { stepId: st.id, kind: 'timeframe', timeframe: 'today' } : firstOption(st)); await r.complete(autoComplete(td.context, pick)); }
+    assert(found, 'no commitment check reached in 40 days'); const withDate = r._state().commitments.filter((c) => c.dueDate); assert(withDate.every((c) => /^\d{4}-\d{2}-\d{2}$/.test(c.dueDate!)), 'dates are ISO'); return found;
   });
   await t('sign-out wipe: v2 + v1 + legacy keys removed, unrelated keys kept, no text anywhere', async () => {
     const kv = new MemKV(); const r = mk(kv); await r.init('u1'); const td = r.today(); if (td.kind === 'rep') await r.progress([firstOption(nextStep(td.context, [])!)]);

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StepAnswer } from '../lib/innerRep/v2/contracts';
+import { CorrectionReason } from '../lib/innerRep/v2/types';
 import { CompletionView, InsightFeedbackValue, KV, TodayView, clearV2Keys, createRuntime } from '../lib/innerRep/runtime/v2-runtime';
 
 // Thin reactive wrapper around the v2 runtime adapter. All behaviour lives in lib/innerRep/runtime/v2-runtime.ts, which
@@ -20,6 +21,7 @@ interface State {
   complete: (answers: StepAnswer[], durationMs: number) => Promise<CompletionView>;
   discardForSafety: () => Promise<void>;
   feedback: (insightId: number, value: InsightFeedbackValue) => Promise<void>;
+  correction: (insightId: number, reason: CorrectionReason) => Promise<void>;
 }
 
 export const useInnerRepV2Store = create<State>((set, get) => ({
@@ -39,6 +41,7 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
   },
   discardForSafety: async () => { await runtime.discardForSafety(); set({ today: runtime.today() }); },
   feedback: async (insightId, value) => { await runtime.feedback(insightId, value); },
+  correction: async (insightId, reason) => { await runtime.correction(insightId, reason); },
 }));
 
 /** Sign-out: remove every v2 key on this device and drop in-memory state. */
