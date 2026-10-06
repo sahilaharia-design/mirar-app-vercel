@@ -8,7 +8,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "expo export --platform web",
-    "vercel-build": "expo export --platform web"
+    "vercel-build": "expo export --platform web",
+    "visual:review": "vite --config review/vite.config.ts",
+    "visual:build": "vite build --config review/vite.config.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -39,7 +42,9 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
-    "typescript": "~5.9.2"
+    "@types/react-dom": "^19.2.2",
+    "typescript": "~5.9.2",
+    "vite": "^7.3.6"
   },
   "private": true
 }
