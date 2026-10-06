@@ -1,5 +1,8 @@
 # Mirar Inner Rep — v2 simulator: results, failures, and what changes
 
+> **Update after the approved decisions (`docs/V2_DECISIONS.md`).** Orientation is no longer collected; contradiction is no longer a user-facing insight; the open question runs about every 10 reps with 3 phrasings; the tie-break is per-user; the exercise window is 14 reps. Where numbers below differ (e.g. repetition, fatigue, templates used, rest frequency), `docs/V2_ANALYSIS.md` and `docs/V2_DECISIONS.md` hold the current ones; sections 3, 10–15 describe the pre-decision run and are kept as the record of what drove the decisions.
+
+
 Branch `mirar-emotional-fitness`. **No migration was created or run. Nothing is deployed. The shipping app (v1) is untouched.**
 This report is the output of building the v2 engine as a separate pure-TypeScript module (`lib/innerRep/v2/`) plus a synthetic-user simulator (`scripts/sim/`).
 

@@ -61,6 +61,8 @@ export interface Template {
   hasLens?: boolean;
   /** optional free-text step (never stored in this build) */
   words?: { prompt: string; maxChars: number };
+  /** alternative wordings of the same question; chosen deterministically per user, never repeating back-to-back */
+  promptVariants?: string[];
   tags: string[];
 }
 
@@ -223,6 +225,7 @@ export interface Instance {
   intent: string;
   intentRef?: number;
   trace: Trace;
+  variant?: number;
   completed: boolean;
   unknownPrimary: boolean;
   burden: boolean;
@@ -241,5 +244,7 @@ export interface State {
   restDays: number[];
   lastProbeInstance?: number;
   lastCaptureDay?: number;
+  /** stable per-user number; makes tie-breaks and wording rotation differ between users but never within one */
+  userSeed: number;
   seq: { obs: number; inst: number; thread: number; commit: number; insight: number };
 }

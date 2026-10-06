@@ -17,6 +17,8 @@ export interface Decision {
   bound?: Domain;
   intent: string;
   intentRef?: number;
+  /** which wording of the question to use (deterministic per user, rotates) */
+  variant: number;
   trace: Trace;
   evidence: EvidenceResult;
 }
@@ -89,8 +91,15 @@ export function decide(s: State, day: number, cfg: V2Config = V2): Decision {
     day, selected, layer, primaryReason: primary, secondaryReasons: secondary, constraints, rejected, letRest, domain,
     orientation: undefined, openThreads, dueCommitments, activeDomains: activeDomains.map(String), budget: { used: budgetUsed, cap: cfg.budget.cap },
   });
+  const hashStr = (str: string) => { let h = 2166136261; for (const ch of str) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return (h >>> 0); };
+  /** deterministic per user, rotates with use, never the same wording twice in a row */
+  const pickVariant = (templateId: string): number => {
+    const n = TEMPLATE_BY_ID[templateId].promptVariants?.length ?? 1; if (n <= 1) return 0;
+    const used = insts.filter((i) => i.templateId === templateId);
+    return (hashStr(`${s.userSeed}|${templateId}`) + used.length) % n;
+  };
   const finish = (layer: Layer, templateId: string, frame: Frame, intent: string, primary: string, secondary: string[], bound?: Domain, intentRef?: number): Decision =>
-    ({ layer, templateId, frame, bound, intent, intentRef, evidence, trace: traceBase(label(templateId, frame, bound), layer, primary, secondary, bound) });
+    ({ layer, templateId, frame, bound, intent, intentRef, variant: pickVariant(templateId), evidence, trace: traceBase(label(templateId, frame, bound), layer, primary, secondary, bound) });
 
   // ═══ RETURN AFTER A GAP: ask openly first, assume nothing ═══
   if (returnMode) {
@@ -240,7 +249,7 @@ export function decide(s: State, day: number, cfg: V2Config = V2): Decision {
     if (why.length === 0) {
       restCheck = 'REST: no useful new inner work can be justified — calm run, nothing open, all capacities recently exercised, and the user said nothing needs attention.';
       s.restDays.push(day);
-      return { layer: 'rest', intent: 'rest', evidence, trace: { ...traceBase('(no rep today)', 'rest', 'Nothing needs examining today. This is a justified outcome, not filler.', ['calm run', 'nothing open', 'coverage satisfied', 'the user themselves said nothing needs attention']), restCheck } };
+      return { layer: 'rest', intent: 'rest', variant: 0, evidence, trace: { ...traceBase('(no rep today)', 'rest', 'Nothing needs examining today. This is a justified outcome, not filler.', ['calm run', 'nothing open', 'coverage satisfied', 'the user themselves said nothing needs attention']), restCheck } };
     }
     restCheck = `not rest: ${why.join('; ')}`;
   }
@@ -266,7 +275,7 @@ export function decide(s: State, day: number, cfg: V2Config = V2): Decision {
     const quick = simplify ? -t.seconds : 0;
     const cold = n === 0 && t.id === cfg.coldStartTemplate ? 1 : 0;
     const presenceOk = t.role === 'presence' ? (n >= 6 && !lastBurden ? 0 : -1) : 0; // presence is for settled stretches
-    const hash = (() => { let h = 2166136261; for (const ch of `${day}${t.id}`) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return ((h >>> 0) % 1000) / 1000; })();
+    const hash = (hashStr(`${s.userSeed}|${day}|${t.id}`) % 1000) / 1000; // per-user: two users do not get the same order
     return { t, vec: [cold, quick, presenceOk, coverage, mech, fmt, positive, lightFit, hash], coverage, capAgo, mechAgo };
   };
   const NAMES = ['cold start', 'simple/quick', 'presence fit', 'capacity coverage', 'mechanism fatigue', 'format fatigue', 'positive mix', 'light after non-light', 'tie-break'];
@@ -279,7 +288,18 @@ export function decide(s: State, day: number, cfg: V2Config = V2): Decision {
   }
   const cmp = (a: number[], b: number[]) => { for (let k = 0; k < a.length; k++) if (a[k] !== b[k]) return b[k] - a[k]; return 0; };
   eligible.sort((x, y) => cmp(x.vec, y.vec));
-  const pool = eligible.length ? eligible : trainingPool.map(rank).sort((x, y) => cmp(x.vec, y.vec));
+  // If the repetition window leaves nothing (e.g. simplify mode only allows a handful of short, light reps),
+  // do not ignore variety silently: relax the window and take the exercise used LONGEST ago, and say so.
+  let relaxedNote: string | null = null;
+  let pool = eligible;
+  if (!eligible.length) {
+    const relaxed = trainingPool.filter((t) => !(intensityBlocked(t) ?? simpleBlocked(t))).map((t) => ({ t, ago: repsAgoOf((i) => i.templateId === t.id) })).sort((a, b) => b.ago - a.ago);
+    const candidates = (relaxed.length ? relaxed.map((x) => x.t) : trainingPool);
+    pool = candidates.map(rank).sort((x, y) => cmp(x.vec, y.vec));
+    const pick = relaxed[0];
+    if (pick) { const idx = pool.findIndex((q) => q.t.id === pick.t.id); if (idx > 0) pool.unshift(...pool.splice(idx, 1)); }
+    relaxedNote = `repeat window relaxed: every allowed exercise was inside its window, so the one used longest ago was taken (${pick ? (pick.ago === Infinity ? 'never used' : pick.ago + 1 + ' reps ago') : '—'})`;
+  }
   const win = pool[0];
   const lostOn = (o: typeof win) => { for (let k = 0; k < win.vec.length; k++) if (win.vec[k] !== o.vec[k]) return NAMES[k]; return 'tie-break'; };
   // why the other layers did not win
@@ -293,6 +313,7 @@ export function decide(s: State, day: number, cfg: V2Config = V2): Decision {
   reasons.push(win.capAgo === Infinity ? `capacity ${win.t.capacity} not yet practised` : `capacity ${win.t.capacity} last practised ${win.capAgo + 1} reps ago`);
   if (win.vec[4]) reasons.push('mechanism not used in the last 2 reps');
   if (win.vec[6]) reasons.push('no positive rep in the last 5');
+  if (relaxedNote) reasons.push(relaxedNote);
   const d = finish('training', win.t.id, 'base', 'training', 'Nothing is open and no context needs testing: exercise what is least recently practised.', reasons);
   d.trace.restCheck = restCheck;
   d.trace.constraints = constraints;

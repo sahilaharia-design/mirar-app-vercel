@@ -13,11 +13,11 @@ const base = { version: 1 as const, role: 'training' as const, intensity: 'light
 export const TEMPLATES: Template[] = [
   // ── Focus ──
   { ...base, id: 'foc_attention', capacity: 'focus', sub_capacity: 'attention_drain', mechanism: 'recognition', interaction: 'choice', domainRole: 'issue', hasLens: true, seconds: 25, tags: ['attention'],
-    capture: { domain: 'if_burden', orientation: 'if_burden' },
+    capture: { domain: 'if_burden', orientation: 'never' },
     prompt: 'Think about the last two hours. Did anything take more attention than it deserved?',
     options: [o('phone', 'My phone', { domain: 'technology' }), o('work', 'Work', { domain: 'work' }), o('person', 'Another person', { burden: true }), o('overthinking', 'Overthinking', { domain: 'self', burden: true }), nothing('Nothing in particular')] },
   { ...base, id: 'foc_loops', capacity: 'focus', sub_capacity: 'unfinished_loops', mechanism: 'inventory', interaction: 'choice', intensity: 'light', domainRole: 'issue', seconds: 20, tags: ['clutter'],
-    capture: { domain: 'if_burden', orientation: 'if_burden' },
+    capture: { domain: 'if_burden', orientation: 'never' },
     prompt: 'How many unfinished things are running in the background of your head right now?',
     options: [nothing('Basically none', 'none'), o('few', 'One or two'), o('several', 'Several', { burden: true }), o('many', 'Too many to count', { burden: true })] },
   { ...base, id: 'foc_settle', capacity: 'focus', sub_capacity: 'settling_vs_switching', mechanism: 'contrast', interaction: 'compare', seconds: 20, tags: ['attention'],
@@ -25,7 +25,7 @@ export const TEMPLATES: Template[] = [
     options: [o('settled', 'I could settle into one thing.', { stance: { key: 'focus_state', side: 'settled' } }), o('switching', 'I kept switching between things.', { burden: true, stance: { key: 'focus_state', side: 'switching' } })] },
   // ── Energy ──
   { ...base, id: 'en_drain', capacity: 'energy', sub_capacity: 'depletion', mechanism: 'recognition', interaction: 'choice', domainRole: 'issue', hasLens: true, intensity: 'medium', seconds: 30, tags: ['energy'],
-    capture: { domain: 'never', orientation: 'if_burden' },
+    capture: { domain: 'never', orientation: 'never' },
     prompt: 'What took the most out of you today, if anything?',
     options: [o('work', 'Work', { domain: 'work', burden: true }), o('partner', 'My partner', { domain: 'partner', burden: true }), o('family', 'Family', { domain: 'family', burden: true }), o('friends', 'Friends', { domain: 'friends', burden: true }), o('money', 'Money', { domain: 'money', burden: true }), o('body', 'My body', { domain: 'body_health', burden: true }), o('thoughts', 'My own thoughts', { domain: 'self', burden: true }), nothing('Nothing — I feel fine')] },
   { ...base, id: 'en_helped', capacity: 'energy', sub_capacity: 'recovery', mechanism: 'inventory', interaction: 'choice', domainRole: 'resource', seconds: 20, tags: ['positive'],
@@ -36,7 +36,7 @@ export const TEMPLATES: Template[] = [
     options: [o('pushing', 'I pushed past what I had.', { burden: true, stance: { key: 'pace', side: 'pushing' } }), o('pacing', 'I paced myself.', { stance: { key: 'pace', side: 'pacing' } })] },
   // ── Relationships ──
   { ...base, id: 'rel_boundary', capacity: 'relationships', sub_capacity: 'boundaries', mechanism: 'attribution', interaction: 'choice', domainRole: 'issue', hasLens: true, intensity: 'medium', sensitivity: 'medium', seconds: 35, tags: ['mood'],
-    capture: { domain: 'never', orientation: 'if_burden' },
+    capture: { domain: 'never', orientation: 'never' },
     prompt: 'Is someone else\'s mood affecting yours today?',
     options: [o('partner', 'My partner', { domain: 'partner', burden: true }), o('family', 'Family', { domain: 'family', burden: true }), o('friends', 'A friend', { domain: 'friends', burden: true }), o('work', 'Someone at work', { domain: 'work', burden: true }), nothing('No one', 'nobody')],
     followUp: { prompt: 'How much of the mood is yours?', options: [o('mine', 'Mostly mine'), o('partly', 'Partly'), o('theirs', 'Mostly theirs', { burden: true })] } },
@@ -64,12 +64,12 @@ export const TEMPLATES: Template[] = [
     prompt: 'Which is closer to today?',
     options: [o('need_clarity', 'I need more clarity.', { stance: { key: 'direction', side: 'need_clarity' } }), o('already_know', "I already know. I just haven't acted.", { stance: { key: 'direction', side: 'already_know' } })] },
   { ...base, id: 'dir_fits', capacity: 'direction', sub_capacity: 'what_still_fits', mechanism: 'recognition', interaction: 'choice', domainRole: 'issue', seconds: 25, tags: ['direction'],
-    capture: { domain: 'if_burden', orientation: 'if_burden' },
+    capture: { domain: 'if_burden', orientation: 'never' },
     prompt: 'Does the direction you\'re heading still fit?',
     // durable stance: a statement about direction, not a daily state — the only kind a contradiction check may use
     options: [o('yes', 'Yes, it fits', { stance: { key: 'fit', side: 'fits', durable: true } }), o('mostly', 'Mostly', { stance: { key: 'fit', side: 'fits', durable: true } }), o('not_really', 'Not really', { burden: true, stance: { key: 'fit', side: 'outgrown', durable: true } }), o('outgrown', "I've outgrown it", { burden: true, stance: { key: 'fit', side: 'outgrown', durable: true } })] },
   { ...base, id: 'dir_time', capacity: 'direction', sub_capacity: 'time_vs_values', mechanism: 'attribution', interaction: 'choice', domainRole: 'issue', hasLens: true, seconds: 25, tags: ['values'],
-    capture: { domain: 'if_burden', orientation: 'if_burden' },
+    capture: { domain: 'if_burden', orientation: 'never' },
     prompt: 'Did today\'s time go to what matters to you?',
     options: [o('mostly', 'Mostly'), o('partly', 'Partly'), o('not_really', 'Not really', { burden: true })] },
   // ── Action ──
@@ -83,7 +83,7 @@ export const TEMPLATES: Template[] = [
   { ...base, id: 'act_friction', capacity: 'action', sub_capacity: 'starting_friction', mechanism: 'recognition', interaction: 'choice', domainRole: 'issue', hasLens: true, intensity: 'medium', seconds: 30, tags: ['action'],
     capture: { domain: 'if_burden', orientation: 'never' },
     prompt: "What's the hardest part of starting something right now?",
-    options: [o('time', 'Finding the time', { domain: 'time', burden: true, orientation: 'present' }), o('energy', 'Having the energy', { domain: 'body_health', burden: true, orientation: 'present' }), o('worry', 'Something about it worries me', { burden: true, orientation: 'future' }), o('unclear', "I'm not sure how to start", { burden: true, orientation: 'uncertainty' }), nothing("Starting isn't the problem", 'not_a_problem')] },
+    options: [o('time', 'Finding the time', { domain: 'time', burden: true }), o('energy', 'Having the energy', { domain: 'body_health', burden: true }), o('worry', 'Something about it worries me', { burden: true }), o('unclear', "I'm not sure how to start", { burden: true }), nothing("Starting isn't the problem", 'not_a_problem')] },
   // ── Continuity (served only because something is open) ──
   { ...base, id: 'cont_commitment', role: 'continuity', capacity: 'action', sub_capacity: 'follow_through', mechanism: 'commitment_check', interaction: 'check', positiveCompatible: true, seconds: 15, tags: ['commitment'],
     prompt: 'You mentioned you might do something. How is that going?',
@@ -96,8 +96,9 @@ export const TEMPLATES: Template[] = [
     options: [o('heavier', 'Heavier', { polarity: 'present', burden: true }), o('same', 'About the same', { polarity: 'present' }), o('lighter', 'Lighter', { polarity: 'present' }), o('settled', 'Settled', { polarity: 'absent', kind: 'nothing' })] },
   // ── Calibration + presence ──
   { ...base, id: 'probe_anchor', role: 'probe', capacity: 'direction', sub_capacity: 'open_probe', mechanism: 'probe', interaction: 'probe', domainRole: 'issue', seconds: 20, tags: ['probe'],
-    capture: { domain: 'never', orientation: 'if_burden' },
+    capture: { domain: 'never', orientation: 'never' },
     prompt: "What's most on your mind today?",
+    promptVariants: ["What's most on your mind today?", "What's taking up the most room in your head today?", 'If you named one thing on your mind right now, what would it be?'],
     options: [o('work', 'Work', { domain: 'work' }), o('partner', 'My partner', { domain: 'partner' }), o('family', 'Family', { domain: 'family' }), o('friends', 'Friends', { domain: 'friends' }), o('money', 'Money', { domain: 'money' }), o('body', 'My body or health', { domain: 'body_health' }), o('self', 'Myself', { domain: 'self' }), o('time', 'Time', { domain: 'time' }), o('technology', 'Technology', { domain: 'technology' }), o('other', 'Something else', { domain: 'other' }), o('event', 'Something significant happened', { flagEvent: true, domain: 'unknown' }), nothing('Nothing in particular')] },
   { ...base, id: 'presence', role: 'presence', capacity: 'direction', sub_capacity: 'ease', mechanism: 'acknowledgment', interaction: 'acknowledge', domainRole: 'issue', seconds: 10, tags: ['presence'],
     capture: { domain: 'if_present', orientation: 'never' },

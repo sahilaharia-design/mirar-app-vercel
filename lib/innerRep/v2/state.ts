@@ -8,8 +8,8 @@ import { Commitment, Domain, DomainState, Instance, Observation, Orientation, St
 // reducer is where "what the user said" becomes an observation; nothing in this
 // file reads raw text (there is none in the contract).
 
-export function createState(): State {
-  return { day: 0, instances: [], observations: [], threads: [], commitments: [], insights: [], feedbackMem: {}, domainState: {}, restDays: [], seq: { obs: 0, inst: 0, thread: 0, commit: 0, insight: 0 } };
+export function createState(userSeed = 0): State {
+  return { userSeed, day: 0, instances: [], observations: [], threads: [], commitments: [], insights: [], feedbackMem: {}, domainState: {}, restDays: [], seq: { obs: 0, inst: 0, thread: 0, commit: 0, insight: 0 } };
 }
 
 export const ds = (s: State, d: Domain): DomainState => (s.domainState[d] ??= { negStreak: 0, lastLensDay: {} });
@@ -17,9 +17,9 @@ export const completed = (s: State) => s.instances.filter((i) => i.completed);
 export const lastInstance = (s: State) => s.instances[s.instances.length - 1];
 export const daysSinceLast = (s: State, day: number) => (s.instances.length ? day - lastInstance(s).day : Infinity);
 
-export function flowContext(s: State, day: number, t: Instance['templateId'], frame: Instance['frame'], bound: Domain | undefined, cfg: V2Config = V2): FlowContext {
+export function flowContext(s: State, day: number, t: Instance['templateId'], frame: Instance['frame'], bound: Domain | undefined, cfg: V2Config = V2, variant = 0): FlowContext {
   return {
-    template: TEMPLATE_BY_ID[t], frame, bound,
+    template: TEMPLATE_BY_ID[t], frame, bound, variant,
     captureCooledDown: s.lastCaptureDay === undefined || day - s.lastCaptureDay >= cfg.capture.cooldownDays,
     openThreadDomains: s.threads.filter((x) => x.state === 'open' || x.state === 'resting').map((x) => x.domain),
     threadDeclinedDomains: (Object.entries(s.domainState) as [Domain, DomainState][]).filter(([, v]) => (v.threadDeclinedUntil ?? -1) > day).map(([k]) => k),
@@ -48,12 +48,12 @@ export function applyRep(s: State, inst: Instance, ctx: FlowContext, answers: St
     return;
   }
 
-  const prim = primaryOptions(t, ctx.frame, ctx.bound);
+  const prim = primaryOptions(t, ctx.frame, ctx.bound, ctx.variant);
   const optionDomains = Array.from(new Set(prim.options.map((x) => x.domain).filter((d): d is Domain => !!d && d !== 'unknown')));
   const cap = ans('capture_domain');
   const capturedDomain: Domain | undefined = cap && cap.kind === 'domain' ? cap.domain : undefined;
   const orA = ans('capture_orientation');
-  const capturedOrientation: Orientation | undefined = orA && orA.kind === 'orientation' ? orA.orientation : undefined;
+  const capturedOrientation: Orientation | undefined = cfg.orientation.enabled && orA && orA.kind === 'orientation' ? orA.orientation : undefined;
 
   let domain: Domain | undefined = chosen.domain && chosen.domain !== 'unknown' ? chosen.domain : undefined;
   let domainSource: Observation['domainSource'] | undefined = domain ? 'option' : undefined;
@@ -69,7 +69,7 @@ export function applyRep(s: State, inst: Instance, ctx: FlowContext, answers: St
   const obs: Observation = {
     id: ++s.seq.obs, day, instanceId: inst.id, templateId: t.id, capacity: t.capacity, mechanism: t.mechanism, step: 'primary', optionId: chosen.id,
     domain, domainSource, domainOrigin: origin,
-    orientation: chosen.orientation ?? capturedOrientation, signal: chosen.signal,
+    orientation: cfg.orientation.enabled ? (chosen.orientation ?? capturedOrientation) : undefined, signal: chosen.signal,
     polarity: chosen.polarity ?? 'present', burden, unknown: false,
     domainRole: isLensLike ? 'issue' : t.domainRole, offeredDomains,
     closedSet: offeredDomains.length > 0 && offeredDomains.length <= cfg.evidence.closedSetMax,

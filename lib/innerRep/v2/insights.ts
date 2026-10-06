@@ -16,7 +16,8 @@ export interface InsightDecision { evidenceKey: string; verdict: 'shown' | 'elig
 /** feedback on a domain claim (repeated signal OR convergence) applies to the domain, whichever kind carried it */
 export const fbFor = (s: State, e: Pick<Evidence, 'key' | 'kind' | 'subject'>) => s.feedbackMem[e.key] ?? (e.kind === 'repeated_signal' || e.kind === 'cross_capacity_convergence' ? s.feedbackMem[`domain:${e.subject}`] : undefined);
 
-export function buildInsight(s: State, e: Evidence, tentativeMode: boolean): Omit<InsightRecord, 'id' | 'day'> | null {
+export function buildInsight(s: State, e: Evidence, tentativeMode: boolean, cfg: V2Config = V2): Omit<InsightRecord, 'id' | 'day'> | null {
+  if (e.kind === 'contradiction' && !cfg.insight.contradictionEnabled) return null; // evidence concept kept; no user-facing contradiction in the MVP
   const snap = { independentN: e.independentN, introducedN: e.introducedN, promptedN: e.promptedN };
   const fb = fbFor(s, e);
   const prior = fb?.noDay !== undefined ? ' Earlier you said a similar reading didn\'t fit, so treat this as a question.' : fb?.partlyDay !== undefined ? ' You said an earlier version was only partly right.' : '';
@@ -60,7 +61,7 @@ export function chooseInsight(s: State, evidence: Evidence[], day: number, tenta
   let shown: Omit<InsightRecord, 'id' | 'day'> | undefined;
   for (const e of evidence) {
     if (e.status !== 'active') { decisions.push({ evidenceKey: e.key, verdict: 'not_eligible', reason: e.note ?? e.status }); continue; }
-    const ins = buildInsight(s, e, tentativeMode);
+    const ins = buildInsight(s, e, tentativeMode, cfg);
     if (!ins) { decisions.push({ evidenceKey: e.key, verdict: 'not_eligible', reason: 'drives continuity, not an insight' }); continue; }
     const prev = [...s.insights].reverse().find((i) => i.evidenceKey === e.key);
     if (prev && day - prev.day < cooldown) { decisions.push({ evidenceKey: e.key, verdict: 'eligible_not_shown', reason: `shown ${day - prev.day}d ago (cooldown ${cooldown}d)` }); continue; }

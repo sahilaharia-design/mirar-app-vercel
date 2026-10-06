@@ -3,7 +3,7 @@
 // finding about people. Change values here, never inline. "reps" = completed
 // reps (not calendar days); "days" = calendar days.
 export const V2 = {
-  templateWindowReps: 10,       // same template+frame not within this many reps
+  templateWindowReps: 14,       // same template+frame not within this many reps (10 → 14 after simulation: first exact repeat day ~17 → ~18)
   lensWindowReps: 5,            // same template, different binding
   budget: { lookbackReps: 5, cap: 2, maxConsecutive: 2 },  // ≤cap of last N reps may be continuity/context-driven; never more than maxConsecutive in a row (due commitments exempt)
   intensity: {
@@ -13,7 +13,7 @@ export const V2 = {
   ease: { unknownRun: 2 },      // consecutive unknown/skipped reps → gentle + simple
   disengage: { window: 6, threshold: 0.5 },  // share of unknown/skip/not_this in last N answers → simplify, let threads rest
   gaps: { returnDays: 7, dormantDays: 30 },
-  probe: { everyReps: 7, minBetweenReps: 4, firstAfterReps: 4, unexplainedBurden: { window: 6, minBurdenReps: 2 } },
+  probe: { everyReps: 10, minBetweenReps: 4, firstAfterReps: 4, unexplainedBurden: { window: 6, minBurdenReps: 2 } },
   capture: { cooldownDays: 3 }, // don't ask "what's this connected to?" more often than this
   thread: {
     checkEveryReps: 3,          // gap between thread-bound reps
@@ -45,7 +45,9 @@ export const V2 = {
     suppressDaysNo: 21, suppressDaysUnsure: 7, newEvidenceAfterNo: 2,
     tentativeModeWindow: 3, tentativeModeNo: 2, // ≥2 "No" in last 3 → tentative mode
   },
-  insight: { cooldownDaysSameKey: 14, maxPer7Days: 2 },
+  insight: { cooldownDaysSameKey: 14, maxPer7Days: 2, contradictionEnabled: false },  // contradiction stays an evidence concept; no user-facing insight in the MVP
+  // Orientation (past/present/future/uncertainty) is NOT collected in the MVP: no engine rule uses it yet.
+  orientation: { enabled: false },
   rest: {
     enabled: false,              // OFF in the app; the simulator turns it on
     minHistoryReps: 10, issueLookbackDays: 28, calmRun: 8, maxBurdenShare14: 0.15, minAnsweredShare: 0.7,

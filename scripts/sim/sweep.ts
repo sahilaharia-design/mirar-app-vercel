@@ -36,6 +36,10 @@ export function sweep(seeds: number[], onlyIds?: string[]): SweepResult {
       for (const cm of r.state.commitments) for (const e of cm.events) { if (e.by === 'system' && e.to !== 'unconfirmed') v('system set a user-only commitment status', `${tag} #${cm.id}`); if (e.by === 'user' && e.to === 'unconfirmed') v('user event marked unconfirmed', `${tag} #${cm.id}`); }
       for (const cm of r.state.commitments) { if (cm.asks > V2.commitment.maxAsks + (cm.events.some((e) => e.to === 'postponed') ? V2.commitment.maxAsks * cm.events.filter((e) => e.to === 'postponed').length : 0)) v('commitment nagged', `${tag} #${cm.id} asks ${cm.asks}`); }
       for (const cm of r.state.commitments) if (cm.status === 'unconfirmed') { const lastUnc = cm.events.find((e) => e.to === 'unconfirmed')!.day; if (a.some((i) => i.intentRef === cm.id && i.frame === 'commitment_check' && i.day > lastUnc)) v('asked about an unconfirmed commitment', `${tag} #${cm.id}`); }
+      // decisions applied after review
+      if (r.state.observations.some((o) => o.orientation !== undefined) || r.state.threads.some((t) => t.orientation !== undefined)) v('orientation was collected (disabled in the MVP)', tag);
+      if (r.state.insights.some((i) => i.kind === 'contradiction')) v('a contradiction insight was shown (disabled in the MVP)', tag);
+      if (r.logs.some((l) => l.answers.some((a) => a.stepId === 'capture_orientation'))) v('orientation step was emitted', tag);
       // text hygiene
       for (const i of r.state.insights) if (BANNED.test(i.text)) v('banned wording in an insight', `${tag}: ${i.text.slice(0, 50)}`);
       for (const l of r.logs) if (l.decision) { const t = l.decision.trace; if (BANNED.test([t.primaryReason, ...t.secondaryReasons, ...t.constraints.map((x) => x.effect), ...t.letRest, ...l.refusals.map((x) => x.reason)].join(' '))) { v('banned wording in a trace', `${tag} day ${l.day + 1}`); break; } }

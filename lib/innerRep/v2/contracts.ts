@@ -14,6 +14,7 @@ export type Step =
   | { id: 'primary' | 'follow_up'; type: 'choice'; prompt: string; layout: 'list' | 'compare'; options: StepOption[]; allowUnknown: true }
   | { id: 'words'; type: 'words'; prompt: string; maxChars: number; optional: true; saved: false; safetyCheck: true }
   | { id: 'capture_domain'; type: 'domain_chips'; prompt: string; domains: Domain[]; optional: true }
+  /** DISABLED in the MVP: never emitted while V2.orientation.enabled is false. Safe for the UI to ignore. */
   | { id: 'capture_orientation'; type: 'orientation_chips'; prompt: string; orientations: Orientation[]; optional: true }
   | { id: 'timeframe'; type: 'timeframe'; prompt: string; options: ('today' | 'tomorrow' | 'this_week' | 'pick_date' | 'none')[]; optional: true }
   | { id: 'thread_offer'; type: 'yes_no'; prompt: string; domain: Domain; optional: true };
@@ -46,7 +47,7 @@ export const DOMAIN_CHIP_LABEL: Record<Domain, string> = {
 };
 
 /** Options for the primary step of a given frame (the single source of truth for the UI and the simulator). */
-export function primaryOptions(t: Template, frame: Frame, bound?: Domain): { prompt: string; options: Option[]; layout: 'list' | 'compare' } {
+export function primaryOptions(t: Template, frame: Frame, bound?: Domain, variant = 0): { prompt: string; options: Option[]; layout: 'list' | 'compare' } {
   if (frame === 'lens' && bound) return { prompt: LENS_PROMPT[t.capacity](DOMAIN_PHRASE[bound]), options: LENS_OPTIONS(bound), layout: 'list' };
   if (frame === 'thread_check' && bound) return { prompt: `Is ${DOMAIN_PHRASE[bound]} still weighing on you?`, options: t.options.map((x) => ({ ...x, domain: bound })), layout: 'list' };
   if (frame === 'resolution' && bound) return {
@@ -55,13 +56,16 @@ export function primaryOptions(t: Template, frame: Frame, bound?: Domain): { pro
     layout: 'list',
   };
   if (frame === 'event_check' && bound) return { prompt: t.prompt, options: t.options.map((x) => ({ ...x, domain: bound })), layout: 'list' };
-  return { prompt: t.prompt, options: t.options, layout: t.interaction === 'compare' ? 'compare' : 'list' };
+  const prompt = t.promptVariants && t.promptVariants.length ? t.promptVariants[variant % t.promptVariants.length] : t.prompt;
+  return { prompt, options: t.options, layout: t.interaction === 'compare' ? 'compare' : 'list' };
 }
 
 export interface FlowContext {
   template: Template;
   frame: Frame;
   bound?: Domain;
+  /** which wording of the question to show (engine-chosen; the UI never picks) */
+  variant?: number;
   /** engine-provided facts the flow needs (no UI logic) */
   captureCooledDown: boolean;
   openThreadDomains: Domain[];
@@ -73,7 +77,7 @@ export function chosenOption(ctx: FlowContext, answers: StepAnswer[]): Option | 
   if (!a) return null;
   if (a.kind === 'unknown' || a.kind === 'skip') return 'unknown';
   if (a.kind !== 'option') return null;
-  return primaryOptions(ctx.template, ctx.frame, ctx.bound).options.find((x) => x.id === a.optionId) ?? null;
+  return primaryOptions(ctx.template, ctx.frame, ctx.bound, ctx.variant).options.find((x) => x.id === a.optionId) ?? null;
 }
 
 /** Deterministic step machine. Returns null when the rep is complete. */
@@ -81,7 +85,7 @@ export function nextStep(ctx: FlowContext, answers: StepAnswer[]): Step | null {
   const t = ctx.template;
   const has = (id: string) => answers.some((a) => a.stepId === id);
   const answered = (id: string) => answers.find((a) => a.stepId === id);
-  const prim = primaryOptions(t, ctx.frame, ctx.bound);
+  const prim = primaryOptions(t, ctx.frame, ctx.bound, ctx.variant);
 
   if (!has('primary')) return { id: 'primary', type: 'choice', prompt: prim.prompt, layout: prim.layout, options: prim.options.map(({ id, label }) => ({ id, label })), allowUnknown: true };
   const chosen = chosenOption(ctx, answers);
@@ -103,7 +107,8 @@ export function nextStep(ctx: FlowContext, answers: StepAnswer[]): Step | null {
     return { id: 'capture_domain', type: 'domain_chips', prompt: "What's this mostly connected to?", domains: ['work', 'partner', 'family', 'friends', 'self', 'body_health', 'money', 'time', 'technology', 'other'], optional: true };
 
   const domainNow = chosen.domain && chosen.domain !== 'unknown' ? chosen.domain : (() => { const d = answered('capture_domain'); return d && d.kind === 'domain' ? d.domain : undefined; })();
-  const wantsOrientation = t.capture.orientation === 'if_burden' ? !!chosen.burden : t.capture.orientation === 'if_present' ? !absent : false;
+  const orientationOn = V2.orientation.enabled; // MVP: off — never asked
+  const wantsOrientation = orientationOn && t.capture.orientation === 'if_burden' ? !!chosen.burden : t.capture.orientation === 'if_present' ? !absent : false;
   if (isBase && wantsOrientation && !chosen.orientation && (domainNow || t.role === 'probe') && (ctx.captureCooledDown || has('capture_domain')) && !has('capture_orientation'))
     return { id: 'capture_orientation', type: 'orientation_chips', prompt: 'Is it more about…', orientations: ['past', 'present', 'future', 'uncertainty', 'none'], optional: true };
 
@@ -121,7 +126,7 @@ export function nextStep(ctx: FlowContext, answers: StepAnswer[]): Step | null {
     return { id: 'thread_offer', type: 'yes_no', prompt: 'Want Mirar to check in on this now and then? You can stop any time.', domain: offerDomain, optional: true };
   // When the user agrees to a check-in, ask once which way it points (thread-level orientation: past / present / future / uncertainty).
   const offer = answered('thread_offer');
-  if (offer && offer.kind === 'yes' && !chosen.orientation && !has('capture_orientation'))
+  if (orientationOn && offer && offer.kind === 'yes' && !chosen.orientation && !has('capture_orientation'))
     return { id: 'capture_orientation', type: 'orientation_chips', prompt: 'Is it more about…', orientations: ['past', 'present', 'future', 'uncertainty', 'none'], optional: true };
   void V2;
   return null;

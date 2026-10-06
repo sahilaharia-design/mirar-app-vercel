@@ -6,7 +6,8 @@ import { decide } from '../../lib/innerRep/v2/engine';
 import { computeEvidence } from '../../lib/innerRep/v2/evidence';
 import { applyFeedback, chooseInsight } from '../../lib/innerRep/v2/insights';
 import { TEMPLATES, TEMPLATE_BY_ID } from '../../lib/innerRep/v2/templates';
-import { StepAnswer, nextStep } from '../../lib/innerRep/v2/contracts';
+import { StepAnswer, nextStep, primaryOptions } from '../../lib/innerRep/v2/contracts';
+const primaryOptionsFor = (t: (typeof TEMPLATES)[number], frame: 'lens', d: Domain) => primaryOptions(t, frame, d).prompt;
 import { Commitment, DOMAINS, Domain, Instance, ORIENTATIONS, Observation, State, Thread } from '../../lib/innerRep/v2/types';
 import { PROFILES } from './profiles';
 import { metrics } from './report';
@@ -145,24 +146,19 @@ test('7 Selection bias', 'context-driven reps are recorded as thread_continuatio
   return ok(bad === 0, `${bad} context-driven observations mislabelled as independent`);
 });
 
-// ═══ 8 — DOMAIN + ORIENTATION ═══
-const combo = (id: string, d: Domain, o: string) => test('8 Domain × orientation', `${d} + ${o} are captured as separate dimensions (${id} and across all runs)`, () => {
-  const all = Object.values(R).flatMap((r) => r.state.observations);
-  const mine = run(id).state.observations; const here = mine.filter((x) => x.domain === d && x.orientation === o).length;
-  const threadPairs = Object.values(R).flatMap((r) => r.state.threads).filter((t) => t.domain === d && t.orientation === o).length;
-  const everywhere = all.filter((x) => x.domain === d && x.orientation === o).length + threadPairs;
-  const domainOnly = mine.filter((x) => x.domain && !x.orientation).length; const orientOnly = all.filter((x) => x.orientation && !x.domain).length;
-  const crossed = all.filter((x) => x.domain !== undefined && x.orientation !== undefined && (x.domain as string) === (x.orientation as string)).length;
-  return ok(everywhere > 0 && crossed === 0 && domainOnly > 0, `${here} observations in this run + ${threadPairs} thread(s) across runs carry both (${everywhere} total); ${domainOnly} domain-only in this run (not forced to pair); ${orientOnly} orientation-only across runs`);
+// ═══ 8 — DOMAIN (orientation is deferred) ═══
+test('8 Domain / orientation', 'orientation is NOT collected: no orientation step is ever emitted and nothing stores one (all runs)', () => {
+  let steps = 0, stored = 0; for (const r of ALL) { for (const l of r.logs) steps += l.answers.filter((a) => a.stepId === 'capture_orientation').length; stored += r.state.observations.filter((o) => o.orientation !== undefined).length + r.state.threads.filter((t) => t.orientation !== undefined).length; }
+  return ok(steps === 0 && stored === 0 && V2.orientation.enabled === false, `orientation steps answered/skipped: ${steps}; observations/threads carrying an orientation: ${stored}; flag enabled=${V2.orientation.enabled}`);
 });
-combo('work_stress', 'work', 'future'); combo('relationship_conflict', 'partner', 'present'); combo('family_past', 'family', 'past'); combo('introspective_inactive', 'self', 'uncertainty'); combo('money_future', 'money', 'future'); combo('body_present', 'body_health', 'present');
-test('8 Domain × orientation', 'orientation is only collected when the exercise supports it (never on neutral/positive reps)', () => {
-  let bad = 0; for (const id of Object.keys(R)) for (const o of R[id].state.observations) if (o.orientation && !o.burden && !['probe_anchor', 'act_friction'].includes(o.templateId) && o.domainOrigin !== 'user_introduced') bad++;
-  return ok(bad === 0, `${bad} orientation values on non-burden, non-probe reps`);
+test('8 Domain / orientation', 'the engine never asks the user for an orientation even when one would apply (nextStep after a burdened, domain-bearing answer)', () => {
+  const ctx = flowContext(createState(), 0, 'en_drain', 'base', undefined);
+  const a: StepAnswer[] = [{ stepId: 'primary', kind: 'option', optionId: 'work' }]; const st = nextStep(ctx, a);
+  const ctx2 = flowContext(createState(), 0, 'probe_anchor', 'base', undefined); const b: StepAnswer[] = [{ stepId: 'primary', kind: 'option', optionId: 'work' }, { stepId: 'thread_offer', kind: 'yes' }]; const st2 = nextStep(ctx2, b);
+  return ok((!st || st.id !== 'capture_orientation') && (!st2 || st2.id !== 'capture_orientation'), `after a burdened domain answer: ${st ? st.id : 'none'}; after accepting a check-in: ${st2 ? st2.id : 'none'}`);
 });
-test('8 Domain × orientation', 'orientation is stored but does not change any selection yet', () => {
-  const a = run('work_stress'); const withO = a.state.observations.filter((o) => o.orientation).length;
-  return finding(`${withO} observations carry an orientation in work_stress, yet no engine rule reads it. Either use it (e.g. future+uncertainty → a lighter, grounding rep) or stop collecting it until a rule needs it.`);
+test('8 Domain / orientation', 'domain is still captured, independent of any orientation concept', () => {
+  const doms = new Set(ALL.flatMap((r) => r.state.observations.map((o) => o.domain).filter(Boolean))); return ok(doms.size >= 8, `${doms.size} distinct domains observed across all runs: ${[...doms].join(', ')}`);
 });
 
 // ═══ 9 — EIGHT EVIDENCE TYPES: fire + near-miss ═══
@@ -176,6 +172,7 @@ test('9 Evidence', 'change FIRES: recent week much heavier than own baseline', (
 test('9 Evidence', 'change NEAR-MISS: baseline too thin to call a change', () => { const s = createState(); for (let d = 1; d <= 3; d++) ob(s, d, 'foc_loops', { burden: false }); for (let d = 22; d <= 24; d++) ob(s, d, 'foc_loops', { burden: true }); return ok(!has(ev(s, 25), 'change'), `refusal: ${refused(ev(s, 25), 'change')[0]?.reason}`); });
 test('9 Evidence', 'contradiction FIRES: opposite stances within two weeks', () => { const s = createState(); ob(s, 1, 'dir_fits', { stance: { key: 'fit', side: 'fits', durable: true } }); ob(s, 6, 'dir_fits', { stance: { key: 'fit', side: 'outgrown', durable: true } }); return ok(!!has(ev(s, 7), 'contradiction', 'fit'), 'fired'); });
 test('9 Evidence', 'contradiction NEAR-MISS: same stance repeated; opposite stances 25 days apart; and day-to-day state variation (not a durable statement)', () => { const s = createState(); ob(s, 1, 'dir_fits', { stance: { key: 'fit', side: 'fits', durable: true } }); ob(s, 6, 'dir_fits', { stance: { key: 'fit', side: 'fits', durable: true } }); const a = !has(ev(s, 7), 'contradiction', 'fit'); const s2 = createState(); ob(s2, 1, 'dir_fits', { stance: { key: 'fit', side: 'fits', durable: true } }); ob(s2, 27, 'dir_fits', { stance: { key: 'fit', side: 'outgrown', durable: true } }); const b = !has(ev(s2, 28), 'contradiction', 'fit'); const s3 = createState(); ob(s3, 1, 'en_pace', { stance: { key: 'pace', side: 'pushing' } }); ob(s3, 3, 'en_pace', { stance: { key: 'pace', side: 'pacing' } }); const c = !has(ev(s3, 4), 'contradiction', 'pace'); return ok(a && b && c, `same-side refused: ${a}; far-apart refused: ${b}; day-to-day state variation (pushing vs pacing) refused: ${c}`); });
+test('9 Evidence', 'contradiction stays an EVIDENCE concept but never becomes a user-facing insight in the MVP', () => { const s = createState(); ob(s, 1, 'dir_fits', { stance: { key: 'fit', side: 'fits', durable: true } }); ob(s, 6, 'dir_fits', { stance: { key: 'fit', side: 'outgrown', durable: true } }); const r = ev(s, 7); const sh = chooseInsight(s, r.evidence, 7, false); const anyShown = ALL.some((x) => x.state.insights.some((i) => i.kind === 'contradiction')); return ok(!!has(r, 'contradiction', 'fit') && !sh.shown && !anyShown && V2.insight.contradictionEnabled === false, `evidence fires: ${!!has(r, 'contradiction', 'fit')}; insight shown: ${!!sh.shown}; contradiction insights across ${ALL.length} runs: ${anyShown ? 'some' : 0}`); });
 test('9 Evidence', 'unresolved_thread FIRES: user-confirmed, recently confirmed', () => { const s = createState(); thread(s, 'partner', { lastConfirmedDay: 8 }); return ok(!!ev(s, 10).evidence.find((e) => e.kind === 'unresolved_thread'), 'fired'); });
 test('9 Evidence', 'unresolved_thread NEAR-MISS: engine candidate; and thread not confirmed for 20 days', () => { const s = createState(); thread(s, 'partner', { state: 'candidate', openedVia: 'engine_candidate', stateSource: 'engine' }); const a = !ev(s, 10).evidence.find((e) => e.kind === 'unresolved_thread'); const s2 = createState(); thread(s2, 'partner', { lastConfirmedDay: 0 }); const b = !ev(s2, 25).evidence.find((e) => e.kind === 'unresolved_thread'); return ok(a && b, `candidate refused: ${a}; stale refused: ${b}`); });
 test('9 Evidence', 'follow_through FIRES on a user status; unconfirmed is NOT failure', () => { const s = createState(); const c: Commitment = { id: ++s.seq.commit, kind: 'reach_out', timeframe: 'tomorrow', createdDay: 0, dueDay: 1, status: 'done', statusSource: 'user', asks: 1, noneRevisits: 0, events: [] }; const c2: Commitment = { ...c, id: ++s.seq.commit, status: 'unconfirmed', statusSource: 'system' }; s.commitments.push(c, c2); const r = ev(s, 5); const txt = JSON.stringify(r).toLowerCase().replace(/not as failure/g, ''); return ok(r.evidence.filter((e) => e.kind === 'follow_through').length === 2 && !/fail|avoid|flak|lazy/.test(txt) && r.refusals.some((x) => /not as failure/.test(x.reason)), `fired for done and unconfirmed; failure language present: ${/fail|avoid/.test(txt)}`); });
@@ -231,7 +228,7 @@ test('13 High burden', 'no endless escalation: ≤ 2 consecutive non-light reps 
 test('13 High burden', 'recovery can outrank relevance, and the system never discards a thread (≥ 80% of seeds show recovery overriding relevance; 100% no system resolution)', () => { const rs = RS['high_burden']; const rec = rs.filter((r) => r.logs.some((l) => l.decision?.trace.constraints.some((c) => c.name === 'recovery' && /relevance/.test(c.overrode ?? '')))).length; const sys = rs.filter((r) => r.state.threads.some((t) => t.state === 'resolved' && t.stateSource !== 'user')).length; return ok(rec / rs.length >= 0.8 && sys === 0, `recovery overrode relevance in ${rec}/${rs.length} seeds; seeds with a system-resolved thread: ${sys}`); });
 // ═══ 14 — IRREGULAR USE ═══
 test('14 Irregular', 'after a 7+ day absence the first rep is an open probe, not the old thread (every seed, every gap)', () => { let bad = 0, tot = 0; for (const id of ['absence_week', 'absence_month_60', 'every_2_3_days']) for (const r of RS[id]) { const a = r.state.instances; for (let k = 1; k < a.length; k++) if (a[k].day - a[k - 1].day >= V2.gaps.returnDays) { tot++; if (a[k].intent !== 'probe_return') bad++; } } return ok(bad === 0 && tot > 0, `${tot} returns checked, ${bad} did not start with an open probe`); });
-test('14 Irregular', 'after a month away: threads go dormant, past-due commitments lapse quietly, no old asks on return (every seed)', () => forAll('absence_month_60', (r) => { const back = r.state.instances.find((i) => i.day > 48); const askedOld = r.state.instances.filter((i) => i.day > 48 && (i.intent === 'thread_check' || i.intent === 'commitment_due') && i.day <= (back?.day ?? 0) + 3).length; const stillOpen = r.state.threads.filter((t) => t.kind === 'ongoing' && t.state === 'open' && t.openedDay < 15 && (t.lastConfirmedDay ?? 0) < 15 && !r.state.instances.some((i) => i.day > 48 && i.bound === t.domain && i.intent === 'thread_check')).length;
+test('14 Irregular', 'after a month away: threads go dormant, past-due commitments lapse quietly, no old asks on return (every seed)', () => forAll('absence_month_60', (r) => { const back = r.state.instances.find((i) => i.day > 48); const reRaised = (d: string) => r.state.observations.some((o) => o.day > 48 && o.domain === d && o.domainOrigin === 'user_introduced'); const askedOld = r.state.instances.filter((i) => i.day > 48 && i.day <= (back?.day ?? 0) + 3 && ((i.intent === 'thread_check' && !reRaised(i.bound as string)) || (i.intent === 'commitment_due' && (r.state.commitments.find((c) => c.id === i.intentRef)?.createdDay ?? 99) < 15))).length; const stillOpen = r.state.threads.filter((t) => t.kind === 'ongoing' && t.state === 'open' && t.openedDay < 15 && (t.lastConfirmedDay ?? 0) < 15 && !reRaised(t.domain)).length;
   const dormantOrWoken = r.state.threads.filter((t) => t.openedDay < 15).every((t) => t.state !== 'open' || (t.lastConfirmedDay ?? 0) > 48);
   return { ok: !!back && back.intent === 'probe_return' && askedOld === 0 && dormantOrWoken, note: `first back ${back?.intent}; old asks ${askedOld}; threads from before still open without the user raising them: ${stillOpen}` }; }));
 test('14 Irregular', 'a thread from 30 days ago does not dominate on return: ≤ 1 partner-driven rep among the first 5 back (every seed)', () => forAll('absence_month_60', (r) => { const back = r.state.instances.filter((i) => i.day > 48).slice(0, 5); const n = back.filter((i) => i.bound === 'partner' || i.intent.endsWith(':partner')).length; return { ok: n <= 1, note: `${n} of ${back.length}` }; }));
@@ -274,6 +271,34 @@ test('17 Commitments', 'a passed deadline is not failure: unconfirmed never appe
   return ok(bad === 0, `${bad} insights mention missed/failed commitments`);
 });
 test('17 Commitments', 'introspective_inactive (mostly changes mind): zero "avoidance"-type claims and zero commitment-based insights (every seed)', () => forAll('introspective_inactive', (r) => { const bad = r.state.insights.filter((i) => /commit|follow|avoid|inactive|act\b/i.test(i.text)).length; return { ok: bad === 0, note: `${bad} insights about acting` }; }));
+// ═══ HEURISTICS APPLIED AFTER SIMULATION REVIEW ═══
+test('18 Applied heuristics', 'open context probe runs about every 10 reps (cadence probes: median gap ≥ 9 reps, stable users)', () => {
+  const gaps: number[] = []; for (const r of RS['stable_60']) { const a = r.state.instances; let last = -1; a.forEach((i, k) => { if (i.templateId === 'probe_anchor') { if (last >= 0) gaps.push(k - last); last = k; } }); }
+  const sorted = [...gaps].sort((x, y) => x - y); const med = sorted[Math.floor(sorted.length / 2)];
+  return ok(med >= 9 && med <= 12, `${gaps.length} gaps; median ${med} reps, min ${sorted[0]}, max ${sorted[sorted.length - 1]} (config everyReps ${V2.probe.everyReps})`);
+});
+test('18 Applied heuristics', 'the open question has 3 phrasings; consecutive uses never repeat the same wording (all runs)', () => {
+  let bad = 0, uses = 0; const seen = new Set<number>(); for (const r of ALL) { let prev = -1; for (const i of r.state.instances) if (i.templateId === 'probe_anchor') { uses++; seen.add(i.variant ?? 0); if (i.variant === prev) bad++; prev = i.variant ?? 0; } }
+  return ok(TEMPLATE_BY_ID['probe_anchor'].promptVariants!.length === 3 && bad === 0 && seen.size === 3, `${uses} uses; variants seen ${[...seen].join(',')}; back-to-back repeats ${bad}`);
+});
+test('18 Applied heuristics', 'tie-break is deterministic per user: same user → same order; different users → different first reps', () => {
+  const p = PROFILES.find((x) => x.id === 'stable')!; const first = (seed: number) => runProfile({ ...p, seed }).state.instances.slice(0, 8).map((i) => i.templateId).join('>');
+  const a1 = first(111), a2 = first(111); const many = new Set(Array.from({ length: 20 }, (_, k) => first(1000 + k)));
+  return ok(a1 === a2 && many.size >= 10, `same seed identical: ${a1 === a2}; distinct first-8 sequences across 20 users: ${many.size} (was 5 with a day-only hash)`);
+});
+test('18 Applied heuristics', 'exercise window 14: no non-continuity exercise repeats (same binding) within 14 reps unless the trace says the window was relaxed (all runs)', () => {
+  let worst = Infinity, where = '', relaxedN = 0, unexplained = 0; for (const r of ALL) { const a = r.state.instances; const last: Record<string, number> = {}; a.forEach((i, k) => { const t = TEMPLATE_BY_ID[i.templateId]; if (t.role === 'continuity' || t.role === 'probe') return; const key = `${i.templateId}|${i.frame}|${i.bound ?? ''}`; if (key in last && k - last[key] < V2.templateWindowReps) { if (/repeat window relaxed/.test(i.trace.secondaryReasons.join(' '))) relaxedN++; else { unexplained++; if (k - last[key] < worst) { worst = k - last[key]; where = `${r.profile.id} ${key}`; } } } last[key] = k; }); }
+  return ok(unexplained === 0, `repeats inside the window: ${relaxedN} (all explicitly relaxed in the trace, only when every allowed exercise was inside its window), ${unexplained} unexplained${unexplained ? ` (closest ${worst} reps apart: ${where})` : ''}; window ${V2.templateWindowReps}`);
+});
+test('18 Applied heuristics', 'current budget (2 of 5) and rest behaviour are unchanged', () => ok(V2.budget.cap === 2 && V2.budget.maxConsecutive === 2 && V2.rest.calmRun === 8 && V2.rest.minGapDays === 10, `budget ${V2.budget.cap}/${V2.budget.lookbackReps}, max ${V2.budget.maxConsecutive} in a row; rest calmRun ${V2.rest.calmRun}, minGap ${V2.rest.minGapDays}d`));
+test('18 Applied heuristics', 'internal terms never reach users: no "probe", "bias", "calibration" or "selection" in any prompt, option, chip, or shown insight (all runs)', () => {
+  const banned = /\bprobe\b|\bbias\b|calibrat|selection|\blens\b|thread|\bengine\b/i; const strings: string[] = [];
+  for (const t of TEMPLATES) { strings.push(t.prompt, ...(t.promptVariants ?? []), ...t.options.map((o) => o.label)); if (t.followUp) strings.push(t.followUp.prompt, ...t.followUp.options.map((o) => o.label)); if (t.words) strings.push(t.words.prompt); }
+  for (const c of ['focus', 'energy', 'relationships', 'growth', 'direction', 'action'] as const) for (const d of ['work', 'partner', 'family', 'friends', 'self', 'body_health', 'money', 'time', 'technology', 'rest', 'other'] as Domain[]) { const t = TEMPLATES.find((x) => x.hasLens && x.capacity === c)!; strings.push(primaryOptionsFor(t, 'lens', d)); }
+  const hits = strings.filter((x) => banned.test(x)); const ins = ALL.flatMap((r) => r.state.insights.map((i) => i.text)).filter((x) => banned.test(x));
+  return ok(hits.length === 0 && ins.length === 0, `${strings.length} authored strings and ${ALL.reduce((a, r) => a + r.state.insights.length, 0)} generated insights scanned; hits ${hits.length + ins.length}${hits[0] ? ' e.g. ' + hits[0] : ''}${ins[0] ? ' e.g. ' + ins[0] : ''}`);
+});
+
 // ═══ contract + structural ═══
 test('Contracts', '"I don\'t know" ends a rep without asking anything further', () => {
   const ctx = flowContext(createState(), 0, 'foc_attention', 'base', undefined);

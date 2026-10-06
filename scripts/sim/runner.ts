@@ -20,7 +20,7 @@ export function respond(step: Step, ctx: FlowContext, latent: Latent, tr: Traits
   const sid = step.id;
   if (step.type === 'choice') {
     if (r() < tr.unknownRate) return { stepId: sid, kind: 'unknown' };
-    const opts = sid === 'follow_up' ? t.followUp!.options : primaryOptions(t, ctx.frame, ctx.bound).options;
+    const opts = sid === 'follow_up' ? t.followUp!.options : primaryOptions(t, ctx.frame, ctx.bound, ctx.variant).options;
     const total = Object.values(latent.domains).reduce((a, x) => a + (x ?? 0), 0);
     // lens / thread checks / events / commitments: purpose-built behaviour
     if (ctx.frame === 'lens' || ctx.frame === 'thread_check') {
@@ -67,7 +67,7 @@ function ctxEventDone(_c: FlowContext, _d: number, _p: Profile) { return eventDo
 
 export function runProfile(p: Profile, over: Partial<V2Config> = {}, restEnabled = true): RunResult {
   const cfg: V2Config = { ...V2, ...over, rest: { ...V2.rest, ...(over.rest ?? {}), enabled: restEnabled } };
-  const s = createState();
+  const s = createState(p.seed);
   const r = rng(p.seed);
   const tr: Traits = { ...DEFAULT_TRAITS, ...(p.traits ?? {}), commit: { ...DEFAULT_TRAITS.commit, ...(p.traits?.commit ?? {}) } };
   eventDone.set(p, false);
@@ -78,9 +78,9 @@ export function runProfile(p: Profile, over: Partial<V2Config> = {}, restEnabled
     const dec = decide(s, d, cfg);
     if (dec.layer === 'rest') { logs.push({ day: d, engaged: true, decision: dec, answers: [], newObs: [], newEvidence: [], refusals: dec.evidence.refusals, rest: true, insightNotes: [] }); continue; }
     const t = TEMPLATE_BY_ID[dec.templateId!];
-    const inst: Instance = { id: ++s.seq.inst, day: d, templateId: t.id, frame: dec.frame!, bound: dec.bound, capacity: t.capacity, mechanism: t.mechanism, intensity: t.intensity, layer: dec.layer, intent: dec.intent, intentRef: dec.intentRef, trace: dec.trace, completed: false, unknownPrimary: false, burden: false, skippedAll: false };
+    const inst: Instance = { id: ++s.seq.inst, day: d, templateId: t.id, frame: dec.frame!, bound: dec.bound, capacity: t.capacity, mechanism: t.mechanism, intensity: t.intensity, layer: dec.layer, intent: dec.intent, intentRef: dec.intentRef, variant: dec.variant, trace: dec.trace, completed: false, unknownPrimary: false, burden: false, skippedAll: false };
     s.instances.push(inst);
-    const ctx = flowContext(s, d, t.id, dec.frame!, dec.bound, cfg);
+    const ctx = flowContext(s, d, t.id, dec.frame!, dec.bound, cfg, dec.variant);
     const latent = p.latent(d);
     const answers: StepAnswer[] = [];
     if (r() < tr.abandon) answers.push({ stepId: 'primary', kind: 'skip' });

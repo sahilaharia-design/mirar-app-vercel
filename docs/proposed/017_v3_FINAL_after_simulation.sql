@@ -8,9 +8,9 @@
 
 -- 0. Two small vocabularies, kept independent (domain ≠ orientation).
 create table public.domains      (id text primary key, sort int not null, active boolean not null default true);
-create table public.orientations (id text primary key, sort int not null, active boolean not null default true);
+create table public.orientations (id text primary key, sort int not null, active boolean not null default true);   -- DEFERRED: not collected in the MVP (docs/V2_DECISIONS.md #2); kept so it can return when a selection/evidence rule needs it
 -- seed domains:      work, partner, family, friends, self, body_health, money, time, technology, rest, other, unknown
--- seed orientations: past, present, future, uncertainty, none, unknown
+-- seed orientations (deferred): past, present, future, uncertainty, none, unknown
 -- Labels live in the app's locale files (en/hi/gu), never in these tables. Extensible by insert.
 
 -- 1. DECISIONS: one row per opened day, INCLUDING "no rep today". SIM: rest and its reason must be auditable.
@@ -44,6 +44,7 @@ create table public.inner_rep_instances (
   mechanism        text not null,
   intensity        text not null check (intensity in ('light','medium')),
   interaction_type text not null,
+  prompt_variant   smallint,             -- which of the rotating wordings was shown (the open question has 3)
   status           text not null default 'served' check (status in ('served','completed','skipped','abandoned')),
   served_at        timestamptz not null default now(),
   completed_at     timestamptz,
@@ -64,7 +65,7 @@ create table public.observations (
   domain_id        text references public.domains(id),            -- what part of life
   domain_source    text check (domain_source in ('option','user_tapped','binding')),
   domain_origin    text check (domain_origin in ('prompted_choice','prompted_text','user_introduced','thread_continuation','commitment','correction')),
-  orientation_id   text references public.orientations(id),       -- which way it points; collected only when the exercise supports it
+  orientation_id   text references public.orientations(id),       -- DEFERRED: always NULL in the MVP
   orientation_source text check (orientation_source in ('option','user_tapped')),
   domain_role      text not null check (domain_role in ('issue','resource','none')),  -- SIM: "what helped" must never count as an issue
   polarity         text not null default 'present' check (polarity in ('present','absent','unknown')),
@@ -115,7 +116,7 @@ create table public.threads (
   user_id        uuid not null references public.users(id) on delete cascade,
   kind           text not null check (kind in ('ongoing','event')),
   domain_id      text not null references public.domains(id),
-  orientation_id text references public.orientations(id),         -- SIM: collected once, when the user accepts a check-in
+  orientation_id text references public.orientations(id),         -- DEFERRED: always NULL in the MVP
   state          text not null check (state in ('candidate','open','resting','dormant','resolved')),
   state_source   text not null check (state_source in ('engine','user')),
   opened_from    uuid references public.observations(id),
@@ -197,7 +198,7 @@ create table public.mirror_insights (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.users(id) on delete cascade,
   instance_id uuid references public.inner_rep_instances(id) on delete set null,
-  kind text not null check (kind in ('observation','repeated_signal','cross_capacity_convergence','change','contradiction','resolution')),
+  kind text not null check (kind in ('observation','repeated_signal','cross_capacity_convergence','change','contradiction','resolution')),  -- 'contradiction' is allowed by the schema but disabled as a user-facing insight in the MVP
   tier text not null check (tier in ('supported','tentative','hedged')),                         -- SIM: wording tier is stored, not recomputed
   template_id text not null, template_params jsonb not null default '{}',
   shown_text text not null,
