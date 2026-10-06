@@ -1,0 +1,32 @@
+[
+  {
+    "target": "mirar-mark.png",
+    "source": "Only Logo.png",
+    "previous_exact_crop": false,
+    "size": [
+      1109,
+      1640
+    ],
+    "current_exact_crop_verified": true
+  },
+  {
+    "target": "mirar-wordmark.png",
+    "source": "Just Name.png",
+    "previous_exact_crop": false,
+    "size": [
+      2261,
+      797
+    ],
+    "current_exact_crop_verified": true
+  },
+  {
+    "target": "mirar-logo-full.png",
+    "source": "Logo without TM_1.png",
+    "previous_exact_crop": false,
+    "size": [
+      2512,
+      1096
+    ],
+    "current_exact_crop_verified": true
+  }
+]
