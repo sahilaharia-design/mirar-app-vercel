@@ -82,6 +82,32 @@ export default {
     again: 'Try again',
   },
 
+  // ─── Daily Inner Rep ────────────────────────────────────────────────────────
+  innerRep: {
+    eyebrow: "Today's inner rep",
+    begin: 'Begin',
+    seconds: 'About {{count}} seconds',
+    dont_know: "I don't know",
+    skip: 'Skip',
+    next: 'Next',
+    done: 'Done for today',
+    back_home: 'Back to today',
+    words_placeholder: 'A few words',
+    words_hint: 'Optional. Not saved if you skip.',
+    which_true: 'Which is more true today?',
+    practice_days_one: '{{count}} day of practice this month',
+    practice_days_other: '{{count}} days of practice this month',
+    done_card: 'Done for today. Back tomorrow.',
+    feedback_q: 'Does that sound right?',
+    fb_accurate: 'Accurate',
+    fb_partly: 'Partly',
+    fb_no: 'No',
+    fb_unsure: 'Not sure',
+    fb_thanks: 'Noted.',
+    loading: 'Getting today ready',
+    safety_continue: 'Back to today',
+  },
+
   // ─── Home (everyday layer) ──────────────────────────────────────────────────
   home: {
     your_week: 'Your week',

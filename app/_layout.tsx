@@ -106,6 +106,7 @@ function AppShell() {
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
         <Stack.Screen name="assess" options={{ headerShown: false }} />
         <Stack.Screen name="try" options={{ headerShown: false }} />
+        <Stack.Screen name="inner-rep" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="auth/callback" options={{ headerShown: false }} />
         <Stack.Screen

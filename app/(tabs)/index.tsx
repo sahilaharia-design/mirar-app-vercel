@@ -18,7 +18,8 @@ import { useCheckInStore } from '../../stores/checkin-store';
 import { useCycleStore } from '../../stores/cycle-store';
 import { useDevStore } from '../../stores/dev-store';
 import { ThisOrThat } from '../../components/check-in/ThisOrThat';
-import { DayScoreCard } from '../../components/home/DayScoreCard';
+import { InnerRepCard } from '../../components/home/InnerRepCard';
+import { useInnerRepStore } from '../../stores/inner-rep-store';
 import { EVERYDAY_AREAS } from '../../lib/everyday';
 import { FONTS } from '../../lib/constants';
 import { AppHeader } from '../../components/ui/AppHeader';
@@ -118,6 +119,7 @@ export default function TodayScreen() {
   } = useCycleStore();
   const { isCompleted, completedAt, loadTodayQuestion, question } = useCheckInStore();
   const { simulatedDay, setSimulatedDay, resetSimulatedDay } = useDevStore();
+  const rep = useInnerRepStore();
 
   const [refreshing, setRefreshing] = useState(false);
   const [showCheckin, setShowCheckin] = useState(false);
@@ -152,6 +154,7 @@ export default function TodayScreen() {
   }, [session?.user?.id, simulatedDay, i18n.language]);
 
   useEffect(() => { load(); }, [load]);
+  useEffect(() => { if (session?.user?.id) rep.load(session.user.id); }, [session?.user?.id]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -235,24 +238,15 @@ export default function TodayScreen() {
           <Text style={[styles.greeting, { color: colors.slate }]}>
             {t(getGreetingKey())}
           </Text>
-          {streakLength >= 2 && (
-            <Text style={[styles.streakLine, { color: colors.slateLight }]}>
-              {t('common.days_in_a_row', { count: streakLength })}
-            </Text>
-          )}
         </Animated.View>
 
-        {/* The one card: your week as a number (or today's question) */}
-        <DayScoreCard
-          scores={dailyScores}
-          isCompleted={isCompleted}
-          question={
-            (question && EVERYDAY_AREAS[question.theme_1 as keyof typeof EVERYDAY_AREAS]?.question) ||
-            question?.prompt_text ||
-            t('home.first_question')
-          }
-          tomorrowTease={question?.tomorrow_tease}
-          onStart={() => setShowCheckin(true)}
+        {/* The one card: today's inner rep, Begin, and a quiet continuity cue */}
+        <InnerRepCard
+          exercise={rep.today}
+          doneToday={rep.doneToday}
+          cue={rep.cue}
+          practiceDays={rep.practiceDays}
+          onBegin={() => router.push('/inner-rep')}
         />
 
         {/* Milestone — rare, once, specific; never competes with the card */}
