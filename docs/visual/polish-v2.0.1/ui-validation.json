@@ -1,0 +1,3661 @@
+[
+  {
+    "screen": "today-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "primary-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "My phone"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "Another person"
+        },
+        {
+          "height": 64,
+          "label": "Overthinking"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "primary-320",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "commitment-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You mentioned: Reach out to a friend. How is that going?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Done"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Not yet, later"
+        },
+        {
+          "height": 64,
+          "label": "I've changed my mind"
+        },
+        {
+          "height": 64,
+          "label": "I've decided not to"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "commitment-320",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "no-capacity-today-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "no-capacity-rep-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's most on your mind today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "My partner"
+        },
+        {
+          "height": 64,
+          "label": "Family"
+        },
+        {
+          "height": 64,
+          "label": "Friends"
+        },
+        {
+          "height": 64,
+          "label": "Money"
+        },
+        {
+          "height": 64,
+          "label": "My body or health"
+        },
+        {
+          "height": 64,
+          "label": "Myself"
+        },
+        {
+          "height": 64,
+          "label": "Time"
+        },
+        {
+          "height": 64,
+          "label": "Technology"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 85,
+          "label": "Something significant happened"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "mirror-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "correction-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's off?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 85,
+          "label": "The situation is right, but what it means isn't"
+        },
+        {
+          "height": 85,
+          "label": "It matters, but not as much as that sounds"
+        },
+        {
+          "height": 85,
+          "label": "Something important is missing"
+        },
+        {
+          "height": 85,
+          "label": "That was true, but it has changed"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "I'd rather not say"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "correction-320",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "optional-note-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Something else",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Continue"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "note-320",
+    "result": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "timeframe-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "When would you like to do it?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "date-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Pick a date",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Use this date"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "date-320",
+    "result": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "primary-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "My phone"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "Another person"
+        },
+        {
+          "height": 64,
+          "label": "Overthinking"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "primary-390",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "commitment-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You mentioned: Reach out to a friend. How is that going?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Done"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Not yet, later"
+        },
+        {
+          "height": 64,
+          "label": "I've changed my mind"
+        },
+        {
+          "height": 64,
+          "label": "I've decided not to"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "commitment-390",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "no-capacity-today-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "no-capacity-rep-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's most on your mind today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "My partner"
+        },
+        {
+          "height": 64,
+          "label": "Family"
+        },
+        {
+          "height": 64,
+          "label": "Friends"
+        },
+        {
+          "height": 64,
+          "label": "Money"
+        },
+        {
+          "height": 64,
+          "label": "My body or health"
+        },
+        {
+          "height": 64,
+          "label": "Myself"
+        },
+        {
+          "height": 64,
+          "label": "Time"
+        },
+        {
+          "height": 64,
+          "label": "Technology"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "Something significant happened"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "mirror-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "correction-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's off?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 85,
+          "label": "The situation is right, but what it means isn't"
+        },
+        {
+          "height": 85,
+          "label": "It matters, but not as much as that sounds"
+        },
+        {
+          "height": 64,
+          "label": "Something important is missing"
+        },
+        {
+          "height": 64,
+          "label": "That was true, but it has changed"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "I'd rather not say"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "correction-390",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "optional-note-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Something else",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Continue"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "note-390",
+    "result": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "timeframe-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "When would you like to do it?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "date-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Pick a date",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Use this date"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "date-390",
+    "result": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "primary-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "My phone"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "Another person"
+        },
+        {
+          "height": 64,
+          "label": "Overthinking"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "primary-768",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "commitment-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You mentioned: Reach out to a friend. How is that going?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Done"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Not yet, later"
+        },
+        {
+          "height": 64,
+          "label": "I've changed my mind"
+        },
+        {
+          "height": 64,
+          "label": "I've decided not to"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "commitment-768",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "no-capacity-today-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "no-capacity-rep-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's most on your mind today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "My partner"
+        },
+        {
+          "height": 64,
+          "label": "Family"
+        },
+        {
+          "height": 64,
+          "label": "Friends"
+        },
+        {
+          "height": 64,
+          "label": "Money"
+        },
+        {
+          "height": 64,
+          "label": "My body or health"
+        },
+        {
+          "height": 64,
+          "label": "Myself"
+        },
+        {
+          "height": 64,
+          "label": "Time"
+        },
+        {
+          "height": 64,
+          "label": "Technology"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "Something significant happened"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "mirror-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "correction-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's off?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 64,
+          "label": "The situation is right, but what it means isn't"
+        },
+        {
+          "height": 64,
+          "label": "It matters, but not as much as that sounds"
+        },
+        {
+          "height": 64,
+          "label": "Something important is missing"
+        },
+        {
+          "height": 64,
+          "label": "That was true, but it has changed"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "I'd rather not say"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "correction-768",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "optional-note-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Something else",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Continue"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "note-768",
+    "result": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "timeframe-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "When would you like to do it?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "date-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Pick a date",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Use this date"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "date-768",
+    "result": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "primary-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "My phone"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "Another person"
+        },
+        {
+          "height": 64,
+          "label": "Overthinking"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "primary-1024",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "commitment-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You mentioned: Reach out to a friend. How is that going?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Done"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Not yet, later"
+        },
+        {
+          "height": 64,
+          "label": "I've changed my mind"
+        },
+        {
+          "height": 64,
+          "label": "I've decided not to"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "commitment-1024",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "no-capacity-today-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "no-capacity-rep-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's most on your mind today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "My partner"
+        },
+        {
+          "height": 64,
+          "label": "Family"
+        },
+        {
+          "height": 64,
+          "label": "Friends"
+        },
+        {
+          "height": 64,
+          "label": "Money"
+        },
+        {
+          "height": 64,
+          "label": "My body or health"
+        },
+        {
+          "height": 64,
+          "label": "Myself"
+        },
+        {
+          "height": 64,
+          "label": "Time"
+        },
+        {
+          "height": 64,
+          "label": "Technology"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "Something significant happened"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "mirror-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "correction-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's off?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 64,
+          "label": "The situation is right, but what it means isn't"
+        },
+        {
+          "height": 64,
+          "label": "It matters, but not as much as that sounds"
+        },
+        {
+          "height": 64,
+          "label": "Something important is missing"
+        },
+        {
+          "height": 64,
+          "label": "That was true, but it has changed"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "I'd rather not say"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "correction-1024",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "optional-note-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Something else",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Continue"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "note-1024",
+    "result": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "timeframe-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "When would you like to do it?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "date-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Pick a date",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Use this date"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "date-1024",
+    "result": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "primary-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "My phone"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "Another person"
+        },
+        {
+          "height": 64,
+          "label": "Overthinking"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "primary-1440",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "commitment-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You mentioned: Reach out to a friend. How is that going?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Done"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Not yet, later"
+        },
+        {
+          "height": 64,
+          "label": "I've changed my mind"
+        },
+        {
+          "height": 64,
+          "label": "I've decided not to"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "commitment-1440",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "no-capacity-today-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Begin"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "no-capacity-rep-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's most on your mind today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "My partner"
+        },
+        {
+          "height": 64,
+          "label": "Family"
+        },
+        {
+          "height": 64,
+          "label": "Friends"
+        },
+        {
+          "height": 64,
+          "label": "Money"
+        },
+        {
+          "height": 64,
+          "label": "My body or health"
+        },
+        {
+          "height": 64,
+          "label": "Myself"
+        },
+        {
+          "height": 64,
+          "label": "Time"
+        },
+        {
+          "height": 64,
+          "label": "Technology"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "Something significant happened"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "mirror-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "correction-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's off?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 64,
+          "label": "The situation is right, but what it means isn't"
+        },
+        {
+          "height": 64,
+          "label": "It matters, but not as much as that sounds"
+        },
+        {
+          "height": 64,
+          "label": "Something important is missing"
+        },
+        {
+          "height": 64,
+          "label": "That was true, but it has changed"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "I'd rather not say"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "correction-1440",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "optional-note-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Something else",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Continue"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "note-1440",
+    "result": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "timeframe-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "When would you like to do it?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "date-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Pick a date",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Use this date"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "date-1440",
+    "result": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "correction": "situation_right_meaning_off",
+    "callback": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly",
+      "correction": "situation_right_meaning_off"
+    }
+  },
+  {
+    "correction": "importance_overstated",
+    "callback": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly",
+      "correction": "importance_overstated"
+    }
+  },
+  {
+    "correction": "something_missing",
+    "callback": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly",
+      "correction": "something_missing"
+    }
+  },
+  {
+    "correction": "changed_since",
+    "callback": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly",
+      "correction": "changed_since"
+    }
+  },
+  {
+    "correction": "something_else",
+    "callback": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly",
+      "correction": "something_else"
+    }
+  },
+  {
+    "correction": "prefer_not_to_say",
+    "callback": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly",
+      "correction": "prefer_not_to_say"
+    }
+  },
+  {
+    "correctionSkip": {
+      "answers": [],
+      "completed": false,
+      "safety": false,
+      "feedback": "partly"
+    }
+  },
+  {
+    "screen": "note-safety.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "That sounds really heavy. Mirar can't help with this \u2014 a person can.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "date": {
+      "answers": [
+        {
+          "stepId": "primary",
+          "kind": "option",
+          "optionId": "reply"
+        },
+        {
+          "stepId": "timeframe",
+          "kind": "timeframe",
+          "timeframe": "specific_date",
+          "date": "2026-10-08"
+        }
+      ],
+      "completed": true,
+      "safety": false
+    }
+  },
+  {
+    "keyboardFocus": {
+      "text": "My phone",
+      "outline": "rgb(74, 124, 168)"
+    }
+  },
+  {
+    "screen": "followup.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "How much of the mood is yours?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Mostly mine"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Mostly theirs"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "followup",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "followup-completed.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "TodayDone for today.Worth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Noted.\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "context.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's this mostly connected to?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Work"
+        },
+        {
+          "height": 50,
+          "label": "Partner"
+        },
+        {
+          "height": 50,
+          "label": "Family"
+        },
+        {
+          "height": 50,
+          "label": "Friends"
+        },
+        {
+          "height": 50,
+          "label": "Myself"
+        },
+        {
+          "height": 50,
+          "label": "Body or health"
+        },
+        {
+          "height": 50,
+          "label": "Money"
+        },
+        {
+          "height": 50,
+          "label": "Time"
+        },
+        {
+          "height": 50,
+          "label": "Technology"
+        },
+        {
+          "height": 50,
+          "label": "Something else"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "context",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "context-completed.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "TodayDone for today.Worth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Noted.\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "long-reason-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "What's off?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 111,
+          "label": "The situation is right, but what it means isn't The situation is right, but what it means isn't"
+        },
+        {
+          "height": 85,
+          "label": "It matters, but not as much as that sounds"
+        },
+        {
+          "height": 85,
+          "label": "Something important is missing"
+        },
+        {
+          "height": 85,
+          "label": "That was true, but it has changed"
+        },
+        {
+          "height": 64,
+          "label": "Something else"
+        },
+        {
+          "height": 64,
+          "label": "I'd rather not say"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "long-commitment-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You mentioned: Reach out to a friend. How is that going? You mentioned: Reach out to a friend. How is that going?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "Done"
+        },
+        {
+          "height": 64,
+          "label": "Partly"
+        },
+        {
+          "height": 64,
+          "label": "Not yet, later"
+        },
+        {
+          "height": 64,
+          "label": "I've changed my mind"
+        },
+        {
+          "height": 64,
+          "label": "I've decided not to"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "standard-motion.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "\n",
+      "targets": [],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "timeframe": "today",
+    "callback": {
+      "answers": [
+        {
+          "stepId": "primary",
+          "kind": "option",
+          "optionId": "reply"
+        },
+        {
+          "stepId": "timeframe",
+          "kind": "timeframe",
+          "timeframe": "today"
+        }
+      ],
+      "completed": true,
+      "safety": false
+    }
+  },
+  {
+    "timeframe": "tomorrow",
+    "callback": {
+      "answers": [
+        {
+          "stepId": "primary",
+          "kind": "option",
+          "optionId": "reply"
+        },
+        {
+          "stepId": "timeframe",
+          "kind": "timeframe",
+          "timeframe": "tomorrow"
+        }
+      ],
+      "completed": true,
+      "safety": false
+    }
+  },
+  {
+    "timeframe": "this_week",
+    "callback": {
+      "answers": [
+        {
+          "stepId": "primary",
+          "kind": "option",
+          "optionId": "reply"
+        },
+        {
+          "stepId": "timeframe",
+          "kind": "timeframe",
+          "timeframe": "this_week"
+        }
+      ],
+      "completed": true,
+      "safety": false
+    }
+  },
+  {
+    "timeframe": "none",
+    "callback": {
+      "answers": [
+        {
+          "stepId": "primary",
+          "kind": "option",
+          "optionId": "reply"
+        },
+        {
+          "stepId": "timeframe",
+          "kind": "timeframe",
+          "timeframe": "none"
+        }
+      ],
+      "completed": true,
+      "safety": false
+    }
+  },
+  {
+    "tabOrder": [
+      "The situation is right, but what it means isn't",
+      "It matters, but not as much as that sounds",
+      "Something important is missing",
+      "That was true, but it has changed",
+      "Something else",
+      "I'd rather not say",
+      "Skip"
+    ]
+  },
+  {
+    "noteKeyboard": "textarea reachable after focused heading"
+  },
+  {
+    "screen": "standard-motion.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "standard-motion-return.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "TodayDone for today.Worth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Noted.\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "standard-motion.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "standard-motion-return.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "TodayDone for today.Worth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Noted.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "standard-motion.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "standard-motion-return.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "TodayDone for today.Worth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Noted.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "runtimeErrors": "",
+    "standardMotion": "Begin, dismiss, completion, correction, return all passed"
+  },
+  {
+    "screen": "timeframe-final-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "When would you like to do it?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Tomorrow"
+        },
+        {
+          "height": 50,
+          "label": "This week"
+        },
+        {
+          "height": 50,
+          "label": "Pick a date"
+        },
+        {
+          "height": 50,
+          "label": "No deadline"
+        },
+        {
+          "height": 50,
+          "label": "Skip"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  }
+]

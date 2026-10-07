@@ -30,14 +30,14 @@ export function PageTransition({ children, ...props }: ViewProps) {
  }, [progress, reduced]);
  return <Animated.View {...props} style={[props.style, { opacity: progress, transform: [{ translateY: progress.interpolate({ inputRange: [0,1], outputRange: [M.motion.travel,0] }) }] }]}>{children}</Animated.View>;
 }
-export function Prompt({ children, label = 'prompt', display = false }: { children: string; label?: string; display?: boolean }) {
+export function Prompt({ children, label = 'prompt', display = false, compact = false, reveal = false }: { children: string; label?: string; display?: boolean; compact?: boolean; reveal?: boolean }) {
  const ref = useRef<Text>(null); const { width } = useWindowDimensions();
  useEffect(() => {
-  if (Platform.OS === 'web') { const node = ref.current as unknown as HTMLElement | null; node?.setAttribute('tabindex','-1'); node?.focus({ preventScroll: true }); }
+  if (Platform.OS === 'web') { const node = ref.current as unknown as HTMLElement | null; node?.setAttribute('tabindex','-1'); node?.focus({ preventScroll: !reveal }); if (reveal) node?.scrollIntoView({ block: 'start', behavior: 'instant' }); }
   else { const node = findNodeHandle(ref.current); if (node) AccessibilityInfo.setAccessibilityFocus(node); else AccessibilityInfo.announceForAccessibility(children); }
- }, [children]);
- const size = display ? Math.min(72, Math.max(40,width*.055)) : Math.min(56, Math.max(32, width*.045));
- return <Text ref={ref} nativeID={label} accessibilityRole="header" aria-level={1} style={[styles.prompt, { fontSize: size, lineHeight: size * 1.12 }]}>{children}</Text>;
+ }, [children, reveal]);
+ const size = compact ? Math.min(36, Math.max(28, width*.035)) : display ? Math.min(72, Math.max(40,width*.055)) : Math.min(56, Math.max(32, width*.045));
+ return <Text ref={ref} nativeID={label} accessibilityRole="header" aria-level={compact ? 2 : 1} style={[styles.prompt, compact && { marginBottom: M.space.lg }, { fontSize: size, lineHeight: size * 1.12 }]}>{children}</Text>;
 }
 export function Eyebrow({ children }: { children: React.ReactNode }) { return <Text style={styles.eyebrow}>{children}</Text>; }
 export function Body({ children, ...props }: React.ComponentProps<typeof Text>) { return <Text {...props} style={[styles.body, props.style]}>{children}</Text>; }

@@ -9,8 +9,12 @@ import { Action, Body, Prompt, SelectionSurface } from './Foundation';
 type Answer = (answer: StepAnswer) => void;
 export function ChoiceInteraction({ step, answer }: { step: Extract<Step, { type: 'choice' }>; answer: Answer }) {
  const { width } = useWindowDimensions();
+ const commitment = step.context?.commitment;
+ // Timing is supporting context only; a past date is never styled as a failure.
+ const timing = commitment?.timeframe === 'none' ? TIMEFRAME_LABEL.none : commitment?.dueInDays === 0 ? TIMEFRAME_LABEL.today : commitment?.dueInDays === 1 ? TIMEFRAME_LABEL.tomorrow : commitment?.dueInDays !== undefined && commitment.dueInDays > 1 ? `In ${commitment.dueInDays} days` : undefined;
  return <View>
   <Prompt>{step.prompt}</Prompt>
+  {timing && <Body style={styles.commitmentContext}>{timing}</Body>}
   <View role="group" accessibilityLabel={step.prompt} style={{ flexDirection: step.layout === 'compare' && width >= 768 ? 'row' : 'column', gap: M.space.base }}>
    {step.options.map(option => <SelectionSurface key={option.id} compare={step.layout === 'compare'} onPress={() => answer({ stepId: step.id, kind: 'option', optionId: option.id })}>{option.label}</SelectionSurface>)}
   </View>
@@ -55,9 +59,8 @@ export function TimeframeInteraction({ step, answer }: { step: Extract<Step, { t
  const tomorrow = (() => { const d = new Date(); d.setDate(d.getDate() + 1); return iso(d); })();
  return <View><Prompt>{step.prompt}</Prompt><View style={styles.wrap}>{step.options.map(value => <Action secondary selected={value === 'pick_date' && picking ? true : undefined} key={value} onPress={() => value === 'pick_date' ? setPicking(true) : answer({ stepId: step.id, kind: 'timeframe', timeframe: value })}>{timeframeLabels[value]}</Action>)}</View>
   {picking && <View style={styles.date}>
-   <Body>{timeframeLabels.pick_date}</Body>
-   {Platform.OS === 'web' ? React.createElement('input', { type: 'date', 'aria-label': timeframeLabels.pick_date, min: tomorrow, value: date, onChange: (event: React.ChangeEvent<HTMLInputElement>) => setDate(event.target.value), style: { minHeight: 48, maxWidth: '100%', border: '1px solid '+M.color.border, borderRadius: M.radius.control, padding: 12, background: M.color.paper, color: M.color.ink, font: 'inherit' } }) : <TextInput value={date} onChangeText={setDate} placeholder="YYYY-MM-DD" accessibilityLabel="Pick a date, YYYY-MM-DD" autoCorrect={false} style={styles.input} />}
-   <Body style={styles.hint}>Choose a day after today.</Body>
+   {Platform.OS === 'web' ? React.createElement('input', { type: 'date', 'aria-label': timeframeLabels.pick_date, 'aria-describedby': 'date-hint', min: tomorrow, value: date, onChange: (event: React.ChangeEvent<HTMLInputElement>) => setDate(event.target.value), style: { minHeight: 48, maxWidth: '100%', border: '1px solid '+M.color.border, borderRadius: M.radius.control, padding: 12, background: M.color.paper, color: M.color.ink, fontFamily: M.font.body, fontSize: 16 } }) : <TextInput value={date} onChangeText={setDate} placeholder="YYYY-MM-DD" accessibilityLabel="Pick a date, YYYY-MM-DD" aria-describedby="date-hint" autoCorrect={false} style={styles.nativeDate} />}
+   <Body nativeID="date-hint" style={styles.hint}>Choose a day after today.</Body>
    <Action disabled={!future} onPress={() => { if (future) answer({ stepId: step.id, kind: 'timeframe', timeframe: 'specific_date', date }); }}>Use this date</Action>
   </View>}
   <View style={styles.actions}><Action secondary onPress={() => answer({ stepId: step.id, kind: 'skip' })}>Skip</Action></View>
@@ -66,5 +69,6 @@ export function TimeframeInteraction({ step, answer }: { step: Extract<Step, { t
 const styles = StyleSheet.create({
  wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md }, actions: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md, marginTop: M.space.xl },
  unknown: { marginTop: M.space.lg }, input: { fontFamily: M.font.body, fontSize: 18, lineHeight: 28, minHeight: 132, padding: M.space.base, backgroundColor: M.color.paper, color: M.color.ink, borderBottomWidth: 1, borderColor: M.color.warmInk, borderRadius: M.radius.control, textAlignVertical: 'top' },
+ commitmentContext: { marginTop: -M.space.lg, marginBottom: M.space.lg, fontSize: 14, lineHeight: 22 }, nativeDate: { fontFamily: M.font.body, fontSize: 16, minHeight: 48, padding: M.space.md, backgroundColor: M.color.paper, color: M.color.ink, borderWidth: 1, borderColor: M.color.border, borderRadius: M.radius.control },
  hint: { marginTop: M.space.md, fontSize: 14, lineHeight: 22 }, date: { marginTop: M.space.lg, gap: M.space.md },
 });

@@ -4,7 +4,7 @@ import type { CorrectionReason } from '../../../lib/innerRep/v2/types';
 import { CORRECTION_PROMPT, CORRECTION_REASONS } from '../../../lib/innerRep/v2/contracts';
 import { containsCrisisLanguage } from '../../../lib/innerRep/safety';
 import { MIRAR as M } from '../../../design-system/native';
-import { Action, Body, Eyebrow, Prompt } from './Foundation';
+import { Action, Body, Eyebrow, Prompt, SelectionSurface } from './Foundation';
 
 export type InsightFeedback = 'accurate' | 'partly' | 'no' | 'unsure';
 /** Presentation shape from V2_CONTRACTS §5. Feedback is a callback, never a default selection. */
@@ -31,9 +31,14 @@ export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { 
    {!given && <View style={styles.wrap}>{([['accurate','Accurate'],['partly','Partly'],['no','No'],['unsure','Not sure']] as const).map(([value,label]) => <Action key={value} secondary disabled={pending} onPress={() => void give(value)}>{label}</Action>)}</View>}
    {error && <Body accessibilityRole="alert">Couldn't record that. Please try again.</Body>}
    {given === 'partly' && onCorrection && !corrected && <View style={styles.feedback}>
-    <Action secondary expanded={correcting} onPress={() => setCorrecting(!correcting)}>{CORRECTION_PROMPT}</Action>
-    {correcting && !pendingReason && <View style={styles.wrap}>{CORRECTION_REASONS.map(r => <Action key={r.id} secondary disabled={pending} onPress={() => (r.words ? setPendingReason(r.id) : void send(r.id))}>{r.label}</Action>)}<Action secondary onPress={() => setCorrecting(false)}>Skip</Action></View>}
-    {correcting && pendingReason && <View style={styles.feedback}>
+    {!correcting && <Action secondary expanded={false} onPress={() => setCorrecting(true)}>{CORRECTION_PROMPT}</Action>}
+    {correcting && !pendingReason && <View>
+     <Prompt compact reveal label="correction-prompt">{CORRECTION_PROMPT}</Prompt>
+     <View role="group" accessibilityLabel={CORRECTION_PROMPT}>{CORRECTION_REASONS.map(r => <SelectionSurface key={r.id} disabled={pending} onPress={() => (r.words ? setPendingReason(r.id) : void send(r.id))}>{r.label}</SelectionSurface>)}</View>
+     <View style={styles.skip}><Action secondary onPress={() => setCorrecting(false)}>Skip</Action></View>
+    </View>}
+    {correcting && pendingReason && <View style={styles.note}>
+     <Prompt compact reveal label="correction-note-prompt">{CORRECTION_REASONS.find(r => r.id === pendingReason)!.label}</Prompt>
      <TextInput multiline value={note} onChangeText={setNote} maxLength={80} autoComplete="off" autoCorrect={false} spellCheck={false} importantForAutofill="no" textContentType="none" accessibilityLabel="Tell Mirar more (optional)" aria-describedby="correction-privacy" style={styles.input} />
      <Body nativeID="correction-privacy" style={styles.hint}>Optional. Not saved in this version.</Body>
      <View style={styles.wrap}><Action secondary disabled={pending} onPress={() => void finishNote(true)}>Continue</Action><Action secondary disabled={pending} onPress={() => void finishNote(false)}>Skip</Action></View>
@@ -44,4 +49,4 @@ export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { 
 }
 const styles = StyleSheet.create({ mirror: { gap: M.space.lg, paddingTop: M.space.xl, borderTopWidth: 1, borderTopColor: M.color.warmInk }, feedback: { gap: M.space.base, marginTop: M.space.lg }, wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md }, evidence: { gap: M.space.sm },
  input: { fontFamily: M.font.body, fontSize: 18, lineHeight: 28, minHeight: 96, padding: M.space.base, backgroundColor: M.color.paper, color: M.color.ink, borderBottomWidth: 1, borderColor: M.color.warmInk, borderRadius: M.radius.control, textAlignVertical: 'top' },
- hint: { fontSize: 14, lineHeight: 22 } });
+ hint: { fontSize: 14, lineHeight: 22 }, skip: { marginTop: M.space.lg }, note: { gap: M.space.base } });

@@ -18,8 +18,9 @@ export function fixture(name: string) {
  };
  const template = TEMPLATE_BY_ID[variants[name] ?? decision.templateId!];
  const frame: Frame = name === 'commitment' ? 'commitment_check' : name === 'continuity' ? 'thread_check' : 'base';
- const context = flowContext(s,1,template.id,frame,name === 'continuity' ? 'partner' : undefined,undefined,decision.variant);
- const payload = { instanceId: 1, templateId: template.id, frame, capacityLabel: template.capacity[0].toUpperCase()+template.capacity.slice(1), intensity: template.intensity, estimatedSeconds: template.seconds, dismissible: true as const };
+ if (name === 'commitment') s.commitments.push({id:1,kind:'reach_out',label:'Reach out to a friend',timeframe:'specific_date',createdDay:0,dueDay:2,status:'open',statusSource:'user',asks:0,noneRevisits:0,events:[]});
+ const context = flowContext(s,1,template.id,frame,name === 'continuity' ? 'partner' : undefined,undefined,decision.variant,name === 'commitment' ? 1 : undefined);
+ const payload = { instanceId: 1, templateId: template.id, frame, ...(template.role === 'training' ? {capacityLabel: template.capacity[0].toUpperCase()+template.capacity.slice(1)} : {}), intensity: template.intensity, estimatedSeconds: template.seconds, dismissible: true as const };
  return { context,payload };
 }
 export function engineInsight(): ShownInsight | undefined {

@@ -1,5 +1,7 @@
 # Phase 2 — Daily Inner Rep visual implementation
 
+> Historical Phase 2 record. Claude subsequently supplied the v2 runtime adapter and v2.0.1 contract fixes. See [final polish and current validation](polish-v2.0.1/README.md) for the current integration status.
+
 ## Source and branch
 Repository: `https://github.com/sahilaharia-design/mirar-app-vercel.git`.
 Implementation checkout: `/Users/sahilharia/Documents/Mirar v2 visual`.
