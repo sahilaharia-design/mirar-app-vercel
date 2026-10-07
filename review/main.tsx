@@ -1,4 +1,5 @@
 import React from 'react';
+import {ExperienceReview} from './ExperienceReview';
 import { createRoot } from 'react-dom/client';
 import { DailyInnerRep } from '../components/inner-rep/v2/DailyExperience';
 import { fixture,engineInsight,answersTo } from './fixtures';
@@ -17,7 +18,7 @@ const today = scenario === 'mirror' || scenario === 'done'
 const audit: {answers:StepAnswer[];completed:boolean;feedback?:string;correction?:string;safety:boolean} = {answers:[],completed:false,safety:false};
 // Structured review observability only: no text is accepted by these callbacks.
 Object.defineProperty(window,'reviewAudit',{value:audit});
-createRoot(document.getElementById('root')!).render(<main><DailyInnerRep today={today} greeting="Good afternoon." draft={draft} onProgress={answers=>{audit.answers=answers;}} onDismiss={()=>{}}
+createRoot(document.getElementById('root')!).render(params.has('experience')?<ExperienceReview/>:<main><DailyInnerRep today={today} greeting="Good afternoon." draft={draft} onProgress={answers=>{audit.answers=answers;}} onDismiss={()=>{}}
  onComplete={async answers=>{if(nextStep(base.context,answers)) throw new Error('Incomplete contract');audit.answers=answers;if(scenario==='retry'&&!params.has('retry')) {params.set('retry','1');throw new Error('Review retry');} audit.completed=true;return {insight};}}
  onSafety={answers=>{audit.answers=answers;audit.safety=true;}}
  onFeedback={async (_id,value)=>{audit.feedback=value;}}

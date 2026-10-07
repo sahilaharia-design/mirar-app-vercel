@@ -1,0 +1,10 @@
+import React from 'react';
+import { View, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { Action, Body, Eyebrow, Prompt, PageTransition } from '../inner-rep/v2/Foundation';
+import { ExperiencePage, PrivacyTruth, X } from './ExperienceKit';
+export interface EntryProps {email:string;onEmail:(value:string)=>void;onSubmit:()=>void;onBack:()=>void;onRetry:()=>void;loading:boolean;sent:boolean;error:string|null}
+export function EntryExperience({email,onEmail,onSubmit,onBack,onRetry,loading,sent,error}:EntryProps){return <ExperiencePage action={<Action secondary onPress={onBack}>About Mirar</Action>}><KeyboardAvoidingView behavior={Platform.OS==='ios'?'padding':undefined} style={X.narrow}><PageTransition><View style={X.space}>
+ <Eyebrow>A moment for yourself</Eyebrow><Prompt display>{sent?'Your way in is on its way.':'Step into Mirar.'}</Prompt>
+ {sent?<><Body style={X.lede}>Open the sign-in link sent to {email}. You can continue here when you return.</Body><Body>No password to remember. If the link expires, request another.</Body><Action secondary onPress={onRetry}>Use another email or try again</Action></>:<><Body style={X.lede}>A small daily practice for your inner life. Start with one truthful response.</Body><View style={X.space}><Body nativeID="email-label">Your email</Body><TextInput accessibilityLabel="Your email" aria-describedby="entry-privacy" value={email} onChangeText={onEmail} keyboardType="email-address" autoComplete="email" autoCapitalize="none" autoCorrect={false} returnKeyType="send" editable={!loading} onSubmitEditing={onSubmit} style={X.field}/>{error&&<Body accessibilityRole="alert">{error}</Body>}<Action disabled={loading||!email.trim()} onPress={onSubmit}>{loading?'Sending your link…':'Send my sign-in link'}</Action><Body nativeID="entry-privacy" style={X.small}>Your email is used for sign-in. The link opens your account; no practice response is sent with it.</Body></View></>}
+ <View style={X.rule}><PrivacyTruth/></View>
+ </View></PageTransition></KeyboardAvoidingView></ExperiencePage>;}

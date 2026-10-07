@@ -10,6 +10,8 @@ import { useSettingsStore } from '../../stores/settings-store';
 import { useAssessStore } from '../../stores/assess-store';
 import { generateMirarId } from '../../lib/scoring';
 import { withTimeout } from '../../lib/with-timeout';
+import { ExperiencePage, X } from '../../components/experience/ExperienceKit';
+import { Prompt, Body, Action } from '../../components/inner-rep/v2/Foundation';
 import { MirarLogo } from '../../components/ui/MirarLogo';
 import { FONT_SIZE, SPACING } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
@@ -115,37 +117,9 @@ export default function OnboardingScreen() {
     }
   };
 
-  return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
-      <View style={styles.header}>
-        <MirarLogo size="sm" />
-      </View>
-
-      <View style={styles.center}>
-        {status === 'creating' && (
-          <Animated.View entering={FadeIn.duration(400)} style={styles.content}>
-            <ActivityIndicator color={colors.slateMid} style={styles.spinner} />
-            <Text style={[styles.label, { color: colors.slateMid }]}>{t('account_setup.creating')}</Text>
-          </Animated.View>
-        )}
-
-        {status === 'done' && (
-          <Animated.View entering={FadeIn.duration(500)} style={styles.content}>
-            <Text style={[styles.doneTitle, { color: colors.slate }]}>{t('account_setup.done_title')}</Text>
-            <Text style={[styles.doneSub, { color: colors.slateLight }]}>{t('account_setup.done_sub')}</Text>
-          </Animated.View>
-        )}
-
-        {status === 'error' && (
-          <Animated.View entering={FadeIn.duration(400)} style={styles.content}>
-            <Text style={[styles.errorText, { color: colors.slateMid }]}>
-              {t('account_setup.error_text')}
-            </Text>
-          </Animated.View>
-        )}
-      </View>
-    </SafeAreaView>
-  );
+  return <ExperiencePage><View style={[X.narrow,X.space]}>
+    {status === 'creating' ? <><Prompt display>A little space, just for you.</Prompt><ActivityIndicator accessibilityLabel="Preparing your account"/><Body>Preparing your account. Your first Inner Rep is next.</Body></> : status === 'done' ? <><Prompt display>Welcome to Mirar.</Prompt><Body>One truthful response is enough to begin.</Body></> : <><Prompt display>We couldn’t prepare your account.</Prompt><Body accessibilityRole="alert">Please try again. You don’t need to begin the sign-in process again.</Body><Action onPress={()=>{setStatus('creating');void createAccount();}}>Try again</Action></>}
+  </View></ExperiencePage>;
 }
 
 const styles = StyleSheet.create({

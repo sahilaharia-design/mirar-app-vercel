@@ -1,93 +1,10 @@
-import { Tabs } from 'expo-router';
-import { View, Text, StyleSheet } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { FONT_SIZE } from '../../lib/constants';
-import { useColors } from '../../contexts/theme-context';
-
-function TabIcon({ name, focused, colors }: { name: string; focused: boolean; colors: ReturnType<typeof useColors> }) {
-  const icons: Record<string, string> = {
-    index: '◎',
-    profile: '○',
-  };
-  return (
-    <Text style={[styles.icon, { color: focused ? colors.slate : colors.slateMid }]}>
-      {icons[name] ?? '○'}
-    </Text>
-  );
-}
-
-function TabLabel({ label, focused, colors }: { label: string; focused: boolean; colors: ReturnType<typeof useColors> }) {
-  return (
-    <Text
-      style={[
-        styles.label,
-        { color: focused ? colors.slate : colors.slateMid },
-        focused && styles.labelFocused,
-      ]}
-    >
-      {label}
-    </Text>
-  );
-}
-
-export default function TabsLayout() {
-  const { t } = useTranslation();
-  const colors = useColors();
-
-  const TAB_CONFIG = [
-    { name: 'index', label: t('nav.today') },
-    { name: 'profile', label: t('nav.profile') },
-  ];
-  return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: [styles.tabBar, { backgroundColor: colors.creamLight, borderTopColor: colors.border }],
-        tabBarActiveTintColor: colors.slate,
-        tabBarInactiveTintColor: colors.slateMid,
-        tabBarShowLabel: false,
-      }}
-    >
-      {TAB_CONFIG.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <View style={styles.tabItem}>
-                <TabIcon name={tab.name} focused={focused} colors={colors} />
-                <TabLabel label={tab.label} focused={focused} colors={colors} />
-              </View>
-            ),
-          }}
-        />
-      ))}
-      {/* v1 surfaces: no tab, and the routes redirect to Today (see signals.tsx / reports.tsx). */}
-      <Tabs.Screen name="signals" options={{ href: null }} />
-      <Tabs.Screen name="reports" options={{ href: null }} />
-    </Tabs>
-  );
-}
-
-const styles = StyleSheet.create({
-  tabBar: {
-    borderTopWidth: 1,
-    height: 72,
-    paddingBottom: 12,
-    paddingTop: 8,
-  },
-  tabItem: {
-    alignItems: 'center',
-    gap: 2,
-  },
-  icon: {
-    fontSize: 18,
-  },
-  label: {
-    fontSize: FONT_SIZE.xs,
-    letterSpacing: 0.5,
-  },
-  labelFocused: {
-    fontWeight: '500',
-  },
-});
+import React from 'react';
+import {Tabs} from 'expo-router';
+import {View,Text,Pressable,StyleSheet} from 'react-native';
+import type {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {MIRAR as M} from '../../design-system/native';
+const names:Record<string,string>={index:'Today',mirror:'The Mirror',profile:'Me'};
+function PracticeNavigation({state,navigation}:BottomTabBarProps){const insets=useSafeAreaInsets();return <View role="navigation" accessibilityLabel="Mirar navigation" style={[S.bar,{paddingBottom:Math.max(8,insets.bottom)}]}><View role="tablist" style={S.tabs}>{state.routes.filter(r=>names[r.name]).map(route=>{const selected=state.routes[state.index].key===route.key;return <Pressable key={route.key} accessibilityRole="tab" accessibilityState={{selected}} onPress={()=>{const event=navigation.emit({type:'tabPress',target:route.key,canPreventDefault:true});if(!selected&&!event.defaultPrevented)navigation.navigate(route.name,route.params);}} onLongPress={()=>navigation.emit({type:'tabLongPress',target:route.key})} style={({pressed})=>[S.tab,{borderBottomColor:selected?M.color.warmInk:'transparent',backgroundColor:pressed?M.color.selected:'transparent'}]}><Text style={[S.label,{fontWeight:selected?'600':'400'}]}>{names[route.name]}</Text></Pressable>;})}</View></View>;}
+export default function TabsLayout(){return <Tabs tabBar={props=><PracticeNavigation {...props}/>} screenOptions={{headerShown:false}}><Tabs.Screen name="index" options={{title:'Today'}}/><Tabs.Screen name="mirror" options={{title:'The Mirror'}}/><Tabs.Screen name="profile" options={{title:'Me'}}/><Tabs.Screen name="signals" options={{href:null}}/><Tabs.Screen name="reports" options={{href:null}}/></Tabs>;}
+const S=StyleSheet.create({bar:{backgroundColor:M.color.paper,borderTopWidth:1,borderTopColor:M.color.border,paddingTop:8,paddingHorizontal:16},tabs:{width:'100%',maxWidth:720,alignSelf:'center',flexDirection:'row'},tab:{flex:1,minHeight:48,alignItems:'center',justifyContent:'center',borderBottomWidth:2},label:{fontFamily:M.font.body,fontSize:14,lineHeight:22,color:M.color.ink}});

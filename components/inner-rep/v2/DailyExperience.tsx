@@ -6,6 +6,8 @@ import { Action, Body, BrandAsset, Eyebrow, PageTransition, Prompt, VisualFounda
 import { HonestMirror, type ShownInsight, type InsightFeedback } from './HonestMirror';
 import { V2RepFlow } from './RepFlow';
 import { SAFETY_RESOURCES } from '../../../lib/innerRep/safety';
+import { IntegrationMoment } from '../../experience/IntegrationMoment';
+import { SectionTitle, X } from '../../experience/ExperienceKit';
 import type { CorrectionReason } from '../../../lib/innerRep/v2/types';
 
 export interface Completion { closing?: string; insight?: ShownInsight }
@@ -26,7 +28,7 @@ export function DailyInnerRep(props: DailyExperienceProps) {
 }
 function Experience({ today, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection }: DailyExperienceProps) {
  const [stage, setStage] = useState<'today' | 'rep' | 'completed' | 'safety'>('today');
- const [answers, setAnswers] = useState<StepAnswer[]>(draft); const [completion, setCompletion] = useState<Completion | null>(null);
+ const [answers, setAnswers] = useState<StepAnswer[]>(draft); const [receipt, setReceipt] = useState<{context:FlowContext;answers:StepAnswer[]}|null>(null); const [guide,setGuide]=useState(false); const [completion, setCompletion] = useState<Completion | null>(null);
  const { width } = useWindowDimensions(); const complete = completion ?? (today.kind === 'done' ? today : null);
  const dismiss = () => { setStage('today'); onDismiss?.(); };
  const progress = (value: StepAnswer[]) => { setAnswers(value); onProgress?.(value); };
@@ -35,20 +37,23 @@ function Experience({ today, greeting, continuityCue, practiceDays, draft = [], 
   <View style={styles.header}><BrandAsset />{stage === 'rep' && <Action secondary onPress={dismiss}>{NAV_LABEL.backToToday}</Action>}</View>
   <View style={[styles.composition, { maxWidth: width >= 1024 ? 920 : 720 }]}>
    {stage === 'rep' && today.kind === 'rep' ? <>
-    <View style={styles.context}><Eyebrow>Today</Eyebrow>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}</View>
-    <V2RepFlow key={today.payload.instanceId} context={today.context} initialAnswers={answers} onProgress={progress} onSafety={value => { setAnswers([]); onSafety(value); setStage('safety'); }} onComplete={async (value,duration) => { const result = await onComplete(value,duration); setCompletion(result); setAnswers([]); setStage('completed'); }} />
+    <View style={styles.context}><Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}</View>
+    <V2RepFlow key={today.payload.instanceId} context={today.context} initialAnswers={answers} onProgress={progress} onSafety={value => { setAnswers([]); onSafety(value); setStage('safety'); }} onComplete={async (value,duration) => { const result = await onComplete(value,duration); setReceipt({context:today.context,answers:value}); setCompletion(result); setAnswers([]); setStage('completed'); }} />
    </> : stage === 'safety' ? <PageTransition>
     <Prompt>{SAFETY_RESOURCES.headline}</Prompt><Body>{SAFETY_RESOURCES.body}</Body>
     <View style={styles.safety}>{SAFETY_RESOURCES.lines.map(line => <View key={line.label}><Body>{line.label}</Body><Body>{line.value}</Body></View>)}</View>
     <Body>{SAFETY_RESOURCES.note}</Body><View style={styles.bottom}><Action onPress={dismiss}>{NAV_LABEL.backToToday}</Action></View>
    </PageTransition> : complete ? <PageTransition>
-    <Eyebrow>Today</Eyebrow><View style={styles.title}><Prompt>{stage === 'completed' && complete.closing ? complete.closing : 'Done for today.'}</Prompt></View>
-    {insight && <HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? reason => onCorrection(insight.id,reason) : undefined} onSafety={() => { setAnswers([]); onSafety([]); setStage('safety'); }} />}
+    <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt>{stage === 'completed' && complete.closing ? complete.closing : 'Done for today.'}</Prompt></View>
+    <IntegrationMoment context={receipt?.context} answers={receipt?.answers}/>
+    {insight && <View style={styles.mirrorEntry}><HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? reason => onCorrection(insight.id,reason) : undefined} onSafety={() => { setAnswers([]); onSafety([]); setStage('safety'); }} /></View>}
     {stage === 'completed' && <View style={styles.bottom}><Action secondary onPress={() => setStage('today')}>{NAV_LABEL.backToToday}</Action></View>}
    </PageTransition> : today.kind === 'rep' ? <PageTransition>
-    <Eyebrow>Today</Eyebrow><View style={styles.title}><Prompt display>{greeting}</Prompt><Body style={styles.invitation}>Your inner rep for today.</Body></View>
+    <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt display>{greeting}</Prompt><Body style={styles.invitation}>{answers.length?'Pick up where you left off.':practiceDays?'A little practice. A little more room.':'Your first Inner Rep. A moment to notice.'}</Body></View>
     <View style={styles.details}>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}<Body>{today.payload.estimatedSeconds} seconds</Body></View>
     <Action onPress={() => setStage('rep')}>{answers.length ? 'Resume' : 'Begin'}</Action>
+    <View style={styles.entryNote}><Body>{answers.length?'Your structured choices are kept so you can resume. Optional words are not saved.':'There is no answer to perform. You can leave any time.'}</Body></View>
+    {!practiceDays && <View style={styles.entryNote}><Action secondary expanded={guide} onPress={()=>setGuide(!guide)}>What is an Inner Rep?</Action>{guide&&<View style={X.space}><SectionTitle>A small exercise, not a test.</SectionTitle><Body>Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.</Body><Body style={X.small}>Optional words are not saved. This beta keeps practice on this device and clears it when you sign out.</Body></View>}</View>}
     {continuityCue && <Body style={styles.bottom}>{continuityCue}</Body>}
     {!!practiceDays && <Body style={styles.practice}>{practiceDays} {practiceDays === 1 ? 'day' : 'days'} of practice this month</Body>}
    </PageTransition> : null}
@@ -56,6 +61,7 @@ function Experience({ today, greeting, continuityCue, practiceDays, draft = [], 
  </ScrollView>;
 }
 const styles = StyleSheet.create({
+ mirrorEntry: { marginTop: M.space.large }, entryNote: { marginTop: M.space.lg, gap: M.space.base },
  page: { flex: 1, backgroundColor: M.color.surface }, content: { flexGrow: 1, paddingTop: M.space.lg, paddingBottom: M.space.large },
  header: { width: '100%', maxWidth: 1120, alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 48 },
  composition: { width: '100%', alignSelf: 'center', paddingTop: M.space.hero, paddingBottom: M.space.lg },

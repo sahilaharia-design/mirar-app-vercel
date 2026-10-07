@@ -1,0 +1,4036 @@
+[
+  {
+    "screen": "discover-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try a sample"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "discover-320",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "entry-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Step into Mirar.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Send my sign-in link"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "entry-320",
+    "result": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "intro-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You don\u2019t need a better answer. Just a truer one.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 64,
+          "label": "I don\u2019t know"
+        },
+        {
+          "height": 64,
+          "label": "I\u2019d rather leave this for now"
+        },
+        {
+          "height": 50,
+          "label": "Meet today\u2019s Inner Rep"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "intro-320",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Begin"
+        },
+        {
+          "height": 50,
+          "label": "What is an Inner Rep?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "today-320",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "mirror-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clearer view, without a label.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Go to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "mirror-320",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "me-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "The practice is yours.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "How to practise with Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Privacy in this beta"
+        },
+        {
+          "height": 50,
+          "label": "Contact Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Sign out"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "me-320",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "privacy-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clear account of what stays.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "privacy-320",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "sample-320",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-integrated-320.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Local review \u00b7 simulated sign-in \u00b7 memory-only practiceDiscoverTodayMirrorMeEnter MirarBetaEveryday emotional fitnessYour inner life needs practice, too.Small daily Inner Reps for noticing clearly, choosing intentionally, and living with what you feel.Begin your practiceNo streak to protect. No right answer to perform.Try an Inner Rep \u00b7 sampleNotice the next time your attention moves.You don\u2019t have to change it. Recognising the movement is the practice.Try againA sample only. Answers here are not saved or used to understand you.Notice \u2192 Exercise \u2192 Integrate \u2192 LiveBecome more capable of meeting your life.Emotional fitness isn\u2019t always feeling good. It\u2019s practising what you do with whatever you feel.DirectionEnergyFocusRelationshipsGrowthActionA capacity you can practiseFocusPractise returning your attention.These are areas of practice, not six scores.The Honest MirrorA reflection you can disagree with.Mirar works with your responses. When there is enough evidence, it offers a reflection. You decide whether it fits.Example \u00b7 fictional responsesWorth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Does this feel accurate?AccuratePartlyNoNot sureNo claims about who you are. Uncertainty stays visible. \u201cNo\u201d is as welcome as \u201cAccurate\u201d.A practice, not a programmeOne moment today. A clearer view over time.TodayOne real response. Something to notice in the rest of your day.As you returnPractice can deepen. A commitment you chose may be remembered.When evidence supports itAn Honest Mirror can reflect what your own responses suggest.The beta currently offers daily reps and individual reflections. A fuller view of your practice is still being built.Your mirror is yoursTruth over performance.\u201cI don\u2019t know\u201d counts. Leaving is allowed. Disagreement helps correct the mirror.Mirar is an everyday practice, not therapy or a diagnosis. You can use it without writing anything.In this beta, practice stays on your device and is cleared when you sign out. Optional words are not saved. We use your email to send your sign-in link.Read privacy informationWhy Mirar existsAlignment is a daily recalibration.Built by Dr. Sahil Haria, PhD, from a question: what if we maintained our inner life as intentionally as everything else?The practice is yours. Mirar helps you make room for it.BeginTake a moment. Then take it into your life.Enter MirarA passwordless sign-in. One small Inner Rep.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try again"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "discover-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try a sample"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "discover-390",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "entry-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Step into Mirar.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Send my sign-in link"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "entry-390",
+    "result": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "intro-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You don\u2019t need a better answer. Just a truer one.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 64,
+          "label": "I don\u2019t know"
+        },
+        {
+          "height": 64,
+          "label": "I\u2019d rather leave this for now"
+        },
+        {
+          "height": 50,
+          "label": "Meet today\u2019s Inner Rep"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "intro-390",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Begin"
+        },
+        {
+          "height": 50,
+          "label": "What is an Inner Rep?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "today-390",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "mirror-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clearer view, without a label.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Go to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "mirror-390",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "me-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "The practice is yours.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "How to practise with Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Privacy in this beta"
+        },
+        {
+          "height": 50,
+          "label": "Contact Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Sign out"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "me-390",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "privacy-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clear account of what stays.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "privacy-390",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "sample-390",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-integrated-390.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Local review \u00b7 simulated sign-in \u00b7 memory-only practiceDiscoverTodayMirrorMeEnter MirarBetaEveryday emotional fitnessYour inner life needs practice, too.Small daily Inner Reps for noticing clearly, choosing intentionally, and living with what you feel.Begin your practiceNo streak to protect. No right answer to perform.Try an Inner Rep \u00b7 sampleNotice the next time your attention moves.You don\u2019t have to change it. Recognising the movement is the practice.Try againA sample only. Answers here are not saved or used to understand you.Notice \u2192 Exercise \u2192 Integrate \u2192 LiveBecome more capable of meeting your life.Emotional fitness isn\u2019t always feeling good. It\u2019s practising what you do with whatever you feel.DirectionEnergyFocusRelationshipsGrowthActionA capacity you can practiseFocusPractise returning your attention.These are areas of practice, not six scores.The Honest MirrorA reflection you can disagree with.Mirar works with your responses. When there is enough evidence, it offers a reflection. You decide whether it fits.Example \u00b7 fictional responsesWorth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Does this feel accurate?AccuratePartlyNoNot sureNo claims about who you are. Uncertainty stays visible. \u201cNo\u201d is as welcome as \u201cAccurate\u201d.A practice, not a programmeOne moment today. A clearer view over time.TodayOne real response. Something to notice in the rest of your day.As you returnPractice can deepen. A commitment you chose may be remembered.When evidence supports itAn Honest Mirror can reflect what your own responses suggest.The beta currently offers daily reps and individual reflections. A fuller view of your practice is still being built.Your mirror is yoursTruth over performance.\u201cI don\u2019t know\u201d counts. Leaving is allowed. Disagreement helps correct the mirror.Mirar is an everyday practice, not therapy or a diagnosis. You can use it without writing anything.In this beta, practice stays on your device and is cleared when you sign out. Optional words are not saved. We use your email to send your sign-in link.Read privacy informationWhy Mirar existsAlignment is a daily recalibration.Built by Dr. Sahil Haria, PhD, from a question: what if we maintained our inner life as intentionally as everything else?The practice is yours. Mirar helps you make room for it.BeginTake a moment. Then take it into your life.Enter MirarA passwordless sign-in. One small Inner Rep.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try again"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "discover-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try a sample"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "discover-768",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "entry-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Step into Mirar.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Send my sign-in link"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "entry-768",
+    "result": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "intro-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You don\u2019t need a better answer. Just a truer one.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 64,
+          "label": "I don\u2019t know"
+        },
+        {
+          "height": 64,
+          "label": "I\u2019d rather leave this for now"
+        },
+        {
+          "height": 50,
+          "label": "Meet today\u2019s Inner Rep"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "intro-768",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Begin"
+        },
+        {
+          "height": 50,
+          "label": "What is an Inner Rep?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "today-768",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "mirror-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clearer view, without a label.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Go to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "mirror-768",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "me-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "The practice is yours.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "How to practise with Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Privacy in this beta"
+        },
+        {
+          "height": 50,
+          "label": "Contact Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Sign out"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "me-768",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "privacy-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clear account of what stays.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "privacy-768",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "sample-768",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-integrated-768.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Local review \u00b7 simulated sign-in \u00b7 memory-only practiceDiscoverTodayMirrorMeEnter MirarBetaEveryday emotional fitnessYour inner life needs practice, too.Small daily Inner Reps for noticing clearly, choosing intentionally, and living with what you feel.Begin your practiceNo streak to protect. No right answer to perform.Try an Inner Rep \u00b7 sampleNotice the next time your attention moves.You don\u2019t have to change it. Recognising the movement is the practice.Try againA sample only. Answers here are not saved or used to understand you.Notice \u2192 Exercise \u2192 Integrate \u2192 LiveBecome more capable of meeting your life.Emotional fitness isn\u2019t always feeling good. It\u2019s practising what you do with whatever you feel.DirectionEnergyFocusRelationshipsGrowthActionA capacity you can practiseFocusPractise returning your attention.These are areas of practice, not six scores.The Honest MirrorA reflection you can disagree with.Mirar works with your responses. When there is enough evidence, it offers a reflection. You decide whether it fits.Example \u00b7 fictional responsesWorth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Does this feel accurate?AccuratePartlyNoNot sureNo claims about who you are. Uncertainty stays visible. \u201cNo\u201d is as welcome as \u201cAccurate\u201d.A practice, not a programmeOne moment today. A clearer view over time.TodayOne real response. Something to notice in the rest of your day.As you returnPractice can deepen. A commitment you chose may be remembered.When evidence supports itAn Honest Mirror can reflect what your own responses suggest.The beta currently offers daily reps and individual reflections. A fuller view of your practice is still being built.Your mirror is yoursTruth over performance.\u201cI don\u2019t know\u201d counts. Leaving is allowed. Disagreement helps correct the mirror.Mirar is an everyday practice, not therapy or a diagnosis. You can use it without writing anything.In this beta, practice stays on your device and is cleared when you sign out. Optional words are not saved. We use your email to send your sign-in link.Read privacy informationWhy Mirar existsAlignment is a daily recalibration.Built by Dr. Sahil Haria, PhD, from a question: what if we maintained our inner life as intentionally as everything else?The practice is yours. Mirar helps you make room for it.BeginTake a moment. Then take it into your life.Enter MirarA passwordless sign-in. One small Inner Rep.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try again"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "discover-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try a sample"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "discover-1024",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "entry-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Step into Mirar.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Send my sign-in link"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "entry-1024",
+    "result": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "intro-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You don\u2019t need a better answer. Just a truer one.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 64,
+          "label": "I don\u2019t know"
+        },
+        {
+          "height": 64,
+          "label": "I\u2019d rather leave this for now"
+        },
+        {
+          "height": 50,
+          "label": "Meet today\u2019s Inner Rep"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "intro-1024",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Begin"
+        },
+        {
+          "height": 50,
+          "label": "What is an Inner Rep?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "today-1024",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "mirror-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clearer view, without a label.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Go to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "mirror-1024",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "me-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "The practice is yours.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "How to practise with Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Privacy in this beta"
+        },
+        {
+          "height": 50,
+          "label": "Contact Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Sign out"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "me-1024",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "privacy-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clear account of what stays.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "privacy-1024",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "sample-1024",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-integrated-1024.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Local review \u00b7 simulated sign-in \u00b7 memory-only practiceDiscoverTodayMirrorMeEnter MirarBetaEveryday emotional fitnessYour inner life needs practice, too.Small daily Inner Reps for noticing clearly, choosing intentionally, and living with what you feel.Begin your practiceNo streak to protect. No right answer to perform.Try an Inner Rep \u00b7 sampleNotice the next time your attention moves.You don\u2019t have to change it. Recognising the movement is the practice.Try againA sample only. Answers here are not saved or used to understand you.Notice \u2192 Exercise \u2192 Integrate \u2192 LiveBecome more capable of meeting your life.Emotional fitness isn\u2019t always feeling good. It\u2019s practising what you do with whatever you feel.DirectionEnergyFocusRelationshipsGrowthActionA capacity you can practiseFocusPractise returning your attention.These are areas of practice, not six scores.The Honest MirrorA reflection you can disagree with.Mirar works with your responses. When there is enough evidence, it offers a reflection. You decide whether it fits.Example \u00b7 fictional responsesWorth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Does this feel accurate?AccuratePartlyNoNot sureNo claims about who you are. Uncertainty stays visible. \u201cNo\u201d is as welcome as \u201cAccurate\u201d.A practice, not a programmeOne moment today. A clearer view over time.TodayOne real response. Something to notice in the rest of your day.As you returnPractice can deepen. A commitment you chose may be remembered.When evidence supports itAn Honest Mirror can reflect what your own responses suggest.The beta currently offers daily reps and individual reflections. A fuller view of your practice is still being built.Your mirror is yoursTruth over performance.\u201cI don\u2019t know\u201d counts. Leaving is allowed. Disagreement helps correct the mirror.Mirar is an everyday practice, not therapy or a diagnosis. You can use it without writing anything.In this beta, practice stays on your device and is cleared when you sign out. Optional words are not saved. We use your email to send your sign-in link.Read privacy informationWhy Mirar existsAlignment is a daily recalibration.Built by Dr. Sahil Haria, PhD, from a question: what if we maintained our inner life as intentionally as everything else?The practice is yours. Mirar helps you make room for it.BeginTake a moment. Then take it into your life.Enter MirarA passwordless sign-in. One small Inner Rep.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try again"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "discover-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Work has come up 5 times (5 raised by you).",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try a sample"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "discover-1440",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "entry-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Step into Mirar.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Send my sign-in link"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "entry-1440",
+    "result": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "intro-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "You don\u2019t need a better answer. Just a truer one.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 64,
+          "label": "I don\u2019t know"
+        },
+        {
+          "height": 64,
+          "label": "I\u2019d rather leave this for now"
+        },
+        {
+          "height": 50,
+          "label": "Meet today\u2019s Inner Rep"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "intro-1440",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "today-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Good afternoon.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Begin"
+        },
+        {
+          "height": 50,
+          "label": "What is an Inner Rep?"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "today-1440",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "mirror-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clearer view, without a label.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Go to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "mirror-1440",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "me-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "The practice is yours.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "How to practise with Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Privacy in this beta"
+        },
+        {
+          "height": 50,
+          "label": "Contact Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Sign out"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "me-1440",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "privacy-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clear account of what stays.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "privacy-1440",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Which is closer to today?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 152,
+          "label": "I could settle into one thing."
+        },
+        {
+          "height": 152,
+          "label": "I kept switching between things."
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "sample-1440",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "sample-integrated-1440.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Local review \u00b7 simulated sign-in \u00b7 memory-only practiceDiscoverTodayMirrorMeEnter MirarBetaEveryday emotional fitnessYour inner life needs practice, too.Small daily Inner Reps for noticing clearly, choosing intentionally, and living with what you feel.Begin your practiceNo streak to protect. No right answer to perform.Try an Inner Rep \u00b7 sampleNotice the next time your attention moves.You don\u2019t have to change it. Recognising the movement is the practice.Try againA sample only. Answers here are not saved or used to understand you.Notice \u2192 Exercise \u2192 Integrate \u2192 LiveBecome more capable of meeting your life.Emotional fitness isn\u2019t always feeling good. It\u2019s practising what you do with whatever you feel.DirectionEnergyFocusRelationshipsGrowthActionA capacity you can practiseFocusPractise returning your attention.These are areas of practice, not six scores.The Honest MirrorA reflection you can disagree with.Mirar works with your responses. When there is enough evidence, it offers a reflection. You decide whether it fits.Example \u00b7 fictional responsesWorth noticingWork has come up 5 times (5 raised by you).Why am I seeing this?Does this feel accurate?AccuratePartlyNoNot sureNo claims about who you are. Uncertainty stays visible. \u201cNo\u201d is as welcome as \u201cAccurate\u201d.A practice, not a programmeOne moment today. A clearer view over time.TodayOne real response. Something to notice in the rest of your day.As you returnPractice can deepen. A commitment you chose may be remembered.When evidence supports itAn Honest Mirror can reflect what your own responses suggest.The beta currently offers daily reps and individual reflections. A fuller view of your practice is still being built.Your mirror is yoursTruth over performance.\u201cI don\u2019t know\u201d counts. Leaving is allowed. Disagreement helps correct the mirror.Mirar is an everyday practice, not therapy or a diagnosis. You can use it without writing anything.In this beta, practice stays on your device and is cleared when you sign out. Optional words are not saved. We use your email to send your sign-in link.Read privacy informationWhy Mirar existsAlignment is a daily recalibration.Built by Dr. Sahil Haria, PhD, from a question: what if we maintained our inner life as intentionally as everything else?The practice is yours. Mirar helps you make room for it.BeginTake a moment. Then take it into your life.Enter MirarA passwordless sign-in. One small Inner Rep.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Begin your practice"
+        },
+        {
+          "height": 50,
+          "label": "Try again"
+        },
+        {
+          "height": 64,
+          "label": "Direction"
+        },
+        {
+          "height": 64,
+          "label": "Energy"
+        },
+        {
+          "height": 64,
+          "label": "Focus"
+        },
+        {
+          "height": 64,
+          "label": "Relationships"
+        },
+        {
+          "height": 64,
+          "label": "Growth"
+        },
+        {
+          "height": 64,
+          "label": "Action"
+        },
+        {
+          "height": 50,
+          "label": "Why am I seeing this?"
+        },
+        {
+          "height": 50,
+          "label": "Accurate"
+        },
+        {
+          "height": 50,
+          "label": "Partly"
+        },
+        {
+          "height": 50,
+          "label": "No"
+        },
+        {
+          "height": 50,
+          "label": "Not sure"
+        },
+        {
+          "height": 50,
+          "label": "Read privacy information"
+        },
+        {
+          "height": 50,
+          "label": "Enter Mirar"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "entry-sent.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Your way in is on its way.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Use another email or try again"
+        },
+        {
+          "height": 50,
+          "label": "Local review: continue to introduction"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "intro-response.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "I don\u2019t know",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 64,
+          "label": "I don\u2019t know"
+        },
+        {
+          "height": 64,
+          "label": "I\u2019d rather leave this for now"
+        },
+        {
+          "height": 50,
+          "label": "Meet today\u2019s Inner Rep"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "first-rep.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back to Today"
+        },
+        {
+          "height": 64,
+          "label": "My phone"
+        },
+        {
+          "height": 64,
+          "label": "Work"
+        },
+        {
+          "height": 64,
+          "label": "Another person"
+        },
+        {
+          "height": 64,
+          "label": "Overthinking"
+        },
+        {
+          "height": 64,
+          "label": "Nothing in particular"
+        },
+        {
+          "height": 64,
+          "label": "I don't know"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "first-integration.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Done for today.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "first-integration",
+    "result": {
+      "inapplicable": 58,
+      "incomplete": 0,
+      "passes": 31,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "done-today.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Local review \u00b7 simulated sign-in \u00b7 memory-only practiceDiscoverTodayMirrorMeWednesday 7 OctoberDone for today.Integrate \u2192 LiveLet the noticing meet your day.You choseThink about the last two hours. Did anything take more attention than it deserved?WorkNotice once, later today, whether this comes up again. You can leave it there; noticing does not oblige you to change it.globalThis.global = globalThis;\n",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "mirror-practice.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clearer view, without a label.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Go to Today"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "a11y": "mirror-practice",
+    "result": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "violations": []
+  },
+  {
+    "screen": "privacy-return.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "A clear account of what stays.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "Back"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "screen": "entry-standard-motion.png",
+    "geometry": {
+      "overflow": false,
+      "focus": "Step into Mirar.",
+      "targets": [
+        {
+          "height": 50,
+          "label": "Discover"
+        },
+        {
+          "height": 50,
+          "label": "Today"
+        },
+        {
+          "height": 50,
+          "label": "Mirror"
+        },
+        {
+          "height": 50,
+          "label": "Me"
+        },
+        {
+          "height": 50,
+          "label": "About Mirar"
+        },
+        {
+          "height": 50,
+          "label": "Send my sign-in link"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Serif",
+          "status": "unloaded"
+        },
+        {
+          "family": "DM Sans",
+          "status": "unloaded"
+        },
+        {
+          "family": "\"Instrument Serif\"",
+          "status": "loaded"
+        },
+        {
+          "family": "\"DM Sans\"",
+          "status": "loaded"
+        }
+      ]
+    }
+  },
+  {
+    "runtimeErrors": ""
+  }
+]

@@ -1,3 +1,5 @@
 /* Approved focus primitive for the web implementation, independent of review CSS. */
 :focus-visible { outline: 2px solid #4A7CA8 !important; outline-offset: 3px; }
 [role=heading]:focus { outline: none !important; }
+
+[role="tab"]:focus-visible { outline: 2px solid #4A7CA8; outline-offset: 3px; }

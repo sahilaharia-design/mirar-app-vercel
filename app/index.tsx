@@ -1,23 +1,5 @@
-import { Redirect } from 'expo-router';
-import { useAuthStore } from '../stores/auth-store';
-import { View, ActivityIndicator } from 'react-native';
-import { useColors } from '../contexts/theme-context';
-
-export default function Index() {
-  const { session, isInitialized } = useAuthStore();
-  const colors = useColors();
-
-  if (!isInitialized) {
-    return (
-      <View style={{ flex: 1, backgroundColor: colors.cream, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator color={colors.slate} />
-      </View>
-    );
-  }
-
-  if (session) {
-    return <Redirect href="/(tabs)/" />;
-  }
-
-  return <Redirect href="/(auth)/login" />;
-}
+import React from 'react';
+import {Redirect,router} from 'expo-router';
+import {useAuthStore} from '../stores/auth-store';
+import {DiscoverExperience} from '../components/experience/DiscoverExperience';
+export default function Index(){const {session,isInitialized}=useAuthStore();if(isInitialized&&session)return <Redirect href="/(tabs)/"/>;return <DiscoverExperience onEnter={()=>router.push('/(auth)/login')} onPrivacy={()=>router.push('/privacy')}/>;}

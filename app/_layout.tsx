@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Linking from 'expo-linking';
 import { useAuthStore } from '../stores/auth-store';
 import { useSettingsStore } from '../stores/settings-store';
-import { ThemeProvider, useTheme } from '../contexts/theme-context';
+import { ThemeProvider } from '../contexts/theme-context';
 import { supabase } from '../lib/supabase';
 import { withTimeout } from '../lib/with-timeout';
 
@@ -28,7 +28,6 @@ function AppShell() {
   const isInitialized = useAuthStore((s) => s.isInitialized);
   const isUserLoading = useAuthStore((s) => s.isUserLoading);
   const loadLanguage = useSettingsStore((s) => s.loadLanguage);
-  const { isDark } = useTheme();
   const segments = useSegments();
   const router = useRouter();
 
@@ -72,12 +71,15 @@ function AppShell() {
   useEffect(() => {
     if (!isInitialized || isUserLoading) return;
 
+    const routeSegments = segments as string[];
+    const inPublicRoot = routeSegments.length === 0 || routeSegments[0] === 'index' || routeSegments[0] === 'privacy';
+    const inAuthCallback = routeSegments[0] === 'auth' && routeSegments[1] === 'callback';
     const inAuthGroup = segments[0] === '(auth)';
     const inAssessGroup = segments[0] === 'assess' || segments[0] === 'try';
     const inOnboardingGroup = segments[0] === '(onboarding)';
 
     if (!session) {
-      if (!inAuthGroup && !inAssessGroup && !inOnboardingGroup) {
+      if (!inPublicRoot && !inAuthCallback && !inAuthGroup && !inAssessGroup) {
         router.replace('/(auth)/login');
       }
       return;
@@ -100,7 +102,7 @@ function AppShell() {
 
   return (
     <>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />

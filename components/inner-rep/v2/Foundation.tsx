@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useId } from 'react';
 import { AccessibilityInfo, Animated, Easing, Image, Platform, Pressable, StyleSheet, Text, View, useWindowDimensions, findNodeHandle, type ViewProps } from 'react-native';
 import FontGate from './FontGate';
 import Wordmark from '../../../assets/brand/mirar-wordmark.png';
@@ -30,14 +30,14 @@ export function PageTransition({ children, ...props }: ViewProps) {
  }, [progress, reduced]);
  return <Animated.View {...props} style={[props.style, { opacity: progress, transform: [{ translateY: progress.interpolate({ inputRange: [0,1], outputRange: [M.motion.travel,0] }) }] }]}>{children}</Animated.View>;
 }
-export function Prompt({ children, label = 'prompt', display = false, compact = false, reveal = false }: { children: string; label?: string; display?: boolean; compact?: boolean; reveal?: boolean }) {
- const ref = useRef<Text>(null); const { width } = useWindowDimensions();
+export function Prompt({ children, label, display = false, compact = false, reveal = false }: { children: string; label?: string; display?: boolean; compact?: boolean; reveal?: boolean }) {
+ const generatedId = useId(); const ref = useRef<Text>(null); const { width } = useWindowDimensions();
  useEffect(() => {
   if (Platform.OS === 'web') { const node = ref.current as unknown as HTMLElement | null; node?.setAttribute('tabindex','-1'); node?.focus({ preventScroll: !reveal }); if (reveal) node?.scrollIntoView({ block: 'start', behavior: 'instant' }); }
   else { const node = findNodeHandle(ref.current); if (node) AccessibilityInfo.setAccessibilityFocus(node); else AccessibilityInfo.announceForAccessibility(children); }
  }, [children, reveal]);
  const size = compact ? Math.min(36, Math.max(28, width*.035)) : display ? Math.min(72, Math.max(40,width*.055)) : Math.min(56, Math.max(32, width*.045));
- return <Text ref={ref} nativeID={label} accessibilityRole="header" aria-level={compact ? 2 : 1} style={[styles.prompt, compact && { marginBottom: M.space.lg }, { fontSize: size, lineHeight: size * 1.12 }]}>{children}</Text>;
+ return <Text ref={ref} nativeID={label ?? generatedId} accessibilityRole="header" aria-level={compact ? 2 : 1} style={[styles.prompt, compact && { marginBottom: M.space.lg }, { fontSize: size, lineHeight: size * 1.12 }]}>{children}</Text>;
 }
 export function Eyebrow({ children }: { children: React.ReactNode }) { return <Text style={styles.eyebrow}>{children}</Text>; }
 export function Body({ children, ...props }: React.ComponentProps<typeof Text>) { return <Text {...props} style={[styles.body, props.style]}>{children}</Text>; }
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
  prompt: { fontFamily: M.font.display, color: M.color.ink, letterSpacing: -.5, marginBottom: M.space.large },
  eyebrow: { fontFamily: M.font.body, color: M.color.muted, fontSize: 12, lineHeight: 18, letterSpacing: 1, textTransform: 'uppercase' },
  body: { fontFamily: M.font.body, color: M.color.muted, fontSize: 16, lineHeight: 26 },
- action: { minHeight: 48, minWidth: 44, paddingHorizontal: M.space.lg, paddingVertical: M.space.md, borderRadius: M.radius.control, alignItems: 'center', justifyContent: 'center', borderWidth: 1, alignSelf: 'flex-start' },
+ action: { maxWidth: '100%', minHeight: 48, minWidth: 44, paddingHorizontal: M.space.lg, paddingVertical: M.space.md, borderRadius: M.radius.control, alignItems: 'center', justifyContent: 'center', borderWidth: 1, alignSelf: 'flex-start' },
  primary: { backgroundColor: M.color.ink, borderColor: M.color.ink }, secondary: { backgroundColor: 'transparent', borderColor: M.color.border },
  actionText: { fontFamily: M.font.body, fontSize: 16, lineHeight: 24, fontWeight: '500' },
  selection: { minHeight: 64, paddingVertical: M.space.base, paddingHorizontal: M.space.base, borderBottomWidth: 1, borderBottomColor: M.color.border, justifyContent: 'center' },
