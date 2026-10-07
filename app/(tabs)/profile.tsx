@@ -15,7 +15,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { useTheme, useColors } from '../../contexts/theme-context';
-import { AppHeader } from '../../components/ui/AppHeader';import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
+import { AppHeader } from '../../components/ui/AppHeader';
+import { InertWhenBlurred } from '../../components/ui/InertWhenBlurred';
+import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
@@ -48,6 +50,7 @@ export default function ProfileScreen() {
   };
 
   return (
+    <InertWhenBlurred>
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.cream }]}>
       <AppHeader />
 
@@ -114,6 +117,7 @@ export default function ProfileScreen() {
         <View style={{ height: SPACING.xl }} />
       </ScrollView>
     </SafeAreaView>
+    </InertWhenBlurred>
   );
 }
 
