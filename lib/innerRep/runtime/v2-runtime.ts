@@ -34,6 +34,10 @@ export async function clearV2Keys(kv: KV) {
 }
 
 export interface ShownInsightView { id: number; tier: 'supported' | 'tentative' | 'hedged'; text: string; evidence: { independentN: number; promptedN: number; introducedN: number } }
+export interface MirrorFacts {
+  capacities: { capacity: Capacity; label: string; reps: number; lastDate: string }[];
+  carrying: { label: string; dueDate?: string }[];
+}
 export interface CompletionView { closing?: string; insight?: ShownInsightView }
 export type TodayView =
   | { kind: 'rep'; payload: RepPayload; context: FlowContext; draft: StepAnswer[] }
@@ -231,6 +235,28 @@ export function createRuntime(deps: RuntimeDeps) {
       const t = now(); const set = new Set<number>();
       for (const i of s.instances) if (i.completed) { const d = new Date(i.day * 86400000); if (d.getUTCFullYear() === t.getFullYear() && d.getUTCMonth() === t.getMonth()) set.add(i.day); }
       return set.size;
+    },
+
+    /**
+     * Read model for The Mirror. Facts only, derived from stored structured state: which capacities the user has
+     * practised (completed training reps, counts and last day) and commitments they chose that are still open.
+     * It never reads observations, insights or free text, never ranks or scores, and never exposes a reflection
+     * (so a rejected or withheld claim cannot be revived).
+     */
+    mirrorFacts(): MirrorFacts {
+      const by = new Map<Capacity, { reps: number; lastDay: number }>();
+      for (const i of s.instances) {
+        if (!i.completed || i.skippedAll || i.layer !== 'training') continue;
+        const cur = by.get(i.capacity) ?? { reps: 0, lastDay: 0 };
+        by.set(i.capacity, { reps: cur.reps + 1, lastDay: Math.max(cur.lastDay, i.day) });
+      }
+      const capacities = [...by.entries()]
+        .map(([capacity, v]) => ({ capacity, label: CAPACITY_LABEL[capacity], reps: v.reps, lastDate: new Date(v.lastDay * 86400000).toISOString().slice(0, 10) }))
+        .sort((a, b) => a.label.localeCompare(b.label)); // alphabetical: no implied ranking
+      const carrying = s.commitments
+        .filter((c) => (c.status === 'open' || c.status === 'postponed') && c.label)
+        .map((c) => ({ label: c.label as string, dueDate: c.postponedUntilDate ?? c.dueDate }));
+      return { capacities, carrying };
     },
 
     /** Test/diagnostic access to the engine state (structured only). */
