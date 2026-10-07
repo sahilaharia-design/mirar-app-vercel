@@ -514,6 +514,10 @@ export default {
   // ─── Profile ─────────────────────────────────────────────────────────────────
   profile: {
     title: 'Profile',
+    account: 'Account',
+    contact: 'Contact Mirar',
+    contact_sub: 'Questions or feedback. Write to us any time.',
+    beta_note: 'Mirar beta',
     mirar_id: 'Mirar ID',
     practice: 'Your practice',
     cycle_label: 'Cycle {{n}} · Day {{day}}',

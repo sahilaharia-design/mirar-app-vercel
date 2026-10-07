@@ -22,6 +22,7 @@ import { InnerRepCard } from '../../components/home/InnerRepCard';
 import { DailyInnerRepHost } from '../../components/inner-rep/v2/DailyInnerRepHost';
 import { MIRAR as M } from '../../design-system/native';
 import { INNER_REP_V2 } from '../../lib/innerRep/runtime/flag';
+import { InertWhenBlurred } from '../../components/ui/InertWhenBlurred';
 import { useInnerRepStore } from '../../stores/inner-rep-store';
 import { EVERYDAY_AREAS } from '../../lib/everyday';
 import { FONTS } from '../../lib/constants';
@@ -113,7 +114,7 @@ export default function TodayRoute() {
 }
 function V2Today() {
   // role="main": the Today content is the page's main landmark (the tab bar is the shell's navigation)
-  return <SafeAreaView style={{ flex: 1, backgroundColor: M.color.surface }} edges={['top']}><View role="main" style={{ flex: 1 }}><DailyInnerRepHost /></View></SafeAreaView>;
+  return <InertWhenBlurred><SafeAreaView style={{ flex: 1, backgroundColor: M.color.surface }} edges={['top']}><View role="main" style={{ flex: 1 }}><DailyInnerRepHost /></View></SafeAreaView></InertWhenBlurred>;
 }
 
 function LegacyTodayScreen() {

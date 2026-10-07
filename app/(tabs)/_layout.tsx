@@ -7,12 +7,10 @@ import { useColors } from '../../contexts/theme-context';
 function TabIcon({ name, focused, colors }: { name: string; focused: boolean; colors: ReturnType<typeof useColors> }) {
   const icons: Record<string, string> = {
     index: '◎',
-    signals: '∿',
-    reports: '▤',
     profile: '○',
   };
   return (
-    <Text style={[styles.icon, { color: focused ? colors.slate : colors.slateLight }]}>
+    <Text style={[styles.icon, { color: focused ? colors.slate : colors.slateMid }]}>
       {icons[name] ?? '○'}
     </Text>
   );
@@ -23,7 +21,7 @@ function TabLabel({ label, focused, colors }: { label: string; focused: boolean;
     <Text
       style={[
         styles.label,
-        { color: focused ? colors.slate : colors.slateLight },
+        { color: focused ? colors.slate : colors.slateMid },
         focused && styles.labelFocused,
       ]}
     >
@@ -38,8 +36,6 @@ export default function TabsLayout() {
 
   const TAB_CONFIG = [
     { name: 'index', label: t('nav.today') },
-    { name: 'signals', label: t('nav.signals') },
-    { name: 'reports', label: t('nav.mirror') },
     { name: 'profile', label: t('nav.profile') },
   ];
   return (
@@ -48,7 +44,7 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarStyle: [styles.tabBar, { backgroundColor: colors.creamLight, borderTopColor: colors.border }],
         tabBarActiveTintColor: colors.slate,
-        tabBarInactiveTintColor: colors.slateLight,
+        tabBarInactiveTintColor: colors.slateMid,
         tabBarShowLabel: false,
       }}
     >
@@ -66,6 +62,9 @@ export default function TabsLayout() {
           }}
         />
       ))}
+      {/* v1 surfaces: no tab, and the routes redirect to Today (see signals.tsx / reports.tsx). */}
+      <Tabs.Screen name="signals" options={{ href: null }} />
+      <Tabs.Screen name="reports" options={{ href: null }} />
     </Tabs>
   );
 }

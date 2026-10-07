@@ -1,3 +1,4 @@
+import { INNER_REP_V2 } from '../../lib/innerRep/runtime/flag';
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -9,7 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../stores/auth-store';
 import { useCycleStore } from '../../stores/cycle-store';
@@ -22,7 +23,7 @@ import { MirrorGuideModal } from '../../components/guide/MirrorGuideModal';
 import { FONT_SIZE, SPACING, RADIUS } from '../../lib/constants';
 import { useColors } from '../../contexts/theme-context';
 
-export default function ReportsScreen() {
+function LegacyReportsScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
@@ -219,3 +220,9 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
+
+// v1 surface. When v2 is on this route no longer exists for users: it redirects to Today.
+export default function ReportsScreen() {
+  if (INNER_REP_V2) return <Redirect href="/(tabs)" />;
+  return <LegacyReportsScreen />;
+}

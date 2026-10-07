@@ -1,3 +1,5 @@
+import { Redirect } from 'expo-router';
+import { INNER_REP_V2 } from '../../lib/innerRep/runtime/flag';
 import React, { useEffect } from 'react';
 import {
   View,
@@ -52,7 +54,7 @@ function getCrossThemeObservation(t: (key: string, opts?: any) => string, themeS
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
-export default function SignalsScreen() {
+function LegacySignalsScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const { session } = useAuthStore();
@@ -368,3 +370,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
+
+// v1 surface. When v2 is on this route no longer exists for users: it redirects to Today.
+export default function SignalsScreen() {
+  if (INNER_REP_V2) return <Redirect href="/(tabs)" />;
+  return <LegacySignalsScreen />;
+}

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, Redirect } from 'expo-router';
+import { INNER_REP_V2 } from '../lib/innerRep/runtime/flag';
 import { useTranslation } from 'react-i18next';
 import { useColors } from '../contexts/theme-context';
 import { FONTS, FONT_SIZE, SPACING, RADIUS } from '../lib/constants';
@@ -16,7 +17,13 @@ import { EVERYDAY_AREAS, scoreWord } from '../lib/everyday';
 const PICKS = { left: 10, middle: 50, right: 90 } as const;
 type PickKey = keyof typeof PICKS;
 
+// v1 funnel (five-second check-in): retired when v2 is on; visitors go to sign-in.
 export default function TryScreen() {
+  if (INNER_REP_V2) return <Redirect href="/(auth)/login" />;
+  return <LegacyTryScreen />;
+}
+
+function LegacyTryScreen() {
   const { t } = useTranslation();
   const colors = useColors();
   const area = EVERYDAY_AREAS.EWB;

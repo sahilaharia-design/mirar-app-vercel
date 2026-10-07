@@ -1,7 +1,7 @@
 import { Redirect, Stack } from 'expo-router';
 
-// Dev tools — only accessible in development or when EXPO_PUBLIC_DEV_TOOLS=true
-const isAllowed = __DEV__ || process.env.EXPO_PUBLIC_DEV_TOOLS === 'true';
+// Dev tools — development builds only (never reachable in a production bundle)
+const isAllowed = __DEV__;
 
 export default function DevLayout() {
   if (!isAllowed) {

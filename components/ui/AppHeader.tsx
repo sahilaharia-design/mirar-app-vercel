@@ -20,7 +20,10 @@ export function AppHeader({ style }: AppHeaderProps) {
 
   return (
     <View style={[styles.header, { borderBottomColor: colors.borderLight }, style]}>
-      <MirarLogo size="sm" />
+      <View style={styles.brand}>
+        <MirarLogo size="sm" />
+        <Text style={[styles.beta, { color: colors.slateMid, borderColor: colors.borderLight }]}>Beta</Text>
+      </View>
       <TouchableOpacity
         onPress={() => Linking.openURL(CONTACT_LINK)}
         activeOpacity={0.7}
@@ -45,6 +48,8 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.sm,
     borderBottomWidth: 1,
   },
+  brand: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  beta: { fontSize: 11, letterSpacing: 0.6, textTransform: 'uppercase', borderWidth: 1, borderRadius: 999, paddingHorizontal: 8, paddingVertical: 1 },
   helpButton: {
     padding: 4,
   },
