@@ -7,6 +7,7 @@ import { applyRep, createState, flowContext } from '../v2/state';
 import { TEMPLATE_BY_ID } from '../v2/templates';
 import { Capacity, CorrectionReason, Instance, State } from '../v2/types';
 import { buildMirror, MirrorModel } from './mirror-contract';
+import { buildReceipt, Receipt } from './receipt';
 import { CORRECTION_REASONS } from '../v2/contracts';
 
 // ─── Inner Rep v2 runtime adapter ─────────────────────────────────────────────
@@ -259,6 +260,9 @@ export function createRuntime(deps: RuntimeDeps) {
         .map((c) => ({ label: c.label as string, dueDate: c.postponedUntilDate ?? c.dueDate }));
       return { capacities, carrying };
     },
+
+    /** Today's exact response, rebuilt from stored structured state (survives reload). Null if no rep was completed today. */
+    receipt(): Receipt | null { return buildReceipt(s, dayOf(now())); },
 
     /** The Mirror read model (contract v1, see mirror-contract.ts). Pure over stored structured state. */
     mirror(): MirrorModel { return buildMirror(s, dayOf(now())); },

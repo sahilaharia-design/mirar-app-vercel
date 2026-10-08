@@ -1,8 +1,9 @@
 import { CORRECTION_REASONS } from '../v2/contracts';
 import { V2 } from '../v2/config';
 import { computeEvidence } from '../v2/evidence';
-import { DOMAIN_PHRASE, TEMPLATES } from '../v2/templates';
-import { CAPACITIES, Capacity, InsightRecord, Option, State } from '../v2/types';
+import { DOMAIN_PHRASE } from '../v2/templates';
+import { CAPACITIES, Capacity, InsightRecord, State } from '../v2/types';
+import { resolveSteps, ResolvedStep } from './step-resolver';
 
 /**
  * THE MIRROR — read model, contract v1.
@@ -49,13 +50,6 @@ const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const none = (): MirrorTrace => ({ instanceIds: [], observationIds: [], commitmentIds: [], insightIds: [] });
 const SAID_LIMIT = 8;
 
-const optionLabel = (templateId: string, optionId?: string): { prompt: string; label: string } | null => {
-  const t = TEMPLATES.find((x) => x.id === templateId); if (!t || !optionId) return null;
-  const find = (opts: Option[]) => opts.find((o) => o.id === optionId);
-  const o = find(t.options); if (o) return { prompt: t.prompt, label: o.label };
-  const f = t.followUp && find(t.followUp.options); return f ? { prompt: t.followUp!.prompt, label: f.label } : null;
-};
-
 export function buildMirror(s: State, today: number): MirrorModel {
   const out: MirrorStatement[] = [];
   const push = (x: MirrorStatement) => out.push(x);
@@ -64,6 +58,9 @@ export function buildMirror(s: State, today: number): MirrorModel {
   // ── said (USER SAID): the user's own most recent structured choices, newest first ─────────────────────────
   const said = s.observations.filter((o) => !o.unknown && (o.step === 'primary' || o.step === 'capture') && (o.optionId || o.domain))
     .slice().sort((a, b) => b.id - a.id);
+  const resolvedBy = new Map<number, ResolvedStep>();
+  const instOf = new Map(s.instances.map((i) => [i.id, i]));
+  const resolvedInst = new Set<number>();
   let n = 0;
   for (const o of said) {
     if (n >= SAID_LIMIT) break;
@@ -71,8 +68,10 @@ export function buildMirror(s: State, today: number): MirrorModel {
       push({ id: `said:o${o.id}`, section: 'said', source: 'user_said', text: `You said this was mostly connected to ${DOMAIN_PHRASE[o.domain] ?? o.domain}.`, facts: { domain: o.domain }, trace: { ...none(), observationIds: [o.id], instanceIds: [o.instanceId] }, date: iso(o.day) });
       n++; continue;
     }
-    const l = optionLabel(o.templateId, o.optionId); if (!l) continue;
-    push({ id: `said:o${o.id}`, section: 'said', source: 'user_said', text: `${l.prompt} You chose “${l.label.replace(/\.$/, '')}”.`, facts: { question: l.prompt, choice: l.label }, trace: { ...none(), observationIds: [o.id], instanceIds: [o.instanceId] }, date: iso(o.day) });
+    if (!resolvedInst.has(o.instanceId)) { resolvedInst.add(o.instanceId); const inst = instOf.get(o.instanceId); if (inst) for (const r of resolveSteps(s, inst, s.observations)) resolvedBy.set(r.observationId, r); }
+    const r = resolvedBy.get(o.id); if (!r || r.choice.kind !== 'option') continue;
+    const label = r.choice.label.replace(/\.$/, '');
+    push({ id: `said:o${o.id}`, section: 'said', source: 'user_said', text: `${r.prompt} You chose “${label}”.`, facts: { question: r.prompt, choice: label }, trace: { ...none(), observationIds: [o.id], instanceIds: [o.instanceId] }, date: iso(o.day) });
     n++;
   }
 

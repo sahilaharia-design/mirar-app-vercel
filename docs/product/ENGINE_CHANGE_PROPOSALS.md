@@ -76,6 +76,18 @@ The engine's "rest / no-rep" is disabled in the shipping config. A *rest exercis
 
 ---
 
+## A5 — Evidence returns the observation ids it counted (read-only)
+
+**Need.** The Mirror's `come_up` trace currently selects observations by domain and evidence days: an approximation of the engine's supporting set. To state exactly which responses back a count, the engine must report them.
+
+**Amendment.** `computeEvidence` adds `observationIds: number[]` to each `Evidence`. No decision, threshold, ordering or selection changes.
+
+**Tests.** Engine, correction and runtime suites and the 420-run sweep byte-identical; a recount from the ids equals `independentN`, `promptedN`, `introducedN` for every evidence in every simulated run; the Mirror contract replaces its approximation with the exact ids.
+
+**Risk.** Minimal: a new field on an output type. **Success.** Zero mismatches between ids and counts across 24+ simulated users.
+
+---
+
 ## Not proposed
 - Changing evidence thresholds, correction semantics, commitment budgets, context budgets or contradiction behaviour.
 - Free-text inference or storage.
