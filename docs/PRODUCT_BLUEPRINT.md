@@ -1,5 +1,7 @@
 # Mirar v2 — product value audit and blueprint
 
+> **Superseded in part** by `docs/product/MIRAR_VALUE_AND_RUNTIME_CONTRACT.md` (branch `mirar-product-value`). The diagnosis here stands. The universal Notice → Name → Try form, display-only "moves" and the ranking P1–P8 were re-evaluated and changed; see `docs/product/CODEX_ALIGNMENT_REVIEW.md` §7. The published commit `9095186` is unchanged.
+
 Status: analysis and proposal. Nothing here is merged, deployed or implemented. The engine (`inner-rep-engine-v2.0.1-correction-fix`) is unchanged.
 Written 8 October 2026 against `mirar-v2-experience` (Codex `6c6f0d0` + runtime/Mirror read model).
 

@@ -6,6 +6,7 @@ import { applyCorrection, applyFeedback, chooseInsight } from '../v2/insights';
 import { applyRep, createState, flowContext } from '../v2/state';
 import { TEMPLATE_BY_ID } from '../v2/templates';
 import { Capacity, CorrectionReason, Instance, State } from '../v2/types';
+import { buildMirror, MirrorModel } from './mirror-contract';
 import { CORRECTION_REASONS } from '../v2/contracts';
 
 // ─── Inner Rep v2 runtime adapter ─────────────────────────────────────────────
@@ -258,6 +259,9 @@ export function createRuntime(deps: RuntimeDeps) {
         .map((c) => ({ label: c.label as string, dueDate: c.postponedUntilDate ?? c.dueDate }));
       return { capacities, carrying };
     },
+
+    /** The Mirror read model (contract v1, see mirror-contract.ts). Pure over stored structured state. */
+    mirror(): MirrorModel { return buildMirror(s, dayOf(now())); },
 
     /** Test/diagnostic access to the engine state (structured only). */
     _state: () => s,
