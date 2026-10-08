@@ -1,0 +1,56 @@
+{
+  "requests": [
+    {
+      "url": "https://mirar-creative-review-3umgtap6z-sahilaharia-designs-projects.vercel.app/?direction=aperture",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "authenticated": false,
+      "redirected": false
+    },
+    {
+      "url": "https://mirar-creative-review-3umgtap6z-sahilaharia-designs-projects.vercel.app/?direction=weave",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "authenticated": false,
+      "redirected": false
+    },
+    {
+      "url": "https://mirar-creative-review-3umgtap6z-sahilaharia-designs-projects.vercel.app/?direction=field",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "authenticated": false,
+      "redirected": false
+    },
+    {
+      "url": "https://mirar-creative-review-3umgtap6z-sahilaharia-designs-projects.vercel.app/baseline/?experience=discover",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "robots": "noindex, nofollow",
+      "authenticated": false,
+      "redirected": false
+    }
+  ],
+  "matchingStaticFiles": [
+    "/index.html",
+    "/baseline/index.html",
+    "/baseline/fonts/dm-sans-latin.woff2",
+    "/baseline/fonts/instrument-serif-latin.woff2",
+    "/baseline/assets/InstrumentSerif-Regular-DXer19By.ttf",
+    "/baseline/assets/index-Bq0s0zUz.js",
+    "/baseline/assets/index-C07mAtxs.css",
+    "/baseline/assets/mirar-wordmark-B7fqZekE.png",
+    "/baseline/assets/DMSans-Variable-OkNhvBry.ttf",
+    "/assets/dm-sans-latin-CwMReqGs.woff2",
+    "/assets/InstrumentSerif-Regular-DXer19By.ttf",
+    "/assets/instrument-serif-latin-DGrY7Whw.woff2",
+    "/assets/mirar-wordmark-B7fqZekE.png",
+    "/assets/mirar-mark-BS5IeR91.png",
+    "/assets/index-BFYxuLfp.css",
+    "/assets/DMSans-Variable-OkNhvBry.ttf",
+    "/assets/index-cFL9yMMl.js"
+  ],
+  "cookieOrAuthorizationOrBypassTokenUsed": false
+}
