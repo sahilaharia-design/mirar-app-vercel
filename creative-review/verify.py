@@ -6,7 +6,7 @@ B = os.environ.get('AGENT_BROWSER_BIN') or shutil.which('agent-browser')
 if not B:
     raise SystemExit('Set AGENT_BROWSER_BIN to your installed agent-browser executable.')
 BASE=os.environ.get('MIRAR_CREATIVE_URL','http://127.0.0.1:5176')
-ROOT=Path(__file__).resolve().parents[1]/'docs/creative/validation'
+ROOT=Path(os.environ.get('MIRAR_QA_OUTPUT',str(Path(__file__).resolve().parents[1]/'docs/creative/validation')))
 (ROOT/'screenshots').mkdir(parents=True,exist_ok=True)
 results=json.loads((ROOT/'results.json').read_text()) if os.environ.get('MIRAR_QA_ONLY')=='motion' else []
 atexit.register(lambda:(ROOT/'results.json').write_text(json.dumps(results,indent=2)+'\n'))

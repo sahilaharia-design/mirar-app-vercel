@@ -29,3 +29,37 @@
 .field .choice-set.compare .choice:last-child{min-height:76px}
 @media(max-width:700px){.weave .choice-set.compare .choice{grid-template-columns:52px 1fr;gap:10px 14px;padding:18px 14px}.weave .choice-set.compare .choice .choice-mark{width:52px}.weave .choice-set.compare .choice>span:not(.choice-state){font-size:28px}.field .choice-set.compare .choice{grid-template-columns:56px 1fr;gap:12px 14px;padding:18px 14px}.field .choice-set.compare .choice .choice-mark{width:56px}.field .choice-set.compare .choice.is-selected{padding:18px 14px}.field .choice-set.compare .choice>span:not(.choice-state){font-size:27px}}
 .product-header>a{min-height:44px;display:flex;align-items:center}
+/* Mirar refinement: source-defined windows, not generic circles or traced ovals. */
+.hero-art .art{max-height:600px}
+.art .reading-plane{transition:transform 650ms var(--settle)}
+.aperture .hero-art{transform:none}
+.aperture .hero h1{font-size:clamp(56px,6.3vw,96px)}
+.aperture .hero-art{background:#ebe5dc;border-left:1px solid var(--line)}
+.aperture .hero-art figcaption{padding:16px 20px}
+.aperture .story-section{background:#29272a}
+.aperture .mirror-emblem{border:0;border-radius:0;padding:0}
+.weave .hero-art{border-left:1px solid var(--line)}
+.weave .hero h1{font-size:clamp(52px,5.8vw,88px)}
+.field .hero-art,.field .story-art{transform:none;box-shadow:none}
+.field .hero h1{font-size:clamp(52px,5.5vw,84px)}
+.field .hero h1 em{border:0}
+.field .observation-leaf,.field .inference-leaf,.weave .observation-leaf{transform:none}
+.mirror-edge{display:block;width:42px;height:62px;mask-size:contain;-webkit-mask-size:contain;mask-position:center;-webkit-mask-position:center;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;background:var(--ink);opacity:.18;flex-shrink:0}
+.today-window{display:flex;gap:24px;align-items:center;padding:20px 0 28px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.today-window .mirror-edge{width:70px;height:104px;opacity:.28}
+.today-window p{font-family:'Instrument Serif',serif;font-size:28px;line-height:1.2;margin:0}
+.observation-leaf,.inference-leaf{position:relative;padding-left:42px}
+.observation-leaf>.mirror-edge,.inference-leaf>.mirror-edge{position:absolute;left:0;top:30px;width:24px;height:130px;mask-size:88px 130px;-webkit-mask-size:88px 130px;mask-position:right center;-webkit-mask-position:right center;opacity:.3}
+.inference-leaf>.mirror-edge{opacity:.15}
+.reading-controls{display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line);padding:12px 0 24px}
+.reading-controls .eyebrow{margin:0;max-width:420px}
+.mirror-columns.read-separately{grid-template-columns:1fr;max-width:780px;margin-left:auto;margin-right:auto;gap:40px}
+.mirror-columns.read-separately .observation-leaf{min-height:0}
+.read-separately .leaf-mark{position:absolute;right:24px;bottom:20px;opacity:.15;width:100px}
+.solid{position:relative;overflow:hidden}
+.solid:after{content:'';position:absolute;right:9px;top:8px;width:22px;height:34px;background:var(--paper);opacity:.14;mask:var(--mirar-mark) center/contain no-repeat;-webkit-mask:var(--mirar-mark) center/contain no-repeat;pointer-events:none}
+.choice .choice-mark circle{r:initial}
+.aperture .choice.is-selected .choice-mark circle{r:initial}
+@media(max-width:1023px){.aperture .hero h1{font-size:clamp(52px,6.5vw,76px)}.weave .hero h1,.field .hero h1{font-size:clamp(52px,6vw,72px)}}
+@media(max-width:700px){.aperture .hero h1,.weave .hero h1,.field .hero h1{font-size:clamp(48px,11.8vw,70px)}.hero-art .art{max-height:400px}.aperture .hero-art{border:0}.hero-art figcaption,.aperture .hero-art figcaption{padding:14px 12px}.today-window{padding:12px 0 20px;margin-bottom:20px}.today-window .mirror-edge{width:48px;height:72px}.today-window p{font-size:25px}.reading-controls{gap:16px;align-items:flex-start;flex-direction:column}.observation-leaf,.inference-leaf{padding-left:28px}.mirror-columns.read-separately{gap:28px}.field .story-art{padding:12px}.story-art .art{max-height:370px}}
+@media(prefers-reduced-motion:reduce){.art .reading-plane{transition:none!important}}

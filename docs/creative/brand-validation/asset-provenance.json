@@ -1,0 +1,28 @@
+[
+  {
+    "source": "/Users/sahilharia/Downloads/Mirar Logos Transparent/Only Logo.png",
+    "sourceSHA256": "ba3b2ba16511bfc98d38859dac3cbaa6f58708d36a0edad567f52603db99c814",
+    "repositoryAsset": "assets/brand/mirar-mark.png",
+    "repositorySHA256": "a73e21a448297f476b371ab99eee73a2448ed7c1f11ca179f3254df99d3dcb60",
+    "sourceBounds": [
+      935,
+      641,
+      2044,
+      2281
+    ],
+    "exactArtworkPixels": true
+  },
+  {
+    "source": "/Users/sahilharia/Downloads/Mirar Logos Transparent/Just Name.png",
+    "sourceSHA256": "db3f6f59c7e2618d1e9a32532fc60ff20ea53e16aac0f24b805647f5fdd31865",
+    "repositoryAsset": "assets/brand/mirar-wordmark.png",
+    "repositorySHA256": "7356bc92f79bd021c447d76ac0e20ff76a41e09c3af8d8a0634e5c6d4f5d679f",
+    "sourceBounds": [
+      377,
+      1028,
+      2638,
+      1825
+    ],
+    "exactArtworkPixels": true
+  }
+]

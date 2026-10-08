@@ -1,5 +1,7 @@
 # Mirar — three creative worlds
 
+> Initial exploration record. The current recommendation and revised samples are in [Brand refinement](BRAND_REFINEMENT.md).
+
 8 October 2026 · Exploration base `6c6f0d07eab763cbe5908228856647b34d99183e` · `codex/mirar-creative-explorations` (separate exploration branch)
 
 ## Review first
