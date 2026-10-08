@@ -65,3 +65,7 @@ These labels belong in development controls. Actual UI depends on available fact
 Obtain the actual blueprint and record its revision. Reconcile it with the inspected remote additions without modifying frozen engine or silently changing privacy. Then build one unified component system plus real/fixture adapters, complete the journey, validate all requested states, and deploy a verified anonymous Preview. Existing three-direction URLs remain unchanged while this gate is pending.
 
 No new runtime or engine test result, screenshot or hosted unified experience is claimed by this preparation commit.
+
+## Independent audit before blueprint publication
+
+See [Independent experience audit](INDEPENDENT_EXPERIENCE_AUDIT.md) for ten source-backed findings and a reconciliation protocol. The user has identified the original blueprint as local branch `mirar-product-blueprint`, commit `9095186`, awaiting publication confirmation. This is provenance supplied by the user, not a claim that the file has been read. Fetch and read it completely once the push is confirmed; reconcile before any merge or deployment.
