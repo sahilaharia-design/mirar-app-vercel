@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-10",
+  "repository": "https://github.com/sahilaharia-design/mirar-app-vercel",
+  "blueprintCommit": "90951865776f8632c536dafcb8aeb4edbd72bc3e",
+  "productValueCommit": "2d150e01fd30e0b9d20e7f642147188414def8c3",
+  "auditCommit": "c78064c7085bc07150e487f06cc8a37516f8e33b",
+  "snapshotMethod": "git archive pinned product-value lib and scripts to temporary directory",
+  "frozenEngineEdited": false,
+  "remoteWorkMerged": false,
+  "deploymentPerformed": false,
+  "suite": "nine existing checks passed; 24 simulated users, 430 statements",
+  "focusedChecks": "three behavior gaps reproduced and one contradictory unknown-copy sample"
+}

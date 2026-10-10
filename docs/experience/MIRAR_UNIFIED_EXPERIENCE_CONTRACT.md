@@ -1,179 +1,174 @@
-# Mirar — unified experience contract
+# Mirar — unified product and experience contract
 
-8 October 2026. **Working specification; not an approved product contract.** Branch: `codex/mirar-unified-experience`, based on `ad4d6a9`. No unified implementation or new deployment is claimed by this document.
+Reconciled recommendation, 10 October 2026. Branch `codex/mirar-unified-experience`. **Integration specification, not an approval to amend the engine, merge, migrate or deploy.** This replaces the provisional missing-blueprint specification. Open decisions and capability gates are explicit; no claim that Claude or the user has accepted every resolution.
 
-## Source gate
+## 1. Sources and actual state
 
-The actual `docs/PRODUCT_BLUEPRINT.md` must be read before decisions that depend on Claude's product-value model. After fetching origin with tags/pruning, the file is absent from the checkout, all remote branch trees, and all fetched history for that path. Checked: `origin/main` / `origin/mirar-v2-experience` at `8850cfc`, `origin/mirar-v2-integration` at `3394254`, `origin/mirar-v2-beta-cutover` at `11f6e33`, and `origin/mirar-emotional-fitness` at `ab017dd`. Its location has been requested. The seven product problems in the user's brief are requirements to investigate, not a substitute for that document.
+Repository: `sahilaharia-design/mirar-app-vercel`.
 
-Read sources: creative review, brand refinement, validation/deployment records; `V2_CONTRACTS.md`, `V2_FEEDBACK_SEMANTICS.md`, `CODEX_FOLLOWUPS.md`; previous `CLAUDE_HANDOFF.md`; actual creative implementations and runtime. Remote changes `2a72585` / `8850cfc` were inspected without merging or editing them.
+| Source | Pinned revision | Review |
+|---|---|---|
+| Original blueprint, `docs/PRODUCT_BLUEPRINT.md` | `90951865776f8632c536dafcb8aeb4edbd72bc3e` | Read completely; diagnosis retained, several prescriptions superseded |
+| Product-value documents, Mirror implementation and tests | `2d150e01fd30e0b9d20e7f642147188414def8c3` | Published branch fetched; all five companion documents read completely, code inspected and tested in isolated temporary snapshot |
+| Experience audit | `c78064c7085bc07150e487f06cc8a37516f8e33b` | Pushed and remote verified before reconciliation |
+| Creative brand refinement and public evidence | `460d326`, `ad4d6a9` | Canonical artwork, three implemented concepts and historical validation |
+| Existing runtime and frozen contracts | engine tag `inner-rep-engine-v2.0.1-correction-fix`; experience remote `8850cfc` | Existing behavior checked against code, not just blueprint assertions |
 
-**Important new support:** remote `mirrorFacts(): MirrorFacts` exposes completed training capacities (capacity, label, reps, lastDate) and open/postponed commitments (label, optional dueDate), alphabetically ordered. It does not expose response history, observations, eligible interpretations, correction history or approved changes. The earlier statement that all Mirror facts lack a read model is now outdated. These remote changes are not yet integrated into this branch.
+The product-value branch is **read, not merged**. This branch retains the existing runtime without `runtime.mirror()`. Capability marked “remote-built” refers specifically to `2d150e0`, not functionality already integrated here. The original audit remains historical; its missing-blueprint/read-model statements are superseded by this contract.
 
-## Unified thesis
+## 2. Common recommendation
 
-**A stable opening, an honest response, a reading that stays revisable.** Aperture supplies one spatial grammar. Fieldnotes contributes provenance, not a second palette. Weave contributes the idea of carrying an intention, not a fabric whose density measures progress. The user can understand and operate the distinction between experience and interpretation.
+**A stable Mirar opening; a useful act of practice; a reading that remains separate and revisable.** Adopt Aperture / The Revisable Window as the single visual grammar, Fieldnotes' provenance discipline, and Weave's idea of carrying a chosen intention only where real data exists. No new competing creative worlds.
 
-Day-one value must exist without an insight: meeting a real choice, noticing what it asks, and leaving with the exact response or a legitimate decision not to resolve it. Returning offers another useful practice and real carried context, never a promise that the product has discovered the person.
+Daily value comes from what the user does during a supported exercise, not the frequency of insights or the beauty of a receipt. An exact receipt is useful grounding, not sufficient evidence of benefit. Keep non-action, ambiguity and leaving legitimate. Neither Notice → Name → Try nor Notice → Choose → Look again is a mandatory sequence.
 
-## Canonical identity and visual grammar
+**Challenge to both teams:** adding a second choice and a responsive closing can still be a questionnaire. A family earns its place only when a user performs a useful operation and can describe it. Current templates cannot honestly be presented as fully implemented new Reframe, sorting or pause exercises. Improved presentation is the first slice, not proof that the larger product problem has been solved.
 
-- Preserve the canonical mark and wordmark artwork. Existing PNGs were verified pixel-identical to the originals after removal of transparent outer margins; provenance is in `../creative/brand-validation/asset-provenance.json`.
-- Use the actual mark alpha for graphic windows. Do not redraw an oval, trace a substitute, recolour the artwork, or make an oval control library.
-- Large source-defined opening at arrival; quiet boundary beside a question; distinct reading planes at reflection. Live text and hit areas remain outside masks.
-- Ivory, paper, charcoal, restrained clay; Instrument Serif and DM Sans. Keep the approved semantic token roles rather than introducing a palette per feature.
-- Original diagrams depict framing, separation and carrying. They must explain an operation, not supply a measurement of the person. Photography is optional only if it does more than this system already does; no stock wellness filler.
-- A gap is room for uncertainty, never missing progress. A correction changes the reading's presentation, never damages or dims the person/mark.
-- User-triggered motion: 180ms feedback, 280ms disclosure, up to 400ms / 8px entry. Any longer explanatory graphic must be optional and outside the task path. Reduced motion is immediate. No loops, compulsory delays, scroll hijack or reveal that withholds essential copy.
+## 3. Brand, graphics and motion across the journey
 
-## Implementation boundaries
+Preserve canonical artwork pixels, proportions and colour. Use actual mark alpha for original graphic windows; never redraw a generic oval, trace a new logo, filter/recolour the source, or crop meaningful artwork. Transparent margin trimming already verified in `../creative/brand-validation/asset-provenance.json` remains unchanged.
 
-**Implemented now:** existing app's auth/onboarding, runtime Today/draft/completion, supported response steps, feedback/correction, optional-note privacy; separate three-direction prototypes and their public Preview. These are existing implementations, not the unified deliverable.
+The mark's negative space structures a relationship: what was experienced, a separate possible reading, and an open boundary. Text and controls remain live, legible and unmasked. Use the opening generously at discovery, quietly beside a rep and explicitly at a reading boundary. Do not put a mark beside every answer simply to brand it. Plain utilities use the smallest expression.
 
-**Prototype-only now:** source-mask story graphics and reading-layout controls; fictional future Mirror and illustrative evidence. Its no-op feedback callbacks demonstrate layout only. They are unsuitable for a functional unified experience.
+One warm ivory/paper/charcoal system, restrained accents, existing semantic roles, Instrument Serif and DM Sans. Preserve reflective texture from the source artwork and purposeful original graphic planes. No three palettes, textile-density progress, circular reticles, glass, ambient loops or stock wellness imagery. One expressive composition per screen; flat, varied information arrangements instead of repeated cards.
 
-**Deferred pending actual blueprint / approved contract:** new exercise semantics, varied integration outcomes beyond exact responses, historical evidence archive, correction-history presentation, shifts over time, cloud history and day-based narrative features. The user's list of possible interactions does not itself extend `Step` or permit selection logic in UI.
+Input-driven motion explains separation, consideration or release. Standard feedback 180ms, disclosure 280ms, entry up to 400ms/8px; optional explanatory motion may settle longer only outside required task completion. No forced wait, auto-answer, endless breathing or scroll capture. Reduced motion preserves all information with immediate state changes. Rejection/qualification changes the reading surface, never damages, dims or stains the mark/person. No fill, brightness or gap size measures fitness or certainty.
 
-## Feature specifications
+## 4. Capability map and adapter boundary
 
-Each proposal below records the required product/interface questions. “Capacity” describes the intended exercise, not a measured improvement or an invented label on non-training reps.
+| Capability | Actual input/output | Status and truthful fallback |
+|---|---|---|
+| Selection / Today | runtime `today(): TodayView`; rep payload/context/draft or done/optional insight | Existing. UI never chooses cold-start/family from a preference |
+| Rep sequence | `nextStep(FlowContext, StepAnswer[]) → Step|null` | Existing. Exact supplied prompt/options; unsupported type → unavailable/back; orientation remains disabled |
+| Answers | option ID, unknown, skip, domain, timeframe/date, yes/no, payload-free words | Existing. No rank, sort, weight or pick-two schema |
+| Completion | `complete(answers,duration) → CompletionView` | Existing closing?/insight?. Immediate answers available; no durable exact session receipt exposed after reload |
+| Feedback/correction | async `feedback(id,value)`, `correction(id,reason)` | Existing fixed semantics. Acknowledge success only; error/retry stays honest |
+| Capacity practice / carrying | `mirrorFacts(): MirrorFacts` | Remote-built at `8850cfc`, not integrated here. Factual-only interim adapter after reviewed integration |
+| Typed Mirror | `mirror(): MirrorModel` from `buildMirror(state,day)` | Remote-built at `2d150e0`; **not ready for unqualified full UI use** until review gates in §8 are repaired |
+| Continuity cue | optional component `continuityCue` | Slot exists, runtime supplier absent. Hide it; no UI-generated remembered narrative |
+| New families / first capacity | A1–A4 proposals | Not built/approved. Separate versioned engine/catalog work, never renderer-only answers |
+| Durable account history | opt-in event-sourced memo | Proposal only. Current structured practice remains device-local; sign-out wipes it |
 
-### 1. Discover and demonstrate
-- User need: understand emotional fitness by trying something before registering.
-- Capacity: attention for the existing `foc_settle` demonstration; other examples only if approved.
-- Behavior: a real template/step sequence; framing highlights what is being considered without changing option copy.
-- Outcome: exact selected statement, uncertainty, or leaving; never an inferred visitor profile.
-- Input: authored discovery copy, canonical assets, approved `FlowContext`.
-- Output: structured `StepAnswer[]` held only in the demo session; explicit entry action.
-- Existing support: template and `nextStep`; existing sample implementation.
-- New functionality: unified graphic/components and public-to-entry transition; no new engine behavior.
-- Evidence/privacy: demo separate from personal practice; no migration of sample answers into account history.
-- Fallback: unsupported step gets an explicit unavailable state; optional/unknown paths remain available.
-- Acceptance: complete sample before auth; unknown ends honestly; reload clears demo; no inference or outbound answer request.
+Presentations accept public view data and callbacks. They must not inspect `_state`, parse storage, recompute evidence, infer eligibility or make new selection rules. Diagnostic state is used only in tests. Development fixtures have separate entry points/adapters, explicit fictional-scenario labels and isolated session state. They cannot populate authenticated production data or imply successful real authentication/writes. Reuse presentation components; prevent fixture data from entering the production adapter/build.
 
-### 2. Understand six capacities
-- User need: know what a practice asks them to exercise.
-- Capacity: Direction, Energy, Focus, Relationships, Growth, Action; use established vocabulary, not legacy theme-score dials.
-- Behavior: selectable authored examples reveal the operation, not a result or readiness level.
-- Outcome: a concrete explanation of practice; no score, diagnosis or promise of efficacy.
-- Input: approved authored descriptions and real template references.
-- Output: display selection only.
-- Existing support: catalog capacity metadata; no capacity assessment.
-- New functionality: explanatory visual system; copy review against blueprint.
-- Evidence/privacy: no collection and no personal ranking.
-- Fallback: all explanations available as plain live text without animation.
-- Acceptance: user can describe an example; label never implies demonstrated ability; no unsupported exercises presented as functional.
+## 5. Complete journey specification
 
-### 3. Enter and onboard
-- User need: arrive with trust and minimal setup.
-- Capacity: introductory noticing; not assessment.
-- Behavior: existing email/sending/sent/error/retry flow, then a brief interaction permitting uncertainty/disagreement/declining examination.
-- Outcome: clear next action and accurate privacy expectations.
-- Input: supplied auth status/callbacks; approved authored introduction.
-- Output: existing auth submission and existing onboarding completion; no new inferred attributes.
-- Existing support: account/auth/onboarding boundary; introduction component.
-- New functionality: coherent arrival graphics and accessible transition.
-- Evidence/privacy: real email only through existing service; hosted demo authentication must be explicitly simulated and cannot ship as auth.
-- Fallback: retry and back; preserve existing expired-link behavior and guarded routes.
-- Acceptance: no long questionnaire; no bypass; focus lands on meaningful content; sign-out semantics unchanged.
+Each row includes user need, intended capacity/operation, real input/output, outcome, privacy/evidence and fallback. Detailed acceptance follows.
 
-### 4. Today and return
-- User need: one relevant invitation, with genuine continuity when available.
-- Capacity: supplied rep capacity only; optional labels stay optional.
-- Behavior: welcome/draft-resume/done; at most one approved continuity line. Keep the prompt visually primary.
-- Outcome: begin, resume, finish, or return to life without obligation.
-- Input: `TodayView`, practice-days fact, draft and approved context; remote Mirror facts only after reviewed integration.
-- Output: existing navigation/progress callbacks.
-- Existing support: actual Today states, commitment context, local practice count.
-- New functionality: attentive home composition. Narrative continuity text requires supplied approved data.
-- Evidence/privacy: never invent yesterday, claim cloud recall, or read the storage blob in presentation.
-- Fallback: sparse home with one meaningful invitation; missing capacity has no blank placeholder.
-- Acceptance: Day 1/3/7/30 fixtures are explicit review inputs, not feature unlocks. Missing/rejected evidence cannot appear as memory.
+| Stage | User need / operation | Real inputs → outputs | Outcome / evidence / privacy | Fallback and status |
+|---|---|---|---|---|
+| Discover | Understand emotional fitness through a moment of noticing | Authored explanation + canonical graphic + real sample context → local structured answers | Sample before registration; no personal inference, no transfer to account | Existing sample can be refined. Static explanation if unavailable; do not imply full new family exists |
+| Demonstrate / understand | Feel a real choice and understand six areas of practice | Exact sample step; approved authored capacity descriptions → display selection | Distinguish practice from score; no claim that visitor trained/improved | All meaning in live text; diagrams optional. Real sample is primary, three-state metaphor secondary |
+| Enter | Informed, ordinary account entry | Existing email/loading/sent/error/callbacks → existing auth request | Retention visible before sign-in; demo explicitly separate | Back/retry/expired paths preserved; no fake delivery success |
+| Onboard | Learn autonomy by exercising it, briefly | Authored demonstration → local display state and existing begin callback | Consider a statement, leave it open, or go directly to Today; no diagnosis/preferences collection | Replace “which answer is allowed?” quiz. Skip first-class. Capacity selector deferred until A1 approved |
+| First rep | Do a useful operation available today | Actual Today rep/context/draft → exact contract answers | Prompt hero, source-defined attention boundary, legitimate unknown | Existing cold start remains `foc_attention`; no renderer override to Reframe |
+| Integration | Understand what happened and leave without another task | Completed context + answers + supplied completion → display only | Exact offered statements with their actual questions; outcome-specific authored release, no raw words/inference | Unknown/absence can end immediately; reloaded done has no invented receipt; no universal extra action |
+| Today | An attentive home with one clear action | Today/draft/count/approved context → begin/resume/done | Optional capacity secondary, exact named commitment, one approved cue at most | Sparse composition, no blank label. Missing cue stays absent |
+| Return | Resume something real rather than unlock a milestone | Supplied draft/practice facts/carrying → normal navigation | No streak, elapsed-day insight, fabricated yesterday or cloud memory | Day 1/3/7/30 are explicit review scenarios, not feature gates |
+| Honest Mirror | Inspect a possible reading and disagree | Eligible supplied insight + real callbacks → value/reason only | Distinct reading/provenance/unknown; equal feedback, optional note safety-only | No eligible insight → no reading. Missing exact support → no pseudo quotation |
+| Commitments | Recognize what was chosen and name the outcome | Commitment step context/timeframe → existing structured status/date answers | Offered label identified as chosen; neutral postponement/change/drop | No task list/overdue warning; no invented date. Missing carrying omitted |
+| The Mirror | Inspect earned facts and conditional readings | Reviewed runtime view → source-separated presentation, no new inference | Factual practice/carrying; ledger secondary; only eligible reviewed readings | One beginning state; sparse useful facts. Gated sections hidden, not seven empty cards |
+| Evolving understanding | Revisit actual changes without a growth narrative | Only approved engine reading/change + matched trace | Own earlier answers compared as authored by engine; no causality/ability claim | Insufficient/mismatched/withheld evidence → no comparison; fixtures explicit |
+| Privacy / Me | Know storage and leave safely | Actual account/retention callbacks → existing actions | Device-local structure, sign-out wipe, unsaved optional text; sensitive data even when structured | No new deletion/sync control until real implementation and approval |
 
-### 5. Inner Rep interaction
-- User need: exercise a useful operation rather than complete a decorative survey.
-- Capacity: exactly the template's capacity and mechanism.
-- Behavior: render the actual step/prompt/options. Compare separates offered truths; list supports scanning; words/context/timeframe retain existing semantics. No ranking, drag, freeform inference or new response shape without contract.
-- Outcome: user's exact structured response, or unknown/optional skip/dismissal.
-- Input: actual `nextStep(context, answers)` result; no UI-chosen next question.
-- Output: exact `StepAnswer` variants; no raw words.
-- Existing support: choice compare/list, optional words/domain, timeframe and check-in offer. Orientation remains disabled.
-- New functionality: purposeful presentation and focus choreography. Separating event/interpretation and other proposed exercises need real templates/schema if not supported.
-- Evidence/privacy: exact option provenance; safety-only transient words with existing safeguards.
-- Fallback: standard accessible controls remain sufficient; no gesture-only dependency.
-- Acceptance: every emitted step handled; unknown valid; optional skip distinct; resume exact; no duplicate submit; missing label and long prompt reflow.
+### Day-one integration rules
 
-### 6. Integration and completion
-- User need: understand what was useful today without repetitive generic advice.
-- Capacity: tied to actual completed practice; no universal second exercise.
-- Behavior: show exact offered question/choice; vary only from approved outcome metadata, never inferred psychological meaning.
-- Outcome: potentially noticing, action, revision, intention, uncertainty or leaving alone. These are design targets, not existing output variants.
-- Input: completed context/structured answers and current `CompletionView`; future authored outcome contract needs Claude.
-- Output: existing completion/Today navigation. No automatic commitment.
-- Existing support: exact selected option, unknown, commitment timeframe and optional supplied closing/insight.
-- New functionality: varied authored integration types and truthful reusable mapping require blueprint/contract.
-- Evidence/privacy: receipt is not a saved journal or an insight; do not expose unsaved words.
-- Fallback: exact response with permission to finish; no canned advice filling absent data.
-- Acceptance: unknown requires no action; non-action is valid; commitment shown only when chosen; no universal Notice → Name → Try sequence.
+Use the actual `nextStep(context,[])` question and offered labels, including contextual frame/variant. Never rewrite engine prompt in the UI to make it more relatable. Author separate supporting explanation if needed; catalog copy changes require controlled approval.
 
-### 7. Honest Mirror and visible correction
-- User need: inspect a tentative reading and see that disagreement is legitimate.
-- Capacity: examination of interpretation; not a test of self-awareness.
-- Behavior: separate selected response, supplied observation, engine reading and unknown. Read separately/alongside changes layout only. Keep four feedback values equal and all six Partly reasons exact.
-- Outcome: existing feedback/correction is actually submitted; acknowledgement describes that event, not an instant new insight.
-- Input: eligible `ShownInsightView`, explicit response/observation provenance if supplied, async feedback/correction callbacks.
-- Output: existing feedback value/reason; optional note remains safety-only and unstored.
-- Existing support: current reflection, counts disclosure, fixed feedback policy and structured correction. No supports-raising effect for Accurate.
-- New functionality: visible successful-submission acknowledgement; a history view requires approved reactive eligibility/correction read model.
-- Evidence/privacy: do not pair an unrelated current response with a reflection as evidence. Partly qualifies/withholds; No is final. No raw note in callbacks, history or analytics.
-- Fallback: no eligible insight means no interpretation; absent exact evidence means do not invent quotations or observation text. Retry errors without false success.
-- Acceptance: exact engine wording; hedged reading not styled as fact; no rejected reading resurrected; “I'd rather not say” first-class; all reasons, skip, privacy wording and safety stop verified.
+| Actual current session | Permitted useful release | Not permitted |
+|---|---|---|
+| Primary unknown | “Not knowing is a complete answer.” Finish without a new assignment | Claim skill mastery or ask another question to resolve it |
+| Explicit absence / deliberate rest option | Acknowledge that exact choice and release | Treat calmness as missing data; automatically create a commitment |
+| Ordinary offered response | Show what was selected and a concise authored description of the operation, matched to approved content | Generic advice keyed to the tap presented as an insight or proof of benefit |
+| Real primary + follow-up | Present each exact response under its actual question; juxtapose without adding causal connective | Assume mood ownership, reason, goal or result not selected |
+| Commitment-creating option | Exact chosen authored commitment label + actual timeframe; optional permission to leave | Promise tomorrow's check unless supplied/scheduled; add another move choice |
+| Optional step skipped | Completed responses stand; no re-ask or penalty | Imply skip means unsure, resistance or missing effort |
+| Reloaded done with no receipt view | Truthful done state and eligible supplied insight, if any | Mine state or reconstruct an exact historical answer from current catalog defaults |
 
-### 8. Commitments
-- User need: recognize what was remembered and name its outcome without productivity pressure.
-- Capacity: actual action/continuity rep; label omitted for continuity as supplied.
-- Behavior: carry exact authored label and timeframe as a sentence. Follow-up only through actual approved step; neutral postponed/changed-mind outcomes.
-- Outcome: user's own status choice or optional timeframe; no inferred failure.
-- Input: step commitment context; remote `MirrorFacts.carrying` for factual display after integration.
-- Output: existing structured step answers; no arbitrary task editing endpoint.
-- Existing support: named follow-up, future-only dates; remote open/postponed carrying facts.
-- New functionality: unified carrying surface, no new calendar/task system.
-- Evidence/privacy: no IDs, overdue state, urgency badge or implied user-authored text when label is an offered option.
-- Fallback: no carrying records means quiet absence, not suggested obligations; undefined dueDate is no invented deadline.
-- Acceptance: label immediately recognizable, all five timeframes exact, today/past rejected for picked date, Back to Today distinct from Today timeframe.
+The intended future outcomes are clarity, a capacity exercised, intentional action, permission, or continuity. These are evaluation categories, not outputs already emitted by runtime. A new family must demonstrate its operation in session before its closing may describe it. A before/after report says what the user reported; it never proves the exercise caused the change. No mandatory time target or 90-second marketing promise from templates currently estimated at 15–35 seconds.
 
-### 9. The Mirror and evolving understanding
-- User need: see genuine accumulation while retaining the right to revise.
-- Capacity: factual practiced-capacity history, not an ability score.
-- Behavior: factual practice and carrying first; evidence-backed readings only from an approved eligible model. Avoid repeated unavailable cards.
-- Outcome: intelligible difference between fact, interpretation, correction and what cannot yet be said.
-- Input: approved `MirrorFacts`, practice-days fact; future explicit response records/eligible readings/corrections/shifts.
-- Output: navigation or approved callbacks only; no UI-computed patterns.
-- Existing support: remote capacities/carrying facts. No historical eligible reflection/response/shift model found.
-- New functionality: structured archive and correction/shift provenance remain Claude dependencies; fixtures may demonstrate the concept when conspicuously labelled.
-- Evidence/privacy: never mine `_state` or persisted blob; no charts of invented growth; no restoration of rejected claims.
-- Fallback: one generous beginning/sparse state; facts remain useful without interpretation.
-- Acceptance: no evidence, only practice, carrying, pending correction, rejected reading and unavailable history all distinguishable. Fixture data cannot enter production adapter.
+## 6. Exercise families: retain ambition, gate unsupported mechanics
 
-### 10. Privacy, trust and useful return
-- User need: know what is retained and return because practice has value.
-- Capacity: none assigned to utility screens.
-- Behavior: point-of-use privacy plus plain utility detail; a return is welcomed without a missed-day narrative.
-- Outcome: informed use, optional departure, a practice that ends.
-- Input: actual retention/auth behavior and approved product copy.
-- Output: existing support/sign-out/delete capabilities only where real; no invented control.
-- Existing support: device-local structured state, sign-out wipe; unsaved words/notes; existing account setup remains separate.
-- New functionality: durable cross-device history requires controlled engineering/privacy work; intentional Hindi/Gujarati font parity remains planned.
-- Evidence/privacy: do not describe the entire production product as “nothing saved” merely because a demo is memory-only.
-- Fallback: service/network errors explained honestly; no false deletion or sent-email confirmation.
-- Acceptance: demo/real-account distinction explicit; clear storage limitations; no unsupported security, efficacy or clinical claim.
+| Family | What earns its place | Current support | Decision/dependency |
+|---|---|---|---|
+| Notice | User discriminates a closer description, can say not quite | Broad recognition lists exist | Refinement/close-not-quite is new; don't call extra profiling a skill without review |
+| Attend | Deliberate allocation or set-aside | Attention recognition/paired statements | New allocation/remember-later semantics need contract; no productivity pressure |
+| Reframe | User considers genuinely different possible readings without a correct answer | `gro_update` reports change; does not perform new Reframe | Pilot after A3 approval. Domain alone may be insufficient to author safe plausible alternatives; keep original view/heavier legitimate, no charitable-reading preference |
+| Settle | User can pause and choose a response | No urge/pause contract | Safety review + A3; never infer crisis from “very strong” alone or change resource triggers in UI |
+| Relate | User distinguishes responsibilities without adjudicating fault | Mood attribution/follow-up and connection commitment | Full sort is new. No blanket “theirs” advice, unsafe-context detection claim or drag-only answer |
+| Choose | Deliberate intent or intentional non-action | `act_tiny`/`rel_connect` create real commitments; direction templates exist | Full values → compare → action chain is not already implemented despite family “Exists” label. A2/A3 if extended |
+| Recover | User deliberately recalls a resource or rests | `en_helped`, pacing and intentional rest option | New use-resource follow-up needs contract. Rest exercise distinct from disabled no-rep rest |
+| Integrate | Reflect on when noticing occurred without scoring it | No timing-report schema | A3; four-way timing is not automatically compatible with current change evidence. Dedicated evidence design needed before longitudinal comparisons |
 
-## Functional/prototype adapter requirements
+Select a small pilot for genuine operation, not all eight families at once. Reframe's brand fit does not prove its safety or superiority. A1 is optional, affects first selection only, and needs approved engine work; it is not necessary to repair today's permission-quiz onboarding. Never register family answers in an unsupported generic option slot.
 
-Reusable presentation accepts approved view data and callbacks. Real adapters consume public runtime/store methods, never diagnostic state. Fixture adapters are isolated development entry points with a persistent “fictional scenario” label, separate lifecycle and no production export. A fixture day is not the user's day. Prototype auth never connects to protected app routes. Mock errors/corrected/history states are explicitly labelled; they cannot claim real writes succeeded.
+## 7. Corrections: clear consequences, precise promises
 
-## Validation and release gate
+Four answers remain equal and unselected. All six correction reasons remain exact, in order, including prefer-not-to-say. Partly records its value first; reason is optional. Something else note retains “Optional. Not saved in this version.” Text is safety-checked, cleared, never passed through callbacks, persisted, sent, logged or rendered into history.
 
-Validate the complete implemented journey at 320×568, 390×844, 768×1024, 1024×768 and 1440×900; focus order, keyboard-only completion, 44px targets, contrast, reduced motion, long copy, scrolling and layout stability. Include sparse/return/resume/done, every correction, privacy/safety, date picker, failed callbacks and absence of eligibility. Product review must ask whether each operation helps understanding, not merely whether it is impressive.
+Copy below is a **reconciled candidate**, shown only after awaited success; final product copy requires review.
 
-Previous creative evidence is historical, not validation of the unified journey: 185 records, 84 geometry screenshots, 66 axe scans; 64 incomplete contrast checks remain unresolved. No new validation is claimed yet. New hosted preview must be a separate verified Preview, anonymous without token, leaving mirar.life and authoritative deployments unchanged. No merge or public production deployment.
+| Event | Candidate acknowledgement | Policy detail / limitation |
+|---|---|---|
+| Accurate | “Your response is recorded.” | Does not increase support or confidence; ordinary cooldown remains |
+| Partly | “This reading needs qualifying. It won’t be repeated unchanged.” | Withheld until reason-dependent new independent evidence; later wording must be hedged; not a promise of an instant rewritten reading |
+| Structured reason success | “Your correction is recorded.” | Show chosen reason if useful; no claim that user explained missing meaning; skip leaves no nag |
+| No | “This reading is set aside.” | Domain-related lens rest is 21 days for relevant claim kinds. Do not promise all questions, commitments or all reading kinds disappear for exactly 21 days |
+| Not sure | “No conclusion added. This reading will wait.” | Seven-day eligibility delay, not a guaranteed check-in in a week |
+| Callback failed | Existing failure + retry, no success | Keep reason retryable, note cleared; no false claim of confirmed durable disk/cloud write |
+
+Do not use “Ask me again later” as an actionable scheduling control without a real callback/contract. Do not show an explicit scheduled date based solely on cooldown expiry. Immediately hide or qualify the reading surface according to the reviewed product choice; do not keep the unchanged claim in Mirror history after Partly as a shortcut. Real feedback semantics remain unchanged.
+
+## 8. Typed Mirror: good foundation, concrete release gates
+
+Remote v1 supplies `MirrorModel {version,engineVersion,state,statements,sections}` and `MirrorStatement {id,section,source,text,facts,trace,date?}`. Sources are `user_said`, `observed`, `inferred`, `unknown`; sections said/practised/come_up/carrying/readings/shifted/unknown. Use these source boundaries, not seven mandatory visual chapters. IDs are internal metadata, never user-facing copy.
+
+**Verified result:** existing suite passes all nine checks over 24 simulated users / 430 statements, including six directly rejected readings. That does not prove current eligibility, exact question identity or supporting-trace correctness. Focused checks on the same pinned code reproduced the first four issues below; source review establishes the others. Evidence in `reconciliation-validation/`.
+
+| Gate | Gap in `2d150e0` | Required runtime contract behavior / fallback |
+|---|---|---|
+| M1: current reading eligibility | `readings` loops all insights and only omits directly No records; Partly prints original text unchanged with a verdict suffix. Old related readings are not checked against later feedback/current withholding | Claude repairs eligibility/provenance view outside frozen engine. All six Partly reasons, skipped reason, Not sure delay, later domain rejection and expired/retired evidence tested. Until repaired: show no historical inferred reading/shift; do not infer eligibility in UI |
+| M2: actual offered question/choice | `optionLabel` uses base template prompt/options, ignores instance frame/binding/variant; tested variant question mismatch and missing lens “Not today” | Return actual served question/label provenance. Do not silently substitute defaults. Missing provenance → omit exact receipt; no reconstruction in presentation |
+| M3: source-linked evidence | Trace IDs exist, but readings have only insight IDs; no supporting record mapping. `come_up` collects domain/day observations, potentially mixing independent and continuation records | Expose authoritative minimal support records and count semantics. Hide response→reading links until supplied. Adjacent planes never imply derivation just because both exist |
+| M4: complete structured facts | `facts` is an open Record, not a source/section-discriminated schema. Reading facts omit prompted/introduced counts; recurring facts have window/count but no offered denominator | Strengthen view schema/validators with required per-source fields and validity. Do not infer ratios, numerator definitions or denominators from trace length/window length. Use authored text only when eligible; display exact counts actually supplied |
+| M5: accurate unknown copy | “Mirar has not been told anything in these areas” is based on unpractised capacities; a probe can supply work context without any training rep | Say only that those capacities have no completed training reps. Unknown count is not refusal/ability; not a prominent score. Missing practice is not missing personal knowledge |
+| M6: retained-state limits | Runtime housekeeping retains finite instances/observations/insights; existing suite only covers 30 days | Test traces after trimming/reload (including >120-day observations/>300 instances). Specify retained-history window, omit unverifiable statements; never market lifetime/all-history counts |
+| M7: historical status vs current assertion | Historical accepted readings may no longer be supported; date and old verdict alone do not establish permission to present as current | Model explicit current eligibility or withheld/history-only status. Resolve archival policy before display; current recommendation keeps gated historical text out |
+
+The UI may render reviewed factual practice/carrying views, and matched source statements after repair. A safe interim Mirror is an empty/sparse surface with real practices and commitments, optional provenance disclosure, no gated readings or unsupported recurring/shift statements. The ledger is inspectable evidence, not a hero list of quiz answers.
+
+Do not connect an unrelated live answer with a fictional work reading. Fictional studies use their own coherent support records and explicit label. Read separately/alongside changes layout only; it never restores hidden claims. Before/after describes reported answers, never causes or growth.
+
+## 9. Privacy and claim decisions
+
+Retain local structured practice and sign-out wipe. An account email and authored choices still constitute sensitive information; “no raw words” is not “no sensitive data.” New cloud history remains explicit opt-in proposal, default off, not part of visual delivery. No migration, backup setting, staff access or deletion claim is implemented here.
+
+The durable-history memo needs engineering decisions: ordered feedback/correction events are not generally commutative; runtime feedback is first-answer-wins, not a universal last-action-wins policy. Replay needs served decisions, variants, dates, abandoned instances and feedback, not completions alone. Existing bounded local snapshot cannot always recreate discarded event history. Owner-only RLS is not proof that only the user can technically access data; disclosure must match actual staff/provider capabilities. Schema text-key bans alone cannot prevent raw content inside JSON; validation must constrain values. None of these is approval to implement sync.
+
+Do not repeat unsupported competitor superiority, habit certainty or safety claims. “No competitor does this” is unverified and excluded from product copy. Simulator figures describe synthetic runs, not real retention or efficacy. A Day-30 view can be useful on one retained device; cross-device durability is the unsupported promise, not the existence of any Day-30 value. Earlier/lighter answers never signify better mental health. No clinical claims or new safety routing.
+
+## 10. Implementation priorities and decision ownership
+
+1. **P0 / Claude:** repair M1/M2 and define M3/M4 support/eligibility. Tests must cover qualified/withheld/related-old readings and contextual exact receipts, not only No. User decisions on archival semantics remain explicit. No engine edit required to enforce a safe read boundary.
+2. **P1 / Codex + product:** one unified discovery→entry→brief autonomous intro→actual first rep→outcome-specific integration slice. Repair unknown/absence contradiction, eliminate permission quiz, truthful success/error correction acknowledgement. Preserve real runtime and canonical graphics. This improves current flow; it does not pretend new families ship.
+3. **P2 / Claude + Codex:** factual/sparse Mirror and corrected typed view, collapsed provenance, real carrying, reactive feedback updates. Never ship all seven sections because the type lists them.
+4. **P3 / Claude:** approved scheduled-context cue supplier; show on Today only when actual current selection/pending event supports it. No “tomorrow” promise from a general eligibility rule.
+5. **P4 / product:** decide a real exercise pilot and explicit confirmation policy; approve versioned A1/A3 separately if desired. Validate Reframe alternative content, taxonomy and non-action paths before pursuing volume.
+6. **Separate / engineering + product:** opt-in durable history, actual auth/security review, safety review, multilingual fonts and native assistive-technology checks. No broad dependency upgrades in the design pass.
+
+## 11. Acceptance and truthful failure states
+
+- Every major operation states a concrete user need/capacity, actual performed action, user-visible outcome, supported input/output and legitimate stop/unknown path. A reviewer can name what was done, not just how many answers were collected.
+- Day 1 works without any insight/history/commitment. An unsure/absent/declining user can finish without generic advice or a compulsory move.
+- Intro skip works; no personal preference can change first selection until A1 is approved. Returning people do not repeat onboarding solely because history is sparse.
+- Exact primary/follow-up questions and choices are preserved across frame/variant. Reloaded missing receipt is honest; no raw text reconstructed.
+- All four feedback paths and six reasons, reason skip, note skip/continue, failure/retry and safety stop tested. No/Partly cannot resurrect unchanged text through Today, Mirror, separation control, reload or a related reading.
+- All claims in functional Mirror come through reviewed public model, with authoritative eligibility and supporting provenance. IDs existing is necessary, not sufficient. Denominator/window semantics explicit; no cause/growth inference.
+- Empty, sparse, factual, corrected, rejected, unavailable, returning, interrupted and completed states are useful. Day 1/3/7/30 fixtures labelled and capability-driven, not unlocks.
+- Validate 320×568, 390×844, 768×1024, 1024×768, 1440×900; long prompts/reasons/commitments, scroll/focus stability, keyboard-only completion, 44px targets, contrast, reduced motion and native date behavior. Historical axe incomplete checks must be resolved/reported, not called certification.
+- Five-person journey review is formative usability, not efficacy or representative retention evidence. Observe clarity about selected response vs reading and why a correction mattered. Don't optimize down the unknown rate as if uncertainty is failure; better relevance may increase honest uncertainty.
+- Canonical pixels unchanged. No engine/catalog/privacy changes hidden in presentation. Auth errors and local write limitations accurately described. No analytics on responses.
+
+## 12. Delivery status
+
+The audit branch and reconciled specification are published for Claude to read. This change is documentation and reproducible review evidence only. No new unified UI, runtime edits, engine amendments, merge, migration or deployment. Existing creative Preview remains unchanged. Agreement exists at the recommendation level; implementation blockers and product decisions in §§6–10 are not silently resolved.

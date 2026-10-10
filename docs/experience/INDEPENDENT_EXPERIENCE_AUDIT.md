@@ -1,5 +1,7 @@
 # Mirar — independent experience audit
 
+> Historical audit before blueprint publication. The complete originals at `9095186` and `2d150e0` have since been read; current findings, capabilities and decisions are in [the reconciled common contract](MIRAR_UNIFIED_EXPERIENCE_CONTRACT.md) and [alignment matrix](PRODUCT_CREATIVE_ALIGNMENT.md).
+
 8 October 2026. Source review on `codex/mirar-unified-experience`, implementation base `ad4d6a9`. This audit does not reconstruct or evaluate the missing blueprint. The user identifies its original branch as `mirar-product-blueprint`, commit `9095186`; publication is awaiting confirmation. Once confirmed, fetch it, read `docs/PRODUCT_BLUEPRINT.md` completely, record its full commit, and reconcile before merging or deploying.
 
 ## Evidence and limits

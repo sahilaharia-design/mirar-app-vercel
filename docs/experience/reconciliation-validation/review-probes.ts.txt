@@ -1,0 +1,15 @@
+import {buildMirror} from './lib/innerRep/runtime/mirror-contract';
+import {createState,flowContext,applyRep} from './lib/innerRep/v2/state';
+import {TEMPLATE_BY_ID} from './lib/innerRep/v2/templates';
+import {computeEvidence} from './lib/innerRep/v2/evidence';
+import {chooseInsight,applyFeedback,applyCorrection} from './lib/innerRep/v2/insights';
+import {nextStep} from './lib/innerRep/v2/contracts';
+function add(s:any,day:number,t:string,frame:any='base',bound:any=undefined,variant=0){const ctx=flowContext(s,day,t,frame,bound,undefined,variant);const temp=TEMPLATE_BY_ID[t];const i:any={id:++s.seq.inst,day,templateId:t,frame,bound,capacity:temp.capacity,mechanism:temp.mechanism,intensity:temp.intensity,layer:temp.role==='training'?'training':'probe',intent:'probe',variant,trace:{},completed:false,unknownPrimary:false,burden:false,skippedAll:false};s.instances.push(i);return {ctx,i};}
+const rows:any[]=[];
+const s=createState(42);for(let day=20000;day<20005;day++){const {ctx,i}=add(s,day,'probe_anchor');applyRep(s,i,ctx,[{stepId:'primary',kind:'option',optionId:'work'},{stepId:'thread_offer',kind:'no'}]);}
+const shown=chooseInsight(s,computeEvidence(s,20004).evidence,20004,false).shown;if(!shown)throw Error('missing fixture reading');const ins:any={...shown,id:++s.seq.insight,day:20004};s.insights.push(ins);applyFeedback(s,ins.id,'partly',20004);applyCorrection(s,ins.id,'something_missing',20004);
+rows.push({check:'Partly-qualified text reproduced unchanged',observed:buildMirror(s,20004).sections.readings.some(x=>x.text.startsWith(ins.text)),expected:false});
+const v=createState(4);const a=add(v,20000,'probe_anchor','base',undefined,1);const offered=nextStep(a.ctx,[])!;applyRep(v,a.i,a.ctx,[{stepId:'primary',kind:'option',optionId:'work'},{stepId:'thread_offer',kind:'no'}]);const receipt=buildMirror(v,20000).sections.said[0];rows.push({check:'Receipt uses actually offered variant question',offeredPrompt:offered.prompt,receiptQuestion:receipt?.facts.question,observed:offered.prompt===receipt?.facts.question,expected:true});
+const l=createState(5);const b=add(l,20000,'foc_attention','lens','work');const question=nextStep(b.ctx,[])!;applyRep(l,b.i,b.ctx,[{stepId:'primary',kind:'option',optionId:'not_today'}]);rows.push({check:'Approved lens response represented in said',offeredPrompt:question.prompt,option:'Not today',observed:buildMirror(l,20000).sections.said.length>0,expected:true});
+const u=createState(6);const c=add(u,20000,'probe_anchor');applyRep(u,c.i,c.ctx,[{stepId:'primary',kind:'option',optionId:'work'},{stepId:'thread_offer',kind:'no'}]);rows.push({check:'Unpractised copy does not deny supplied context',text:buildMirror(u,20000).sections.unknown.find(x=>x.id==='unknown:unpractised')?.text,knownTopic:'work'});
+console.log(JSON.stringify(rows,null,2));
