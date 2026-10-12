@@ -21,10 +21,10 @@ History is preserved by merge commits. No force-push, no rebase of shared branch
 - **Discovery: the fictional example is inert** (no live feedback buttons) and labelled as not connected to the sample.
 
 ## Contract repairs made after Codex's review (all tested)
-M1/M7 current eligibility · M2 exact prompts (the resolver) · M3 provenance flag (`approximate` for recurring counts until amendment A5) · M4 typed facts with denominators · M5 honest unpractised copy · M6 retention window and truncation flag. 21 contract checks, including a mutation-checked Partly gate.
+M1/M7 current eligibility · M2 exact prompts (the resolver) · M3 provenance flag (`approximate` for recurring counts until amendment A5) · M4 typed facts with denominators · M5 honest unpractised copy · M6 retention window and truncation flag. 20 contract checks, including a mutation-checked Partly gate.
 
 ## Tests (this branch)
-TypeScript clean. Engine 85/85. Correction 17/17. Runtime 18/18. Mirror 4. Mirror contract 21 checks. Receipt 8 checks. Codex review build passes.
+TypeScript clean. Engine 85/85. Correction 17/17. Runtime 18/18. Mirror 4. Mirror contract 20 checks. Receipt 8 checks. Codex review build passes.
 
 ## Staging (not production)
 Hosted, behind Vercel protection: a demo-auth build with review states enabled (`mirar-7njn2n8wq-…`), and a production-equivalent real-auth build (`mirar-jsap1qbdq-…`). Neither is promoted.
