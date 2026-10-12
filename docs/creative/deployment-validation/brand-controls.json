@@ -1,0 +1,56 @@
+[
+  {
+    "direction": "aperture",
+    "viewport": [
+      390,
+      844
+    ],
+    "separateAlongsideKeepsContent": true,
+    "overflow": false
+  },
+  {
+    "direction": "weave",
+    "viewport": [
+      390,
+      844
+    ],
+    "separateAlongsideKeepsContent": true,
+    "overflow": false
+  },
+  {
+    "direction": "field",
+    "viewport": [
+      390,
+      844
+    ],
+    "separateAlongsideKeepsContent": true,
+    "overflow": false
+  },
+  {
+    "direction": "aperture",
+    "viewport": [
+      1440,
+      900
+    ],
+    "separateAlongsideKeepsContent": true,
+    "overflow": false
+  },
+  {
+    "direction": "weave",
+    "viewport": [
+      1440,
+      900
+    ],
+    "separateAlongsideKeepsContent": true,
+    "overflow": false
+  },
+  {
+    "direction": "field",
+    "viewport": [
+      1440,
+      900
+    ],
+    "separateAlongsideKeepsContent": true,
+    "overflow": false
+  }
+]

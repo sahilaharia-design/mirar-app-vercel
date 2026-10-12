@@ -1,0 +1,26 @@
+[
+  {
+    "check": "Partly-qualified text reproduced unchanged",
+    "observed": true,
+    "expected": false
+  },
+  {
+    "check": "Receipt uses actually offered variant question",
+    "offeredPrompt": "What's taking up the most room in your head today?",
+    "receiptQuestion": "What's most on your mind today?",
+    "observed": false,
+    "expected": true
+  },
+  {
+    "check": "Approved lens response represented in said",
+    "offeredPrompt": "Did work pull at your attention today?",
+    "option": "Not today",
+    "observed": false,
+    "expected": true
+  },
+  {
+    "check": "Unpractised copy does not deny supplied context",
+    "text": "Not practised yet: Direction, Energy, Focus, Relationships, Growth, Action. Mirar has not been told anything in these areas.",
+    "knownTopic": "work"
+  }
+]
