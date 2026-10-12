@@ -80,6 +80,23 @@ In the Supabase dashboard, confirm one new row in Authentication → Users and o
 
 **Report back:** pass or fail for each step, the sender and subject line, and the link's host (never the link itself).
 
+### 3a. Who does what in the signup test (so only the inbox steps need you)
+
+| Step | Who | Needs your inbox? |
+|---|---|---|
+| Read Supabase Authentication > URL Configuration (Site URL, Redirect URLs) and tell me the values (they are not secret) | **YOU** | No (needs your Supabase login) |
+| Add `https://mirar-v2-review-real.vercel.app/**` to Redirect URLs (see the note below) | **YOU** | No |
+| Give me a never-used test address, or type it yourself | **YOU** | No |
+| Open the landing, press the CTA, confirm the URL is `.../login`, type the address, press "Send my sign-in link", confirm the "sent" state | **Claude** (browser) or you | No |
+| **Open the email** (check spam), confirm sender and subject, hover to read where the link points | **YOU** | **Yes** |
+| **Click the link in the same browser** (or, if I am driving, copy it to that browser) | **YOU** | **Yes** |
+| Watch the account screen, introduction, first rep, closing; reload; sign out; sign in again; click the first link again | Claude or you | Only to fetch the second email for the sign-in-again step |
+| Check the new row in Authentication > Users and the `users` table | **YOU** | No (needs your Supabase login) |
+
+**Which build to test.** Production (`mirar-app.vercel.app`) still runs the previous release, so testing there tests the old onboarding. To test the **new** integrated app with real sign-in before cutover, use `https://mirar-v2-review-real.vercel.app`. The sign-in link returns to whichever address the user started from, and Supabase only honours that if it is in Redirect URLs; otherwise it falls back to the Site URL (production). So add the review alias to Redirect URLs for the duration of the test, and remove it afterwards if you prefer. It is a login-protected address, not a public one.
+
+**Do not paste the sign-in link into chat.** It signs the holder in. I only need its host and whether the page after clicking looked right.
+
 ## 4. Stable review environment (no expiring links)
 
 Two fixed aliases on the existing `mirar-app` project, both **not production** and protected by Vercel login (you are signed in as the team owner, so just open them):
