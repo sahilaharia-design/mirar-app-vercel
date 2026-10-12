@@ -1,6 +1,6 @@
 # Public practice sample — validation evidence
 
-12 October 2026. Tested locally at http://127.0.0.1:5180 with the published Claude routing destination configured. No deployment performed.
+12 October 2026. Tested locally at http://127.0.0.1:5180 with the published Claude routing destination configured. No production deployment performed.
 
 ## Results
 
@@ -27,3 +27,7 @@ Use the existing landing dev script with `VITE_MIRAR_APP_ENTRY_URL=https://mirar
 Claude must review the general fictional mechanic and authored content against evidence boundaries, integrate the frontend change and own staging/release. No engine, persistence, schema, catalog, selection or feedback changes were made.
 
 The decisive human test remains **unrun**: ask first-time visitors “What did you practise?” without suggesting an answer. Technical branch coverage proves operation, not comprehension or emotional-fitness efficacy. A response of “I answered questions” requires further redesign.
+
+## Hosted repeat verification
+
+Repeated the complete harness against the public deployment `https://mirar-creative-review-8zhsa4dn7-sahilaharia-designs-projects.vercel.app/` on 12 October 2026. Latest `results.json` and screenshots are from that hosted run: 178 records, 45 path checks, 51 axe scans, zero violations/incomplete checks, no runtime errors, and CTA arrival at the configured login URL. No credentials, bypass headers or signed share links were used. All five requested sizes passed. Static preview deployment uses the existing creative-review project; production remains untouched.
