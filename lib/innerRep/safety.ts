@@ -6,6 +6,8 @@
 // non-Roman scripts (Devanagari/Gujarati), and has false positives on idioms
 // (docs/ENGINE_REVIEW.md §9). Wording + helpline list need founder/clinician sign-off before
 // production (flagged in docs/EMOTIONAL_FITNESS_AUDIT.md).
+// Resources checked 2026-10-07 against the Tele-MANAS programme (MoHFW, https://telemanas.mohfw.gov.in): 14416 and
+// 1800-891-4416, free, 24x7. India emergency number 112. Re-verify before changing or adding regions.
 const PATTERNS: RegExp[] = [
   /\bkill(ing)?\s+my\s*self\b/i,
   /\bend(ing)?\s+(it\s+all|my\s+(own\s+)?life)\b/i,
@@ -38,7 +40,7 @@ export const SAFETY_RESOURCES = {
   body: 'If you might act on these thoughts, or you\'re in danger right now, please contact emergency services or a crisis line. You don\'t have to be sure it\'s "serious enough" to call.',
   lines: [
     { label: 'Emergency (India)', value: '112' },
-    { label: 'Tele-MANAS — free, 24x7 (India)', value: '14416' },
+    { label: 'Tele-MANAS — free, 24x7 (India)', value: '14416 or 1800-891-4416' },
     { label: 'Elsewhere', value: 'Call your local emergency number' },
   ],
   note: 'Mirar is not therapy or crisis support.',
