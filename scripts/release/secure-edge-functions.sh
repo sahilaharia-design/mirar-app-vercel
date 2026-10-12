@@ -1,55 +1,89 @@
 #!/usr/bin/env bash
-# Rotates ADMIN_SECRET and secures the admin edge functions. RUN BY THE SUPABASE ACCOUNT OWNER.
-# Never prints a secret. Prints only secret NAMES, digests (hashes), HTTP status codes and byte counts.
+# Secures the admin edge functions. RUN BY THE SUPABASE ACCOUNT OWNER. Compatible with macOS bash 3.2.
+# Never prints a secret. Prints only secret NAMES, digests (hashes), function names, HTTP status codes and byte counts.
+# Never calls any function except the two admin functions in the verification step, and never sends a credential that is real.
 #
-# Prerequisites (one time):
+# One-time setup:
 #   brew install supabase/tap/supabase
 #   supabase login                                   # opens a browser; you authorize the CLI
 #   supabase link --project-ref jranpiyhluyuqigqfyhn
 #
-# Usage:
-#   scripts/release/secure-edge-functions.sh delete     # rotate, then DELETE admin-analytics and admin-user-list (recommended)
-#   scripts/release/secure-edge-functions.sh redeploy   # rotate, then deploy the fail-closed versions from this repo
+# Modes (read-only first):
+#   scripts/release/secure-edge-functions.sh inventory   # READ-ONLY: lists deployed functions and secret names/digests
+#   scripts/release/secure-edge-functions.sh delete      # rotate ADMIN_SECRET, then delete admin-analytics and admin-user-list
+#   scripts/release/secure-edge-functions.sh redeploy    # rotate ADMIN_SECRET, then deploy the fail-closed admin functions
+#
+# Failure handling (why no partial failure leaves you worse off):
+#   * Step order is: rotate, confirm, then delete. If rotation fails the script stops and nothing has changed.
+#   * Rotation only REPLACES the secret; it never unsets it. The deployed admin code skips its check when the secret is UNSET,
+#     so deletion-before-rotation or "delete the secret" would be unsafe, and this script does neither.
+#   * If anything fails after rotation, the old leaked value is already dead and the functions are still gated by a value nobody knows.
+#   * Re-running is safe: it rotates again and retries the deletion.
 set -euo pipefail
-MODE="${1:-}"; [ "$MODE" = "delete" ] || [ "$MODE" = "redeploy" ] || { sed -n 2,13p "$0"; exit 2; }
+MODE="${1:-}"
+case "$MODE" in inventory|delete|redeploy) ;; *) sed -n 2,18p "$0"; exit 2;; esac
 REF="jranpiyhluyuqigqfyhn"
-command -v supabase >/dev/null || { echo "Supabase CLI not found. See prerequisites."; exit 1; }
+ADMIN_FUNCS="admin-analytics admin-user-list"
+
+command -v supabase >/dev/null || { echo "Supabase CLI not found. See setup at the top of this file."; exit 1; }
+command -v curl >/dev/null || { echo "curl not found."; exit 1; }
+
+echo "== 0. Access check and inventory (read-only)"
+supabase functions list --project-ref "$REF" || { echo "Cannot list functions. Run: supabase login, then supabase link --project-ref $REF"; exit 1; }
+echo
+echo "Secret names and digests (hashes; values are never shown):"
+SECRETS="$(supabase secrets list --project-ref "$REF" 2>/dev/null || true)"
+echo "$SECRETS"
+digest() { echo "$SECRETS" | awk -v n="$1" '$1==n {print $NF}' | head -1; }
+BEFORE_ADMIN="$(digest ADMIN_SECRET)"
+if echo "$SECRETS" | grep -q "CRON_SECRET"; then echo "CRON_SECRET: present"; else echo "CRON_SECRET: NOT SET"; fi
+echo "ADMIN_SECRET digest before: ${BEFORE_ADMIN:-<not set>}"
+[ "$MODE" = "inventory" ] && { echo "Inventory only. Nothing was changed."; exit 0; }
+
+echo
+echo "This will rotate ADMIN_SECRET and then $MODE: $ADMIN_FUNCS"
+read -r -p "Type YES to continue: " OK; [ "$OK" = "YES" ] || { echo "Cancelled. Nothing changed."; exit 1; }
+
+echo "== 1. Rotate ADMIN_SECRET (the new value is generated, sent to Supabase and discarded; it is never displayed)"
 command -v openssl >/dev/null || { echo "openssl not found."; exit 1; }
-
-digest() { supabase secrets list --project-ref "$REF" 2>/dev/null | awk -v n="$1" '$1==n || $2==n {print $NF}' | head -1; }
-
-echo "== 1. Before: secret names present (digests only)"
-BEFORE_ADMIN="$(digest ADMIN_SECRET || true)"; CRON_PRESENT="$(supabase secrets list --project-ref "$REF" 2>/dev/null | grep -c CRON_SECRET || true)"
-echo "ADMIN_SECRET digest: ${BEFORE_ADMIN:-<not set>}"; echo "CRON_SECRET present: $([ "$CRON_PRESENT" -gt 0 ] && echo yes || echo NO)"
-
-echo "== 2. Rotate ADMIN_SECRET (new value is generated and sent to Supabase; it is never displayed or saved)"
-# The value goes through a private temp file (mode 600), not the command line, so it never appears in the process list.
 umask 077; TMP="$(mktemp)"; trap 'rm -f "$TMP"' EXIT
 printf 'ADMIN_SECRET=%s\n' "$(openssl rand -base64 48)" > "$TMP"
 supabase secrets set --env-file "$TMP" --project-ref "$REF" >/dev/null
 rm -f "$TMP"
-AFTER_ADMIN="$(digest ADMIN_SECRET || true)"
-if [ -n "$AFTER_ADMIN" ] && [ "$AFTER_ADMIN" != "$BEFORE_ADMIN" ]; then echo "ADMIN_SECRET digest changed: ROTATED"; else echo "ADMIN_SECRET digest did NOT change. Stop and check the dashboard (Edge Functions > Secrets)."; exit 1; fi
-echo "Note: nobody, including you, now knows the value. If you want to use the admin functions later, set a value you have saved in your password manager."
 
-echo "== 3. Secure the functions"
-if [ "$MODE" = "delete" ]; then
-  supabase functions delete admin-analytics --project-ref "$REF"
-  supabase functions delete admin-user-list --project-ref "$REF"
-else
-  supabase functions deploy admin-analytics --project-ref "$REF" --no-verify-jwt
-  supabase functions deploy admin-user-list --project-ref "$REF" --no-verify-jwt
+echo "== 2. Confirm the rotation"
+SECRETS="$(supabase secrets list --project-ref "$REF" 2>/dev/null || true)"
+AFTER_ADMIN="$(digest ADMIN_SECRET)"
+if [ -z "$AFTER_ADMIN" ]; then
+  echo "Could not read the new digest. The secret may or may not have changed. Open Dashboard > Edge Functions > Secrets and check ADMIN_SECRET exists and 'updated' is just now. STOPPING before any deletion; the functions remain gated."
+  exit 1
 fi
+if [ "$AFTER_ADMIN" = "$BEFORE_ADMIN" ]; then
+  echo "Digest unchanged, so the secret was NOT rotated. STOPPING before any deletion; nothing has changed."
+  exit 1
+fi
+echo "ADMIN_SECRET digest changed: ROTATED. The previously leaked value no longer works."
 
-echo "== 4. Verify (status code and size only; response bodies are discarded)"
-for n in admin-analytics admin-user-list; do
-  for H in "none" "x-admin-secret: invalid-test-credential-0001"; do
-    if [ "$H" = "none" ]; then ARGS=(); else ARGS=(-H "$H"); fi
-    printf "%-16s %-45s " "$n" "${H}"; curl -s -o /dev/null -w "status=%{http_code} bytes=%{size_download}\n" -X POST "https://$REF.supabase.co/functions/v1/$n" "${ARGS[@]}" -H "Content-Type: application/json" -d '{}'
-  done
+echo "== 3. $MODE the admin functions (one at a time; stops on the first failure)"
+BK="$(mktemp -d)"
+for n in $ADMIN_FUNCS; do
+  if [ "$MODE" = "delete" ]; then
+    # best-effort backup of the deployed source before deleting (the repository also holds the source)
+    ( cd "$BK" && mkdir -p supabase && supabase functions download "$n" --project-ref "$REF" >/dev/null 2>&1 ) && echo "backed up $n to $BK" || echo "(backup of $n not possible; the repository holds its source)"
+    supabase functions delete "$n" --project-ref "$REF"
+    echo "deleted $n"
+  else
+    supabase functions deploy "$n" --project-ref "$REF" --no-verify-jwt
+    echo "redeployed $n"
+  fi
 done
-echo "Expected: 401 for every line (redeploy mode) or 404 (delete mode)."
 
-echo "== 5. CRON_SECRET"
-[ "$CRON_PRESENT" -gt 0 ] && echo "CRON_SECRET exists: trial-lifecycle is gated. No change made." || echo "CRON_SECRET is NOT set: trial-lifecycle can be triggered by anyone holding the public anon key. Tell Claude; do not deploy a fail-closed change until the scheduler is confirmed to send x-cron-secret."
+echo "== 4. Verify (status and size only; bodies discarded; the test credential is a dummy)"
+for n in $ADMIN_FUNCS; do
+  printf "%-16s no credential          " "$n"
+  curl -s -o /dev/null -w "status=%{http_code} bytes=%{size_download}\n" -X POST "https://$REF.supabase.co/functions/v1/$n" -H "Content-Type: application/json" -d '{}'
+  printf "%-16s wrong credential       " "$n"
+  curl -s -o /dev/null -w "status=%{http_code} bytes=%{size_download}\n" -X POST "https://$REF.supabase.co/functions/v1/$n" -H "x-admin-secret: invalid-test-credential-0001" -H "Content-Type: application/json" -d '{}'
+done
+echo "Expected: 404 on every line after delete; 401 on every line after redeploy."
 echo "Done."
