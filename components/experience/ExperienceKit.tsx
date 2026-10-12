@@ -4,10 +4,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import { MIRAR as M } from '../../design-system/native';
 import { BrandAsset, VisualFoundation, Body, Eyebrow } from '../inner-rep/v2/Foundation';
 
-export function ExperiencePage({ children, action }: { children: React.ReactNode; action?: React.ReactNode }) {
+export function ExperiencePage({ children, action, publicPage=false }: { children: React.ReactNode; action?: React.ReactNode; publicPage?:boolean }) {
  const { width } = useWindowDimensions();
  return <VisualFoundation><SafeAreaView style={X.page} edges={['top','bottom']}><ScrollView style={X.page} contentContainerStyle={[X.pageContent,{paddingHorizontal:width<768?24:64}]} keyboardShouldPersistTaps="handled">
-  <View role="banner" style={X.header}><BrandAsset/><View style={X.actions}>{action}<Eyebrow>Beta</Eyebrow></View></View>
+  <View role="banner" style={X.header}><BrandAsset/><View style={X.actions}>{action}<Eyebrow>{publicPage?'Daily practice':'Beta'}</Eyebrow></View></View>
   <View role="main" style={X.bound}>{children}</View>
  </ScrollView></SafeAreaView></VisualFoundation>;
 }

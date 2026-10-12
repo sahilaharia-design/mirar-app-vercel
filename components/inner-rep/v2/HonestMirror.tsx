@@ -15,7 +15,7 @@ export interface ShownInsight {
 export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { insight: ShownInsight; onFeedback: (feedback: InsightFeedback) => Promise<void>; onCorrection?: (reason: CorrectionReason) => Promise<void>; onSafety?: () => void }) {
  const [given, setGiven] = useState<InsightFeedback | null>(null); const [pending, setPending] = useState(false);
  const [evidence, setEvidence] = useState(false); const [error, setError] = useState(false); const [corrected, setCorrected] = useState(false);
- const [correcting, setCorrecting] = useState(false);
+ const [correcting, setCorrecting] = useState(false); const [skipped,setSkipped]=useState(false);
  // structured correction. Free text, if offered, lives only in this field: it is safety-checked, cleared, and never passed on.
  const [pendingReason, setPendingReason] = useState<CorrectionReason | null>(null); const [note, setNote] = useState('');
  const give = async (value: InsightFeedback) => { if (pending) return; setPending(true); setError(false); try { await onFeedback(value); setGiven(value); } catch { setError(true); } finally { setPending(false); } };
@@ -23,19 +23,22 @@ export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { 
  const finishNote = async (use: boolean) => { const crisis = use && containsCrisisLanguage(note); setNote(''); if (crisis) { setPendingReason(null); onSafety?.(); return; } if (pendingReason) await send(pendingReason); };
  return <View style={styles.mirror}>
   <Eyebrow>{insight.tier === 'hedged' ? 'Something to consider' : 'Worth noticing'}</Eyebrow>
-  <Prompt label="mirror-prompt">{insight.text}</Prompt>
+  {!given?<Prompt label="mirror-prompt">{insight.text}</Prompt>:<Prompt compact reveal label="mirror-receipt">{given==='partly'?'This reading needs qualifying.':given==='no'?'This reading is set aside.':given==='unsure'?'Room to remain unsure.':'Your response is recorded.'}</Prompt>}
+  <Body style={styles.hint}>{insight.evidence.independentN} independent observations · {insight.evidence.promptedN} chosen from offered options · {insight.evidence.introducedN} raised by you</Body>
   <Action secondary expanded={evidence} onPress={() => setEvidence(!evidence)}>{evidence ? 'Hide the context' : 'Why am I seeing this?'}</Action>
   {evidence && <View style={styles.evidence}><Body>{insight.evidence.independentN} independent observations</Body><Body>{insight.evidence.promptedN} chosen from offered options</Body><Body>{insight.evidence.introducedN} raised by you</Body></View>}
   <View style={styles.feedback}>
-   <Body>{given ? 'Noted.' : 'Does this feel accurate?'}</Body>
+   <Body>{given==='partly'?'It won’t be repeated unchanged. More independent evidence is needed before a qualified reading can return.':given==='no'?'Your disagreement is recorded about Mirar’s reading, not about you.':given==='unsure'?'No conclusion added. Waiting is not a scheduled follow-up.':given==='accurate'?'This does not make the reading more certain.':'Does this feel accurate?'}</Body>
    {!given && <View style={styles.wrap}>{([['accurate','Accurate'],['partly','Partly'],['no','No'],['unsure','Not sure']] as const).map(([value,label]) => <Action key={value} secondary disabled={pending} onPress={() => void give(value)}>{label}</Action>)}</View>}
+   {corrected&&<Body accessibilityLiveRegion="polite">Your correction is recorded.</Body>}
+   {skipped&&<Body accessibilityLiveRegion="polite">Partly is recorded. No reason is needed.</Body>}
    {error && <Body accessibilityRole="alert">Couldn't record that. Please try again.</Body>}
-   {given === 'partly' && onCorrection && !corrected && <View style={styles.feedback}>
+   {given === 'partly' && onCorrection && !corrected && !skipped && <View style={styles.feedback}>
     {!correcting && <Action secondary expanded={false} onPress={() => setCorrecting(true)}>{CORRECTION_PROMPT}</Action>}
     {correcting && !pendingReason && <View>
      <Prompt compact reveal label="correction-prompt">{CORRECTION_PROMPT}</Prompt>
      <View role="group" accessibilityLabel={CORRECTION_PROMPT}>{CORRECTION_REASONS.map(r => <SelectionSurface key={r.id} disabled={pending} onPress={() => (r.words ? setPendingReason(r.id) : void send(r.id))}>{r.label}</SelectionSurface>)}</View>
-     <View style={styles.skip}><Action secondary onPress={() => setCorrecting(false)}>Skip</Action></View>
+     <View style={styles.skip}><Action secondary onPress={() => {setCorrecting(false);setSkipped(true);}}>Skip</Action></View>
     </View>}
     {correcting && pendingReason && <View style={styles.note}>
      <Prompt compact reveal label="correction-note-prompt">{CORRECTION_REASONS.find(r => r.id === pendingReason)!.label}</Prompt>

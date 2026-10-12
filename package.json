@@ -11,7 +11,10 @@
     "vercel-build": "expo export --platform web",
     "visual:review": "vite --config review/vite.config.ts",
     "visual:build": "vite build --config review/vite.config.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "landing:dev": "vite --config landing/vite.config.ts",
+    "landing:review-build": "vite build --config landing/vite.config.ts",
+    "landing:build": "node scripts/frontend/build-landing.cjs"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

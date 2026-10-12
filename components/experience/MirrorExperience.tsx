@@ -1,18 +1,44 @@
-import React from 'react';
-import {View,Text} from 'react-native';
-import type {CommitmentContext} from '../../lib/innerRep/v2/contracts';
-import {Body,Eyebrow,Prompt,Action} from '../inner-rep/v2/Foundation';
-import {ExperiencePage,Chapter,X,PrivacyTruth} from './ExperienceKit';
-export type MirrorExercised={label:string;reps:number;lastDate:string}[];
-export type MirrorCarrying={label:string;dueDate?:string}[];
-const fmt=(iso:string)=>new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-export function MirrorExperience({practiceDays=0,commitment,exercised=[],carrying=[],onToday}:{practiceDays?:number;commitment?:CommitmentContext;exercised?:MirrorExercised;carrying?:MirrorCarrying;onToday:()=>void}){
- return <ExperiencePage><View style={X.space}><Eyebrow>The Mirror</Eyebrow><Prompt display>A clearer view, without a label.</Prompt><Body style={X.lede}>{practiceDays?'A practice is taking shape. What becomes visible here should stay grounded in what you actually chose.':'This begins quietly. You do not need a profile of yourself before you begin.'}</Body></View>
- <Chapter label="What you’ve been exercising" title={practiceDays?'You’ve been making room.':'One moment is enough to begin.'}>
- {practiceDays>0&&<View style={X.receipt}><Text style={X.quote}>{practiceDays} {practiceDays===1?'day':'days'} of practice this month</Text><Body style={X.small}>A fact about practice, not a measure of your emotional fitness. The days do not need to be consecutive.</Body></View>}
- {exercised.length>0?<View style={X.space}><Body>Capacities you’ve practised, from the Inner Reps you completed. Not a ranking, and not a measure of ability.</Body>{exercised.map(c=><View key={c.label} style={X.receipt}><Text style={X.quote}>{c.label}</Text><Body style={X.small}>{c.reps} {c.reps===1?'rep':'reps'} · last on {fmt(c.lastDate)}</Body></View>)}</View>:<Body>The capacities you practise will be listed here as you complete Inner Reps.</Body>}
- </Chapter>
- <Chapter label="What Mirar is beginning to notice" title="Evidence comes before interpretation."><Body>A reflection, when the evidence supports one, appears after your Inner Rep in Today. You can agree, qualify it, disagree or remain unsure.</Body><Body style={X.small}>Past reflections aren’t available here yet. Today is where you can meet and correct a reflection.</Body><Action secondary onPress={onToday}>Go to Today</Action></Chapter>
- <Chapter label="What you’re carrying" title={carrying.length||commitment?'Something you chose.':'Room for an intentional next step.'}>{carrying.length>0?<View style={X.space}>{carrying.map(c=><View key={c.label} style={X.receipt}><Eyebrow>Something you chose to carry</Eyebrow><Text style={X.quote}>{c.label}</Text>{c.dueDate&&<Body style={X.small}>Around {fmt(c.dueDate)}</Body>}</View>)}<Body>Its outcome is yours to name, when it comes up in Today.</Body></View>:commitment?<View style={X.receipt}><Eyebrow>Something you chose to carry</Eyebrow><Text style={X.quote}>{commitment.label}</Text><Body>This is the commitment in today’s check-in. Its outcome is yours to name.</Body></View>:<Body>When you choose something to carry, it appears here until you name how it went. A full history isn’t shown in this beta.</Body>}</Chapter><Chapter label="What has been present · what may have shifted" title="Not enough to show here yet."><Body>There is nothing to reflect back here yet. This part of the Mirror is still being built: a view that separates your choices from Mirar’s interpretations, and keeps uncertainty visible.</Body><Body style={X.small}>The daily practice works while this part of the mirror is being built.</Body></Chapter><PrivacyTruth/>
+import React, { useState } from 'react';
+import { View, Text } from 'react-native';
+import type { CommitmentContext } from '../../lib/innerRep/v2/contracts';
+import type { MirrorModel, MirrorStatement } from '../../lib/innerRep/runtime/mirror-contract';
+import { Body, Eyebrow, Prompt, Action } from '../inner-rep/v2/Foundation';
+import { ExperiencePage, Chapter, X, PrivacyTruth } from './ExperienceKit';
+import { WindowStudy, WindowBoundary } from './WindowStudy';
+export type MirrorExercised = {
+    label: string;
+    reps: number;
+    lastDate: string;
+}[];
+export type MirrorCarrying = {
+    label: string;
+    dueDate?: string;
+}[];
+const sourceLabel = { user_said: 'Your selected response', observed: 'A fact about practice', inferred: 'A possible reading', unknown: 'What remains open' } as const;
+/** No eligibility computation in the UI. Archive release requires Claude's repaired read model and explicit gate. */
+export function MirrorExperience({ practiceDays = 0, commitment, exercised = [], carrying = [], model, readingHistory = 'unavailable', onToday }: {
+    practiceDays?: number;
+    commitment?: CommitmentContext;
+    exercised?: MirrorExercised;
+    carrying?: MirrorCarrying;
+    model?: MirrorModel;
+    readingHistory?: 'unavailable' | 'approved';
+    onToday: () => void;
+}) {
+    const [ledger, setLedger] = useState(false);
+    const [apart, setApart] = useState(false);
+    const facts = model?.sections.practised ?? [];
+    const carried = model?.sections.carrying ?? [];
+    const said = model?.sections.said ?? [];
+    const readings = readingHistory === 'approved' && model ? [...model.sections.come_up, ...model.sections.readings, ...model.sections.shifted, ...model.sections.unknown] : [];
+    return <ExperiencePage><View style={X.space}><Eyebrow>The Mirror</Eyebrow><Prompt display>{practiceDays || facts.length ? 'What is here. What stays open.' : 'A beginning, without a verdict.'}</Prompt><View style={{ flexDirection: 'row', gap: 24, alignItems: 'center' }}><View style={{ flex: 1 }}><Body style={X.lede}>{practiceDays || facts.length ? 'A view of actual practice and things you chose to carry. Facts stay distinct from readings.' : 'You do not need a profile of yourself before you begin. A small practice is enough.'}</Body></View><View style={{ width: 96 }}><WindowStudy quiet/></View></View><Action onPress={onToday}>Go to Today</Action></View>
+ {(facts.length > 0 || exercised.length > 0 || practiceDays > 0) && <Chapter label="Practice, not ability" title="What you’ve been exercising."><WindowBoundary />{practiceDays > 0 && <Body>{practiceDays} {practiceDays === 1 ? 'day' : 'days'} of practice this month. The days need not be consecutive.</Body>}{facts.map(s => <Statement key={s.id} value={s}/>)}{!model && exercised.map((c, i) => <View key={i} style={X.receipt}><Text style={X.quote}>{c.label}</Text><Body>{c.reps} {c.reps === 1 ? 'rep' : 'reps'} · last on {c.lastDate}</Body></View>)}<Body style={X.small}>These describe practice completed, not emotional-fitness levels.</Body></Chapter>}
+ {(carried.length > 0 || carrying.length > 0 || commitment) && <Chapter label="Your intentions" title="Something you chose to carry.">{carried.map(s => <Statement key={s.id} value={s}/>)}{!model && (carrying.length ? carrying : commitment ? [{ label: commitment.label }] : []).map((c, i) => <View key={i} style={X.receipt}><Text style={X.quote}>{c.label}</Text>{'dueDate' in c && c.dueDate && <Body>Around {c.dueDate}</Body>}</View>)}<Body>Its outcome belongs to you. A follow-up, when supplied in Today, lets you name it.</Body></Chapter>}
+ {said.length > 0 && <Chapter label="Response provenance" title="Your choices, in context."><Action secondary expanded={ledger} onPress={() => setLedger(!ledger)}>{ledger ? 'Close your responses' : 'Read your selected responses'}</Action>{ledger && <View style={X.space}>{said.map(s => <Statement key={s.id} value={s}/>)}</View>}<Body style={X.small}>These are responses to offered questions. They are not explanations of who you are.</Body></Chapter>}
+ {readings.length > 0 ? <Chapter label="A separate reading surface" title="A reflection stays revisable."><Action secondary selected={apart} onPress={() => setApart(!apart)}>{apart ? 'Read alongside' : 'Read separately'}</Action><View style={{ gap: apart ? 48 : 24 }}>{readings.map(s => <Statement key={s.id} value={s}/>)}</View></Chapter> : <Chapter label="Room for uncertainty" title="There need not be a reading."><Body>When evidence supports a reflection, it appears after your Inner Rep in Today. You can question it there.</Body>{readingHistory === 'unavailable' && <Body style={X.small}>Historical interpretations are not available in this release. Your practice facts and chosen intentions can still be useful.</Body>}</Chapter>}
+ <PrivacyTruth />
  </ExperiencePage>;
 }
+function Statement({ value }: {
+    value: MirrorStatement;
+}) { return <View style={X.receipt}><Eyebrow>{sourceLabel[value.source]}</Eyebrow><Text style={X.quote}>{value.text}</Text>{value.date && <Body style={X.small}>{value.date}</Body>}</View>; }
