@@ -55,7 +55,7 @@ export function PracticeSample({ onEnter }: {
  {reading && <View style={S.completed} accessibilityLiveRegion="polite"><SectionTitle>{openings[start].result}</SectionTitle><Body>{SAMPLE_VIEWS[reading].close}</Body><Body style={X.small}>You kept an observation separate from a possible meaning. This was not an assessment of you.</Body><View style={X.row}><Action onPress={onEnter}>Continue with Mirar</Action><Action secondary onPress={reset}>Try the exercise again</Action></View></View>}
  </>}
  {!left && <Action secondary onPress={() => setLeft(true)}>Leave the exercise</Action>}
- <Body style={S.privacy}>An authored perspective exercise. No visitor profile, inferred insight or remembered answer.</Body>
+ <Body style={S.privacy}>Sample practice · only on this page. Mirar beta chooses your daily rep, which may be simpler.</Body>
  </View>;
 }
 function Tile({ children, onPress, selected }: {

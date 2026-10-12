@@ -94,3 +94,15 @@ Build: existing `npm run landing:review-build` for local checks. For Claude's ve
 ## Verified candidate evidence
 
 See [validation evidence](practice-sample-validation/README.md): 45 normal path checks across five sizes, 51 axe scans with zero violations/incomplete checks, 13 exit states, keyboard/reduced-motion checks and CTA arrival at the published login URL. TypeScript and review build pass. First-time visitor comprehension and Claude mechanic/content approval remain pending.
+
+## Reconciliation with Claude’s newly published sample spec
+
+Read completely: `origin/mirar-integration:docs/product/SAMPLE_EXERCISE_SPEC.md` at `78d12c4` (introduced in `1985735`). Its status is **specification for approval**, not an approved engine exercise. This candidate does not silently implement its proposed personal questionnaire.
+
+Agreements: demonstrate an operation; separate the public sample from the unbuilt Reframe catalog; no personal inference or efficacy attribution; no persistence, analytics or answer URL; preserve original-view legitimacy; no gesture-only input; live text carries all meaning; focus/live announcement and reduced motion; retain the inert fictional Honest Mirror study separately. The candidate now visibly states on every state that this sample lives only on this page and the beta chooses a daily rep that may be simpler. This is a concise disclosure rather than the spec’s longer exact sentence; Claude should review the wording before release.
+
+**Recommended difference requiring Claude’s product/content decision:** keep the fictional observation/meaning window rather than collecting a personal situation, before-weight, chosen frame and after-weight. Four successive self-reports risk recreating the repetitive questionnaire the user explicitly challenged. A before/after receipt can suggest an outcome even with a causality disclaimer; none is needed to demonstrate keeping evidence separate from a possible meaning. The spec’s “smaller than the waiting makes it feel” reading also supplies an unsupported explanation; “worth starting small” moves into advice, contrary to its own authoring rules. The fictional scene avoids drafting four personal frame sets whose fit we cannot know.
+
+Unknown differs intentionally: instead of ending immediately without practice, it offers a usable distinction between observable absence and an unknown reason, while retaining an immediate Leave option. The user asked for a meaningful unknown branch. No obligation to complete or settle an answer is added.
+
+No personal before/after weights, efficacy sentence, new catalog family or engine amendment is implemented. Human review must decide the public exercise before release. The preview shows the proposed alternative concretely, so the decision can be made from an operating experience rather than copy alone. `git merge-tree` confirms no textual conflicts with `78d12c4`; no branch merge was performed.
