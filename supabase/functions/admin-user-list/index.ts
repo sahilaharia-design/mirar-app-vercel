@@ -12,21 +12,28 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-admin-secret',
 }
 
+// Constant-time string comparison for secret checks.
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let r = 0
+  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return r === 0
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   // ── Auth gate ─────────────────────────────────────────────────────────────
+  // FAIL CLOSED: if the secret is not configured, nothing is served. Previously an unset secret skipped this check entirely.
   const adminSecret = Deno.env.get('ADMIN_SECRET')
-  if (adminSecret) {
-    const provided = req.headers.get('x-admin-secret') ?? ''
-    if (provided !== adminSecret) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+  const adminSecretProvided = req.headers.get('x-admin-secret') ?? ''
+  if (!adminSecret || !safeEqual(adminSecretProvided, adminSecret)) {
+    return new Response(
+      JSON.stringify({ error: 'Unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
   }
 
   try {
