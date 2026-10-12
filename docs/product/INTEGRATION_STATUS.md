@@ -36,3 +36,12 @@ Hosted, behind Vercel protection: a demo-auth build with review states enabled (
 - The live `/privacy` and `/terms` at `mirar.life` describe the retired v1 product. See `docs/infrastructure/MIRAR_ROUTING_AND_CONFIG_CONTRACT.md`.
 - Hosted accessibility re-scan at all five widths, 320 and 768 and 1024 geometry, and native-device testing were not re-run on this build.
 - Decisions D1–D6 (`APPROVAL_DECISIONS.md`) are pending. None was applied.
+
+
+---
+## Update, 12 October 2026 (Aperture integration and landing release)
+
+- **Merged:** `codex/mirar-aperture-build` (`0a47691`) into `mirar-integration` (merge `e138569`). Seven presentation conflicts were resolved by hand in favour of Codex's Aperture components; the runtime/store wiring, `runtime.receipt()`, `runtime.mirror()` and the eligibility repairs were kept. The Mirror route now passes `readingHistory="approved"` because current eligibility is enforced and tested.
+- **Landing:** Codex's `landing/` build integrated into `mirar-landing` (`fc91151`) and released to `https://mirar.life/`. Primary CTA: `https://mirar-app.vercel.app/login`. Legal pages rewritten (`docs/legal/LEGAL_REVIEW_FLAGS.md`). Google Analytics removed.
+- **App:** not promoted. Staging: demo-auth `mirar-an79ew3wn-…`; real-auth production-equivalent `mirar-ns7z550pl-…`.
+- **Still open:** `ADMIN_SECRET` rotation; first-time signup on a new email; qualified legal and safety review; D1–D5.
