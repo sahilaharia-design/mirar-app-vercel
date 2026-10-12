@@ -1,5 +1,7 @@
 # Mirar — routing and configuration contract (for the production landing)
 
+> **Update, 12 October 2026 (after release).** The Aperture landing is live at `https://mirar.life/` (static build served by a rewrite in `mirar-landing`; the temporary 307 redirect to the app is **removed**). The primary CTA is baked in as `https://mirar-app.vercel.app/login` and was verified from the public domain. Legal pages were rewritten for the current beta (`docs/legal/LEGAL_REVIEW_FLAGS.md` on `mirar-integration`). Production landing deployment: `mirar-landing-m2kbb91wn-…` (repo `mirar-landing`, `fc91151`). Rollback: `mirar-landing-hgc7m5ger-…`, then `…-3oamvrb1f-…`. Everything below is otherwise unchanged.
+
 Verified 12 October 2026 against live deployed routes, repository code and Supabase's public auth settings. Items I could **not** verify are marked **UNVERIFIED**; do not treat them as facts. No secret values appear here.
 
 Consumer: Codex (production Aperture landing for `https://mirar.life`). Owner: Claude (integration and release).
