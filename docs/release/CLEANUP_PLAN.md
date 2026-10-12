@@ -1,5 +1,7 @@
 # Supabase cleanup and signup verification plan
 
+> **Superseded in part** by `SUPABASE_REMEDIATION_CHECKLIST.md`, which reconciles this plan to the observed dashboard state: 14 deployed functions (not 17; the repository holds 16), `email-nudge` and `whatsapp-nudge` not deployed, and four active v1 cron jobs holding hardcoded credentials. Where the two differ, the checklist wins.
+
 Scope: only the Edge Functions and scheduled jobs that exist for this project (`jranpiyhluyuqigqfyhn`), plus the signup test. No secret, token or user record appears here. I called nothing destructive, deleted nothing, changed no job, and sent no email.
 
 Legend: **[V]** verified by me from code, migrations or a safe probe. **[YOU]** needs your Supabase login or inbox. **[U]** unknown until you look.
