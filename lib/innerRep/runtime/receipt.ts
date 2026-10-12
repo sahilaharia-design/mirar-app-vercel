@@ -9,12 +9,14 @@ import { resolveSteps } from './step-resolver';
  * commitments). It exists so the receipt survives a reload without any new persistence and without the UI reading stored
  * blobs. Exact authored labels only. Never contains free text (none is stored), never an interpretation or insight.
  */
-export interface ReceiptStep { prompt: string; choice: { kind: 'option'; label: string } | { kind: 'unknown' } | { kind: 'domain'; label: string } }
+export interface ReceiptStep { prompt: string; choice: { kind: 'option'; label: string; absent: boolean; createsCommitment: boolean } | { kind: 'unknown' } | { kind: 'domain'; label: string } }
 export interface Receipt {
   instanceId: number;
   /** ISO calendar date of the rep */
   date: string;
   templateId: string;
+  /** the exercise mechanism (recognition, contrast, …) so the closing can describe the operation the user performed */
+  mechanism: string;
   steps: ReceiptStep[];
   /** present only when the user's chosen option created a commitment */
   commitment?: { label: string; timeframe: Timeframe; date?: string };
@@ -31,7 +33,7 @@ export function buildReceipt(s: State, today: number): Receipt | null {
   if (!steps.length) return null;
   const c = [...s.commitments].reverse().find((x) => x.createdDay === inst.day && !!x.label && x.events[0]?.by === 'user');
   return {
-    instanceId: inst.id, date: iso(inst.day), templateId: inst.templateId, steps,
+    instanceId: inst.id, date: iso(inst.day), templateId: inst.templateId, mechanism: inst.mechanism, steps,
     ...(c ? { commitment: { label: c.label as string, timeframe: c.timeframe, ...(c.dueDate && c.timeframe === 'specific_date' ? { date: c.dueDate } : {}) } } : {}),
     trace: { instanceId: inst.id, observationIds: resolved.map((r) => r.observationId), ...(c ? { commitmentId: c.id } : {}) },
   };

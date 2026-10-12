@@ -9,11 +9,14 @@ import { SAFETY_RESOURCES } from '../../../lib/innerRep/safety';
 import { IntegrationMoment } from '../../experience/IntegrationMoment';
 import { SectionTitle, X } from '../../experience/ExperienceKit';
 import type { CorrectionReason } from '../../../lib/innerRep/v2/types';
+import type { Receipt } from '../../../lib/innerRep/runtime/receipt';
 
 export interface Completion { closing?: string; insight?: ShownInsight }
 export interface DailyExperienceProps {
  today: { kind: 'rep'; payload: RepPayload; context: FlowContext } | ({ kind: 'done' } & Completion);
  greeting: string; continuityCue?: string; practiceDays?: number;
+ /** today's exact response from the runtime (survives reload). Optional so the review harness can run without a runtime. */
+ receipt?: Receipt | null;
  draft?: StepAnswer[];
  onProgress?: (answers: StepAnswer[]) => void;
  onDismiss?: () => void;
@@ -26,7 +29,7 @@ export interface DailyExperienceProps {
 export function DailyInnerRep(props: DailyExperienceProps) {
  return <VisualFoundation><Experience {...props} /></VisualFoundation>;
 }
-function Experience({ today, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection }: DailyExperienceProps) {
+function Experience({ today, greeting, continuityCue, practiceDays, receipt: storedReceipt, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection }: DailyExperienceProps) {
  const [stage, setStage] = useState<'today' | 'rep' | 'completed' | 'safety'>('today');
  const [answers, setAnswers] = useState<StepAnswer[]>(draft); const [receipt, setReceipt] = useState<{context:FlowContext;answers:StepAnswer[]}|null>(null); const [guide,setGuide]=useState(false); const [completion, setCompletion] = useState<Completion | null>(null);
  const { width } = useWindowDimensions(); const complete = completion ?? (today.kind === 'done' ? today : null);
@@ -45,7 +48,7 @@ function Experience({ today, greeting, continuityCue, practiceDays, draft = [], 
     <Body>{SAFETY_RESOURCES.note}</Body><View style={styles.bottom}><Action onPress={dismiss}>{NAV_LABEL.backToToday}</Action></View>
    </PageTransition> : complete ? <PageTransition>
     <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt>{stage === 'completed' && complete.closing ? complete.closing : 'Done for today.'}</Prompt></View>
-    <IntegrationMoment context={receipt?.context} answers={receipt?.answers}/>
+    <IntegrationMoment receipt={storedReceipt} context={receipt?.context} answers={receipt?.answers}/>
     {insight && <View style={styles.mirrorEntry}><HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? reason => onCorrection(insight.id,reason) : undefined} onSafety={() => { setAnswers([]); onSafety([]); setStage('safety'); }} /></View>}
     {stage === 'completed' && <View style={styles.bottom}><Action secondary onPress={() => setStage('today')}>{NAV_LABEL.backToToday}</Action></View>}
    </PageTransition> : today.kind === 'rep' ? <PageTransition>

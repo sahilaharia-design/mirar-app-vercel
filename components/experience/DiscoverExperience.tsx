@@ -29,7 +29,7 @@ export function DiscoverExperience({onEnter,onPrivacy}:{onEnter:()=>void;onPriva
   </Chapter>
   <Chapter label="The Honest Mirror" title="A reflection you can disagree with.">
    <Body style={X.lede}>Mirar works with your responses. When there is enough evidence, it offers a reflection. You decide whether it fits.</Body>
-   <View style={S.reflection}><Eyebrow>Example · fictional responses</Eyebrow><HonestMirror insight={{id:0,tier:'supported',text:'Work has come up 5 times (5 raised by you).',evidence:{independentN:5,promptedN:0,introducedN:5}}} onFeedback={async()=>{}}/></View>
+   <View style={S.reflection}><Eyebrow>Example · fictional, and not connected to the sample above</Eyebrow><Prompt label="mirror-prompt">Work has come up 5 times (5 raised by you).</Prompt><Body>In Mirar, a reading like this comes with its evidence, and you can answer Accurate, Partly, No or Not sure. This example is a picture of that, and cannot be answered.</Body></View>
    <Body>No claims about who you are. Uncertainty stays visible. “No” is as welcome as “Accurate”.</Body>
   </Chapter>
   <Chapter label="A practice, not a programme" title="One moment today. A clearer view over time.">

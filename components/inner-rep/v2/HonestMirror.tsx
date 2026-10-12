@@ -7,6 +7,13 @@ import { MIRAR as M } from '../../../design-system/native';
 import { Action, Body, Eyebrow, Prompt, SelectionSurface } from './Foundation';
 
 export type InsightFeedback = 'accurate' | 'partly' | 'no' | 'unsure';
+/** What each answer truthfully does (V2_FEEDBACK_SEMANTICS / config.ts). Shown only after the answer was recorded. No promise of a timed follow-up. */
+const ACK: Record<InsightFeedback, string> = {
+ accurate: 'Your response is recorded.',
+ partly: 'This reading needs qualifying. It won’t be repeated unchanged.',
+ no: 'This reading is set aside.',
+ unsure: 'No conclusion added. This reading will wait.',
+};
 /** Presentation shape from V2_CONTRACTS §5. Feedback is a callback, never a default selection. */
 export interface ShownInsight {
  id: number; tier: 'supported' | 'tentative' | 'hedged'; text: string;
@@ -15,11 +22,11 @@ export interface ShownInsight {
 export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { insight: ShownInsight; onFeedback: (feedback: InsightFeedback) => Promise<void>; onCorrection?: (reason: CorrectionReason) => Promise<void>; onSafety?: () => void }) {
  const [given, setGiven] = useState<InsightFeedback | null>(null); const [pending, setPending] = useState(false);
  const [evidence, setEvidence] = useState(false); const [error, setError] = useState(false); const [corrected, setCorrected] = useState(false);
- const [correcting, setCorrecting] = useState(false);
+ const [correcting, setCorrecting] = useState(false); const [skipped, setSkipped] = useState(false); const [reasonGiven, setReasonGiven] = useState<CorrectionReason | null>(null);
  // structured correction. Free text, if offered, lives only in this field: it is safety-checked, cleared, and never passed on.
  const [pendingReason, setPendingReason] = useState<CorrectionReason | null>(null); const [note, setNote] = useState('');
  const give = async (value: InsightFeedback) => { if (pending) return; setPending(true); setError(false); try { await onFeedback(value); setGiven(value); } catch { setError(true); } finally { setPending(false); } };
- const send = async (reason: CorrectionReason) => { if (!onCorrection) return; setPending(true); setError(false); try { await onCorrection(reason); setCorrected(true); setPendingReason(null); } catch { setError(true); } finally { setPending(false); } };
+ const send = async (reason: CorrectionReason) => { if (!onCorrection) return; setPending(true); setError(false); try { await onCorrection(reason); setReasonGiven(reason); setCorrected(true); setPendingReason(null); } catch { setError(true); } finally { setPending(false); } };
  const finishNote = async (use: boolean) => { const crisis = use && containsCrisisLanguage(note); setNote(''); if (crisis) { setPendingReason(null); onSafety?.(); return; } if (pendingReason) await send(pendingReason); };
  return <View style={styles.mirror}>
   <Eyebrow>{insight.tier === 'hedged' ? 'Something to consider' : 'Worth noticing'}</Eyebrow>
@@ -27,15 +34,16 @@ export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { 
   <Action secondary expanded={evidence} onPress={() => setEvidence(!evidence)}>{evidence ? 'Hide the context' : 'Why am I seeing this?'}</Action>
   {evidence && <View style={styles.evidence}><Body>{insight.evidence.independentN} independent observations</Body><Body>{insight.evidence.promptedN} chosen from offered options</Body><Body>{insight.evidence.introducedN} raised by you</Body></View>}
   <View style={styles.feedback}>
-   <Body>{given ? 'Noted.' : 'Does this feel accurate?'}</Body>
+   <Body accessibilityLiveRegion="polite">{given ? ACK[given] : 'Does this feel accurate?'}</Body>
    {!given && <View style={styles.wrap}>{([['accurate','Accurate'],['partly','Partly'],['no','No'],['unsure','Not sure']] as const).map(([value,label]) => <Action key={value} secondary disabled={pending} onPress={() => void give(value)}>{label}</Action>)}</View>}
    {error && <Body accessibilityRole="alert">Couldn't record that. Please try again.</Body>}
-   {given === 'partly' && onCorrection && !corrected && <View style={styles.feedback}>
+   {given === 'partly' && corrected && reasonGiven && <Body accessibilityLiveRegion="polite">Your correction is recorded: {CORRECTION_REASONS.find(r => r.id === reasonGiven)?.label}.</Body>}
+   {given === 'partly' && onCorrection && !corrected && !skipped && <View style={styles.feedback}>
     {!correcting && <Action secondary expanded={false} onPress={() => setCorrecting(true)}>{CORRECTION_PROMPT}</Action>}
     {correcting && !pendingReason && <View>
      <Prompt compact reveal label="correction-prompt">{CORRECTION_PROMPT}</Prompt>
      <View role="group" accessibilityLabel={CORRECTION_PROMPT}>{CORRECTION_REASONS.map(r => <SelectionSurface key={r.id} disabled={pending} onPress={() => (r.words ? setPendingReason(r.id) : void send(r.id))}>{r.label}</SelectionSurface>)}</View>
-     <View style={styles.skip}><Action secondary onPress={() => setCorrecting(false)}>Skip</Action></View>
+     <View style={styles.skip}><Action secondary onPress={() => { setCorrecting(false); setSkipped(true); }}>Skip</Action></View>
     </View>}
     {correcting && pendingReason && <View style={styles.note}>
      <Prompt compact reveal label="correction-note-prompt">{CORRECTION_REASONS.find(r => r.id === pendingReason)!.label}</Prompt>

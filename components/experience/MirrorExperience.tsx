@@ -1,18 +1,43 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {View,Text} from 'react-native';
-import type {CommitmentContext} from '../../lib/innerRep/v2/contracts';
+import type {MirrorModel,MirrorStatement} from '../../lib/innerRep/runtime/mirror-contract';
 import {Body,Eyebrow,Prompt,Action} from '../inner-rep/v2/Foundation';
 import {ExperiencePage,Chapter,X,PrivacyTruth} from './ExperienceKit';
-export type MirrorExercised={label:string;reps:number;lastDate:string}[];
-export type MirrorCarrying={label:string;dueDate?:string}[];
-const fmt=(iso:string)=>new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-export function MirrorExperience({practiceDays=0,commitment,exercised=[],carrying=[],onToday}:{practiceDays?:number;commitment?:CommitmentContext;exercised?:MirrorExercised;carrying?:MirrorCarrying;onToday:()=>void}){
- return <ExperiencePage><View style={X.space}><Eyebrow>The Mirror</Eyebrow><Prompt display>A clearer view, without a label.</Prompt><Body style={X.lede}>{practiceDays?'A practice is taking shape. What becomes visible here should stay grounded in what you actually chose.':'This begins quietly. You do not need a profile of yourself before you begin.'}</Body></View>
- <Chapter label="What you’ve been exercising" title={practiceDays?'You’ve been making room.':'One moment is enough to begin.'}>
- {practiceDays>0&&<View style={X.receipt}><Text style={X.quote}>{practiceDays} {practiceDays===1?'day':'days'} of practice this month</Text><Body style={X.small}>A fact about practice, not a measure of your emotional fitness. The days do not need to be consecutive.</Body></View>}
- {exercised.length>0?<View style={X.space}><Body>Capacities you’ve practised, from the Inner Reps you completed. Not a ranking, and not a measure of ability.</Body>{exercised.map(c=><View key={c.label} style={X.receipt}><Text style={X.quote}>{c.label}</Text><Body style={X.small}>{c.reps} {c.reps===1?'rep':'reps'} · last on {fmt(c.lastDate)}</Body></View>)}</View>:<Body>The capacities you practise will be listed here as you complete Inner Reps.</Body>}
- </Chapter>
- <Chapter label="What Mirar is beginning to notice" title="Evidence comes before interpretation."><Body>A reflection, when the evidence supports one, appears after your Inner Rep in Today. You can agree, qualify it, disagree or remain unsure.</Body><Body style={X.small}>Past reflections aren’t available here yet. Today is where you can meet and correct a reflection.</Body><Action secondary onPress={onToday}>Go to Today</Action></Chapter>
- <Chapter label="What you’re carrying" title={carrying.length||commitment?'Something you chose.':'Room for an intentional next step.'}>{carrying.length>0?<View style={X.space}>{carrying.map(c=><View key={c.label} style={X.receipt}><Eyebrow>Something you chose to carry</Eyebrow><Text style={X.quote}>{c.label}</Text>{c.dueDate&&<Body style={X.small}>Around {fmt(c.dueDate)}</Body>}</View>)}<Body>Its outcome is yours to name, when it comes up in Today.</Body></View>:commitment?<View style={X.receipt}><Eyebrow>Something you chose to carry</Eyebrow><Text style={X.quote}>{commitment.label}</Text><Body>This is the commitment in today’s check-in. Its outcome is yours to name.</Body></View>:<Body>When you choose something to carry, it appears here until you name how it went. A full history isn’t shown in this beta.</Body>}</Chapter><Chapter label="What has been present · what may have shifted" title="Not enough to show here yet."><Body>There is nothing to reflect back here yet. This part of the Mirror is still being built: a view that separates your choices from Mirar’s interpretations, and keeps uncertainty visible.</Body><Body style={X.small}>The daily practice works while this part of the mirror is being built.</Body></Chapter><PrivacyTruth/>
+
+/**
+ * The Mirror. Renders ONLY the typed runtime model (runtime.mirror()); it computes nothing and reads no stored state.
+ * Every sentence below is a statement the contract has already traced to stored structured data. Sections appear only
+ * when they have statements, so sparse and empty Mirrors stay short and honest.
+ */
+const fmt=(iso?:string)=>iso?new Date(iso+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+const Line=({s,date}:{s:MirrorStatement;date?:boolean})=><View style={X.receipt}><Text style={X.quote}>{s.text}</Text>{date&&s.date&&<Body style={X.small}>{fmt(s.date)}</Body>}</View>;
+
+export function MirrorExperience({model,practiceDays=0,onToday}:{model:MirrorModel;practiceDays?:number;onToday:()=>void}){
+ const [ledger,setLedger]=useState(false);
+ const sec=model.sections;
+ const readings=sec.readings.filter(s=>s.source==='inferred'), readingHistory=[...sec.readings,...sec.shifted].filter(s=>s.source!=='inferred');
+ const shifted=sec.shifted.filter(s=>s.source==='inferred');
+ return <ExperiencePage>
+  <View style={X.space}><Eyebrow>The Mirror</Eyebrow><Prompt display>A clearer view, without a label.</Prompt>
+   <Body style={X.lede}>{model.state==='empty'?'This begins quietly. You do not need a profile of yourself before you begin.':'Only what you chose, and what Mirar has counted from it. Nothing here is a score.'}</Body></View>
+  {model.state==='empty'&&<Chapter label="Beginning" title="A clearer view begins with a little practice."><Body>When you complete an Inner Rep, what you chose can appear here. Mirar reflects something back only when there is real evidence for it.</Body><Action secondary onPress={onToday}>Go to Today</Action></Chapter>}
+  {sec.practised.length>0&&<Chapter label="What you’ve practised" title="Areas you’ve exercised.">
+   {practiceDays>0&&<View style={X.receipt}><Text style={X.quote}>{practiceDays} {practiceDays===1?'day':'days'} of practice this month</Text><Body style={X.small}>The days do not need to be consecutive.</Body></View>}
+   <Body>From the Inner Reps you completed. Not a ranking, and not a measure of ability.</Body>
+   {sec.practised.map(s=><Line key={s.id} s={s} date/>)}
+  </Chapter>}
+  {sec.carrying.length>0&&<Chapter label="What you’re carrying" title="Things you chose.">{sec.carrying.map(s=><Line key={s.id} s={s} date/>)}<Body>Its outcome is yours to name, when it comes up in Today.</Body></Chapter>}
+  {sec.come_up.length>0&&<Chapter label="What has come up" title="Counted, not interpreted.">{sec.come_up.map(s=><Line key={s.id} s={s}/>)}<Body style={X.small}>This counts your own responses about the topic in this period. It does not say why, and it is not a verdict.</Body></Chapter>}
+  {readings.length>0&&<Chapter label="Mirar’s readings" title="Offered with their evidence.">{readings.map(s=><Line key={s.id} s={s} date/>)}</Chapter>}
+  {shifted.length>0&&<Chapter label="What may have shifted" title="A comparison with your own earlier answers.">{shifted.map(s=><Line key={s.id} s={s} date/>)}</Chapter>}
+  {readingHistory.length>0&&<Chapter label="Your say on past readings" title="What you told Mirar.">{readingHistory.map(s=><Line key={s.id} s={s} date/>)}</Chapter>}
+  {sec.unknown.length>0&&<Chapter label="What isn’t known" title="Plainly.">{sec.unknown.map(s=><Line key={s.id} s={s}/>)}</Chapter>}
+  {sec.said.length>0&&<Chapter label="Your own choices" title="What you chose recently.">
+   <Action secondary expanded={ledger} onPress={()=>setLedger(!ledger)}>{ledger?'Hide what you chose':'See what you chose'}</Action>
+   {ledger&&<View style={X.space}>{sec.said.map(s=><Line key={s.id} s={s} date/>)}<Body style={X.small}>These are the exact questions and choices, as you saw them.</Body></View>}
+  </Chapter>}
+  {model.state==='sparse'&&<Body style={X.small}>There is not enough here yet for Mirar to reflect anything back. That is fine.</Body>}
+  {model.retained.mayBeTruncated&&<Body style={X.small}>This view covers your most recent practice only.</Body>}
+  <PrivacyTruth/>
  </ExperiencePage>;
 }
