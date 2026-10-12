@@ -1,0 +1,24 @@
+[
+  {
+    "futureDateAccepted": "2026-10-13",
+    "exactCommitmentReceiptReloads": true
+  },
+  {
+    "structuredResumeExact": true
+  },
+  {
+    "feedbackFailureDoesNotClaimSuccess": true
+  },
+  {
+    "correctionRetryWorks": true
+  },
+  {
+    "optionalCapacityAbsentCleanly": true
+  },
+  {
+    "optionalNoteSkipClears": true
+  },
+  {
+    "bothMotionPreferencesVerified": true
+  }
+]

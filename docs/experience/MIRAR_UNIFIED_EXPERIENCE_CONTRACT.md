@@ -1,5 +1,7 @@
 # Mirar — unified product and experience contract
 
+> Implementation follow-up, 12 October: [Aperture build handoff](APERTURE_BUILD_HANDOFF.md) records the new frontend against published Claude input `ee9a9ea`, supplied receipts, remaining read-model gates and production-owner responsibilities. The reconciliation below remains the decision record; capabilities changed after its pinned `2d150e0` input are updated in the handoff, not silently assumed fixed.
+
 Reconciled recommendation, 10 October 2026. Branch `codex/mirar-unified-experience`. **Integration specification, not an approval to amend the engine, merge, migrate or deploy.** This replaces the provisional missing-blueprint specification. Open decisions and capability gates are explicit; no claim that Claude or the user has accepted every resolution.
 
 ## 1. Sources and actual state

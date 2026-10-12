@@ -1,0 +1,8 @@
+  (240 completed reps, 37 with an "I don't know", 15 with a commitment, 0 without a receipt)
+pass  the receipt is identical immediately and after a reload
+pass  no receipt exists before today’s rep is completed
+pass  every receipt traces to stored observations and an instance
+pass  the receipt shows the exact prompt wording the user was shown (incl. variants)
+pass  no free-text field in any receipt
+pass  "I don’t know" is represented as unknown, not as a choice
+pass  a chosen commitment appears with its exact label and timeframe

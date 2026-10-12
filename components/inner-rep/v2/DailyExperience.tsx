@@ -8,15 +8,15 @@ import { V2RepFlow } from './RepFlow';
 import { SAFETY_RESOURCES } from '../../../lib/innerRep/safety';
 import { IntegrationMoment } from '../../experience/IntegrationMoment';
 import { SectionTitle, X } from '../../experience/ExperienceKit';
+import type {Receipt} from '../../../lib/innerRep/runtime/receipt';
+import {WindowStudy,WindowBoundary} from '../../experience/WindowStudy';
 import type { CorrectionReason } from '../../../lib/innerRep/v2/types';
-import type { Receipt } from '../../../lib/innerRep/runtime/receipt';
 
 export interface Completion { closing?: string; insight?: ShownInsight }
 export interface DailyExperienceProps {
  today: { kind: 'rep'; payload: RepPayload; context: FlowContext } | ({ kind: 'done' } & Completion);
+ receipt?:Receipt|null;
  greeting: string; continuityCue?: string; practiceDays?: number;
- /** today's exact response from the runtime (survives reload). Optional so the review harness can run without a runtime. */
- receipt?: Receipt | null;
  draft?: StepAnswer[];
  onProgress?: (answers: StepAnswer[]) => void;
  onDismiss?: () => void;
@@ -29,7 +29,7 @@ export interface DailyExperienceProps {
 export function DailyInnerRep(props: DailyExperienceProps) {
  return <VisualFoundation><Experience {...props} /></VisualFoundation>;
 }
-function Experience({ today, greeting, continuityCue, practiceDays, receipt: storedReceipt, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection }: DailyExperienceProps) {
+function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection }: DailyExperienceProps) {
  const [stage, setStage] = useState<'today' | 'rep' | 'completed' | 'safety'>('today');
  const [answers, setAnswers] = useState<StepAnswer[]>(draft); const [receipt, setReceipt] = useState<{context:FlowContext;answers:StepAnswer[]}|null>(null); const [guide,setGuide]=useState(false); const [completion, setCompletion] = useState<Completion | null>(null);
  const { width } = useWindowDimensions(); const complete = completion ?? (today.kind === 'done' ? today : null);
@@ -40,7 +40,7 @@ function Experience({ today, greeting, continuityCue, practiceDays, receipt: sto
   <View style={styles.header}><BrandAsset />{stage === 'rep' && <Action secondary onPress={dismiss}>{NAV_LABEL.backToToday}</Action>}</View>
   <View style={[styles.composition, { maxWidth: width >= 1024 ? 920 : 720 }]}>
    {stage === 'rep' && today.kind === 'rep' ? <>
-    <View style={styles.context}><Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}</View>
+    <WindowBoundary/><View style={styles.context}><Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}</View>
     <V2RepFlow key={today.payload.instanceId} context={today.context} initialAnswers={answers} onProgress={progress} onSafety={value => { setAnswers([]); onSafety(value); setStage('safety'); }} onComplete={async (value,duration) => { const result = await onComplete(value,duration); setReceipt({context:today.context,answers:value}); setCompletion(result); setAnswers([]); setStage('completed'); }} />
    </> : stage === 'safety' ? <PageTransition>
     <Prompt>{SAFETY_RESOURCES.headline}</Prompt><Body>{SAFETY_RESOURCES.body}</Body>
@@ -48,12 +48,12 @@ function Experience({ today, greeting, continuityCue, practiceDays, receipt: sto
     <Body>{SAFETY_RESOURCES.note}</Body><View style={styles.bottom}><Action onPress={dismiss}>{NAV_LABEL.backToToday}</Action></View>
    </PageTransition> : complete ? <PageTransition>
     <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt>{stage === 'completed' && complete.closing ? complete.closing : 'Done for today.'}</Prompt></View>
-    <IntegrationMoment receipt={storedReceipt} context={receipt?.context} answers={receipt?.answers}/>
+    <IntegrationMoment receipt={runtimeReceipt} context={receipt?.context} answers={receipt?.answers}/>
     {insight && <View style={styles.mirrorEntry}><HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? reason => onCorrection(insight.id,reason) : undefined} onSafety={() => { setAnswers([]); onSafety([]); setStage('safety'); }} /></View>}
     {stage === 'completed' && <View style={styles.bottom}><Action secondary onPress={() => setStage('today')}>{NAV_LABEL.backToToday}</Action></View>}
    </PageTransition> : today.kind === 'rep' ? <PageTransition>
     <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt display>{greeting}</Prompt><Body style={styles.invitation}>{answers.length?'Pick up where you left off.':practiceDays?'A little practice. A little more room.':'Your first Inner Rep. A moment to notice.'}</Body></View>
-    <View style={styles.details}>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}<Body>{today.payload.estimatedSeconds} seconds</Body></View>
+    <View style={{flexDirection:'row',gap:24,marginBottom:32,alignItems:'center'}}><View style={{width:96}}><WindowStudy quiet/></View><Body style={{flex:1}}>A question to meet at your own pace. Your response does not need to become a conclusion.</Body></View><View style={styles.details}>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}<Body>{today.payload.estimatedSeconds} seconds</Body></View>
     <Action onPress={() => setStage('rep')}>{answers.length ? 'Resume' : 'Begin'}</Action>
     <View style={styles.entryNote}><Body>{answers.length?'Your structured choices are kept so you can resume. Optional words are not saved.':'There is no answer to perform. You can leave any time.'}</Body></View>
     {!practiceDays && <View style={styles.entryNote}><Action secondary expanded={guide} onPress={()=>setGuide(!guide)}>What is an Inner Rep?</Action>{guide&&<View style={X.space}><SectionTitle>A small exercise, not a test.</SectionTitle><Body>Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.</Body><Body style={X.small}>Optional words are not saved. This beta keeps practice on this device and clears it when you sign out.</Body></View>}</View>}

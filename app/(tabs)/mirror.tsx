@@ -4,4 +4,4 @@ import {useAuthStore} from '../../stores/auth-store';
 import {InertWhenBlurred} from '../../components/ui/InertWhenBlurred';
 import {MirrorExperience} from '../../components/experience/MirrorExperience';
 import {useInnerRepV2Store} from '../../stores/inner-rep-v2-store';
-export default function Mirror(){const {practiceDays,mirror,load}=useInnerRepV2Store();const userId=useAuthStore(s=>s.session?.user?.id);useFocusEffect(useCallback(()=>{if(userId)void load(userId);},[userId,load]));return <InertWhenBlurred><MirrorExperience model={mirror} practiceDays={practiceDays} onToday={()=>router.navigate('/(tabs)/')}/></InertWhenBlurred>;}
+export default function Mirror(){const {practiceDays,mirror,load}=useInnerRepV2Store();const userId=useAuthStore(s=>s.session?.user?.id);useFocusEffect(useCallback(()=>{if(userId)void load(userId);},[userId,load]));return <InertWhenBlurred><MirrorExperience model={mirror} readingHistory="approved" practiceDays={practiceDays} onToday={()=>router.navigate('/(tabs)/')}/></InertWhenBlurred>;}

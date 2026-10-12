@@ -1,0 +1,10 @@
+pass  empty state: no completed reps → state "empty", no statements
+  (24 simulated 30-day users, 430 statements, 12 populated / 12 sparse, 6 rejected readings seen)
+pass  every statement traces to ids that exist in stored state
+pass  no scoring / trait / diagnostic vocabulary in non-reading statements
+pass  a reading the user rejected ("No") is never reproduced
+pass  building the model twice yields identical output
+pass  "said" statements use exact authored labels or domain phrases only
+pass  no free-text field names appear in statement facts
+pass  some simulated users stay sparse (the model does not manufacture content)
+pass  every inferred statement states the user's own response to it
