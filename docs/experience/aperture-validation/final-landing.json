@@ -1,0 +1,77 @@
+[
+  {
+    "viewport": [
+      320,
+      568
+    ],
+    "geometry": {
+      "overflow": false
+    },
+    "a11y": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    }
+  },
+  {
+    "viewport": [
+      390,
+      844
+    ],
+    "geometry": {
+      "overflow": false
+    },
+    "a11y": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    }
+  },
+  {
+    "viewport": [
+      768,
+      1024
+    ],
+    "geometry": {
+      "overflow": false
+    },
+    "a11y": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    }
+  },
+  {
+    "viewport": [
+      1024,
+      768
+    ],
+    "geometry": {
+      "overflow": false
+    },
+    "a11y": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    }
+  },
+  {
+    "viewport": [
+      1440,
+      900
+    ],
+    "geometry": {
+      "overflow": false
+    },
+    "a11y": {
+      "inapplicable": 51,
+      "incomplete": 0,
+      "passes": 38,
+      "violations": 0
+    }
+  }
+]
