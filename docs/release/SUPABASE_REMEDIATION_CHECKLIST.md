@@ -4,6 +4,22 @@ Project `jranpiyhluyuqigqfyhn`. Built from your read-only findings plus my indep
 
 **Rules for whoever executes this (including the browser extension):** never `select` the `command` column of `cron.job` or `cron.job_run_details.return_message`; never display, copy or log a secret value; generate any new secret inside the page and paste it straight into the dashboard field without echoing it. If any result ever shows a credential, stop, treat it as compromised, and tell me only that it happened.
 
+## Status (updated 13 October 2026, from the account owner's reports; not independently verifiable by me)
+
+| Item | Status |
+|---|---|
+| Four v1 cron jobs paused (`active = false`, verified in SQL) | **Done** |
+| Credential types classified: two cron-secret-header jobs, one empty-header job, one anon-key job; **no service-role JWT or sb_secret key** | **Done** (no database-wide key exposure from the jobs) |
+| `CRON_SECRET` rotated (digest changed, CLI "Finished supabase secrets set"; `ADMIN_SECRET` and the other digests unchanged) | **Done**: the disclosed value is invalid |
+| Rotate `ADMIN_SECRET` | **Open** |
+| Retire `admin-user-list` and `admin-analytics`, then verify both endpoints | **Open** (I re-probe status codes once told) |
+| Review historical function logs (window from 18 April 2026 to rotation) | **Open** |
+| Remove the paused jobs so the old hardcoded values leave the database | Later, with approval |
+| First-time signup on the real-auth staging build, and returning login | **Open** |
+| Redirect URL `https://mirar-v2-review-real.vercel.app/auth/callback` added | **Open** |
+
+Production promotion of the v2 app stays blocked until the open items pass.
+
 ## What changed in my inventory (reconciled to the 14 deployed functions)
 - The repository has **16** functions (I said 17 earlier; that was a miscount). **14 are deployed.** Not deployed: `email-nudge` and `whatsapp-nudge`.
 - So **no email or WhatsApp nudge can run**, and **`NUDGE_SECRET` being missing is irrelevant**: it is read only by those two functions, and none of the four active jobs calls them (confirm with the boolean query in step 2).

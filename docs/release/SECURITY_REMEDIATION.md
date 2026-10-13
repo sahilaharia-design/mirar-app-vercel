@@ -74,6 +74,7 @@ The repository schedules hourly jobs for `email-nudge` (and earlier `daily-remin
 ## 10. Status summary
 | Item | Status |
 |---|---|
+| `CRON_SECRET` rotated; four v1 cron jobs paused; no service-role key found in any job (reported 13 Oct) | **Done** (see `SUPABASE_REMEDIATION_CHECKLIST.md`) |
 | Functions currently reject missing, wrong and anon credentials | **Verified** |
 | Old secret still valid | **Yes until you rotate** |
 | Fail-closed fix built | **Done** (not deployed; needs your login) |
