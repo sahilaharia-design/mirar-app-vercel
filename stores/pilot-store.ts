@@ -19,6 +19,8 @@ interface State {
   today: () => string;
   start: (p: PilotId) => PilotSession;
   answer: (a: PAnswer) => Promise<void>;
+  /** persist the draft and re-render after something other than answer()/back() changed the session (the Attend board replay) */
+  changed: () => Promise<void>;
   back: () => Promise<void>;
   close: (how: 'finish' | 'leave') => Promise<PilotRecord | null>;
   discard: () => Promise<void>;
@@ -33,6 +35,7 @@ export const usePilotStore = create<State>((set, get) => {
     session: () => core.session(), records: () => core.records(), resumable: () => core.resumable(), today: () => core.context().today,
     start: (p) => { const s = core.start(p); bump(); return s; },
     answer: async (a) => { const s = core.session(); if (!s) return; s.answer(a); await core.saveDraft(); bump(); },
+    changed: async () => { await core.saveDraft(); bump(); },
     back: async () => { const s = core.session(); if (s && s.back()) { await core.saveDraft(); bump(); } },
     close: async (how) => { const r = await core.close(how); bump(); return r; },
     discard: async () => { await core.discard(); bump(); },

@@ -30,6 +30,10 @@ export class PilotSession {
     for (const a of snap.answers) { try { s.answer(a); } catch { return null; } }  // replay through validation; corrupt drafts are dropped
     s.halted = snap.halted; return s;
   }
+  /** read-only: the context this session was started with */
+  get context(): PilotContext { return this.ctx; }
+  /** an independent copy (same validated answers) for trial runs; mutating it never touches this session */
+  clone(): PilotSession { const c = PilotSession.restore(this.snapshot(), this.ctx); if (!c) throw new PilotAnswerError('cannot clone'); return c; }
   snapshot(): PilotSnapshot { return { pilot: this.pilot, today: this.ctx.today, answers: this.answers.map((a) => ({ ...a }) as PAnswer), halted: this.halted }; }
 
   step(): PStep | null { if (this.halted || this.left) return null; return DEFS[this.pilot].next(this.ctx, this.answers); }

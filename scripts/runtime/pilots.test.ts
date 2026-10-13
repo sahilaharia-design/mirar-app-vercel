@@ -4,6 +4,7 @@ import { PilotSession } from '../../lib/innerRep/pilots/session';
 import { PilotStore, clearPilotKeys, PILOT_KEY_PREFIX, RETENTION_DAYS } from '../../lib/innerRep/pilots/store';
 import { buildPilotMirror, pilotReceipt, pilotOffers, SPARSE_MIN } from '../../lib/innerRep/pilots/read';
 import { SITUATIONS } from '../../lib/innerRep/pilots/look-again';
+import { boardPulls, emptyArrangement, normalizeArrangement, submitArrangement, Arrangement } from '../../lib/innerRep/pilots/board';
 import { carryCandidates, PULLS } from '../../lib/innerRep/pilots/attend';
 import { PAnswer, PILOT_CAPS, PilotAnswerError, PilotContext, PilotRecord, PStep, AttendRecord, LookAgainRecord } from '../../lib/innerRep/pilots/types';
 import { KV } from '../../lib/innerRep/runtime/v2-runtime';
@@ -146,6 +147,26 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     const a = run('look_again', LOOK_FULL), b = run('look_again', { ...LOOK_FULL, interpretation: o('said_wrong'), alternatives: multi('unrelated') });
     const c = run('attend', ATT_FULL), d = run('attend', { ...ATT_FULL, 'place:work': o('let_be'), 'place:messages': o('attend_now'), 'when:messages': o('no_time_set') });
     check('not a questionnaire: closings are not interchangeable, they change with what the person did', a !== b && c !== d);
+  }
+  console.log('— Attend board adapter —');
+  {
+    const mk = () => { const s = new PilotSession('attend', ctxAt('2026-10-14')); drive(s, script({ pulls: multi('work', 'asked', 'rest', 'phone') }), 1); return s; };
+    const s = mk(); const pulls = boardPulls(s)!;
+    check('the board reads its pulls from the real session, in the order the session will ask', pulls.map((p) => p.id).join() === 'work,asked,rest,phone' && boardPulls(new PilotSession('attend', ctxAt('2026-10-14'))) === null);
+    let arr: Arrangement = emptyArrangement(pulls);
+    const r1 = normalizeArrangement(arr, 'work', { disposition: 'attend_now' }); arr = r1.arrangement; const r2 = normalizeArrangement(arr, 'rest', { disposition: 'attend_now' }); arr = r2.arrangement;
+    check('moving a second pull into view moves the first to "leave open" and reports which moved (rest has the same standing as work)', r1.moved === null && r2.moved === 'work' && arr.work.disposition === 'leave_open' && arr.rest.disposition === 'attend_now');
+    arr = normalizeArrangement(arr, 'asked', { disposition: 'set_aside' }).arrangement; arr = normalizeArrangement(arr, 'phone', { disposition: 'let_be' }).arrangement;
+    check('a set-aside placement defaults to "No time set"; do-nothing stays distinct from leave-open', arr.asked.when === 'no_time_set' && arr.phone.disposition === 'let_be' && arr.work.disposition === 'leave_open');
+    const before = JSON.stringify(s.snapshot()); const bad = submitArrangement(s, { ...arr, work: { disposition: 'attend_now' } });
+    check('the runtime, not the board, has the last word: two "attend now" is rejected with its own reason, and the session is unchanged', !bad.ok && /not selectable|Only one/.test(bad.ok ? '' : bad.error) && JSON.stringify(s.snapshot()) === before);
+    check('a missing placement is rejected and leaves the session unchanged', !submitArrangement(s, { work: { disposition: 'leave_open' } }).ok && JSON.stringify(s.snapshot()) === before);
+    const ok = submitArrangement(s, arr); check('a valid arrangement is replayed through the real steps', ok.ok && s.step()!.id === 'hold_offer');
+    drive(s, script({ hold_offer: o('after'), sit: o('settled') })); const rec = complete(1, s) as AttendRecord;
+    check('the record equals what the same choices give step by step', rec.facts.dispositions.map((d) => d.pull + ':' + d.disposition + (d.when ? ':' + d.when : '')).join() === 'work:leave_open,asked:set_aside:no_time_set,rest:attend_now,phone:let_be' && rec.facts.attendNow === 'rest');
+    let rejected = 0, accepted = 0; seed = 321;
+    for (let i = 0; i < 300; i++) { const sx = new PilotSession('attend', ctxAt('2026-10-14')); drive(sx, script({ pulls: multi(...[...PULLS].sort(() => rnd() - 0.5).slice(0, 1 + Math.floor(rnd() * 5)).map((x) => x.id)) }), 1); let a = emptyArrangement(boardPulls(sx)!); for (const p of Object.keys(a)) a = normalizeArrangement(a, p, { disposition: pick(['attend_now', 'set_aside', 'leave_open', 'let_be', 'unknown'] as const), when: pick(['later_today', 'another_day', 'no_time_set'] as const) }).arrangement; const res = submitArrangement(sx, a); if (res.ok) accepted++; else rejected++; }
+    check('fuzz: 300 random boards built through normalizeArrangement are always accepted by the runtime', rejected === 0 && accepted === 300, `rejected=${rejected}`);
   }
   console.log('— Session behaviour —');
   {

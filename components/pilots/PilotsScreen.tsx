@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Platform, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthStore } from '../../stores/auth-store';
 import { usePilotStore } from '../../stores/pilot-store';
 import { MIRAR as M } from '../../design-system/native';
-import { Action, Body, BrandAsset, Eyebrow, Prompt, VisualFoundation } from '../inner-rep/v2/Foundation';
-import { MirrorPanel, PilotRunner, ValuePanel } from './PilotViews';
+import { Action, Body, Eyebrow, Prompt, VisualFoundation } from '../inner-rep/v2/Foundation';
+import { MirrorPanel, ValuePanel } from './PilotViews';
+import { LiveRunner } from '../experience/pilots/LivePilots';
+import { ExperiencePage } from '../experience/ExperienceKit';
 import { buildPilotMirror, pilotOffers, pilotReceipt, type PilotReceipt } from '../../lib/innerRep/pilots/read';
 import { PILOT_TITLES } from '../../lib/innerRep/pilots/session';
 import type { PilotId } from '../../lib/innerRep/pilots/types';
@@ -15,7 +16,7 @@ import { SAFETY_RESOURCES } from '../../lib/innerRep/safety';
 // OPTIONAL EXTRA PRACTICE (pilots) screen. Mounted only by app/pilots.tsx when EXPO_PUBLIC_PILOTS=1 (staging). That variable must never be set in
 // the Production environment. Pilots never change the engine's Today rep, evidence or Mirror; they have their own device-local
 // records and their own Mirror panel. Fixture data is loaded only on explicit request and is labelled.
-const fixtures: typeof import('../../scripts/runtime/pilot-fixtures') | null = process.env.EXPO_PUBLIC_PILOTS === '1' ? require('../../scripts/runtime/pilot-fixtures') : null;
+const fixtures: typeof import('../../scripts/runtime/pilot-fixtures') | null = process.env.EXPO_PUBLIC_PILOTS === '1' && process.env.EXPO_PUBLIC_REVIEW_STATES === '1' ? require('../../scripts/runtime/pilot-fixtures') : null;
 
 type Mode = 'hub' | 'run' | 'closing' | 'safety';
 export default function PilotsScreen() {
@@ -23,7 +24,6 @@ export default function PilotsScreen() {
 }
 
 function Pilots() {
-  const { width } = useWindowDimensions();
   const userId = useAuthStore((s) => s.session?.user?.id);
   const st = usePilotStore(); void st.tick;
   const [mode, setMode] = useState<Mode>('hub'); const [receipt, setReceipt] = useState<PilotReceipt | null>(null); const [fx, setFx] = useState(false);
@@ -34,13 +34,11 @@ function Pilots() {
   const finish = useCallback(async () => { const r = await st.close('finish'); setReceipt(r ? pilotReceipt(r) : null); setMode(r ? 'closing' : 'hub'); }, [st]);
   const leave = async () => { const r = await st.close('leave'); setReceipt(r ? pilotReceipt(r) : null); setMode(r ? 'closing' : 'hub'); };
   const begin = (p: PilotId) => { if (st.resumable()?.pilot !== p) st.start(p); setMode('run'); };
-  const pad = width < 768 ? M.space.lg : M.space.hero;
   const loadFixtures = async () => { if (!fixtures) return; await st.replaceRecords(fixtures.buildFixtures(today)); setFx(true); };
 
-  return <SafeAreaView style={S.page} edges={['top', 'bottom']}><ScrollView contentContainerStyle={[S.content, { paddingHorizontal: pad }]} keyboardShouldPersistTaps="handled">
-    <View style={S.header}><BrandAsset /><Action secondary onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)'))}>Back to Today</Action></View>
+  return <ExperiencePage action={<Action secondary onPress={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)'))}>Back to Today</Action>}>
     <View style={S.col}>
-      {mode === 'run' && session ? <PilotRunner session={session} title={PILOT_TITLES[session.pilot]} onAnswer={st.answer} onBack={st.back} onLeave={() => void leave()} onFinish={() => void finish()}
+      {mode === 'run' && session ? <LiveRunner session={session} title={PILOT_TITLES[session.pilot]} onAnswer={st.answer} onChanged={st.changed} onBack={st.back} onLeave={() => void leave()} onFinish={() => void finish()}
           onSafety={() => { void (async () => { await st.answer({ stepId: session.step()?.id ?? 'observation', kind: 'safety' }); await st.discard(); setMode('safety'); })(); }} />
         : mode === 'safety' ? <View style={S.gap}><Prompt compact>{SAFETY_RESOURCES.headline}</Prompt><Body>{SAFETY_RESOURCES.body}</Body>{SAFETY_RESOURCES.lines.map((l) => <View key={l.label}><Body>{l.label}</Body><Body>{l.value}</Body></View>)}<Body>{SAFETY_RESOURCES.note}</Body><Action onPress={() => setMode('hub')}>Back</Action></View>
         : mode === 'closing' && receipt ? <View><ValuePanel receipt={receipt} /><View style={S.actions}><Action onPress={() => { setMode('hub'); }}>Back to practice</Action></View></View>
@@ -58,7 +56,7 @@ function Pilots() {
           </View>
         </View>}
     </View>
-  </ScrollView></SafeAreaView>;
+  </ExperiencePage>;
 }
 
 const S = StyleSheet.create({

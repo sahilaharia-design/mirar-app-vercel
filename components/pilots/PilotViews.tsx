@@ -40,7 +40,7 @@ export function PilotRunner({ session, title, onAnswer, onBack, onLeave, onFinis
   </PageTransition>;
 }
 
-function StepView({ step, onAnswer, onWords, onSafety }: { step: PStep; onAnswer: (a: PAnswer) => Promise<void>; onWords: (text: string, retry: boolean) => void; onSafety: () => void }) {
+export function StepView({ step, onAnswer, onWords, onSafety }: { step: PStep; onAnswer: (a: PAnswer) => Promise<void>; onWords: (text: string, retry: boolean) => void; onSafety: () => void }) {
   const [sel, setSel] = useState<string[]>([]); const [text, setText] = useState(''); const live = useRef('');
   const unknown = (label = 'I don’t know') => <View style={S.gap}><SelectionSurface onPress={() => void onAnswer({ stepId: step.id, kind: 'unknown' })}>{label}</SelectionSurface></View>;
   if (step.type === 'choice') return <View>
