@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, useWindowDimensions } from 'react-native';
-import { NAV_LABEL, type FlowContext, type RepPayload, type StepAnswer } from '../../../lib/innerRep/v2/contracts';
+import { ScrollView, View, Text, StyleSheet, useWindowDimensions } from 'react-native';
+import { NAV_LABEL, nextStep, type FlowContext, type RepPayload, type StepAnswer } from '../../../lib/innerRep/v2/contracts';
 import { MIRAR as M } from '../../../design-system/native';
 import { Action, Body, BrandAsset, Eyebrow, PageTransition, Prompt, VisualFoundation } from './Foundation';
 import { HonestMirror, type ShownInsight, type InsightFeedback } from './HonestMirror';
@@ -52,10 +52,10 @@ function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, pr
     {insight && <View style={styles.mirrorEntry}><HonestMirror key={insight.id} insight={insight} onFeedback={value => onFeedback(insight.id,value)} onCorrection={onCorrection ? reason => onCorrection(insight.id,reason) : undefined} onSafety={() => { setAnswers([]); onSafety([]); setStage('safety'); }} /></View>}
     {stage === 'completed' && <View style={styles.bottom}><Action secondary onPress={() => setStage('today')}>{NAV_LABEL.backToToday}</Action></View>}
    </PageTransition> : today.kind === 'rep' ? <PageTransition>
-    <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt display>{greeting}</Prompt><Body style={styles.invitation}>{answers.length?'Pick up where you left off.':practiceDays?'A little practice. A little more room.':'Your first Inner Rep. A moment to notice.'}</Body></View>
-    <View style={{flexDirection:'row',gap:24,marginBottom:32,alignItems:'center'}}><View style={{width:96}}><WindowStudy quiet/></View><Body style={{flex:1}}>A question to meet at your own pace. Your response does not need to become a conclusion.</Body></View><View style={styles.details}>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}<Body>{today.payload.estimatedSeconds} seconds</Body></View>
-    <Action onPress={() => setStage('rep')}>{answers.length ? 'Resume' : 'Begin'}</Action>
-    <View style={styles.entryNote}><Body>{answers.length?'Your structured choices are kept so you can resume. Optional words are not saved.':'There is no answer to perform. You can leave any time.'}</Body></View>
+    <View style={[styles.todaySpread,{flexDirection:width>=1024?'row':'column'}]}><View style={styles.todayIntro}>
+    <Eyebrow>{new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})}</Eyebrow><View style={styles.title}><Prompt display>{greeting}</Prompt><Body style={styles.invitation}>{answers.length?'Pick up where you left off.':practiceDays?'Room for today. No need to catch up.':'One opening into an ordinary day.'}</Body></View>
+    <Action onPress={() => setStage('rep')}>{answers.length ? 'Resume' : 'Begin'}</Action><View style={styles.entryNote}><Body style={X.small}>{answers.length?'Your structured choices are kept so you can resume. Optional words are not saved.':'There is no answer to perform. You can leave any time.'}</Body></View>
+    </View><View style={styles.todayWindow}><View style={{height:width>=1024?220:130}}><WindowStudy quiet height={width>=1024?220:130}/></View><Eyebrow>Today’s opening</Eyebrow><Text style={styles.windowTitle}>{nextStep(today.context,answers)?.prompt ?? 'A little room to notice.'}</Text><View style={styles.details}>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}<Body>{today.payload.estimatedSeconds} seconds</Body></View></View></View>
     {!practiceDays && <View style={styles.entryNote}><Action secondary expanded={guide} onPress={()=>setGuide(!guide)}>What is an Inner Rep?</Action>{guide&&<View style={X.space}><SectionTitle>A small exercise, not a test.</SectionTitle><Body>Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.</Body><Body style={X.small}>Optional words are not saved. This beta keeps practice on this device and clears it when you sign out.</Body></View>}</View>}
     {continuityCue && <Body style={styles.bottom}>{continuityCue}</Body>}
     {!!practiceDays && <Body style={styles.practice}>{practiceDays} {practiceDays === 1 ? 'day' : 'days'} of practice this month</Body>}
@@ -64,10 +64,11 @@ function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, pr
  </ScrollView>;
 }
 const styles = StyleSheet.create({
+ todaySpread:{gap:24},todayIntro:{flex:1},todayWindow:{flex:1,padding:24,backgroundColor:M.color.paper,gap:16,borderTopWidth:2,borderTopColor:M.color.warmInk},windowTitle:{fontFamily:M.font.display,fontSize:34,lineHeight:40,color:M.color.ink},
  mirrorEntry: { marginTop: M.space.large }, entryNote: { marginTop: M.space.lg, gap: M.space.base },
  page: { flex: 1, backgroundColor: M.color.surface }, content: { flexGrow: 1, paddingTop: M.space.lg, paddingBottom: M.space.large },
  header: { width: '100%', maxWidth: 1120, alignSelf: 'center', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', minHeight: 48 },
- composition: { width: '100%', alignSelf: 'center', paddingTop: M.space.hero, paddingBottom: M.space.lg },
+ composition: { width: '100%', alignSelf: 'center', paddingTop: M.space.xl, paddingBottom: M.space.lg },
  context: { marginBottom: M.space.xl, gap: M.space.sm }, title: { marginTop: M.space.xl }, invitation: { fontSize: 20, lineHeight: 30, marginBottom: M.space.xl },
  details: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.lg, marginBottom: M.space.xl }, bottom: { marginTop: M.space.xl }, practice: { marginTop: M.space.base, fontSize: 14 }, safety: { marginVertical: M.space.lg, gap: M.space.base },
 });
