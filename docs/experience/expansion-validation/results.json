@@ -1,0 +1,3443 @@
+[
+  {
+    "screen": "landing-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "landing-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "entry-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "entry-320",
+    "counts": {
+      "inapplicable": 48,
+      "incomplete": 0,
+      "passes": 41,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "intro-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "intro-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "today-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-320",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "honest-mirror-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "honest-mirror-320",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-reframe-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-reframe-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-attend-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-attend-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "me-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "me-320",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "privacy-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "privacy-320",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "capacity": "Direction",
+    "viewport": 320,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Energy",
+    "viewport": 320,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Focus",
+    "viewport": 320,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Relationships",
+    "viewport": 320,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Growth",
+    "viewport": 320,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Action",
+    "viewport": 320,
+    "twoPerspectives": true
+  },
+  {
+    "studyLayer": "What was selected",
+    "viewport": 320
+  },
+  {
+    "studyLayer": "What was counted",
+    "viewport": 320
+  },
+  {
+    "studyLayer": "A possible reading",
+    "viewport": 320
+  },
+  {
+    "studyLayer": "What is unknown",
+    "viewport": 320
+  },
+  {
+    "studyLayer": "A correction",
+    "viewport": 320
+  },
+  {
+    "screen": "reframe-0-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-0-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 320,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 320,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-1-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-1-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 320,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 320,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-2-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-2-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 320,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 320,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "pilot": "look_again",
+    "unresolvedExit": true,
+    "viewport": 320
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "view"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "view"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "view"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "view"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "edge"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "open"
+    ],
+    "viewport": 320,
+    "receipt": true
+  },
+  {
+    "screen": "attend-rest-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-rest-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "attend",
+    "replaceFocusAndLeaveOpen": true,
+    "viewport": 320
+  },
+  {
+    "screen": "runtime-unknown-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-unknown-320",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "runtime-mirror-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-mirror-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "runtimeUnknownToMirror": true,
+    "viewport": 320
+  },
+  {
+    "screen": "landing-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "landing-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "entry-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "entry-390",
+    "counts": {
+      "inapplicable": 48,
+      "incomplete": 0,
+      "passes": 41,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "intro-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "intro-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "today-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-390",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "honest-mirror-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "honest-mirror-390",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-reframe-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-reframe-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-attend-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-attend-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "me-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "me-390",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "privacy-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "privacy-390",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "capacity": "Direction",
+    "viewport": 390,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Energy",
+    "viewport": 390,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Focus",
+    "viewport": 390,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Relationships",
+    "viewport": 390,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Growth",
+    "viewport": 390,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Action",
+    "viewport": 390,
+    "twoPerspectives": true
+  },
+  {
+    "studyLayer": "What was selected",
+    "viewport": 390
+  },
+  {
+    "studyLayer": "What was counted",
+    "viewport": 390
+  },
+  {
+    "studyLayer": "A possible reading",
+    "viewport": 390
+  },
+  {
+    "studyLayer": "What is unknown",
+    "viewport": 390
+  },
+  {
+    "studyLayer": "A correction",
+    "viewport": 390
+  },
+  {
+    "screen": "reframe-0-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-0-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 390,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 390,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-1-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-1-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 390,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 390,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-2-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-2-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 390,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 390,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "pilot": "look_again",
+    "unresolvedExit": true,
+    "viewport": 390
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "view"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "view"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "view"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "view"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "edge"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "open"
+    ],
+    "viewport": 390,
+    "receipt": true
+  },
+  {
+    "screen": "attend-rest-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-rest-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "attend",
+    "replaceFocusAndLeaveOpen": true,
+    "viewport": 390
+  },
+  {
+    "screen": "runtime-unknown-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-unknown-390",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "runtime-mirror-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-mirror-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "runtimeUnknownToMirror": true,
+    "viewport": 390
+  },
+  {
+    "screen": "landing-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "landing-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "entry-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "entry-768",
+    "counts": {
+      "inapplicable": 48,
+      "incomplete": 0,
+      "passes": 41,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "intro-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "intro-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "today-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-768",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "honest-mirror-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "honest-mirror-768",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-reframe-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-reframe-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-attend-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-attend-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "me-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "me-768",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "privacy-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "privacy-768",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "capacity": "Direction",
+    "viewport": 768,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Energy",
+    "viewport": 768,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Focus",
+    "viewport": 768,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Relationships",
+    "viewport": 768,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Growth",
+    "viewport": 768,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Action",
+    "viewport": 768,
+    "twoPerspectives": true
+  },
+  {
+    "studyLayer": "What was selected",
+    "viewport": 768
+  },
+  {
+    "studyLayer": "What was counted",
+    "viewport": 768
+  },
+  {
+    "studyLayer": "A possible reading",
+    "viewport": 768
+  },
+  {
+    "studyLayer": "What is unknown",
+    "viewport": 768
+  },
+  {
+    "studyLayer": "A correction",
+    "viewport": 768
+  },
+  {
+    "screen": "reframe-0-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-0-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 768,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 768,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-1-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-1-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 768,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 768,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-2-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-2-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 768,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 768,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "pilot": "look_again",
+    "unresolvedExit": true,
+    "viewport": 768
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "view"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "view"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "view"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "view"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "edge"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "open"
+    ],
+    "viewport": 768,
+    "receipt": true
+  },
+  {
+    "screen": "attend-rest-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-rest-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "attend",
+    "replaceFocusAndLeaveOpen": true,
+    "viewport": 768
+  },
+  {
+    "screen": "runtime-unknown-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-unknown-768",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "runtime-mirror-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-mirror-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "runtimeUnknownToMirror": true,
+    "viewport": 768
+  },
+  {
+    "screen": "landing-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "landing-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "entry-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "entry-1024",
+    "counts": {
+      "inapplicable": 48,
+      "incomplete": 0,
+      "passes": 41,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "intro-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "intro-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "today-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-1024",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "honest-mirror-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "honest-mirror-1024",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-reframe-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-reframe-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-attend-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-attend-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "me-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "me-1024",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "privacy-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "privacy-1024",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "capacity": "Direction",
+    "viewport": 1024,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Energy",
+    "viewport": 1024,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Focus",
+    "viewport": 1024,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Relationships",
+    "viewport": 1024,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Growth",
+    "viewport": 1024,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Action",
+    "viewport": 1024,
+    "twoPerspectives": true
+  },
+  {
+    "studyLayer": "What was selected",
+    "viewport": 1024
+  },
+  {
+    "studyLayer": "What was counted",
+    "viewport": 1024
+  },
+  {
+    "studyLayer": "A possible reading",
+    "viewport": 1024
+  },
+  {
+    "studyLayer": "What is unknown",
+    "viewport": 1024
+  },
+  {
+    "studyLayer": "A correction",
+    "viewport": 1024
+  },
+  {
+    "screen": "reframe-0-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-0-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 1024,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 1024,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-1-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-1-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 1024,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 1024,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-2-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-2-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 1024,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 1024,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "pilot": "look_again",
+    "unresolvedExit": true,
+    "viewport": 1024
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "view"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "view"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "view"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "view"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "edge"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "open"
+    ],
+    "viewport": 1024,
+    "receipt": true
+  },
+  {
+    "screen": "attend-rest-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-rest-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "attend",
+    "replaceFocusAndLeaveOpen": true,
+    "viewport": 1024
+  },
+  {
+    "screen": "runtime-unknown-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-unknown-1024",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "runtime-mirror-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-mirror-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "runtimeUnknownToMirror": true,
+    "viewport": 1024
+  },
+  {
+    "screen": "landing-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "landing-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "entry-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "entry-1440",
+    "counts": {
+      "inapplicable": 48,
+      "incomplete": 0,
+      "passes": 41,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "intro-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "intro-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "today-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-1440",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "honest-mirror-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "honest-mirror-1440",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-reframe-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-reframe-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "pilot-attend-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "pilot-attend-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "me-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "me-1440",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "privacy-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "privacy-1440",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "capacity": "Direction",
+    "viewport": 1440,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Energy",
+    "viewport": 1440,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Focus",
+    "viewport": 1440,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Relationships",
+    "viewport": 1440,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Growth",
+    "viewport": 1440,
+    "twoPerspectives": true
+  },
+  {
+    "capacity": "Action",
+    "viewport": 1440,
+    "twoPerspectives": true
+  },
+  {
+    "studyLayer": "What was selected",
+    "viewport": 1440
+  },
+  {
+    "studyLayer": "What was counted",
+    "viewport": 1440
+  },
+  {
+    "studyLayer": "A possible reading",
+    "viewport": 1440
+  },
+  {
+    "studyLayer": "What is unknown",
+    "viewport": 1440
+  },
+  {
+    "studyLayer": "A correction",
+    "viewport": 1440
+  },
+  {
+    "screen": "reframe-0-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-0-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 1440,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 0,
+    "viewport": 1440,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-1-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-1-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 1440,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 1,
+    "viewport": 1440,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "screen": "reframe-2-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "reframe-2-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 1440,
+    "receipt": true,
+    "apart": true
+  },
+  {
+    "pilot": "look_again",
+    "reading": 2,
+    "viewport": 1440,
+    "receipt": true,
+    "apart": false
+  },
+  {
+    "pilot": "look_again",
+    "unresolvedExit": true,
+    "viewport": 1440
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "edge",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "view",
+      "open",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "view",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "view"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "edge",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "view"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "edge",
+      "open",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "view",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "view"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "edge",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "view"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "edge"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "pilot": "attend",
+    "placements": [
+      "open",
+      "open",
+      "open"
+    ],
+    "viewport": 1440,
+    "receipt": true
+  },
+  {
+    "screen": "attend-rest-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-rest-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "pilot": "attend",
+    "replaceFocusAndLeaveOpen": true,
+    "viewport": 1440
+  },
+  {
+    "screen": "runtime-unknown-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-unknown-1440",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "runtime-mirror-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "runtime-mirror-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "runtimeUnknownToMirror": true,
+    "viewport": 1440
+  },
+  {
+    "entryJourney": true,
+    "noSignupClaim": true
+  },
+  {
+    "screen": "retained-compare",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "retained-compare",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "retainedRecord": "compare",
+    "notAccountHistory": true
+  },
+  {
+    "screen": "retained-timeframe",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "retained-timeframe",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "retainedRecord": "timeframe",
+    "notAccountHistory": true
+  },
+  {
+    "screen": "retained-commitment_check",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "retained-commitment_check",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "retainedRecord": "commitment_check",
+    "notAccountHistory": true
+  },
+  {
+    "screen": "retained-insight",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "retained-insight",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "retainedRecord": "insight",
+    "notAccountHistory": true
+  },
+  {
+    "screen": "keyboard-attend-reduced",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "remote": [],
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "keyboard-attend-reduced",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "keyboardPilot": true,
+    "reducedMotion": true
+  },
+  {
+    "axe": "auth-error",
+    "counts": {
+      "inapplicable": 48,
+      "incomplete": 0,
+      "passes": 41,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "authErrorPresentation": true
+  },
+  {
+    "runtimeErrors": ""
+  }
+]

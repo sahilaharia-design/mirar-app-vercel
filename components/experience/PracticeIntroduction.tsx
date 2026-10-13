@@ -1,10 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { Action, Body, Eyebrow, Prompt } from '../inner-rep/v2/Foundation';
 import { ExperiencePage, PrivacyTruth, X } from './ExperienceKit';
 import { WindowStudy } from './WindowStudy';
-export function PracticeIntroduction({ onBegin }: {
-    onBegin: () => void;
-}) {
-    return <ExperiencePage><View style={[X.narrow, X.space]}><Eyebrow>A first opening</Eyebrow><Prompt display>Start with what is here.</Prompt><WindowStudy quiet/><Body style={X.lede}>A small question. Your own response. Room to leave it open.</Body><Body>Take the first Inner Rep at your own pace. You can choose “I don’t know”, skip optional steps or leave whenever you want.</Body><View style={X.row}><Action onPress={onBegin}>Meet today’s Inner Rep</Action><Action secondary onPress={onBegin}>Go straight to Today</Action></View><PrivacyTruth /><Body style={X.small}>This introduction asks nothing about you. Mirar is a practice, not therapy or a diagnosis.</Body></View></ExperiencePage>;
+import { MIRAR as M } from '../../design-system/native';
+export function PracticeIntroduction({ onBegin }: { onBegin: () => void }) {
+ const {width}=useWindowDimensions();
+ return <ExperiencePage><View style={[S.spread,{flexDirection:width>=768?'row':'column'}]}><View style={{flex:1,gap:24}}><Eyebrow>A first opening</Eyebrow><Prompt display style={{marginBottom:0}}>Meet one moment. Leave room around it.</Prompt><Body style={X.lede}>An offered question. Your response. A clear place to stop.</Body><Action onPress={onBegin}>Go to Today</Action></View><View style={S.folio}><View style={{height:160}}><WindowStudy quiet height={160}/></View>{[['Your pace','Leave whenever you want.'],['Your uncertainty','“I don’t know” is a real answer.'],['Your say','A Mirror reading can be questioned.']].map(([title,body])=><View key={title} style={S.line}><Text style={S.lineTitle}>{title}</Text><Body>{body}</Body></View>)}</View></View><View style={[X.rule,{marginTop:32,gap:12}]}><PrivacyTruth/><Body style={X.small}>This introduction asks nothing about you. Mirar is a practice, not therapy or a diagnosis.</Body></View></ExperiencePage>;
 }
+const S=StyleSheet.create({spread:{gap:32},folio:{flex:1,backgroundColor:M.color.paper,padding:24,gap:20},line:{borderTopWidth:1,borderColor:M.color.border,paddingTop:16,gap:8},lineTitle:{fontFamily:M.font.display,fontSize:30,lineHeight:36,color:M.color.ink}});
