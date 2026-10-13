@@ -1,7 +1,7 @@
 """All public sample branches, using local preview only. No registration, services or response storage."""
 import subprocess,json,atexit,os
 from pathlib import Path
-B=os.environ.get('AGENT_BROWSER_BIN','/private/tmp/mirar-npm-cache/_npx/6de2aa2fded2970c/node_modules/agent-browser/bin/agent-browser-darwin-arm64');base=os.environ.get('MIRAR_SAMPLE_PREVIEW','http://127.0.0.1:5183');root=Path(__file__).resolve().parents[2]/'docs/experience/expansion-validation/sample';(root/'screenshots').mkdir(exist_ok=True,parents=True);rows=[]
+B=os.environ.get('AGENT_BROWSER_BIN','/private/tmp/mirar-npm-cache/_npx/6de2aa2fded2970c/node_modules/agent-browser/bin/agent-browser-darwin-arm64');base=os.environ.get('MIRAR_SAMPLE_PREVIEW','http://127.0.0.1:5183');root=Path(os.environ.get('MIRAR_VALIDATION_DIR',Path(__file__).resolve().parents[2]/'docs/experience/expansion-validation/sample'));(root/'screenshots').mkdir(exist_ok=True,parents=True);rows=[]
 atexit.register(lambda:(root/'results.json').write_text(json.dumps(rows,indent=2)+'\n'))
 def run(*a):return subprocess.check_output([B,'--session','mirar-practice-all-paths','--pin-tab',*a],text=True).strip()
 def js(s):return json.loads(run('eval',s))

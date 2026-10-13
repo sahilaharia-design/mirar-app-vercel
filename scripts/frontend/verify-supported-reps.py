@@ -2,7 +2,7 @@
 import subprocess,json,time,atexit,os
 from pathlib import Path
 B=os.environ.get('AGENT_BROWSER_BIN','agent-browser')
-root=Path(__file__).resolve().parents[2]/'docs/experience/expansion-validation/regression'; (root/'screenshots').mkdir(parents=True,exist_ok=True); results=[]
+root=Path(os.environ.get('MIRAR_VALIDATION_DIR',Path(__file__).resolve().parents[2]/'docs/experience/expansion-validation/regression')); (root/'screenshots').mkdir(parents=True,exist_ok=True); results=[]
 atexit.register(lambda: (root/'ui-validation.json').write_text(json.dumps(results,indent=2)+'\n'))
 def run(*args):
  p=subprocess.run([B,'--session','mirar-expansion-regression','--pin-tab',*args],text=True,capture_output=True)
