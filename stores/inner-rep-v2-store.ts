@@ -5,6 +5,7 @@ import { CorrectionReason } from '../lib/innerRep/v2/types';
 import { CompletionView, InsightFeedbackValue, KV, TodayView, clearV2Keys, createRuntime } from '../lib/innerRep/runtime/v2-runtime';
 import type { MirrorModel } from '../lib/innerRep/runtime/mirror-contract';
 import type { Receipt } from '../lib/innerRep/runtime/receipt';
+import { clearPilotKeys } from '../lib/innerRep/pilots/keys';
 
 // Thin reactive wrapper around the v2 runtime adapter. All behaviour lives in lib/innerRep/runtime/v2-runtime.ts, which
 // delegates every decision to the frozen engine. DEV PERSISTENCE: structured state in AsyncStorage (browser localStorage on
@@ -54,5 +55,6 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
 /** Sign-out: remove every v2 key on this device and drop in-memory state. */
 export async function clearInnerRepV2Data() {
   await clearV2Keys(AsyncStorage as unknown as KV);
+  await clearPilotKeys(AsyncStorage as unknown as KV);
   useInnerRepV2Store.setState({ status: 'idle', userId: null, dayKey: '', today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
 }
