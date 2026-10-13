@@ -66,3 +66,15 @@ Landing production entry remains `landing/main.tsx` with the complete verified c
 - Confirm live magic-link entry/sent/expired/error behavior separately; no fabricated auth success from this review.
 - Rebuild the official landing with its existing verified destination and unchanged legal routes. Run the integrated staging checks before deciding production release.
 - Native VoiceOver/TalkBack, Hindi/Gujarati typography, content comprehension and safety/legal specialist review remain distinct requirements. No human test results are invented from pending invitations.
+
+## Review delivery and final validation
+
+Hosted journey: https://mirar-creative-review-j3bjbf4i7-sahilaharia-designs-projects.vercel.app/
+
+Frontend implementation `76cc36b` (with integration sync `c45f938`). Draft PR #2: https://github.com/sahilaharia-design/mirar-app-vercel/pull/2
+
+Use the Journey menu or `?journey=today`, `?journey=pilot-reframe`, `?journey=pilot-attend`, `?journey=mirror`, `?journey=honest-mirror`. These are review routes, not production routing proposals. Sign-in is explicitly simulated.
+
+Hosted suites pass: 100 Attend arrangements, 35 Look Again paths, 45 approved-sample paths across five sizes; actual supported-rep corrections/timeframes/privacy/resume regression; 658 total validation records; 164 axe scans with zero violations/incomplete checks. TypeScript, both builds and public-bundle exposure checker pass. Evidence: [expansion validation](expansion-validation/README.md). Browser-motion, authored-content and input/output boundaries are checked separately from real-auth delivery, native assistive technology and human benefit/comprehension findings.
+
+Claude: review the two candidate contracts above before any authenticated wiring. Integrate only approved presentation changes; keep engine, receipts, corrections, privacy and selection authoritative. The approved public sample remains byte-identical in its component to the previous review branch. Current public landing remains unchanged.

@@ -1,0 +1,18 @@
+{
+  "frontendCommit": "76cc36be78c2c4b7e559580c2a4fa5148db1b082",
+  "integrationRef": "3dfebc374d67ac409f3246e6288325295856c253",
+  "preview": "https://mirar-creative-review-j3bjbf4i7-sahilaharia-designs-projects.vercel.app/",
+  "deploymentId": "dpl_Bxuxq5LEyWyDM8hWS5AcCs7B4Wne",
+  "target": "preview",
+  "normalMotionPreferenceVerified": true,
+  "productionHtmlUnchanged": true,
+  "humanResults": null,
+  "suites": {
+    "expansion": 379,
+    "supportedReps": 101,
+    "approvedSample": 178
+  },
+  "axeScans": 164,
+  "axeViolations": 0,
+  "axeIncomplete": 0
+}
