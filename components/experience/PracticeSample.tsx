@@ -8,14 +8,14 @@ import { X, SectionTitle } from './ExperienceKit';
 // No self-report, raw words, network, storage, analytics or runtime callback.
 export const SAMPLE_FACT = 'The message has no reply yet.';
 export const SAMPLE_READING = 'They don’t want to reply to me.';
-export const SAMPLE_VIEWS = { original: { label: 'Keep the first reading', text: SAMPLE_READING, close: 'You kept the first reading in view, without turning it into a known fact.' }, other: { label: 'Consider another possibility', text: 'They may not have had a chance to reply.', close: 'You considered another possibility. Nothing in the scene established which reason was true.' }, open: { label: 'Leave the reason unknown', text: 'The reason is not known.', close: 'You left the reason open while keeping the observable part in view.' } } as const;
+export const SAMPLE_VIEWS = { original: { label: 'Keep the first reading', text: SAMPLE_READING, close: 'The first reading remains in view as a possibility, not a known fact.' }, other: { label: 'Consider another possibility', text: 'They may not have had a chance to reply.', close: 'Another possibility is in view. The scene does not establish which reason is true.' }, open: { label: 'Leave the reason unknown', text: 'The reason is not known.', close: 'The reason remains open; the observable part stays in view.' } } as const;
 type Start = 'fact' | 'meaning' | 'unknown';
 type Reading = keyof typeof SAMPLE_VIEWS;
 const openings: Record<Start, {
     title: string;
     copy: string;
     result: string;
-}> = { fact: { title: 'Keep what’s known in view.', copy: 'No reply yet is observable. The reason for it is a separate question.', result: 'You held the observation steady.' }, meaning: { title: 'A reading is not an observation.', copy: '“They don’t want to” supplies a reason the scene hasn’t given us. Keep it as a possible reading, not a fact.', result: 'You separated an observation from a possible meaning.' }, unknown: { title: 'We can separate what’s known from what isn’t.', copy: 'There is no reply yet. Why there is no reply remains unknown. You don’t have to settle the missing part.', result: 'You made room for an unanswered part.' } };
+}> = { fact: { title: 'Starting with what is visible.', copy: 'There is no reply yet; why is a separate question.', result: 'Here, what is visible and a possible reading stay separate.' }, meaning: { title: 'Starting with what it might mean.', copy: 'Here, this is held as one possible reading beside what is visible.', result: 'Here, what is visible and a possible reading stay separate.' }, unknown: { title: 'Not sure where to begin.', copy: 'Nothing here needs settling. What is visible and what is unknown can stay alongside each other.', result: 'Here, what is visible and a possible reading stay separate.' } };
 function FocusTitle({ children }: {
     children: string;
 }) { const ref = useRef<Text>(null); useEffect(() => { if (Platform.OS === 'web') {
@@ -40,10 +40,10 @@ export function PracticeSample({ onEnter }: {
     return <View nativeID="practice-sample" style={S.sample}>
  <Eyebrow>Fictional scene · nothing saved</Eyebrow>
  {left ? <><FocusTitle>The exercise can stay unfinished.</FocusTitle><Body>You don’t need to make a choice or draw a conclusion.</Body><Action secondary onPress={reset}>Return to the exercise</Action></> : !start ? <>
- <FocusTitle>What is observable?</FocusTitle>
+ <FocusTitle>Where does your attention go first?</FocusTitle>
  <View style={S.scene}><View style={{ flex: 1, gap: 8 }}><Body style={{ color: M.color.ink }}>You sent a message. No reply has arrived.</Body></View><View style={{ width: 64 }}><WindowStudy quiet height={96}/></View></View>
- <View role="group" accessibilityLabel="Distinguish an observation from a reading" style={S.choices}>
- <Tile onPress={() => setStart('fact')}>{SAMPLE_FACT}</Tile><Tile onPress={() => setStart('meaning')}>{SAMPLE_READING}</Tile><Tile onPress={() => setStart('unknown')}>I don’t know</Tile>
+ <View role="group" accessibilityLabel="Where your attention goes first" style={S.choices}>
+ <Tile onPress={() => setStart('fact')}>That there is no reply</Tile><Tile onPress={() => setStart('meaning')}>What the silence might mean</Tile><Tile onPress={() => setStart('unknown')}>I’m not sure</Tile>
  </View></> : <> <FocusTitle>{openings[start].title}</FocusTitle><Body>{openings[start].copy}</Body>
  <View role="group" nativeID="practice-window" style={[S.window, { flexDirection: width >= 1024 ? 'row' : 'column' }]} accessibilityLabel="Observation and possible meaning stay separate">
  <View style={S.fixed}><Eyebrow>What is observable</Eyebrow><Text style={S.fact}>{SAMPLE_FACT}</Text></View>
@@ -52,7 +52,7 @@ export function PracticeSample({ onEnter }: {
  </View>
  <Body style={X.small}>Change what the window holds. The observation stays put.</Body>
  <View role="group" accessibilityLabel="Choose a view of the fictional scene" style={S.choices}>{(Object.keys(SAMPLE_VIEWS) as Reading[]).map(k => <Tile key={k} selected={reading === k} onPress={() => setReading(k)}>{SAMPLE_VIEWS[k].label}</Tile>)}</View>
- {reading && <View style={S.completed} accessibilityLiveRegion="polite"><SectionTitle>{openings[start].result}</SectionTitle><Body>{SAMPLE_VIEWS[reading].close}</Body><Body style={X.small}>You kept an observation separate from a possible meaning. This was not an assessment of you.</Body><View style={X.row}><Action onPress={onEnter}>Continue with Mirar</Action><Action secondary onPress={reset}>Try the exercise again</Action></View></View>}
+ {reading && <View style={S.completed} accessibilityLiveRegion="polite"><SectionTitle>{openings[start].result}</SectionTitle><Body>{SAMPLE_VIEWS[reading].close}</Body><Body style={X.small}>This was not an assessment of you.</Body><Body>In the Mirar app, today’s exercise is chosen for you and may be simpler than this one.</Body><View style={X.row}><Action onPress={onEnter}>Continue with Mirar</Action><Action secondary onPress={reset}>Try the exercise again</Action></View></View>}
  </>}
  {!left && <Action secondary onPress={() => setLeft(true)}>Leave the exercise</Action>}
  <Body style={S.privacy}>Sample practice · only on this page. Mirar beta chooses your daily rep, which may be simpler.</Body>

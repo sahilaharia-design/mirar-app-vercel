@@ -106,3 +106,15 @@ Agreements: demonstrate an operation; separate the public sample from the unbuil
 Unknown differs intentionally: instead of ending immediately without practice, it offers a usable distinction between observable absence and an unknown reason, while retaining an immediate Leave option. The user asked for a meaningful unknown branch. No obligation to complete or settle an answer is added.
 
 No personal before/after weights, efficacy sentence, new catalog family or engine amendment is implemented. Human review must decide the public exercise before release. The preview shows the proposed alternative concretely, so the decision can be made from an operating experience rather than copy alone. `git merge-tree` confirms no textual conflicts with `78d12c4`; no branch merge was performed.
+
+## Claude-approved mechanics and copy revision — 13 October 2026
+
+Read `docs/product/PRACTICE_SAMPLE_REVIEW.md` completely from integration commit `293b31a`. Claude approved the fictional scene, active window, three reversible readings and evidence boundaries; user endorsed that verdict and requested the five scoped copy fixes. This update supersedes the candidate’s original quiz-style opening and achievement-style closure wording above.
+
+- Opening: **Where does your attention go first?**
+- Equal starting choices: **That there is no reply / What the silence might mean / I’m not sure**.
+- Starting responses describe visible, possible-meaning or uncertain attention without correcting or rewarding the choice. Screen-reader group label follows the same non-evaluative invitation.
+- Common completion: **Here, what is visible and a possible reading stay separate.** View-specific lines describe what remains in view, rather than crediting a visitor with success.
+- The exact beta-boundary sentence is readable body text immediately above Continue with Mirar; the existing footer disclosure remains.
+
+No state, handler, branch mapping, view label, authored scene/reading, graphics, motion, engine or persistence change. No layout/style redesign. Previous test invitations were for the previous build; any eventual response must identify which version was viewed and cannot be relabelled as evidence for this revision. Human replies remain independent and pending, not validation findings.
