@@ -1,0 +1,101 @@
+{
+  "target": "https://mirar-unified-preview.vercel.app (demo auth, EXPO_PUBLIC_PILOTS=1)",
+  "build": "mirar-unified @ c23e27d (merge of mirar-pilots 8f30963 and codex/mirar-aperture-expansion 8e9fa11)",
+  "date": "2026-10-13",
+  "journey_script": "scripts/frontend/unified-journey.browser.js (phases 1-4, real app and real pilot sessions through the DOM)",
+  "journey_checks": {
+    "phase2": {
+      "engine_rep_completes": true,
+      "pilots_hub_reachable_from_today": true,
+      "camera_retry_offered": true,
+      "frame_shows_observation_and_reading_apart": true,
+      "alternatives_step_reached": true
+    },
+    "reload": "between phase 2 and 3",
+    "phase3": {
+      "hub_offers_resume": true,
+      "draft_holds_no_private_text": true,
+      "resumes_at_alternatives": true,
+      "says_words_are_not_kept": true,
+      "words_not_restored": true,
+      "exit_offers_nothing_and_open_not_find_out": true,
+      "look_again_receipt_honest": true,
+      "look_again_record_structured_only": true,
+      "second_in_view_moves_first_to_open_and_says_so": true,
+      "set_aside_asks_when_and_says_no_reminder": true,
+      "hold_offered_for_the_in_view_item": true,
+      "hold_has_no_timer": true,
+      "attend_record_matches_choices": true,
+      "attend_receipt_says_no_task_created": true
+    },
+    "phase4": {
+      "safety_panel_shown": true,
+      "no_draft_retained": true,
+      "no_new_record": true,
+      "typed_text_nowhere": true,
+      "no_resume_after_safety": true,
+      "mirror_engine_section_present": true,
+      "pilot_section_separate_and_labelled": true,
+      "engine_mirror_unaffected_by_pilots": true,
+      "pilot_statements_traced_and_exact": true,
+      "pilot_sparse_honest": true
+    },
+    "note": "phase 4 was run twice: the first run's five Mirror checks failed because of a script navigation bug (looked for the Mirror tab while on /pilots); the script was fixed and phase 4 re-run, all ten pass. The five safety checks passed in both runs."
+  },
+  "accessibility_axe_4_10_2_wcag2a_2aa_21a_21aa": {
+    "states_scanned": [
+      "hub",
+      "look again situation",
+      "look again words",
+      "look again camera",
+      "look again weight with frame",
+      "look again alternatives",
+      "look again receipt",
+      "attend pulls",
+      "attend board",
+      "attend board with set-aside when",
+      "attend next step"
+    ],
+    "violations": 0,
+    "incomplete": 0
+  },
+  "responsive": {
+    "320": {
+      "overflow": false,
+      "targets_under_44px": 0,
+      "screens": [
+        "attend board",
+        "look again frame"
+      ]
+    },
+    "1440": {
+      "overflow": false,
+      "targets_under_44px": 0,
+      "clipped_elements": 0,
+      "screens": [
+        "look again frame",
+        "attend board"
+      ]
+    },
+    "note": "390 was not separately measured for pilots; the landing sample and Today were checked at 390 earlier."
+  },
+  "landing_preview": "https://mirar-landing-unified-preview.vercel.app: sample opening intact, 3/3 paths, 0 fetch/XHR, empty storage, capacity scenes and Mirror study present, CTA -> staging demo login, legal links -> mirar.life",
+  "real_auth_preview": "https://mirar-unified-real.vercel.app: real Supabase auth (no mock), fixtures module and loader absent from bundle; sign-in NOT verified (callback URL for this alias is not in Supabase Redirect URLs)",
+  "regression": {
+    "engine_suite": "85/85",
+    "correction_suite": "17/17",
+    "runtime": "18/18",
+    "mirror_contract": "20/20",
+    "receipt": "8/8",
+    "mirror": "4/4",
+    "pilots": "75 checks, 0 failing (incl. board adapter, fuzz 300 boards, mutation-checked)",
+    "production_equivalent_export": "no pilot screen, content, fixtures or board strings; anon-only JWT"
+  },
+  "not_run": [
+    "Attend 'Rearrange it' and board prefill in the hosted journey script (covered by session/board tests; exercised by hand on the earlier build)",
+    "390px pilot geometry",
+    "real-auth sign-in",
+    "native VoiceOver/TalkBack",
+    "human comprehension or usefulness testing"
+  ]
+}
