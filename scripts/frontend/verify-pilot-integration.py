@@ -55,7 +55,15 @@ for vi,(w,h) in enumerate([(320,568),(390,844),(768,1024),(1024,768),(1440,900)]
    elif sid=='alternatives':
     capture(f'look-alternatives-{w}-{k}',k==0)
     answer(st,'unknown' if k==3 else None,ids=[] if k==2 else list(range(4)) if k==1 else [vi%4])
-   elif sid=='reweigh':answer(st,'unknown' if k==3 else None,index=(k+vi)%4)
+   elif sid=='reweigh':
+    if k==1:
+     before=js('JSON.stringify(window.pilotReviewAudit.snapshot().answers)')
+     names=js("[...document.querySelectorAll('[aria-label]')].map(e=>e.getAttribute('aria-label')).filter(n=>n?.startsWith('Read possibility '))")
+     assert len(names)==4
+     for name in names:click(name)
+     assert js('JSON.stringify(window.pilotReviewAudit.snapshot().answers)')==before
+     rows.append({'viewport':w,'allSelectedReadingsReversibleWithoutEvidenceWrite':True})
+    answer(st,'unknown' if k==3 else None,index=(k+vi)%4)
    else:answer(st,'unknown' if k==5 else None,index=k%2)
   finish_check(f'look-complete-{w}-{k}','look_again')
  # Attend: every destination and distinct completion/hold/rearrange/unknown/empty outcomes.
