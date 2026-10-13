@@ -4,7 +4,7 @@ This branch combines the approved Aperture expansion (`8e9fa11`) with the actual
 
 ## Runtime boundary
 
-`PilotRunner` renders `session.step()` and returns `PAnswer`. It does not sequence, select or author runtime options. Choice, multi, words and hold all use the emitted prompt/options/limits/allowUnknown/allowBack. Disabled Attend destinations display the exact runtime reason. No automatic focus swap. No drag gesture is required: touch and keyboard activate the same destination buttons. Multi selects at most the emitted maximum.
+`PilotRunner` renders `session.step()` and returns `PAnswer`. It does not sequence, select or author runtime options. Choice, multi, words and hold all use the emitted prompt/options/limits/allowUnknown/allowBack. Disabled Attend destinations display the exact runtime reason. No automatic focus swap. The four places are themselves selectable, with their current assigned pulls visible inside; no duplicate destination questionnaire follows the board. No drag gesture is required: touch and keyboard activate the same destination buttons. Multi selects at most the emitted maximum.
 
 Words exist only in the mounted runner. Only trimmed character counts enter the session, and only after the unchanged crisis check. Camera/retry screens show local words; every departure destroys those words. A restored draft visibly states that words were not restored. Readings and alternatives are reconstructed from structured runtime choices and exact authored labels, never inferred from words. Additional selected possibilities have equally weighted revisit controls. Unknown and no-reading paths do not invent placeholders that imply an interpretation.
 

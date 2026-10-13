@@ -37,7 +37,7 @@ def answer(st,kind=None,index=0,ids=None):
  run('wait','60')
 def finish_check(n,pilot):
  run('wait','--text','WHAT REMAINS UNKNOWN');assert step() is None;recs=record();assert recs[-1]['pilot']==pilot and recs[-1]['status']=='completed';capture(n)
- click('Back to Today');click('Journey');click('Mirror');assert 'Another plane of the Mirror.' in body();assert 'Pilot records stay separate' in body();capture(n+'-mirror',False)
+ click('Back to Today');click('Journey');click('Mirror');assert 'Another plane of the Mirror.' in body();assert 'These practice choices are kept apart' in body();capture(n+'-mirror',False)
 for vi,(w,h) in enumerate([] if os.environ.get('MIRAR_PILOT_EDGE_ONLY') else [(320,568),(390,844),(768,1024),(1024,768),(1440,900)]):
  run('set','viewport',str(w),str(h))
  for stage in ['today','mirror']:
@@ -83,7 +83,7 @@ for vi,(w,h) in enumerate([] if os.environ.get('MIRAR_PILOT_EDGE_ONLY') else [(3
     elif k==4:idx=1
     else:idx=2
     if any(o.get('disabled') for o in opts):
-     assert js("[...document.querySelectorAll('[role=button]')].some(e=>e.textContent==='Attend to it now'&&e.getAttribute('aria-disabled')==='true')");capture(f'attend-disabled-{w}-{k}-{i}',i==1)
+     assert js("[...document.querySelectorAll('[role=button]')].some(e=>e.getAttribute('aria-label')==='Attend to it now'&&e.getAttribute('aria-disabled')==='true')");capture(f'attend-disabled-{w}-{k}-{i}',i==1)
     answer(st,'unknown' if k==7 else None,index=idx)
    elif sid.startswith('when:'):answer(st,index=(k+vi)%3)
    elif sid=='hold_offer':answer(st,index=k%2)

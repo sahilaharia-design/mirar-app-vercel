@@ -18,7 +18,7 @@ const endpoint=execFileSync(bin,['--session','mirar-pilot-expo-qa','--pin-tab','
  await call('Page.navigate',{url:origin+'/pilots'});
  for(let i=0;i<50;i++){if((await evaluate('document.body.textContent')).includes('More than one way to look.'))break;await pause(100);}
  const tap=async label=>{
-  const rect=await evaluate(`(()=>{const e=[...document.querySelectorAll('[role=button]')].find(e=>e.textContent===${JSON.stringify(label)});if(!e)throw Error('Button missing');e.scrollIntoView({block:'center'});const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
+  const rect=await evaluate(`(()=>{const e=[...document.querySelectorAll('[role=button]')].find(e=>(e.getAttribute('aria-label')===${JSON.stringify(label)}||e.textContent===${JSON.stringify(label)}));if(!e)throw Error('Button missing');e.scrollIntoView({block:'center'});const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);
   await call('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[rect]});await call('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await pause(120);
  };
  await tap('Clear pilot data');await tap('Begin Attend');
