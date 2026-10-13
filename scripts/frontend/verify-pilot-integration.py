@@ -38,7 +38,7 @@ def answer(st,kind=None,index=0,ids=None):
 def finish_check(n,pilot):
  run('wait','--text','WHAT REMAINS UNKNOWN');assert step() is None;recs=record();assert recs[-1]['pilot']==pilot and recs[-1]['status']=='completed';capture(n)
  click('Back to Today');click('Journey');click('Mirror');assert 'Another plane of the Mirror.' in body();assert 'Pilot records stay separate' in body();capture(n+'-mirror',False)
-for vi,(w,h) in enumerate([(320,568),(390,844),(768,1024),(1024,768),(1440,900)]):
+for vi,(w,h) in enumerate([] if os.environ.get('MIRAR_PILOT_EDGE_ONLY') else [(320,568),(390,844),(768,1024),(1024,768),(1440,900)]):
  run('set','viewport',str(w),str(h))
  for stage in ['today','mirror']:
   open_stage(stage);capture(f'{stage}-empty-{w}')
@@ -74,7 +74,9 @@ for vi,(w,h) in enumerate([(320,568),(390,844),(768,1024),(1024,768),(1440,900)]
    if sid=='pulls':
     answer(st,'unknown' if k==6 else None,ids=[] if k==5 else [0,1,2,3,4] if k in [0,1] else [5,6,7])
    elif sid.startswith('place:'):
-    opts=st['options'];snap=js('window.pilotReviewAudit.snapshot()');placement=[a for a in snap['answers'] if a['stepId'].startswith('place:')];i=len(placement)
+    opts=st['options'];snap=js('window.pilotReviewAudit.snapshot()');
+    if snap['answers'][-1]['stepId']=='rearrange':assert 'Back' not in js("[...document.querySelectorAll('[role=button]')].map(e=>e.textContent)")
+    placement=[a for a in snap['answers'] if a['stepId'].startswith('place:')];i=len(placement)
     if k in [0,1]:idx=i%4 if i<4 else 2
     elif k==2:idx=2
     elif k==3:idx=3
@@ -101,17 +103,25 @@ click('Leave');assert record()[-1]['status']=='left';assert 'Stopped before comp
 open_stage('pilot-attend');answer(step(),ids=[0]);answer(step(),index=0);answer(step(),index=0);assert step()['type']=='hold';click('Leave');assert record()[-1]['status']=='left' and record()[-1]['facts']['hold']=='left_during';capture('left-hold')
 open_stage('pilot-reframe');click('Leave');assert not record();capture('left-no-answers')
 open_stage('pilot-reframe');answer(step(),index=0);st=step();run('find','role','textbox','fill','--name',st['prompt'],'--exact','I want to kill myself');click('Continue');run('wait','100');assert not record();assert js('window.pilotReviewAudit.storage().every(b=>!b.draft)');capture('safety-no-record')
+# Retry skip/unknown, changing the first attention slot via Back, partial placement and skipped hold.
+open_stage('pilot-reframe');answer(step(),index=0);answer(step());answer(step(),index=1);answer(step(),'skip');assert sentinel in body();answer(step(),index=3);answer(step(),'unknown');assert record()[-1]['facts']['retried'] is False;capture('retry-kept-original')
+open_stage('pilot-reframe');answer(step(),index=0);answer(step());answer(step(),index=2);answer(step());answer(step(),'unknown');answer(step(),index=3);answer(step(),index=0);assert record()[-1]['facts']['cameraChecks']==['no','unknown'];capture('retry-unknown-check')
+open_stage('pilot-attend');answer(step(),ids=[0,1]);answer(step(),index=0);assert step()['options'][0].get('disabled');click('Back');assert step()['id']=='place:messages';answer(step(),index=2);assert not step()['options'][0].get('disabled');answer(step(),index=0);answer(step(),'unknown');answer(step(),index=2);answer(step(),index=1);assert record()[-1]['facts']['hold']=='skipped';assert record()[-1]['facts']['attendNow']=='work';capture('back-frees-first-slot-and-keep')
+open_stage('pilot-attend');answer(step(),ids=[0,1]);answer(step(),index=0);click('Leave');assert record()[-1]['status']=='left';assert 'Useful before you go' not in body();capture('left-partial-allocation')
 # Resume/new-practice conflict never silently drops a draft.
 open_stage('pilot-reframe');answer(step(),index=0);click('Back to Today');click('Begin Attend');assert 'One unfinished practice is here.' in body();click('Keep it for now');assert record()==[];click('Begin Attend');click('Leave it and begin Attend');assert record()[-1]['pilot']=='look_again' and record()[-1]['status']=='left';capture('draft-replacement')
 # Populated pilot history, actual carry offers and all three carry responses.
 for response in range(3):
- open_stage('today');click('Load pilot fixture history');click('Begin Attend');assert step()['id'].startswith('carry:');capture('carry-'+str(response))
+ open_stage('today');click('Load a set-aside review record');click('Begin Attend');assert step()['id'].startswith('carry:');capture('carry-'+str(response))
  while (st:=step()):
   if st['id'].startswith('carry:'):answer(st,'unknown' if response==2 else None,index=response)
   elif st['type']=='multi':answer(st,ids=[])
   elif st['id'].startswith('place:'):answer(st,index=2)
   else:answer(st,index=0)
- assert record()[-1]['status']=='completed';click('Back to Today');click('Journey');click('Mirror');assert 'FIXTURE DATA' in body();capture('populated-mirror-'+str(response))
+ assert record()[-1]['status']=='completed';click('Back to Today');click('Journey');click('Mirror');assert 'FIXTURE DATA' in body();capture('carry-mirror-'+str(response))
+open_stage('today');click('Load pilot fixture history');click('Journey');click('Mirror');assert js('window.pilotReviewAudit.mirror().state')=='populated';capture('populated-pilot-mirror')
+# Complete discover-to-engine-to-pilot-to-Mirror review journey, without registration claims.
+open_stage('landing');click('Enter Mirar');click('Continue the preview without email');click('Go to Today');click('Begin');click("I don't know");click('Back to Today');click('Begin Look Again');answer(step(),'unknown');answer(step(),'skip');answer(step(),'unknown');answer(step(),'unknown');click('Back to Today');click('Journey');click('Mirror');assert '1 day of practice this month' in body();assert 'Look Again: completed 1 time' in body();capture('full-integrated-journey');rows.append({'entryDailyRepPilotMirrorJourney':True,'separateRuntimeFacts':True})
 # Real keyboard operation, reduced motion and touch-equivalent native buttons.
 run('set','media','reduced-motion');open_stage('pilot-attend');assert js("matchMedia('(prefers-reduced-motion: reduce)').matches")
 run('press','Tab');assert 'A message or notification waiting' in js('document.activeElement.textContent');run('press','Enter');assert js("[...document.querySelectorAll('[aria-pressed=true]')].some(e=>e.textContent==='A message or notification waiting')");click('Continue');run('press','Tab');assert 'Attend to it now' in js('document.activeElement.textContent');run('press','Enter');assert step()['id']=='hold_offer';capture('keyboard-reduced-motion')

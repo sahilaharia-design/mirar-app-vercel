@@ -32,11 +32,14 @@ export function PilotRunner({ session, title, onAnswer, onBack, onLeave, onFinis
  const act=async(fn:()=>Promise<void>)=>{if(lock.current)return;lock.current=true;setBusy(true);setError('');try{await fn();}catch{setError('That choice could not be applied. Please try again.');}finally{lock.current=false;setBusy(false);}};
  if(session.isHalted)return <Body>Nothing about this moment is kept.</Body>;
  if(!step)return <Done onFinish={()=>{setWords({});onFinish();}}/>;
+ const previous=answers[answers.length-1]?.stepId;
+ // The session also blocks crossing a hold or rearrangement, even when the new step permits Back.
+ const canBack=step.allowBack&&session.answerCount>0&&!['hold','hold_offer','rearrange'].includes(previous);
  const isPlace=session.pilot==='attend'&&step.id.startsWith('place:');
  const hasFrame=session.pilot==='look_again'&&step.id!=='situation'&&step.type!=='words';
  return <View ref={runner} style={S.runner}>
   <View style={S.bar}><Eyebrow>{title} · optional practice</Eyebrow><View style={S.actions}>
-   {step.allowBack&&session.answerCount>0&&<Action secondary disabled={busy} onPress={()=>void act(onBack)}>Back</Action>}
+   {canBack&&<Action secondary disabled={busy} onPress={()=>void act(onBack)}>Back</Action>}
    <Action secondary disabled={busy} onPress={()=>{setWords({});onLeave();}}>Leave</Action>
   </View></View>
   <PageTransition key={step.id}><View style={S.step}>

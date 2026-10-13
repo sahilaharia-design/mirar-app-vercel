@@ -1,5 +1,7 @@
 // Review only. The real pilot runtime runs against memory KV. No account, device storage or engine writes.
 import { useEffect, useState } from 'react';
+import { PilotSession } from '../lib/innerRep/pilots/session';
+import { PILOT_CAPS } from '../lib/innerRep/pilots/types';
 import { PilotStore } from '../lib/innerRep/pilots/store';
 import { buildPilotMirror, pilotOffers } from '../lib/innerRep/pilots/read';
 import type { PilotPort } from '../components/pilots/PilotPractice';
@@ -12,5 +14,11 @@ export function useReviewPilots(){
  const today=core.context().today;
  const port:PilotPort={session:core.session(),offers:pilotOffers(core.records(),today,core.resumable()?.pilot??null),mirror:buildPilotMirror(core.records(),today),start:id=>{core.start(id);bump();},answer:async a=>{core.session()?.answer(a);await core.saveDraft();bump();},back:async()=>{core.session()?.back();await core.saveDraft();bump();},close:async how=>{const record=await core.close(how);bump();return record;},discard:async()=>{await core.discard();bump();}};
  useEffect(()=>{(window as unknown as {pilotReviewAudit:unknown}).pilotReviewAudit={step:()=>core.session()?.step()??null,snapshot:()=>core.session()?.snapshot()??null,records:()=>core.records(),storage:()=>[...entries.values()].map(x=>JSON.parse(x)),mirror:()=>buildPilotMirror(core.records(),core.context().today)};},[core,entries,tick]);
- return {ready,port,fixture,generation,reopen:async()=>{await core.init('review-only');setGeneration(n=>n+1);bump();},loadFixtures:async()=>{await core.replaceRecords(buildFixtures(today));setFixture(true);bump();},clear:async()=>{await core.clearAll();setFixture(false);bump();}};
+ return {ready,port,fixture,generation,reopen:async()=>{await core.init('review-only');setGeneration(n=>n+1);bump();},loadFixtures:async()=>{await core.replaceRecords(buildFixtures(today));setFixture(true);bump();},loadCarryFixture:async()=>{
+ const date=new Date(today+'T12:00:00Z');date.setUTCDate(date.getUTCDate()-1);
+ const s=new PilotSession('attend',{today:date.toISOString().slice(0,10),caps:PILOT_CAPS,prior:[]});
+ for(let i=0;i<20&&s.step();i++){const st=s.step()!;if(st.type==='multi')s.answer({stepId:st.id,kind:'options',optionIds:['work','rest']});else if(st.type==='choice')s.answer({stepId:st.id,kind:'option',optionId:st.id.startsWith('place:')?'set_aside':st.id.startsWith('when:')?'no_time_set':'settled'});}
+ const rec=s.record(1);if(!rec||!s.isComplete)throw new Error('Incomplete carry fixture');
+ await core.replaceRecords([rec]);setFixture(true);bump();
+ },clear:async()=>{await core.clearAll();setFixture(false);bump();}};
 }
