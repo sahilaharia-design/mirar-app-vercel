@@ -4,7 +4,7 @@ import { PilotSession } from '../../lib/innerRep/pilots/session';
 import { PilotStore, clearPilotKeys, PILOT_KEY_PREFIX, RETENTION_DAYS } from '../../lib/innerRep/pilots/store';
 import { buildPilotMirror, pilotReceipt, pilotOffers, SPARSE_MIN } from '../../lib/innerRep/pilots/read';
 import { SITUATIONS } from '../../lib/innerRep/pilots/look-again';
-import { boardPulls, emptyArrangement, normalizeArrangement, submitArrangement, Arrangement } from '../../lib/innerRep/pilots/board';
+import { boardPulls, previousArrangement, emptyArrangement, normalizeArrangement, submitArrangement, Arrangement } from '../../lib/innerRep/pilots/board';
 import { carryCandidates, PULLS } from '../../lib/innerRep/pilots/attend';
 import { PAnswer, PILOT_CAPS, PilotAnswerError, PilotContext, PilotRecord, PStep, AttendRecord, LookAgainRecord } from '../../lib/innerRep/pilots/types';
 import { KV } from '../../lib/innerRep/runtime/v2-runtime';
@@ -164,6 +164,8 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     const ok = submitArrangement(s, arr); check('a valid arrangement is replayed through the real steps', ok.ok && s.step()!.id === 'hold_offer');
     drive(s, script({ hold_offer: o('after'), sit: o('settled') })); const rec = complete(1, s) as AttendRecord;
     check('the record equals what the same choices give step by step', rec.facts.dispositions.map((d) => d.pull + ':' + d.disposition + (d.when ? ':' + d.when : '')).join() === 'work:leave_open,asked:set_aside:no_time_set,rest:attend_now,phone:let_be' && rec.facts.attendNow === 'rest');
+    { const s2 = new PilotSession('attend', ctxAt('2026-10-14')); drive(s2, script({ pulls: multi('work', 'asked') }), 1); const a2 = normalizeArrangement(normalizeArrangement(emptyArrangement(boardPulls(s2)!), 'work', { disposition: 'attend_now' }).arrangement, 'asked', { disposition: 'set_aside', when: 'another_day' }).arrangement; submitArrangement(s2, a2); drive(s2, script({ hold_offer: o('after'), sit: o('mixed'), rearrange: o('rearrange') }), 3);
+      const prev = previousArrangement(s2)!; check('after "Rearrange it" the board starts from the previous arrangement, not from scratch', previousArrangement(new PilotSession('attend', ctxAt('2026-10-14'))) === null && prev.work.disposition === 'attend_now' && prev.asked.disposition === 'set_aside' && prev.asked.when === 'another_day'); }
     let rejected = 0, accepted = 0; seed = 321;
     for (let i = 0; i < 300; i++) { const sx = new PilotSession('attend', ctxAt('2026-10-14')); drive(sx, script({ pulls: multi(...[...PULLS].sort(() => rnd() - 0.5).slice(0, 1 + Math.floor(rnd() * 5)).map((x) => x.id)) }), 1); let a = emptyArrangement(boardPulls(sx)!); for (const p of Object.keys(a)) a = normalizeArrangement(a, p, { disposition: pick(['attend_now', 'set_aside', 'leave_open', 'let_be', 'unknown'] as const), when: pick(['later_today', 'another_day', 'no_time_set'] as const) }).arrangement; const res = submitArrangement(sx, a); if (res.ok) accepted++; else rejected++; }
     check('fuzz: 300 random boards built through normalizeArrangement are always accepted by the runtime', rejected === 0 && accepted === 300, `rejected=${rejected}`);

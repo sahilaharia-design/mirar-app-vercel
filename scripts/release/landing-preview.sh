@@ -11,8 +11,8 @@ set -euo pipefail
 REF="${1:?git ref required}"; DEPLOY="${2:-}"
 APP="$(cd "$(dirname "$0")/../.." && pwd)"
 LANDING="${LANDING_REPO:-$APP/../mirar-landing}"
-ALIAS="mirar-landing-sample-preview.vercel.app"
-ENTRY="https://mirar-app.vercel.app/login"          # verified app sign-in route (docs/infrastructure routing contract)
+ALIAS="${LANDING_PREVIEW_ALIAS:-mirar-landing-sample-preview.vercel.app}"   # override for a separate stable preview
+ENTRY="${LANDING_ENTRY_URL:-https://mirar-app.vercel.app/login}"   # default: verified app sign-in route; override to point a PREVIEW at a staging app
 SHA="$(git -C "$APP" rev-parse --short "$REF")"
 WT="$(mktemp -d)/src"
 

@@ -1,4 +1,4 @@
-import { PULLS, pullsOf } from './attend';
+import { PULLS, attendFacts, pullsOf } from './attend';
 import type { PilotSession } from './session';
 import type { Disposition, PAnswer, SetAsideWhen } from './types';
 
@@ -44,4 +44,13 @@ function replay(s: PilotSession, a: Arrangement): void {
 export function submitArrangement(s: PilotSession, a: Arrangement): { ok: true } | { ok: false; error: string } {
   try { const trial = s.clone(); replay(trial, a); } catch (e) { return { ok: false, error: e instanceof Error ? e.message : 'rejected' }; }
   replay(s, a); return { ok: true };
+}
+
+/** After "Rearrange it": the arrangement the person had before, so they adjust it instead of starting over. Null if never rearranged. */
+export function previousArrangement(s: PilotSession): Arrangement | null {
+  const answers = s.snapshot().answers; const i = answers.findIndex((a) => a.stepId === 'rearrange' && a.kind === 'option' && a.optionId === 'rearrange');
+  if (i < 0) return null;
+  const f = attendFacts(s.context, answers.slice(0, i)); const out: Arrangement = {};
+  for (const d of f.dispositions) out[d.pull] = d.when ? { disposition: d.disposition, when: d.when } : { disposition: d.disposition };
+  return out;
 }

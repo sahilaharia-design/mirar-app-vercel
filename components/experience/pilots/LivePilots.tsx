@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { MIRAR as M } from '../../../design-system/native';
 import type { PAnswer } from '../../../lib/innerRep/pilots/types';
 import type { PilotSession } from '../../../lib/innerRep/pilots/session';
-import { boardPulls, emptyArrangement, normalizeArrangement, submitArrangement, type Arrangement, type BoardPull } from '../../../lib/innerRep/pilots/board';
+import { boardPulls, emptyArrangement, normalizeArrangement, previousArrangement, submitArrangement, type Arrangement, type BoardPull } from '../../../lib/innerRep/pilots/board';
 import { Action, Body, Eyebrow, PageTransition, Prompt } from '../../inner-rep/v2/Foundation';
 import { StepView } from '../../pilots/PilotViews';
 import { ReflectiveFrame } from '../ApertureScenes';
@@ -50,13 +50,13 @@ export function LiveRunner({ session, title, onAnswer, onChanged, onBack, onLeav
       caption="These stay apart. Writing one down does not decide the other." /></View>}
     {echoLost && !showFrame && <Body style={X.small}>Your earlier words are not kept after a reload. They stay on screen only.</Body>}
     {board
-      ? <Board key={board.map((b) => b.id).join()} pulls={board} onSubmit={(arr) => submitArrangement(session, arr)} onDone={() => void onChanged()} />
+      ? <Board key={board.map((b) => b.id).join() + (snap.answers.length)} pulls={board} initial={previousArrangement(session)} onSubmit={(arr) => submitArrangement(session, arr)} onDone={() => void onChanged()} />
       : <StepView key={step.id} step={step} onAnswer={go} onWords={(text) => setEcho((e) => ({ ...e, observation: text }))} onSafety={() => { setEcho({}); onSafety(); }} />}
   </PageTransition>;
 }
 
-function Board({ pulls, onSubmit, onDone }: { pulls: BoardPull[]; onSubmit: (a: Arrangement) => { ok: true } | { ok: false; error: string }; onDone: () => void }) {
-  const [arr, setArr] = useState<Arrangement>(() => emptyArrangement(pulls)); const [note, setNote] = useState(''); const [err, setErr] = useState('');
+function Board({ pulls, initial, onSubmit, onDone }: { pulls: BoardPull[]; initial: Arrangement | null; onSubmit: (a: Arrangement) => { ok: true } | { ok: false; error: string }; onDone: () => void }) {
+  const [arr, setArr] = useState<Arrangement>(() => { const base = emptyArrangement(pulls); return initial ? { ...base, ...initial } : base; }); const [note, setNote] = useState(''); const [err, setErr] = useState('');
   const label = (id: string) => pulls.find((p) => p.id === id)?.label ?? id;
   const names = (d: string) => pulls.filter((p) => arr[p.id].disposition === d).map((p) => p.label);
   const place = (pull: string, disposition: Arrangement[string]['disposition']) => {
