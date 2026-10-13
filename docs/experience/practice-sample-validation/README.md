@@ -31,3 +31,18 @@ The decisive human test remains **unrun**: ask first-time visitors “What did y
 ## Hosted repeat verification
 
 Repeated the complete harness against the public deployment `https://mirar-creative-review-8zhsa4dn7-sahilaharia-designs-projects.vercel.app/` on 12 October 2026. Latest `results.json` and screenshots are from that hosted run: 178 records, 45 path checks, 51 axe scans, zero violations/incomplete checks, no runtime errors, and CTA arrival at the configured login URL. No credentials, bypass headers or signed share links were used. All five requested sizes passed. Static preview deployment uses the existing creative-review project; production remains untouched.
+
+## Copy-review validation — 13 October 2026 (current)
+
+Current hosted preview: https://mirar-creative-review-31zndqkz8-sahilaharia-designs-projects.vercel.app/
+Frontend commit: `d929967565046cee53227fd88902d383a265d98d`; Claude review: integration `293b31a`. Latest results and screenshots are from this revised hosted build.
+
+- 178 records: 45 paths (9 × the same five viewports); all pass.
+- 51 axe scans: 0 violations, 0 incomplete checks. No browser runtime errors.
+- 45 checks of the common non-achievement completion, selected-view description and beta disclosure appearing before Continue with Mirar.
+- Real Tab navigation through all three starting choices, Enter on uncertainty; Tab navigation through all three views and Enter on unknown reason under reduced-motion preference. Focus reaches the new heading; no scripted focusing of those buttons in the final keyboard test.
+- 13 exit/restart positions and all three starting-response resets pass. No horizontal overflow, undersized targets, localStorage entries or cross-origin practice resource loads.
+- CTA reaches the configured canonical login without sample data. No credentials entered.
+- TypeScript and static build pass. Screenshot `cta-boundary-390.png` explicitly shows readable body disclosure immediately above the CTA and the retained footer. Representative mobile/desktop layouts inspected; no layout/style/graphic/motion change.
+- Canonical assets, engine, evidence logic, schema and persistence unchanged. No production deployment or public landing change.
+- Human comprehension invitations remain pending and refer to the earlier version; automated checks are not visitor findings. No screen-reader user session or efficacy test is claimed.

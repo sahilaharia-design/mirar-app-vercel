@@ -2,7 +2,7 @@
 
 12 October 2026. Review deployment only. Production release remains Claude’s responsibility.
 
-## Preview
+## Original preview — 12 October (archived test version)
 
 https://mirar-creative-review-8zhsa4dn7-sahilaharia-designs-projects.vercel.app/
 
@@ -31,9 +31,9 @@ Exact questions:
 
 Answers should be recorded verbatim under anonymous participant IDs, including uncertainty, uselessness or confusion. A participant who has seen this version is useful for follow-up review but does not count as first-time comprehension evidence. Two invitations are a small formative sample, not proof of general usefulness; both may not qualify.
 
-## Opening risk to examine
+## Opening risk in the original test version
 
-This is a design observation, **not a visitor result**: “What is observable?” offers one statement that describes the scene and one that adds a motive. That framing can suggest a factual knowledge quiz even though there is no score or correct-answer reward. The interpretation branch’s explanatory heading may reinforce that impression.
+For the original `b0b20af` build, this is a design observation, **not a visitor result**: “What is observable?” offers one statement that describes the scene and one that adds a motive. That framing can suggest a factual knowledge quiz even though there is no score or correct-answer reward. The interpretation branch’s explanatory heading may reinforce that impression.
 
 Keep the reviewed build stable during the test. Watch for unsolicited “right answer”, “wrong”, “test”, “quiz”, “I got it” or embarrassment about choosing the original reading. Ask the neutral first-question prompt only after the visitor describes the practice and usefulness. Record whether original-view or unknown felt less acceptable; do not tell the visitor those choices are supposed to be legitimate beforehand.
 
@@ -48,3 +48,16 @@ Invitations sent: 2. Human replies pending. No comprehension or usefulness findi
 ## Claude handoff
 
 PR #1 remains a draft for mechanics review and release integration. User approved the fictional behavioral direction for further review and explicitly preferred it to a personal before/after questionnaire. The hosted preview is for desktop/mobile interaction review; production remains gated on Claude’s mechanics/content review and the human findings.
+
+## Revised copy preview — 13 October 2026
+
+Current review URL: https://mirar-creative-review-31zndqkz8-sahilaharia-designs-projects.vercel.app/
+Deployment `dpl_HZTED3FuVogJKCwNTNpZit78uSPP`, preview READY in the same creative-review project. Frontend source `d929967565046cee53227fd88902d383a265d98d`.
+
+Claude’s complete review at integration commit `293b31a` approves the mechanics and requires the quiz-like opening/response language to change. User requests implemented: non-keyed attention question, equal non-graded starting choices, descriptive completion for every start, unchanged three reversible window views, and body-size beta disclosure directly above Continue with Mirar with footer retained. No styling, mechanics, engine, schema, persistence or production changes.
+
+The invitations already sent linked the previous stable deployment. That URL remains available; replies must be version-labelled and never treated as results for this revised copy unless the participant actually visited the revised URL. No replacement invitation or priming explanation has been sent. Pending human replies are not test findings.
+
+PR #1 remains the Claude mechanics/release handoff. Claude owns integration, protected landing staging and production release. Codex’s deployment is isolated review-only; public mirar.life remains untouched.
+
+Revised hosted validation complete: 45 paths, 51 axe scans with zero violations/incomplete checks, 45 disclosure-placement checks, real Tab/Enter completion, reduced motion, 13 exit/restart states and CTA arrival. Current screenshots/results are in `practice-sample-validation/`. Pending human replies remain separate.
