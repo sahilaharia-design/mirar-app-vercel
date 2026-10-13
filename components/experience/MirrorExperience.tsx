@@ -15,7 +15,7 @@ export type MirrorCarrying = {
     dueDate?: string;
 }[];
 const sourceLabel = { user_said: 'Your selected response', observed: 'A fact about practice', inferred: 'A possible reading', unknown: 'What remains open' } as const;
-/** No eligibility computation in the UI. Archive release requires Claude's repaired read model and explicit gate. */
+/** No eligibility computation in the UI. `readingHistory="approved"` is passed by the app route now that the runtime read model enforces current eligibility (Partly never reproduced unchanged; rejected/stale readings withheld; tested). */
 export function MirrorExperience({ practiceDays = 0, commitment, exercised = [], carrying = [], model, readingHistory = 'unavailable', onToday }: {
     practiceDays?: number;
     commitment?: CommitmentContext;
@@ -41,4 +41,4 @@ export function MirrorExperience({ practiceDays = 0, commitment, exercised = [],
 }
 function Statement({ value }: {
     value: MirrorStatement;
-}) { return <View style={X.receipt}><Eyebrow>{sourceLabel[value.source]}</Eyebrow><Text style={X.quote}>{value.text}</Text>{value.date && <Body style={X.small}>{value.date}</Body>}</View>; }
+}) { return <View style={X.receipt}><Eyebrow>{value.facts.kind === 'reading_history' ? 'Your say on a reading' : sourceLabel[value.source]}</Eyebrow><Text style={X.quote}>{value.text}</Text>{value.date && <Body style={X.small}>{value.date}</Body>}</View>; }

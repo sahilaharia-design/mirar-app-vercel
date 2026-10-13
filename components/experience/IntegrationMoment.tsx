@@ -17,7 +17,7 @@ export function IntegrationMoment({ receipt, context, answers }: {
         if (step?.type === 'choice') {
             const o = a.kind === 'option' ? step.options.find(o => o.id === a.optionId) : null;
             if (o)
-                out.push({ prompt: step.prompt, choice: { kind: 'option', label: o.label } });
+                out.push({ prompt: step.prompt, choice: { kind: 'option', label: o.label, absent: false, createsCommitment: false } });
             else if (a.kind === 'unknown')
                 out.push({ prompt: step.prompt, choice: { kind: 'unknown' } });
         }
@@ -25,7 +25,9 @@ export function IntegrationMoment({ receipt, context, answers }: {
     } return out; })() : []);
     const unknown = steps.some(s => s.choice.kind === 'unknown');
     const commitment = receipt?.commitment;
-    const permission = selected && selected !== 'unknown' && selected.polarity === 'absent';
+    // absence is read from the runtime receipt when present (so it also holds after a reload), else from the immediate session
+    const first = steps[0]?.choice;
+    const permission = (first?.kind === 'option' && first.absent) || (!!selected && selected !== 'unknown' && selected.polarity === 'absent');
     const title = unknown ? 'Room for not knowing.' : commitment ? 'Something you chose to carry.' : permission ? 'You can leave it here.' : steps.length > 1 ? 'Two things, held distinctly.' : steps.length ? 'A moment, named by you.' : 'The practice can end here.';
     return <View style={[X.rule, X.space]}><WindowBoundary /><Eyebrow>Take it into life</Eyebrow><SectionTitle>{title}</SectionTitle>
  {steps.map((s, i) => <View key={i} style={X.receipt}><Body style={X.small}>{s.prompt}</Body><Text style={X.quote}>{s.choice.kind === 'unknown' ? 'I don’t know' : s.choice.label}</Text><Body style={X.small}>{s.choice.kind === 'domain' ? 'Context you selected' : 'Your response to the offered question'}</Body></View>)}

@@ -14,7 +14,7 @@ const greetingKey = () => { const h = new Date().getHours(); return h < 12 ? 'co
 export function DailyInnerRepHost() {
   const { t } = useTranslation();
   const userId = useAuthStore((s) => s.session?.user?.id);
-  const { status, today, dayKey, practiceDays, load, progress, complete, discardForSafety, feedback, correction } = useInnerRepV2Store();
+  const { status, today, dayKey, practiceDays, receipt, load, progress, complete, discardForSafety, feedback, correction } = useInnerRepV2Store();
   // reload on focus: picks up a new calendar day without a full app restart
   useFocusEffect(useCallback(() => { if (userId) void load(userId); }, [userId, load]));
 
@@ -22,7 +22,7 @@ export function DailyInnerRepHost() {
   if (!today) return <View style={{ flex: 1, backgroundColor: M.color.surface, justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator color={M.color.muted} accessibilityLabel="Getting today ready" /></View>;
   return <DailyInnerRep
     key={dayKey} // remount only on a new calendar day: rep → done keeps the presentation's own stage
-    today={today} greeting={t(greetingKey())} practiceDays={practiceDays}
+    today={today} greeting={t(greetingKey())} practiceDays={practiceDays} receipt={receipt}
     draft={today.kind === 'rep' ? today.draft : undefined}
     onProgress={progress}
     onComplete={complete}

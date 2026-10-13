@@ -1,4 +1,4 @@
-import { nextStep, StepAnswer } from '../v2/contracts';
+import { chosenOption, nextStep, StepAnswer } from '../v2/contracts';
 import { V2 } from '../v2/config';
 import { flowContext } from '../v2/state';
 import { Instance, Observation, State } from '../v2/types';
@@ -12,7 +12,7 @@ import { Instance, Observation, State } from '../v2/types';
 export interface ResolvedStep {
   observationId: number;
   prompt: string;
-  choice: { kind: 'option'; label: string } | { kind: 'unknown' } | { kind: 'domain'; domain: string };
+  choice: { kind: 'option'; label: string; absent: boolean; createsCommitment: boolean } | { kind: 'unknown' } | { kind: 'domain'; domain: string };
 }
 
 export function resolveSteps(s: State, inst: Instance, obs: Observation[]): ResolvedStep[] {
@@ -28,8 +28,10 @@ export function resolveSteps(s: State, inst: Instance, obs: Observation[]): Reso
       if (o.unknown) { out.push({ observationId: o.id, prompt: step.prompt, choice: { kind: 'unknown' } }); answers.push({ stepId: step.id, kind: 'unknown' } as StepAnswer); continue; }
       const op = step.options.find((x) => x.id === o.optionId);
       if (!op) break;
-      out.push({ observationId: o.id, prompt: step.prompt, choice: { kind: 'option', label: op.label } });
-      answers.push({ stepId: step.id, kind: 'option', optionId: op.id } as StepAnswer); continue;
+      answers.push({ stepId: step.id, kind: 'option', optionId: op.id } as StepAnswer);
+      const full = chosenOption(ctx, answers);
+      const meta = full && full !== 'unknown' ? full : undefined;
+      out.push({ observationId: o.id, prompt: step.prompt, choice: { kind: 'option', label: op.label, absent: meta?.polarity === 'absent', createsCommitment: meta?.creates === 'commitment' } }); continue;
     }
     if (step.id === 'capture_domain' && o?.domain && !o.unknown) {
       out.push({ observationId: o.id, prompt: step.prompt, choice: { kind: 'domain', domain: o.domain } });
