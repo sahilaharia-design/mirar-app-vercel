@@ -141,6 +141,12 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     const cap = new PilotSession('attend', ctxAt('2026-10-11', [day1])); drive(cap, script({ 'carry:messages': o('still_pulling') }), 1); const ps = cap.step()!;
     check('carried items count against the five-pull limit', ps.type === 'multi' && ps.max === 4 && !ps.options.some((x) => x.id === 'messages'));
   }
+  {
+    const run = (pilot: 'look_again' | 'attend', m: Record<string, any>) => { const s = new PilotSession(pilot, ctxAt('2026-10-14')); drive(s, script(m)); return JSON.stringify(pilotReceipt(s.record(1)!).value.established); };
+    const a = run('look_again', LOOK_FULL), b = run('look_again', { ...LOOK_FULL, interpretation: o('said_wrong'), alternatives: multi('unrelated') });
+    const c = run('attend', ATT_FULL), d = run('attend', { ...ATT_FULL, 'place:work': o('let_be'), 'place:messages': o('attend_now'), 'when:messages': o('no_time_set') });
+    check('not a questionnaire: closings are not interchangeable, they change with what the person did', a !== b && c !== d);
+  }
   console.log('— Session behaviour —');
   {
     const s = new PilotSession('look_again', ctxAt('2026-10-14')); s.answer(opt(s.step()!, 'no_reply')); s.answer(skip(s.step()!));

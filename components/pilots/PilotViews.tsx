@@ -90,11 +90,12 @@ export function ValuePanel({ receipt }: { receipt: PilotReceipt }) {
   </PageTransition>;
 }
 
+const SECTION_LABEL: Record<string, string> = { practised: 'Practised', said: 'What you said', come_up: 'Counted across sessions', carrying: 'Set aside', unknown: 'Not known' };
 export function MirrorPanel({ mirror }: { mirror: PilotMirror }) {
   return <View style={S.section}>
     <Eyebrow>Pilot Mirror · {mirror.state}</Eyebrow>
     {mirror.state === 'empty' && <Body>Nothing practised yet. There is nothing to show, and nothing is assumed.</Body>}
-    {mirror.statements.map((s) => <View key={s.id} style={S.stmt}><Eyebrow>{s.section} · {s.source === 'user_said' ? 'you said' : s.source === 'observed' ? 'counted from your choices' : 'not known'}{s.date ? ` · ${s.date}` : ''}</Eyebrow><Body style={S.item}>{s.text}</Body><Body style={S.hint}>From {s.trace.pilotRecordIds.length ? `${s.trace.pilotRecordIds.length} stored ${s.trace.pilotRecordIds.length === 1 ? 'record' : 'records'}` : 'no stored records'} · exact</Body></View>)}
+    {mirror.statements.map((s) => <View key={s.id} style={S.stmt}><Eyebrow>{SECTION_LABEL[s.section] ?? s.section} · {s.source === 'user_said' ? 'your own choice' : s.source === 'observed' ? 'counted from your choices' : 'not told'}{s.date ? ` · ${s.date}` : ''}</Eyebrow><Body style={S.item}>{s.text}</Body><Body style={S.hint}>From {s.trace.pilotRecordIds.length ? `${s.trace.pilotRecordIds.length} stored ${s.trace.pilotRecordIds.length === 1 ? 'record' : 'records'}` : 'no stored records'} · exact</Body></View>)}
     <Body style={S.hint}>Kept on this device for {mirror.retention.days} days (up to {mirror.retention.maxRecords} records). Not synced.</Body>
     <Eyebrow>Not active in this preview</Eyebrow><LIST items={mirror.inactive} />
   </View>;
