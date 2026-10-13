@@ -39,7 +39,7 @@ export function Prompt({ children, label, display = false, compact = false, reve
  const size = compact ? Math.min(36, Math.max(28, width*.035)) : display ? Math.min(72, Math.max(40,width*.055)) : Math.min(56, Math.max(32, width*.045));
  return <Text ref={ref} nativeID={label ?? generatedId} accessibilityRole="header" aria-level={compact ? 2 : 1} style={[styles.prompt, compact && { marginBottom: M.space.lg }, { fontSize: size, lineHeight: size * 1.12 },style]}>{children}</Text>;
 }
-export function Eyebrow({ children }: { children: React.ReactNode }) { return <Text style={styles.eyebrow}>{children}</Text>; }
+export function Eyebrow({ children, style }: { children: React.ReactNode; style?:StyleProp<TextStyle> }) { return <Text style={[styles.eyebrow,style]}>{children}</Text>; }
 export function Body({ children, ...props }: React.ComponentProps<typeof Text>) { return <Text {...props} style={[styles.body, props.style]}>{children}</Text>; }
 export function Action({ children, onPress, secondary = false, disabled = false, selected, testID, expanded }: { children: string; onPress: () => void; secondary?: boolean; disabled?: boolean; selected?: boolean; testID?: string; expanded?: boolean }) {
  return <Pressable testID={testID} aria-expanded={expanded} onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityState={{ disabled, selected }} aria-pressed={selected} style={({ pressed }) => [styles.action, secondary ? styles.secondary : styles.primary, disabled && { backgroundColor: M.color.disabled }, pressed && { opacity: .85 }]}>

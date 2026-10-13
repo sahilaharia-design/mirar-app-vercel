@@ -1,44 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import type { CommitmentContext } from '../../lib/innerRep/v2/contracts';
 import type { MirrorModel, MirrorStatement } from '../../lib/innerRep/runtime/mirror-contract';
 import { Body, Eyebrow, Prompt, Action } from '../inner-rep/v2/Foundation';
-import { ExperiencePage, Chapter, X, PrivacyTruth } from './ExperienceKit';
-import { WindowStudy, WindowBoundary } from './WindowStudy';
-export type MirrorExercised = {
-    label: string;
-    reps: number;
-    lastDate: string;
-}[];
-export type MirrorCarrying = {
-    label: string;
-    dueDate?: string;
-}[];
+import { ExperiencePage, X, PrivacyTruth, SectionTitle } from './ExperienceKit';
+import { WindowStudy } from './WindowStudy';
+import { MIRAR as M } from '../../design-system/native';
+export type MirrorExercised = { label: string; reps: number; lastDate: string }[];
+export type MirrorCarrying = { label: string; dueDate?: string }[];
 const sourceLabel = { user_said: 'Your selected response', observed: 'A fact about practice', inferred: 'A possible reading', unknown: 'What remains open' } as const;
-/** No eligibility computation in the UI. `readingHistory="approved"` is passed by the app route now that the runtime read model enforces current eligibility (Partly never reproduced unchanged; rejected/stale readings withheld; tested). */
-export function MirrorExperience({ practiceDays = 0, commitment, exercised = [], carrying = [], model, readingHistory = 'unavailable', onToday }: {
-    practiceDays?: number;
-    commitment?: CommitmentContext;
-    exercised?: MirrorExercised;
-    carrying?: MirrorCarrying;
-    model?: MirrorModel;
-    readingHistory?: 'unavailable' | 'approved';
-    onToday: () => void;
-}) {
-    const [ledger, setLedger] = useState(false);
-    const [apart, setApart] = useState(false);
-    const facts = model?.sections.practised ?? [];
-    const carried = model?.sections.carrying ?? [];
-    const said = model?.sections.said ?? [];
-    const readings = readingHistory === 'approved' && model ? [...model.sections.come_up, ...model.sections.readings, ...model.sections.shifted, ...model.sections.unknown] : [];
-    return <ExperiencePage><View style={X.space}><Eyebrow>The Mirror</Eyebrow><Prompt display>{practiceDays || facts.length ? 'What is here. What stays open.' : 'A beginning, without a verdict.'}</Prompt><View style={{ flexDirection: 'row', gap: 24, alignItems: 'center' }}><View style={{ flex: 1 }}><Body style={X.lede}>{practiceDays || facts.length ? 'A view of actual practice and things you chose to carry. Facts stay distinct from readings.' : 'You do not need a profile of yourself before you begin. A small practice is enough.'}</Body></View><View style={{ width: 96 }}><WindowStudy quiet/></View></View><Action onPress={onToday}>Go to Today</Action></View>
- {(facts.length > 0 || exercised.length > 0 || practiceDays > 0) && <Chapter label="Practice, not ability" title="What you’ve been exercising."><WindowBoundary />{practiceDays > 0 && <Body>{practiceDays} {practiceDays === 1 ? 'day' : 'days'} of practice this month. The days need not be consecutive.</Body>}{facts.map(s => <Statement key={s.id} value={s}/>)}{!model && exercised.map((c, i) => <View key={i} style={X.receipt}><Text style={X.quote}>{c.label}</Text><Body>{c.reps} {c.reps === 1 ? 'rep' : 'reps'} · last on {c.lastDate}</Body></View>)}<Body style={X.small}>These describe practice completed, not emotional-fitness levels.</Body></Chapter>}
- {(carried.length > 0 || carrying.length > 0 || commitment) && <Chapter label="Your intentions" title="Something you chose to carry.">{carried.map(s => <Statement key={s.id} value={s}/>)}{!model && (carrying.length ? carrying : commitment ? [{ label: commitment.label }] : []).map((c, i) => <View key={i} style={X.receipt}><Text style={X.quote}>{c.label}</Text>{'dueDate' in c && c.dueDate && <Body>Around {c.dueDate}</Body>}</View>)}<Body>Its outcome belongs to you. A follow-up, when supplied in Today, lets you name it.</Body></Chapter>}
- {said.length > 0 && <Chapter label="Response provenance" title="Your choices, in context."><Action secondary expanded={ledger} onPress={() => setLedger(!ledger)}>{ledger ? 'Close your responses' : 'Read your selected responses'}</Action>{ledger && <View style={X.space}>{said.map(s => <Statement key={s.id} value={s}/>)}</View>}<Body style={X.small}>These are responses to offered questions. They are not explanations of who you are.</Body></Chapter>}
- {readings.length > 0 ? <Chapter label="A separate reading surface" title="A reflection stays revisable."><Action secondary selected={apart} onPress={() => setApart(!apart)}>{apart ? 'Read alongside' : 'Read separately'}</Action><View style={{ gap: apart ? 48 : 24 }}>{readings.map(s => <Statement key={s.id} value={s}/>)}</View></Chapter> : <Chapter label="Room for uncertainty" title="There need not be a reading."><Body>When evidence supports a reflection, it appears after your Inner Rep in Today. You can question it there.</Body>{readingHistory === 'unavailable' && <Body style={X.small}>Historical interpretations are not available in this release. Your practice facts and chosen intentions can still be useful.</Body>}</Chapter>}
- <PrivacyTruth />
+export function MirrorExperience({ practiceDays = 0, commitment, exercised = [], carrying = [], model, readingHistory = 'unavailable', onToday }: { practiceDays?: number; commitment?: CommitmentContext; exercised?: MirrorExercised; carrying?: MirrorCarrying; model?: MirrorModel; readingHistory?: 'unavailable' | 'approved'; onToday: () => void }) {
+ const [ledger, setLedger] = useState(false); const {width}=useWindowDimensions();
+ const facts = model?.sections.practised ?? []; const carried = model?.sections.carrying ?? []; const said = model?.sections.said ?? [];
+ const supplied = readingHistory === 'approved' && model ? [...model.sections.come_up, ...model.sections.readings, ...model.sections.shifted, ...model.sections.unknown] : [];
+ const readings=supplied.filter(s=>s.source==='inferred');const observed=supplied.filter(s=>s.source==='observed');const history=supplied.filter(s=>s.source==='user_said');const unknown=supplied.filter(s=>s.source==='unknown');
+ const hasPractice=practiceDays>0||facts.length>0;
+ return <ExperiencePage><View style={[S.hero,{flexDirection:width>=768?'row':'column'}]}><View style={{flex:1,gap:20}}><Eyebrow style={{color:M.color.ink}}>The Mirror · no verdict on you</Eyebrow><Prompt display style={{marginBottom:0}}>{hasPractice?'A view with room around it.':'A beginning, without a verdict.'}</Prompt><Body style={X.lede}>{hasPractice?'Practice, responses and possible readings. Each keeps its own source.':'There is no profile to fill. Your first practice can stand on its own.'}</Body><Action onPress={onToday}>Go to Today</Action></View><View style={S.window}><WindowStudy quiet height={180} separate={!readings.length}/><Body style={[X.small,{color:M.color.ink}]}>{model?.state==='populated'?'Only currently supplied readings appear here.':'A quiet Mirror does not need to be filled.'}</Body></View></View>
+ {hasPractice && <View style={S.folio}><Eyebrow style={{color:M.color.ink}}>Actual practice · not ability</Eyebrow><SectionTitle>What has been exercised.</SectionTitle>{practiceDays>0&&<Body style={{color:M.color.ink}}>{practiceDays} {practiceDays===1?'day':'days'} of practice this month. No need for consecutive days.</Body>}<View style={S.factRows}>{facts.map(s=><Statement key={s.id} value={s} compact/>)}{!model&&exercised.map((c,i)=><View key={i} style={S.factRow}><Text style={S.factTitle}>{c.label}</Text><Body style={{color:M.color.ink}}>{c.reps} {c.reps===1?'rep':'reps'} · last on {c.lastDate}</Body></View>)}</View><Body style={[X.small,{color:M.color.ink}]}>These are completed reps, not levels of emotional fitness.</Body></View>}
+ {(carried.length>0||carrying.length>0||commitment)&&<View style={S.section}><Eyebrow style={{color:M.color.ink}}>A chosen intention</Eyebrow><SectionTitle>Only what was genuinely chosen.</SectionTitle>{carried.map(s=><Statement key={s.id} value={s}/>)}{!model&&(carrying.length?carrying:commitment?[{label:commitment.label}]:[]).map((c,i)=><View key={i} style={S.statement}><Text style={S.quote}>{c.label}</Text>{'dueDate' in c&&c.dueDate&&<Body style={{color:M.color.ink}}>Around {c.dueDate}</Body>}</View>)}<Body style={[X.small,{color:M.color.ink}]}>An intention is not an outcome. A supplied follow-up lets you name what happened.</Body></View>}
+ <View style={[S.readingSpread,{flexDirection:width>=1024?'row':'column'}]}><View style={S.readingPlane}><Eyebrow style={{color:M.color.ink}}>Mirar’s side of the window</Eyebrow><SectionTitle>{readings.length?'A reading stays revisable.':'There need not be a reading.'}</SectionTitle>{readings.map(s=><Statement key={s.id} value={s}/>)}{!readings.length&&<Body style={{color:M.color.ink}}>No personal explanation is supplied to fill the space. Practice can be useful without a reflection.</Body>}{readingHistory==='unavailable'&&<Body style={[X.small,{color:M.color.ink}]}>Historical interpretations are not available in this release.</Body>}{observed.length>0&&<View style={{gap:16}}><Eyebrow style={{color:M.color.ink}}>Counts, kept distinct</Eyebrow>{observed.map(s=><Statement key={s.id} value={s}/>)}</View>}</View><View style={S.responsePlane}><Eyebrow style={{color:M.color.ink}}>Your side of the window</Eyebrow><SectionTitle>{history.length?'Your say about the instrument.':'Room to leave something open.'}</SectionTitle>{history.map(s=><Statement key={s.id} value={s}/>)}{unknown.map(s=><Statement key={s.id} value={s}/>)}{!history.length&&!unknown.length&&<Body style={{color:M.color.ink}}>Missing context remains missing. A reading, when offered, can be qualified, rejected or left uncertain.</Body>}</View></View>
+ {said.length>0&&<View style={S.section}><Eyebrow style={{color:M.color.ink}}>Source material</Eyebrow><Action secondary expanded={ledger} onPress={()=>setLedger(!ledger)}>{ledger?'Close your responses':'Read your selected responses'}</Action>{ledger&&<View style={{gap:20}}>{said.map(s=><Statement key={s.id} value={s}/>)}</View>}<Body style={[X.small,{color:M.color.ink}]}>The offered question stays with the selected response. Neither is a description of who you are.</Body></View>}
+ {model?.retained.mayBeTruncated&&<Body style={[X.small,{color:M.color.ink}]}>This view reflects retained practice and may not include every earlier session.</Body>}<PrivacyTruth/>
  </ExperiencePage>;
 }
-function Statement({ value }: {
-    value: MirrorStatement;
-}) { return <View style={X.receipt}><Eyebrow>{value.facts.kind === 'reading_history' ? 'Your say on a reading' : sourceLabel[value.source]}</Eyebrow><Text style={X.quote}>{value.text}</Text>{value.date && <Body style={X.small}>{value.date}</Body>}</View>; }
+function Statement({value,compact=false}:{value:MirrorStatement;compact?:boolean}){const [source,setSource]=useState(false);return <View style={compact?S.factRow:S.statement}><Eyebrow style={{color:M.color.ink}}>{sourceLabel[value.source]}</Eyebrow><Text style={compact?S.factTitle:S.quote}>{value.text}</Text>{value.date&&<Body style={[X.small,{color:M.color.ink}]}>{value.date}</Body>}{!compact&&<><Action secondary expanded={source} onPress={()=>setSource(!source)}>{source?'Close source context':'Source context'}</Action>{source&&<View style={S.source}><Body style={[X.small,{color:M.color.ink}]}>{value.provenance==='approximate'?'Related responses are approximate support. The exact set counted by the engine is not exposed in this release.':'This statement comes from retained structured practice.'}</Body>{value.facts.kind==='reading_history'&&<Body style={[X.small,{color:M.color.ink}]}>This records feedback about Mirar. The earlier claim is not repeated here.</Body>}</View>}</>}</View>;}
+const S=StyleSheet.create({hero:{gap:24,paddingBottom:32},window:{flex:.65,backgroundColor:M.color.selected,padding:24,gap:16},folio:{gap:20,paddingVertical:32,borderTopWidth:2,borderColor:M.color.warmInk},factRows:{gap:16},factRow:{gap:8,paddingVertical:16,borderBottomWidth:1,borderColor:M.color.border},factTitle:{fontFamily:M.font.display,fontSize:28,lineHeight:34,color:M.color.ink},section:{gap:20,paddingVertical:32,borderTopWidth:1,borderColor:M.color.border},readingSpread:{gap:24,marginVertical:24},readingPlane:{flex:1,gap:20,padding:24,backgroundColor:M.color.paper,borderTopWidth:2,borderColor:M.color.warmInk},responsePlane:{flex:1,gap:20,padding:24,backgroundColor:M.color.selected,borderLeftWidth:1,borderColor:M.color.warmInk},statement:{gap:12,borderTopWidth:1,borderColor:M.color.border,paddingTop:16},quote:{fontFamily:M.font.display,fontSize:30,lineHeight:36,color:M.color.ink},source:{gap:12,paddingLeft:16,borderLeftWidth:1,borderColor:M.color.warmInk}});
