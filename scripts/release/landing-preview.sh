@@ -21,7 +21,7 @@ git -C "$APP" worktree add -f "$WT" "$REF" >/dev/null 2>&1
 ln -s "$APP/node_modules" "$WT/node_modules"
 ( cd "$WT" && VITE_MIRAR_APP_ENTRY_URL="$ENTRY" node node_modules/vite/bin/vite.js build --config landing/vite.config.ts --base /aperture/ >/dev/null )
 DIST="$WT/landing/dist"; [ -f "$DIST/index.html" ] || { echo "build failed"; exit 1; }
-grep -q "mirar-app.vercel.app/login" "$DIST"/assets/index-*.js && echo "CTA baked in: $ENTRY" || { echo "CTA not found in bundle"; exit 1; }
+grep -qF "${ENTRY#https://}" "$DIST"/assets/index-*.js && echo "CTA baked in: $ENTRY" || { echo "CTA not found in bundle"; exit 1; }
 
 echo "== 2. Stage in mirar-landing (branch mirar-landing-sample-preview from origin/main; production branch untouched)"
 cd "$LANDING"; git fetch -q origin
