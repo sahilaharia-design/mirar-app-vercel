@@ -1,0 +1,15 @@
+{
+  "appCommit": "988bc0bf9ae56375f4ee7285c01beeaaf3008c0b",
+  "documentationTip": "eedcab1",
+  "appDeploymentId": "dpl_4zJQfLSpMuzk2XKapQfkNaxYb9Rv",
+  "appURL": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app",
+  "stableAliasVerifiedSameDeployment": true,
+  "landingDeploymentId": "dpl_DotfL71P7VhrC7iVfVsNiYKyqnM1",
+  "landingURL": "https://mirar-landing-82cay8e4b-sahilaharia-designs-projects.vercel.app",
+  "landingCommit": "e9255dda265f0f892d2c5bb5e85177bfa50ff9c2",
+  "patchSource": "1342e8b3f255ef7e9b1c9dff6c1dcfcc552af43e",
+  "patchValidationOrigin": "http://127.0.0.1:5192",
+  "authentication": "Claude demo auth; Vercel access with existing origin-scoped OIDC credentials; no tokens in artifacts",
+  "physicalDevicesTested": false,
+  "humanUsefulnessTested": false
+}

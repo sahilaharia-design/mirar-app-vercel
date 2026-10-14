@@ -1,0 +1,1027 @@
+[
+  {
+    "screen": "look-alternatives-320",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-reweigh-320",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-completion-320",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mirror-sparse-320",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-390",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-reweigh-390",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-completion-390",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mirror-sparse-390",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-768",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 55,
+        "incomplete": 0,
+        "passes": 34,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-reweigh-768",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-completion-768",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mirror-sparse-768",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1024",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-reweigh-1024",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-completion-1024",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mirror-sparse-1024",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1440",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-reweigh-1440",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "look-completion-1440",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mirror-sparse-1440",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mixed-unknown-receipt",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "mixedUnknownReceiptClaimsNoFirst": true,
+    "facts": {
+      "attendNow": null,
+      "carriedIn": [],
+      "dispositions": [
+        {
+          "disposition": "leave_open",
+          "pull": "work"
+        },
+        {
+          "disposition": "unknown",
+          "pull": "rest"
+        }
+      ],
+      "hold": null,
+      "holdOn": null,
+      "outcome": "arranged",
+      "pulls": [
+        "work",
+        "rest"
+      ],
+      "rearranged": false,
+      "sit": "settled"
+    }
+  },
+  {
+    "screen": "mixed-unknown-mirror",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "mixedUnknownMirrorClaimsNoFirst": true
+  },
+  {
+    "screen": "left-before-weight",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 56,
+        "incomplete": 0,
+        "passes": 33,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "leftStatus": "left",
+    "unperformedRatingNotShown": true
+  },
+  {
+    "screen": "left-partial",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 56,
+        "incomplete": 0,
+        "passes": 33,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "hard-to-tell",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 55,
+        "incomplete": 0,
+        "passes": 34,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "nothing-pulling",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 55,
+        "incomplete": 0,
+        "passes": 34,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots?pilot=attend",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "mixed-family-sparse",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "populated-mirror",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "populated-mirror-sources",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 51,
+        "incomplete": 0,
+        "passes": 38,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/mirror",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "keyboard-hold-reduced-motion",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  },
+  {
+    "screen": "left-hold",
+    "axe": {
+      "axeVersion": "4.12.1",
+      "counts": {
+        "inapplicable": 56,
+        "incomplete": 0,
+        "passes": 33,
+        "violations": 0
+      },
+      "incomplete": [],
+      "lifecycle": {
+        "effectiveLaunch": {
+          "browserLaunched": true,
+          "engine": "chrome",
+          "launchHash": 11677035664275010974
+        },
+        "launched": false,
+        "relaunchedBrowser": false,
+        "restartedBackground": false,
+        "restoreStatus": "not_configured",
+        "reused": true,
+        "saveStatus": "not_attempted"
+      },
+      "url": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app/pilots",
+      "violations": []
+    },
+    "geometry": {
+      "overflow": false,
+      "small": []
+    }
+  }
+]

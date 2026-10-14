@@ -1,0 +1,1934 @@
+[
+  {
+    "screenshot": "initial-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "initial-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screenshot": "opening-0-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-0-0-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-0-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      0
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-1-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-1-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      1
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-2-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-2-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      2
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-1-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-1-0-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-0-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      0
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-1-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-1-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      1
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-2-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-2-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      2
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-2-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-2-0-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-0-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      0
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-1-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-1-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      1
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-2-320",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-2-320",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      2
+    ],
+    "viewport": [
+      320,
+      568
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "initial-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "initial-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screenshot": "opening-0-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-0-0-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-0-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      0
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-1-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-1-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      1
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-2-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-2-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      2
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-1-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-1-0-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-0-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      0
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-1-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-1-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      1
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-2-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-2-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      2
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-2-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-2-0-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-0-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      0
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-1-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-1-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      1
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-2-390",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-2-390",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      2
+    ],
+    "viewport": [
+      390,
+      844
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "initial-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "initial-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screenshot": "opening-0-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-0-0-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-0-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      0
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-1-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-1-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      1
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-2-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-2-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      2
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-1-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-1-0-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-0-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      0
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-1-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-1-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      1
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-2-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-2-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      2
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-2-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-2-0-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-0-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      0
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-1-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-1-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      1
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-2-768",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-2-768",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      2
+    ],
+    "viewport": [
+      768,
+      1024
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "initial-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "initial-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screenshot": "opening-0-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-0-0-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-0-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      0
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-1-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-1-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      1
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-2-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-2-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      2
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-1-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-1-0-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-0-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      0
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-1-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-1-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      1
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-2-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-2-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      2
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-2-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-2-0-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-0-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      0
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-1-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-1-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      1
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-2-1024",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-2-1024",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      2
+    ],
+    "viewport": [
+      1024,
+      768
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "initial-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "initial-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screenshot": "opening-0-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-0-0-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-0-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      0
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-1-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-1-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      1
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-0-2-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-0-2-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      0,
+      2
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-1-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-1-0-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-0-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      0
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-1-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-1-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      1
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-1-2-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-1-2-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      1,
+      2
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "opening-2-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "screenshot": "path-2-0-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-0-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      0
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey don\u2019t want to reply to me.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-1-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-1-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      1
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.A possible reading \u00b7 not a factThey may not have had a chance to reply.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "screenshot": "path-2-2-1440",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "path-2-2-1440",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "path": [
+      2,
+      2
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "fixedObservation": true,
+    "activeWindowText": "What is observableThe message has no reply yet.What remains unknownThe reason is not known.",
+    "neutralCompletion": "Here, what is visible and a possible reading stay separate.",
+    "ctaAfterPractice": true,
+    "betaDisclosureAboveCTA": true
+  },
+  {
+    "exit": [
+      -1,
+      -1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      0,
+      -1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      0,
+      0
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      0,
+      1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      0,
+      2
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      1,
+      -1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      1,
+      0
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      1,
+      1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      1,
+      2
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      2,
+      -1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      2,
+      0
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      2,
+      1
+    ],
+    "restartClears": true
+  },
+  {
+    "exit": [
+      2,
+      2
+    ],
+    "restartClears": true
+  },
+  {
+    "screenshot": "keyboard-reduced-motion",
+    "geometry": {
+      "overflow": false,
+      "remote": [],
+      "small": [],
+      "storage": []
+    }
+  },
+  {
+    "a11y": "keyboard-reduced-motion",
+    "counts": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "keyboardUnknownPractice": true,
+    "reducedMotionPreference": true
+  },
+  {
+    "ctaDelegateResult": "https://mirar-unified-preview.vercel.app/",
+    "ctaMessage": null
+  },
+  {
+    "runtimeErrors": ""
+  }
+]

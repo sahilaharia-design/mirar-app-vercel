@@ -1,0 +1,92 @@
+[
+  {
+    "begin": {
+      "bottom": 409.375,
+      "height": 50,
+      "top": 359.375
+    },
+    "heading": "Think about the last two hours. Did anything take more attention than it deserved?",
+    "headingRect": {
+      "bottom": 335.375,
+      "height": 143.375,
+      "top": 192
+    },
+    "navTop": 503,
+    "overflow": false,
+    "questionCopies": 1,
+    "questionHeading": true,
+    "width": 320
+  },
+  {
+    "begin": {
+      "bottom": 373.53125,
+      "height": 50,
+      "top": 323.53125
+    },
+    "heading": "Think about the last two hours. Did anything take more attention than it deserved?",
+    "headingRect": {
+      "bottom": 299.53125,
+      "height": 107.53125,
+      "top": 192
+    },
+    "navTop": 779,
+    "overflow": false,
+    "questionCopies": 1,
+    "questionHeading": true,
+    "width": 390
+  },
+  {
+    "begin": {
+      "bottom": 361.3125,
+      "height": 50,
+      "top": 311.3125
+    },
+    "heading": "Good morning.",
+    "headingRect": {
+      "bottom": 201.3125,
+      "height": 47.3125,
+      "top": 154
+    },
+    "navTop": 959,
+    "overflow": false,
+    "questionCopies": 1,
+    "questionHeading": false,
+    "width": 768
+  },
+  {
+    "begin": {
+      "bottom": 377.078125,
+      "height": 50,
+      "top": 327.078125
+    },
+    "heading": "Good morning.",
+    "headingRect": {
+      "bottom": 217.078125,
+      "height": 63.078125,
+      "top": 154
+    },
+    "navTop": 703,
+    "overflow": false,
+    "questionCopies": 1,
+    "questionHeading": false,
+    "width": 1024
+  },
+  {
+    "begin": {
+      "bottom": 394.640625,
+      "height": 50,
+      "top": 344.640625
+    },
+    "heading": "Good morning.",
+    "headingRect": {
+      "bottom": 234.640625,
+      "height": 80.640625,
+      "top": 154
+    },
+    "navTop": 835,
+    "overflow": false,
+    "questionCopies": 1,
+    "questionHeading": false,
+    "width": 1440
+  }
+]
