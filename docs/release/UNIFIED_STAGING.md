@@ -1,43 +1,49 @@
-# Unified staging: Aperture expansion + real pilots (13 October 2026)
+# Unified staging: authoritative integrated build (14 October 2026)
 
-**Branch `mirar-unified`** (preserves both histories, no force-push): merge `4411537` of `mirar-pilots` (`8f30963`) and `codex/mirar-aperture-expansion` (`8e9fa11`), then `4541c3f` (live pilot views, board adapter, separated pilot Mirror), `08e79c7` (board prefill, landing-preview overrides), `c23e27d` (script fix). Staging only. Not merged to `main`, not in Production.
+**Branch `mirar-unified-final`.** Staging only. Not merged to `main`. PR #3 and PR #2 are not merged. Production, `mirar.life`, the frozen engine, Supabase configuration and the public landing are untouched.
 
-## Review URLs (all login-protected; ask for a fresh share link when one expires)
-| | URL | Auth |
+## Which source revisions are in, and which are superseded
+| Source | Revision | Status in the final build |
 |---|---|---|
-| **Integrated app, demo auth** | `https://mirar-unified-preview.vercel.app` | **Simulated** (mock user). Review fixtures available. |
-| **Integrated app, real auth** | `https://mirar-unified-real.vercel.app` | **Real Supabase magic link.** No mock, no fixture loader. Sign-in not yet verifiable (see blockers). |
-| **Landing preview** | `https://mirar-landing-unified-preview.vercel.app` | CTA goes to the **demo** app login. |
-| Production (unchanged) | `mirar.life`, `mirar-app.vercel.app` | untouched |
+| Frozen engine + runtime adapter | `mirar-integration` `3dfebc3` | **Incorporated, unchanged** (diff against it is empty for `lib/innerRep/v2`, engine, evidence, catalog and `runtime/`). |
+| My pilot runtime (step machines, session, store, read models, fixtures, tests) | `mirar-pilots` `8f30963` | **Incorporated.** Runtime-copy fixes added (below). |
+| Codex Aperture expansion | `codex/mirar-aperture-expansion` `8e9fa11` | **Incorporated** (landing, Today, entry, completion, Mirror presentation). Its fictional `PracticePilots` is gone from the app and the review journey. |
+| Codex real-pilot Aperture integration (PR #3) | `codex/mirar-pilot-aperture-integration` `85b3322` | **Incorporated and authoritative for pilot presentation:** `PilotPractice`, `PilotViews`, `PilotsScreen`, `PilotHosts`, the Today and Mirror slots, direct Attend placement, unfinished-draft guard. |
+| My earlier unified build | `mirar-unified` `7cc38ac` | **Superseded in presentation** (`LivePilots.tsx`, `PilotMirrorSection.tsx`, the Attend board adapter `board.ts` and its tests, `session.clone/context` removed). **Kept:** fixtures need `PILOTS` and `REVIEW_STATES`; preflight pilot-string scan (extended); landing-preview alias/entry overrides; the A8 proposal; the journey script (rewritten). |
+| Reconciliation | `988bc0b` merge, then docs and script commits | Deployed app code is `988bc0b`. |
 
-Journey on the demo build: landing → Enter → Today (existing engine rep) → completion → Optional extra practice → Look Again → completion → Attend (board) → completion → Mirror (engine section, then the separate extra-practice section) → return.
+Why Codex's Attend placement replaced mine: it never changes a person's choice on their behalf. The runtime's own reason is shown on the disabled "Attend to it now" tile instead of my auto-move to "left open". Both are valid; Codex's keeps the person in control and needs no extra adapter.
 
-## How the Codex frontend is wired to the real contracts
-- Codex's landing, Today, entry, completion and Mirror presentation are already the app's presentation and run on the unchanged `TodayView`, `runtime.receipt()` and `runtime.mirror()`.
-- **Pilots:** `components/experience/pilots/LivePilots.tsx` renders the real `PilotSession` (`step()`, `PAnswer`, back, leave, safety) in Aperture's `ReflectiveFrame` (Look Again) and a spatial board (Attend). `lib/innerRep/pilots/board.ts` replays a board arrangement through `session.answer()`, so the runtime still validates every placement; a rejected arrangement leaves the session unchanged. `components/pilots/PilotsScreen.tsx` is the host. Codex's fictional `PracticePilots.tsx` remains **review-harness only** (`review/ExpansionReview.tsx`) and is not imported by the app.
-- **Mirror:** the engine Mirror is unchanged. `components/pilots/PilotMirrorSection.tsx` renders `buildPilotMirror()` in a labelled, separate section (`MirrorExperience` gained an optional `children` slot). Nothing from pilots enters `runtime.mirror()`, engine evidence or eligibility.
-- **Gates (build-time, direct `process.env`):** `EXPO_PUBLIC_PILOTS=1` mounts the pilots route, the Today entry and the Mirror section; fixtures additionally need `EXPO_PUBLIC_REVIEW_STATES=1`. A production-equivalent build contains none of it (`scripts/release/preflight-app.sh` fails the release otherwise).
+## Review URLs (login-protected; ask for a fresh share link)
+| | URL |
+|---|---|
+| **Integrated app, demo auth (simulated sign-in)** | `https://mirar-unified-preview.vercel.app`, immutable `https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app` |
+| Integrated app, real auth (same code; sign-in not yet verifiable) | `https://mirar-unified-real.vercel.app` |
+| Landing preview (CTA goes to the demo app login) | `https://mirar-landing-unified-preview.vercel.app` (landing unchanged by PR #3; built from `mirar-unified`) |
 
-## Answers to Codex's five contract questions (handoff §"Before authentic wiring")
-1. **Family ids and schema:** `look_again`, `attend`; `PStep` (`choice | multi | words | hold`) and `PAnswer`, with back, unknown and leave on every step as specified in `docs/product/PILOT_CONTRACTS.md`.
-2. **Is a view/edge arrangement an answer, presentation or observation?** A structured, self-reported **record in the separate pilot store**. Never engine evidence, never "personal evidence" by default, never combined with the engine Mirror.
-3. **Commitments:** none. A6 is deferred; "find out later" is hidden and tested as hidden.
-4. **Engine/catalog/selection:** pilots are not in the catalog and are never selected by the engine. A8 is a proposal only: `docs/product/A8_ATTEND_PROPOSAL.md`.
-5. **Personal wording and safety:** Look Again accepts one session-only sentence per attempt, passed only to the existing crisis-language check; on a hit the session halts and nothing is kept. Attend collects none.
+Journey on the demo build: landing → Enter → Today (existing engine rep) → completion with both practices offered → Look Again → receipt → Attend → receipt → Today → Mirror (engine plane, then its own pilot plane) → return.
 
-## Validation (details: `docs/release/unified-validation/results.json`)
-- **Hosted journey (real app, real pilot sessions, no handcrafted outcomes):** 29/29 checks across 4 phases, with a page reload between phase 2 and 3. One earlier run of phase 4 failed five Mirror checks because of a bug in the *test script* (it looked for the Mirror tab while on `/pilots`); fixed and re-run, all pass. Script: `scripts/frontend/unified-journey.browser.js`.
-- **Engine regression:** 85/85, 17/17, 18/18, 20/20, 8/8, 4/4; pilots 75 checks including the board adapter (300 random boards always accepted by the runtime) and two mutation checks.
-- **Accessibility:** axe 4.10.2 (WCAG 2.0/2.1 A and AA), 11 pilot states, 0 violations, 0 incomplete.
-- **Responsive:** 320 and 1440 on the board and the Look Again frame: no overflow, no target under 44 px, nothing clipped. 390 not separately measured for pilots.
-- **Landing preview:** public sample intact (3/3 paths, 0 network calls, empty storage), new sections present.
-- **Production-equivalent export:** no pilot or fixture content; anon-only JWT.
+## The four runtime-copy findings (all fixed, with regression tests)
+1. **Look Again** claimed "noting how certain it felt" / "checking that sentence" even when leaving before those steps. Now stated only when the step was answered.
+2. **Attend** said each pull "has a place" after leaving mid-allocation or with unknown placements. Now: "N of the M", "part of what you named has a place", or "without placing any of it". It also no longer says "chose not to attend" before placement is complete.
+3. **Attend, hard to tell** carried "nothing was pulling". Now: "it was hard to tell what was pulling at you"; "nothing pulling" still says so.
+4. **Pilot Mirror state** used total sessions. Now `populated` only when a cross-session count can actually be shown; otherwise `sparse` with "A count across sessions needs 3 completed sessions of the same exercise with the same kind of answer. So far: Look Again N, Attend M."
 
-## Not verified (stated, not assumed)
-Real-auth sign-in and returning login; native screen readers; Hindi/Gujarati typography; human comprehension and usefulness of either pilot; the safety/helpline copy review; 390 px pilot geometry.
+No evidence semantics, eligibility, storage or the engine changed.
 
-## Blockers (unchanged by this work)
-**Supabase (yours):** `ADMIN_SECRET` rotation; retire `admin-user-list` and `admin-analytics` (then I re-probe for 404); historical log review; add `https://mirar-unified-real.vercel.app/auth/callback` (and the earlier `mirar-v2-review-real` entry) to Redirect URLs, then first-time signup and returning login. **Product:** A6/A7 deferred, A8 not approved. **Release:** v2 app promotion stays blocked until security, authentication and safety gates pass. CRON_SECRET rotated and four cron jobs paused (recorded).
+## Validation (`docs/release/unified-validation/results.json`)
+- **Hosted journey, real app and real pilot sessions:** 32/32 checks, with a page reload between phases 2 and 3. Five defects were found in my *test script* (locators and assertions) and fixed; no product defect surfaced. Phases 3 and 4 were re-run from cleared storage.
+- **Engine and runtime regression:** 85/85, 17/17, 18/18, 20/20, 8/8, 4/4. Pilot suite passes including 10 new checks for the findings; mutation checks on findings 1 and 4 fail as intended.
+- **Accessibility:** axe 4.10.2 (WCAG 2.0/2.1 A and AA), 23 states at each of 1440, 390 and 320 = 69 scans: **0 violations, 0 incomplete**.
+- **Responsive:** same 69 states: no horizontal overflow, no element past the viewport, no target under 44 px.
+- **Privacy and safety:** typed words are in no draft, record or storage; a restored draft says words were not restored; a crisis phrase halts with no draft, no record, no typed text and no resume; starting the other practice never replaces an unfinished one.
+- **Production-equivalent export (`--clear`):** none of the pilot or Aperture-pilot strings, no fixtures; anon-only JWT. Preflight scan extended to the new strings.
+
+## Not verified
+Real-auth sign-in and returning login; native screen readers; Hindi/Gujarati typography; human comprehension and usefulness; safety and helpline copy sign-off; Codex's own agent-browser matrices on this exact build.
+
+## Blockers (unchanged)
+**Supabase (yours):** rotate `ADMIN_SECRET`; retire `admin-user-list` and `admin-analytics` (I then re-probe for 404); historical log review; add `https://mirar-unified-real.vercel.app/auth/callback` to Redirect URLs, then first-time signup and returning login. **Product:** A6 and A7 deferred; A8 not approved; no account-history migration. **Release:** v2 stays out of Production until security, authentication and safety gates pass.
 
 ## Rollback
-Everything here is additive, flag-gated and staging-only. Production, `mirar.life` and the rollback deployments are untouched. Remove staging by deleting the three aliases; revert by not merging `mirar-unified`.
+Additive, flag-gated, staging-only. Delete the aliases to remove staging; do not merge `mirar-unified-final`. Production and its rollback deployments are untouched.

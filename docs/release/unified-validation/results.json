@@ -1,86 +1,81 @@
 {
-  "target": "https://mirar-unified-preview.vercel.app (demo auth, EXPO_PUBLIC_PILOTS=1)",
-  "build": "mirar-unified @ c23e27d (merge of mirar-pilots 8f30963 and codex/mirar-aperture-expansion 8e9fa11)",
-  "date": "2026-10-13",
-  "journey_script": "scripts/frontend/unified-journey.browser.js (phases 1-4, real app and real pilot sessions through the DOM)",
-  "journey_checks": {
-    "phase2": {
-      "engine_rep_completes": true,
-      "pilots_hub_reachable_from_today": true,
-      "camera_retry_offered": true,
-      "frame_shows_observation_and_reading_apart": true,
-      "alternatives_step_reached": true
-    },
-    "reload": "between phase 2 and 3",
-    "phase3": {
-      "hub_offers_resume": true,
-      "draft_holds_no_private_text": true,
-      "resumes_at_alternatives": true,
-      "says_words_are_not_kept": true,
-      "words_not_restored": true,
-      "exit_offers_nothing_and_open_not_find_out": true,
-      "look_again_receipt_honest": true,
-      "look_again_record_structured_only": true,
-      "second_in_view_moves_first_to_open_and_says_so": true,
-      "set_aside_asks_when_and_says_no_reminder": true,
-      "hold_offered_for_the_in_view_item": true,
-      "hold_has_no_timer": true,
-      "attend_record_matches_choices": true,
-      "attend_receipt_says_no_task_created": true
-    },
-    "phase4": {
-      "safety_panel_shown": true,
-      "no_draft_retained": true,
-      "no_new_record": true,
-      "typed_text_nowhere": true,
-      "no_resume_after_safety": true,
-      "mirror_engine_section_present": true,
-      "pilot_section_separate_and_labelled": true,
-      "engine_mirror_unaffected_by_pilots": true,
-      "pilot_statements_traced_and_exact": true,
-      "pilot_sparse_honest": true
-    },
-    "note": "phase 4 was run twice: the first run's five Mirror checks failed because of a script navigation bug (looked for the Mirror tab while on /pilots); the script was fixed and phase 4 re-run, all ten pass. The five safety checks passed in both runs."
+  "target": "https://mirar-unified-preview.vercel.app (demo auth, EXPO_PUBLIC_PILOTS=1, EXPO_PUBLIC_REVIEW_STATES=1, EXPO_PUBLIC_DEV_MOCK=1)",
+  "immutable_deployment": "https://mirar-1do6dsr5q-sahilaharia-designs-projects.vercel.app",
+  "build": "mirar-unified-final @ 988bc0b app code (later commits change docs/scripts only; verified by empty diff of app, components, lib, stores, design-system)",
+  "date": "2026-10-14",
+  "journey_script": "scripts/frontend/unified-journey.browser.js (real app, real pilot sessions, through the DOM; one page reload between phases 2 and 3)",
+  "journey_checks_passed": {
+    "phase2_engine_and_look_again_start": [
+      "engine_rep_completes",
+      "today_offers_both_practices_after_the_engine_rep",
+      "camera_retry_offered",
+      "observation_and_reading_shown_apart",
+      "alternatives_step_reached"
+    ],
+    "phase3_resume_look_again_attend": [
+      "hub_offers_resume",
+      "draft_holds_no_private_text",
+      "starting_another_family_never_replaces_an_unfinished_draft",
+      "resumes_at_alternatives",
+      "says_words_are_not_restored",
+      "words_not_restored",
+      "exit_offers_nothing_and_open_not_find_out",
+      "look_again_receipt_honest",
+      "look_again_record_structured_only",
+      "second_attend_now_is_disabled_with_the_runtime_reason",
+      "set_aside_asks_when_and_says_no_reminder",
+      "hold_offered_for_the_in_view_item",
+      "hold_has_no_timer",
+      "attend_record_matches_choices",
+      "attend_receipt_says_no_task_created",
+      "attend_receipt_states_only_performed_acts"
+    ],
+    "phase4_safety_and_mirror": [
+      "safety_panel_shown",
+      "no_draft_retained",
+      "no_new_record",
+      "typed_text_nowhere",
+      "no_resume_after_safety",
+      "mirror_engine_plane_present",
+      "pilot_plane_separate_and_labelled",
+      "engine_plane_unaffected_by_pilots",
+      "pilot_statements_traced",
+      "pilot_retention_stated_not_synced",
+      "pilot_sparse_note_is_accurate"
+    ],
+    "total": 32,
+    "passing": 32,
+    "script_defects_found_and_fixed_during_validation": [
+      "disabled Attend tile text includes the pull name (locator)",
+      "'not kept' lines are behind a disclosure (locator)",
+      "Mirror tab element reports no box, so a visibility filter skipped it (locator)",
+      "trace line wording is 'stored practice record' (assertion)",
+      "engine-plane check scanned the mounted Today tab (assertion)"
+    ],
+    "note": "Phases 3 and 4 were re-run from cleared storage after the script fixes; no product defect was found by these runs."
   },
   "accessibility_axe_4_10_2_wcag2a_2aa_21a_21aa": {
-    "states_scanned": [
-      "hub",
-      "look again situation",
-      "look again words",
-      "look again camera",
-      "look again weight with frame",
-      "look again alternatives",
-      "look again receipt",
-      "attend pulls",
-      "attend board",
-      "attend board with set-aside when",
-      "attend next step"
+    "widths": [
+      1440,
+      390,
+      320
     ],
+    "scans_per_width": 23,
+    "states": "hub, Look Again situation/words/camera/interpretation/weight/alternatives(+selected)/reweigh/exit/receipt(+expanded), Attend pulls/place 1/place 2 with runtime reason/when/hold offer/sit/receipt(+expanded), Today with offers, Mirror, Mirror pilot sources",
     "violations": 0,
     "incomplete": 0
   },
-  "responsive": {
-    "320": {
-      "overflow": false,
-      "targets_under_44px": 0,
-      "screens": [
-        "attend board",
-        "look again frame"
-      ]
-    },
-    "1440": {
-      "overflow": false,
-      "targets_under_44px": 0,
-      "clipped_elements": 0,
-      "screens": [
-        "look again frame",
-        "attend board"
-      ]
-    },
-    "note": "390 was not separately measured for pilots; the landing sample and Today were checked at 390 earlier."
+  "responsive_1440_390_320": {
+    "overflow": false,
+    "targets_under_44px": 0,
+    "elements_past_viewport": 0
   },
-  "landing_preview": "https://mirar-landing-unified-preview.vercel.app: sample opening intact, 3/3 paths, 0 fetch/XHR, empty storage, capacity scenes and Mirror study present, CTA -> staging demo login, legal links -> mirar.life",
-  "real_auth_preview": "https://mirar-unified-real.vercel.app: real Supabase auth (no mock), fixtures module and loader absent from bundle; sign-in NOT verified (callback URL for this alias is not in Supabase Redirect URLs)",
+  "runtime_copy_findings": {
+    "1": "fixed: Look Again no longer claims the certainty rating or the camera check when those steps did not happen",
+    "2": "fixed: Attend no longer says each pull has a place after leaving mid-allocation or with unknown placements, and no longer says 'chose not to attend' before placement is complete",
+    "3": "fixed: hard-to-tell carries 'it was hard to tell what was pulling at you'",
+    "4": "fixed: Mirror state is 'populated' only when a cross-session count can be shown; the notice names the per-exercise counts"
+  },
   "regression": {
     "engine_suite": "85/85",
     "correction_suite": "17/17",
@@ -88,14 +83,16 @@
     "mirror_contract": "20/20",
     "receipt": "8/8",
     "mirror": "4/4",
-    "pilots": "75 checks, 0 failing (incl. board adapter, fuzz 300 boards, mutation-checked)",
-    "production_equivalent_export": "no pilot screen, content, fixtures or board strings; anon-only JWT"
+    "pilots": "all checks pass, including 10 new checks for the four findings; mutation checks on findings 1 and 4 fail the suite as intended"
   },
+  "production_equivalent_export": "export --clear: none of buildFixtures, FIXTURE DATA, 'More than one way to look', 'Another plane of the Mirror', 'Optional practice \u00b7 preview', 'One unfinished practice is here', 'Show pilot sources', 'Look Again', 'Hard to tell', 'may not want to reply', 'Attention field'; anon-only JWT; preflight scan extended",
+  "real_auth_preview": "https://mirar-unified-real.vercel.app redeployed from the same code (no mock, no fixture loader). Sign-in not verified: callback URL not in Supabase Redirect URLs.",
   "not_run": [
-    "Attend 'Rearrange it' and board prefill in the hosted journey script (covered by session/board tests; exercised by hand on the earlier build)",
-    "390px pilot geometry",
-    "real-auth sign-in",
+    "real-auth sign-in and returning login",
     "native VoiceOver/TalkBack",
-    "human comprehension or usefulness testing"
+    "Hindi/Gujarati typography",
+    "human comprehension and usefulness testing",
+    "safety/helpline copy sign-off",
+    "Codex's agent-browser matrices on this exact build"
   ]
 }
