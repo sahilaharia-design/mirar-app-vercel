@@ -20,7 +20,7 @@ export type PilotMirrorFacts =
   | { kind: 'pilot_reweigh'; n: number; less: number; same: number; more: number; cantTell: number }
   | { kind: 'pilot_pull'; pull: string; label: string; sessions: number; of: number; attended: number; setAside: number; open: number; letBe: number; unknown: number }
   | { kind: 'pilot_set_aside'; pull: string; label: string; when: string; date: string }
-  | { kind: 'pilot_sparse'; completed: number; needed: number }
+  | { kind: 'pilot_sparse'; completed: number; needed: number; byPilot: { look_again: number; attend: number } }
   | { kind: 'pilot_unknown' };
 export interface PilotMirrorStatement {
   id: string;
@@ -80,9 +80,12 @@ export function buildPilotMirror(records: PilotRecord[], today: string): PilotMi
   for (const r of [...at].reverse()) { if (dayNumber(today) - dayNumber(r.date) > CARRY_WINDOW_DAYS) continue; for (const d of r.facts.dispositions) { if (d.disposition !== 'set_aside' || seen.has(d.pull) || offered.has(`${r.id}:${d.pull}`)) continue; seen.add(d.pull); const label = PULLS.find((x) => x.id === d.pull)?.label ?? d.pull; const when = WHEN_LABEL[d.when ?? 'no_time_set'];
     statements.push({ id: `set_aside:${r.id}:${d.pull}`, section: 'carrying', source: 'user_said', text: `You set aside “${label}” (${when.toLowerCase()}) on ${r.date}. It is not a task; it can be offered back once if you practise Attend again within ${CARRY_WINDOW_DAYS} days.`, facts: { kind: 'pilot_set_aside', pull: d.pull, label, when, date: r.date }, trace: { pilotRecordIds: [r.id] }, provenance: 'exact', date: r.date }); } }
 
-  if (totalDone < SPARSE_MIN) statements.push({ id: 'sparse', section: 'unknown', source: 'unknown', text: `Counts across sessions start once you have completed ${SPARSE_MIN} sessions of the same exercise. Until then, only your own latest answers are shown.`, facts: { kind: 'pilot_sparse', completed: totalDone, needed: SPARSE_MIN }, trace: { pilotRecordIds: [] }, provenance: 'exact' });
+  // 'populated' means at least one cross-session count could actually be shown, not merely that many sessions exist.
+  const hasCount = statements.some((x) => x.facts.kind === 'pilot_reweigh' || x.facts.kind === 'pilot_pull');
+  if (!hasCount) { const byPilot = { look_again: done('look_again').length, attend: done('attend').length };
+    statements.push({ id: 'sparse', section: 'unknown', source: 'unknown', text: `A count across sessions needs ${SPARSE_MIN} completed sessions of the same exercise with the same kind of answer. So far: Look Again ${byPilot.look_again}, Attend ${byPilot.attend}. Until then, only your own latest answers are shown.`, facts: { kind: 'pilot_sparse', completed: totalDone, needed: SPARSE_MIN, byPilot }, trace: { pilotRecordIds: [] }, provenance: 'exact' }); }
   statements.push({ id: 'unknown', section: 'unknown', source: 'unknown', text: 'Mirar has not been told why any of this came up, or how it turned out afterwards.', facts: { kind: 'pilot_unknown' }, trace: { pilotRecordIds: [] }, provenance: 'exact' });
-  return { state: totalDone >= SPARSE_MIN ? 'populated' : 'sparse', statements, retention, inactive };
+  return { state: hasCount ? 'populated' : 'sparse', statements, retention, inactive };
 }
 
 /** Today integration: pilots are an optional second practice chosen by the person. The engine's one rep per day is untouched. */

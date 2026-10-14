@@ -1,0 +1,22 @@
+{
+  "frontendCommit": "adfe9f150724c5ef8e43723ccf42194b5a250cf8",
+  "runtimeCommit": "8f30963589ed0a83caa0fc483a73fd58a294840a",
+  "approvedExpansion": "8e9fa11cb46e1386c6a4daa42fe259b08ef35847",
+  "previewURL": "https://mirar-creative-review-13nsw1cv0-sahilaharia-designs-projects.vercel.app",
+  "deploymentId": "dpl_Fugmdrm14NWY1ZdrAXXiDeVmaWGX",
+  "project": "mirar-creative-review",
+  "target": "preview",
+  "publicAnonymousHTTP": 200,
+  "asset": "/assets/index-1G9nJlIz.js",
+  "localAndHostedAssetIdentical": true,
+  "assetSHA256": "43c223199239c28efe251db9b88ec5128a4416ac1f1853b0bf048cae196d045c",
+  "pilotPersistence": "Separate memory KV in hosted review; actual device-local store in local Expo staging validation",
+  "realAuthenticationTested": false,
+  "appBuildFlags": [
+    "EXPO_PUBLIC_DEV_MOCK=1",
+    "EXPO_PUBLIC_REVIEW_STATES=1",
+    "EXPO_PUBLIC_PILOTS=1"
+  ],
+  "appValidationOrigin": "http://127.0.0.1:5191",
+  "supabaseConfiguration": "Nonfunctional local review placeholders; no real auth"
+}

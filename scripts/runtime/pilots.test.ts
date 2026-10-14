@@ -4,7 +4,6 @@ import { PilotSession } from '../../lib/innerRep/pilots/session';
 import { PilotStore, clearPilotKeys, PILOT_KEY_PREFIX, RETENTION_DAYS } from '../../lib/innerRep/pilots/store';
 import { buildPilotMirror, pilotReceipt, pilotOffers, SPARSE_MIN } from '../../lib/innerRep/pilots/read';
 import { SITUATIONS } from '../../lib/innerRep/pilots/look-again';
-import { boardPulls, previousArrangement, emptyArrangement, normalizeArrangement, submitArrangement, Arrangement } from '../../lib/innerRep/pilots/board';
 import { carryCandidates, PULLS } from '../../lib/innerRep/pilots/attend';
 import { PAnswer, PILOT_CAPS, PilotAnswerError, PilotContext, PilotRecord, PStep, AttendRecord, LookAgainRecord } from '../../lib/innerRep/pilots/types';
 import { KV } from '../../lib/innerRep/runtime/v2-runtime';
@@ -148,27 +147,32 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     const c = run('attend', ATT_FULL), d = run('attend', { ...ATT_FULL, 'place:work': o('let_be'), 'place:messages': o('attend_now'), 'when:messages': o('no_time_set') });
     check('not a questionnaire: closings are not interchangeable, they change with what the person did', a !== b && c !== d);
   }
-  console.log('— Attend board adapter —');
+  console.log('— Runtime-copy findings from the Aperture integration review —');
   {
-    const mk = () => { const s = new PilotSession('attend', ctxAt('2026-10-14')); drive(s, script({ pulls: multi('work', 'asked', 'rest', 'phone') }), 1); return s; };
-    const s = mk(); const pulls = boardPulls(s)!;
-    check('the board reads its pulls from the real session, in the order the session will ask', pulls.map((p) => p.id).join() === 'work,asked,rest,phone' && boardPulls(new PilotSession('attend', ctxAt('2026-10-14'))) === null);
-    let arr: Arrangement = emptyArrangement(pulls);
-    const r1 = normalizeArrangement(arr, 'work', { disposition: 'attend_now' }); arr = r1.arrangement; const r2 = normalizeArrangement(arr, 'rest', { disposition: 'attend_now' }); arr = r2.arrangement;
-    check('moving a second pull into view moves the first to "leave open" and reports which moved (rest has the same standing as work)', r1.moved === null && r2.moved === 'work' && arr.work.disposition === 'leave_open' && arr.rest.disposition === 'attend_now');
-    arr = normalizeArrangement(arr, 'asked', { disposition: 'set_aside' }).arrangement; arr = normalizeArrangement(arr, 'phone', { disposition: 'let_be' }).arrangement;
-    check('a set-aside placement defaults to "No time set"; do-nothing stays distinct from leave-open', arr.asked.when === 'no_time_set' && arr.phone.disposition === 'let_be' && arr.work.disposition === 'leave_open');
-    const before = JSON.stringify(s.snapshot()); const bad = submitArrangement(s, { ...arr, work: { disposition: 'attend_now' } });
-    check('the runtime, not the board, has the last word: two "attend now" is rejected with its own reason, and the session is unchanged', !bad.ok && /not selectable|Only one/.test(bad.ok ? '' : bad.error) && JSON.stringify(s.snapshot()) === before);
-    check('a missing placement is rejected and leaves the session unchanged', !submitArrangement(s, { work: { disposition: 'leave_open' } }).ok && JSON.stringify(s.snapshot()) === before);
-    const ok = submitArrangement(s, arr); check('a valid arrangement is replayed through the real steps', ok.ok && s.step()!.id === 'hold_offer');
-    drive(s, script({ hold_offer: o('after'), sit: o('settled') })); const rec = complete(1, s) as AttendRecord;
-    check('the record equals what the same choices give step by step', rec.facts.dispositions.map((d) => d.pull + ':' + d.disposition + (d.when ? ':' + d.when : '')).join() === 'work:leave_open,asked:set_aside:no_time_set,rest:attend_now,phone:let_be' && rec.facts.attendNow === 'rest');
-    { const s2 = new PilotSession('attend', ctxAt('2026-10-14')); drive(s2, script({ pulls: multi('work', 'asked') }), 1); const a2 = normalizeArrangement(normalizeArrangement(emptyArrangement(boardPulls(s2)!), 'work', { disposition: 'attend_now' }).arrangement, 'asked', { disposition: 'set_aside', when: 'another_day' }).arrangement; submitArrangement(s2, a2); drive(s2, script({ hold_offer: o('after'), sit: o('mixed'), rearrange: o('rearrange') }), 3);
-      const prev = previousArrangement(s2)!; check('after "Rearrange it" the board starts from the previous arrangement, not from scratch', previousArrangement(new PilotSession('attend', ctxAt('2026-10-14'))) === null && prev.work.disposition === 'attend_now' && prev.asked.disposition === 'set_aside' && prev.asked.when === 'another_day'); }
-    let rejected = 0, accepted = 0; seed = 321;
-    for (let i = 0; i < 300; i++) { const sx = new PilotSession('attend', ctxAt('2026-10-14')); drive(sx, script({ pulls: multi(...[...PULLS].sort(() => rnd() - 0.5).slice(0, 1 + Math.floor(rnd() * 5)).map((x) => x.id)) }), 1); let a = emptyArrangement(boardPulls(sx)!); for (const p of Object.keys(a)) a = normalizeArrangement(a, p, { disposition: pick(['attend_now', 'set_aside', 'leave_open', 'let_be', 'unknown'] as const), when: pick(['later_today', 'another_day', 'no_time_set'] as const) }).arrangement; const res = submitArrangement(sx, a); if (res.ok) accepted++; else rejected++; }
-    check('fuzz: 300 random boards built through normalizeArrangement are always accepted by the runtime', rejected === 0 && accepted === 300, `rejected=${rejected}`);
+    // 1. Look Again: never claim an act that was not performed
+    const s1 = new PilotSession('look_again', ctxAt('2026-10-14')); drive(s1, script({ situation: o('no_reply'), observation: words, camera: o('yes'), interpretation: o('ignoring') }), 4); s1.leave();
+    const v1 = pilotReceipt(s1.record(1)!).value; check('finding 1: leaving right after naming a reading does not claim the certainty rating was noted', v1.practised.some((x) => /Naming the reading/.test(x)) && !v1.practised.some((x) => /how certain it felt/.test(x)), JSON.stringify(v1.practised));
+    const s1b = new PilotSession('look_again', ctxAt('2026-10-14')); drive(s1b, script({ situation: o('no_reply'), observation: words }), 2); s1b.leave();
+    const v1b = pilotReceipt(s1b.record(1)!).value; check('finding 1: leaving before the camera check does not claim the check', v1b.practised.some((x) => /Writing what happened/.test(x)) && !v1b.practised.some((x) => /checking that sentence/.test(x)), JSON.stringify(v1b.practised));
+    // 2. Attend: leaving mid-allocation, and unknown placements, are not "each thing has a place"
+    const s2 = new PilotSession('attend', ctxAt('2026-10-14')); drive(s2, script({ pulls: multi('work', 'asked', 'rest'), 'place:work': o('leave_open') }), 2); s2.leave();
+    const v2 = pilotReceipt(s2.record(1)!).value;
+    check('finding 2: leaving mid-allocation reports how many were placed, never "each thing has a place", never "chose not to attend"', v2.practised.some((x) => /1 of the 3/.test(x)) && !/Each thing you named/.test(v2.usefulNow) && /Part of what you named/.test(v2.usefulNow) && !v2.established.some((x) => /chose not to give any one/.test(x)), JSON.stringify(v2));
+    const s2b = new PilotSession('attend', ctxAt('2026-10-14')); drive(s2b, script({ pulls: multi('work', 'asked'), 'place:work': unk, 'place:asked': unk, sit: o('settled') })); const v2b = pilotReceipt(s2b.record(1)!).value;
+    check('finding 2: unknown placements are not described as places', !/Each thing you named/.test(v2b.usefulNow) && v2b.practised.some((x) => /without placing any of it/.test(x)) && v2b.unknown.some((x) => /Where you wanted/.test(x)), JSON.stringify(v2b));
+    // 3. could_not_name carried-forward sentence
+    const s3 = new PilotSession('attend', ctxAt('2026-10-14')); drive(s3, script({ pulls: unk })); const v3 = pilotReceipt(s3.record(1)!).value;
+    check('finding 3: "hard to tell" is carried as hard to tell, not as "nothing was pulling"', v3.carriedForward.some((x) => /hard to tell/.test(x)) && !v3.carriedForward.some((x) => /nothing was pulling/.test(x)), JSON.stringify(v3.carriedForward));
+    const s3b = new PilotSession('attend', ctxAt('2026-10-14')); drive(s3b, script({ pulls: multi() })); check('finding 3: and "nothing pulling" still says so', pilotReceipt(s3b.record(1)!).value.carriedForward.some((x) => /nothing was pulling/.test(x)));
+    // 4. Mirror state follows whether a count can actually be shown
+    const mkLA = (n: number, date: string, withReweigh: boolean) => ({ id: n, schema: 1, pilot: 'look_again', date, status: 'completed', stepsSeen: 5, facts: { situation: 'no_reply', observation: 'none', cameraChecks: [], retried: false, interpretation: 'none_yet', weightBefore: null, alternativesOffered: withReweigh ? 4 : 0, alternativesChosen: [], valencesChosen: [], reweigh: withReweigh ? 'same' : null, exit: 'nothing' } } as unknown as PilotRecord);
+    const mkAT = (n: number, date: string) => ({ id: n, schema: 1, pilot: 'attend', date, status: 'completed', stepsSeen: 3, facts: { pulls: [], outcome: 'nothing_pulling', carriedIn: [], dispositions: [], attendNow: null, holdOn: null, hold: null, sit: null, rearranged: false } } as unknown as PilotRecord);
+    const noCount = buildPilotMirror([mkLA(1, '2026-10-10', false), mkLA(2, '2026-10-11', false), mkLA(3, '2026-10-12', false)], '2026-10-20');
+    check('finding 4: three completed sessions with no eligible count are "sparse", not "populated", and say what is missing', noCount.state === 'sparse' && noCount.statements.some((x) => x.facts.kind === 'pilot_sparse' && /Look Again 3, Attend 0/.test(x.text)), JSON.stringify(noCount.statements.map((x) => x.id)));
+    const mixed = buildPilotMirror([mkLA(1, '2026-10-10', true), mkLA(2, '2026-10-11', true), mkAT(3, '2026-10-12')], '2026-10-20');
+    check('finding 4: sessions spread across two exercises (2 + 1) are still sparse', mixed.state === 'sparse' && !mixed.statements.some((x) => x.id === 'reweigh'));
+    const enough = buildPilotMirror([mkLA(1, '2026-10-10', true), mkLA(2, '2026-10-11', true), mkLA(3, '2026-10-12', true)], '2026-10-20');
+    check('finding 4: three eligible same-exercise sessions give a count, and only then "populated"', enough.state === 'populated' && enough.statements.some((x) => x.id === 'reweigh') && !enough.statements.some((x) => x.facts.kind === 'pilot_sparse'));
   }
   console.log('— Session behaviour —');
   {

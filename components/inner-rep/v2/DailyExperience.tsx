@@ -16,6 +16,7 @@ export interface Completion { closing?: string; insight?: ShownInsight }
 export interface DailyExperienceProps {
  today: { kind: 'rep'; payload: RepPayload; context: FlowContext } | ({ kind: 'done' } & Completion);
  receipt?:Receipt|null;
+ extraPractice?: React.ReactNode;
  greeting: string; continuityCue?: string; practiceDays?: number;
  draft?: StepAnswer[];
  onProgress?: (answers: StepAnswer[]) => void;
@@ -29,7 +30,7 @@ export interface DailyExperienceProps {
 export function DailyInnerRep(props: DailyExperienceProps) {
  return <VisualFoundation><Experience {...props} /></VisualFoundation>;
 }
-function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection }: DailyExperienceProps) {
+function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection, extraPractice }: DailyExperienceProps) {
  const [stage, setStage] = useState<'today' | 'rep' | 'completed' | 'safety'>('today');
  const [answers, setAnswers] = useState<StepAnswer[]>(draft); const [receipt, setReceipt] = useState<{context:FlowContext;answers:StepAnswer[]}|null>(null); const [guide,setGuide]=useState(false); const [completion, setCompletion] = useState<Completion | null>(null);
  const { width } = useWindowDimensions(); const complete = completion ?? (today.kind === 'done' ? today : null);
@@ -60,6 +61,7 @@ function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, pr
     {continuityCue && <Body style={styles.bottom}>{continuityCue}</Body>}
     {!!practiceDays && <Body style={styles.practice}>{practiceDays} {practiceDays === 1 ? 'day' : 'days'} of practice this month</Body>}
    </PageTransition> : null}
+   {stage !== 'rep' && stage !== 'safety' && extraPractice}
   </View>
  </ScrollView>;
 }

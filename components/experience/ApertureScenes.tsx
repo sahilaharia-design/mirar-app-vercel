@@ -10,9 +10,9 @@ export function ReflectiveFrame({ left, right, open = false, separate = false, c
  const { width } = useWindowDimensions();
  return <View style={S.frame}>
   <View style={[S.planes, { flexDirection: width < 768 ? 'column' : 'row', gap:separate?24:12 }]}>
-   <View style={[S.plane, S.fixed]}>{left}</View>
+   <View style={[S.plane, S.fixed, width<768?{width:'100%'}:{flex:1}]}>{left}</View>
    <View style={{ width: width < 768 ? '100%' : 120, height: width < 768 ? 100 : 180 }}><WindowStudy quiet height={width < 768 ? 100 : 180} separate={separate||open} perspective={open ? 'open' : 'original'} /></View>
-   <View style={[S.plane, S.moving]}>{right}</View>
+   <View style={[S.plane, S.moving, width<768?{width:'100%'}:{flex:1}]}>{right}</View>
   </View>{caption && <Body style={[X.small,{color:M.color.ink}]}>{caption}</Body>}
  </View>;
 }
@@ -52,7 +52,7 @@ export function MirrorStudy() {
 }
 
 const S = StyleSheet.create({
- frame: { gap: 16 }, planes: { gap: 12, alignItems: 'stretch' }, plane: { flex: 1, minWidth: 0, padding: 16, gap: 12 }, fixed: { borderLeftWidth: 2, borderColor: M.color.warmInk, backgroundColor: M.color.paper }, moving: { borderTopWidth: 1, borderColor: M.color.border, backgroundColor: M.color.raised },
+ frame: { gap: 16 }, planes: { gap: 12, alignItems: 'stretch' }, plane: { minWidth: 0, padding: 16, gap: 12 }, fixed: { borderLeftWidth: 2, borderColor: M.color.warmInk, backgroundColor: M.color.paper }, moving: { borderTopWidth: 1, borderColor: M.color.border, backgroundColor: M.color.raised },
  intro: { gap: 12, maxWidth: 660 }, capacitySpread: { gap: 24 }, capacityIndex: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 8 }, capacity: { width: '48%', minHeight: 108, padding: 16, borderTopWidth: 1, borderColor: M.color.border, gap: 8, justifyContent: 'center' }, capacitySelected: { backgroundColor: M.color.selected, borderColor: M.color.warmInk }, capacityName: { fontFamily: M.font.display, fontSize: 30, lineHeight: 36, color: M.color.ink }, seed: { fontSize: 13, lineHeight: 20, color:M.color.ink }, capacityStage: { flex: 1.3, padding: 24, backgroundColor: M.color.paper, gap: 20 }, sceneTitle: { fontFamily: M.font.display, fontSize: 36, lineHeight: 42, color: M.color.ink }, sceneQuote: { fontFamily: M.font.display, fontSize: 26, lineHeight: 32, color: M.color.ink },
  study: { gap: 24, paddingVertical: 32, borderTopWidth: 2, borderColor: M.color.warmInk }, studyIndex: { flex: 1, gap: 20 }, studyTitle: { fontFamily: M.font.display, fontSize: 48, lineHeight: 52, color: M.color.ink }, studyPlane: { flex: 1.2, gap: 20, padding: 24, backgroundColor: M.color.paper, borderLeftWidth: 1, borderColor: M.color.warmInk }, studyQuote: { fontFamily: M.font.display, fontSize: 34, lineHeight: 40, color: M.color.ink }, annotation: { borderTopWidth: 1, borderColor: M.color.border, paddingTop: 16 },
 });

@@ -117,7 +117,8 @@ export function attendValue(rec: AttendRecord): RepValue {
   if (f.outcome === 'nothing_pulling') practised.push('Checking what is pulling at you, and finding nothing that needed arranging');
   else if (f.outcome === 'could_not_name') practised.push('Checking what is pulling at you, and saying it was hard to tell');
   else if (f.dispositions.length) {
-    practised.push('Giving each thing pulling at you one place: now, for later, open, or deliberately nothing');
+    const placed = f.dispositions.filter((d) => d.disposition !== 'unknown').length;
+    practised.push(placed === f.pulls.length ? 'Giving each thing pulling at you one place: now, for later, open, or deliberately nothing' : placed ? `Giving ${placed} of the ${f.pulls.length} things pulling at you a place: now, for later, open, or deliberately nothing` : 'Looking at what is pulling at you without placing any of it');
     if (f.attendNow) practised.push('Choosing the one thing that gets your attention first');
     if (f.hold === 'ended' && f.holdOn) practised.push(`Staying with ${names([f.holdOn])} until you said you were ready`);
     if (by('set_aside').length) practised.push('Setting something down without dropping it');
@@ -127,15 +128,18 @@ export function attendValue(rec: AttendRecord): RepValue {
   const established: string[] = [];
   if (f.pulls.length) established.push(`What you named as pulling at you: ${names(f.pulls)}.`);
   if (f.attendNow) established.push(`You chose to attend to ${names([f.attendNow])} first.`);
-  else if (f.dispositions.length && by('unknown').length < f.dispositions.length) established.push('You chose not to give any one of them your attention first.');
+  else if (f.dispositions.length && f.dispositions.length === f.pulls.length && by('unknown').length < f.dispositions.length) established.push('You chose not to give any one of them your attention first.');
   for (const d of by('set_aside')) established.push(`Set aside: ${names([d.pull])} (${WHEN_LABEL[d.when ?? 'no_time_set'].toLowerCase()}).`);
   if (by('leave_open').length) established.push(`Left open: ${names(by('leave_open').map((x) => x.pull))}.`);
   if (by('let_be').length) established.push(`You chose to do nothing for now with: ${names(by('let_be').map((x) => x.pull))}.`);
   if (f.sit) established.push(`How the arrangement sat afterwards: ${f.sit === 'unknown' ? 'you were not sure' : SIT_LABEL[f.sit].toLowerCase()}.`);
   if (f.outcome === 'nothing_pulling') established.push('You said nothing is pulling at you right now.');
 
+  const everyPlaced = f.outcome === 'arranged' && f.dispositions.length === f.pulls.length && f.dispositions.every((d) => d.disposition !== 'unknown');
+  const somePlaced = f.dispositions.some((d) => d.disposition !== 'unknown');
   const usefulNow = f.outcome === 'nothing_pulling' ? 'Nothing needs arranging. You do not have to find something to do.'
     : f.outcome === 'could_not_name' ? 'Not being able to name it is a complete answer. Nothing more is asked.'
+    : !everyPlaced ? (somePlaced ? 'Part of what you named has a place. The rest is still open, and that is allowed.' : 'Nothing has been placed yet. What you named is still open, and that is allowed.')
     : f.attendNow ? 'Each thing you named now has a place, and one of them has your attention first.'
     : 'Each thing you named has a place, and you kept your attention free of any single one.';
 
@@ -148,7 +152,7 @@ export function attendValue(rec: AttendRecord): RepValue {
 
   return {
     practised, usefulNow, established, unknown,
-    carriedForward: [f.pulls.length ? 'What you named and where each thing went, as your own choices.' : 'That you checked and nothing was pulling at you.', ...(by('set_aside').length ? [`Items you set aside can be offered back to you once, the next time you practise Attend within ${CARRY_WINDOW_DAYS} days. You can say “not right now”.`] : [])],
+    carriedForward: [f.pulls.length ? 'What you named and where each thing went, as your own choices.' : f.outcome === 'could_not_name' ? 'That it was hard to tell what was pulling at you.' : 'That you checked and nothing was pulling at you.', ...(by('set_aside').length ? [`Items you set aside can be offered back to you once, the next time you practise Attend within ${CARRY_WINDOW_DAYS} days. You can say “not right now”.`] : [])],
     notCarried: ['No reminder, due date, task or commitment is created.', 'No measure of how much was done.'],
   };
 }

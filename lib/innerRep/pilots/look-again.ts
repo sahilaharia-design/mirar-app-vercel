@@ -105,8 +105,8 @@ const listJoin = (xs: string[]) => xs.length <= 1 ? xs.join('') : xs.slice(0, -1
 export function lookAgainValue(rec: LookAgainRecord): RepValue {
   const f = rec.facts; const S = sit(f.situation);
   const practised: string[] = [];
-  if (f.observation === 'written') practised.push('Writing what happened separately from how you read it, and checking that sentence against what a camera could record');
-  if (f.interpretation && typeof f.interpretation === 'object') practised.push('Naming the reading you were carrying as a reading, and noting how certain it felt');
+  if (f.observation === 'written') practised.push(f.cameraChecks.length ? 'Writing what happened separately from how you read it, and checking that sentence against what a camera could record' : 'Writing what happened separately from how you read it');
+  if (f.interpretation && typeof f.interpretation === 'object') practised.push(f.weightBefore ? 'Naming the reading you were carrying as a reading, and noting how certain it felt' : 'Naming the reading you were carrying as a reading');
   if (f.alternativesChosen.length) practised.push(`Setting ${f.alternativesChosen.length === 1 ? 'another possibility' : 'other possibilities'} beside your reading`);
   else if (f.alternativesOffered) practised.push('Looking at other possible readings and deciding which, if any, fit');
   if (!practised.length) practised.push('Starting an exercise and stopping where it stopped being useful');
