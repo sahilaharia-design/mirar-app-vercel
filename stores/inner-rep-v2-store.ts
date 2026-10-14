@@ -56,5 +56,7 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
 export async function clearInnerRepV2Data() {
   await clearV2Keys(AsyncStorage as unknown as KV);
   await clearPilotKeys(AsyncStorage as unknown as KV);
+  // in-memory pilot state too (staging only; the direct env comparison is inlined, so Production bundles contain no pilot store)
+  if (process.env.EXPO_PUBLIC_PILOTS === '1') (require('./pilot-store') as typeof import('./pilot-store')).resetPilotMemory();
   useInnerRepV2Store.setState({ status: 'idle', userId: null, dayKey: '', today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
 }

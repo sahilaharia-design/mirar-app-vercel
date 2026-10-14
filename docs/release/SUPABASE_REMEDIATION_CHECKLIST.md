@@ -185,3 +185,6 @@ Run in your own browser (the link returns to the browser that opens it, so I can
 3. Complete today's rep, open an extra practice (Look Again or Attend), reload, confirm the unfinished practice resumes without your words.
 4. Sign out: pilot and engine device data should clear. Sign in again with the same email (returning login) and confirm a clean Today with no stale pilot records.
 5. Tell me what you saw (screens and wording, no URLs containing tokens). I will compare with the expected behaviour and update the gate.
+
+### Result (14 October 2026)
+Owner tested first-time signup and returning login on `mirar-unified-real`: authentication **PASS**; continuity limitations and one fixed in-memory defect are recorded in `docs/release/REAL_AUTH_TEST_RECORD.md`.

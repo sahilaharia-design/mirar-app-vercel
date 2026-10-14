@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { KV } from '../lib/innerRep/runtime/v2-runtime';
 import { PilotStore } from '../lib/innerRep/pilots/store';
-import { clearPilotKeys } from '../lib/innerRep/pilots/keys';
 import type { PAnswer, PilotId, PilotRecord } from '../lib/innerRep/pilots/types';
 import type { PilotSession } from '../lib/innerRep/pilots/session';
 
@@ -44,8 +43,8 @@ export const usePilotStore = create<State>((set, get) => {
   };
 });
 
-/** Sign-out: remove every pilot key on this device and drop in-memory state. */
-export async function clearPilotData() {
-  await clearPilotKeys(AsyncStorage as unknown as KV);
-  usePilotStore.setState({ userId: null, ready: false });
+/** Sign-out: drop the in-memory pilot state (records, unfinished session) so nothing from the previous account can render. Storage keys are cleared by clearPilotKeys. */
+export function resetPilotMemory() {
+  core.dropMemory();
+  usePilotStore.setState({ userId: null, ready: false, tick: usePilotStore.getState().tick + 1 });
 }

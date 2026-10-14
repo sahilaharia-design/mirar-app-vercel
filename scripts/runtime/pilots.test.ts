@@ -240,6 +240,17 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     check('fixtures are produced by the real sessions: 9 completed records, ids sequential, all valid', fx.length === 9 && fx.every((r, i) => r.id === i + 1 && r.status === 'completed') && m.state === 'populated');
     check('fixture Mirror passes the same language and trace rules', m.statements.length >= 5 && !/(you tend|always|pattern|improv|progress|score|better|worse|should|because|trend)/i.test(m.statements.map((x) => x.text).join(' ')));
   }
+    { // Sign-out must also drop the IN-MEMORY pilot state (found in real-auth staging review, 14 Oct 2026)
+      const kvS = new MemKV(); const now2 = () => new Date(2026, 9, 14); const A = new PilotStore({ storage: kvS, now: now2 }); await A.init('userA');
+      const sA = A.start('look_again'); sA.answer(opt(sA.step()!, 'no_reply')); await A.saveDraft();
+      const done = A.start('attend'); drive(done, script({ pulls: multi() })); await A.close('finish');
+      const sB = A.start('look_again'); sB.answer(opt(sB.step()!, 'plan_changed')); await A.saveDraft();   // an unfinished practice
+      await clearPilotKeys(kvS);                                                                         // what sign-out does to storage
+      check('(the gap) clearing storage alone leaves the previous user\'s records and unfinished session readable in memory', A.records().length === 1 && A.session() !== null);
+      A.dropMemory();
+      check('dropMemory() (called at sign-out) leaves no records, no session, no resume offer', A.records().length === 0 && A.session() === null && A.resumable() === null);
+      await A.init('userB'); check('a different or returning user starts empty after sign-out', A.records().length === 0 && A.session() === null && A.resumable() === null);
+    }
   console.log('— Compatibility —');
   {
     let diff = 'x'; try { diff = execSync('git diff --name-only mirar-integration -- lib/innerRep/v2 lib/innerRep/engine.ts lib/innerRep/evidence.ts lib/innerRep/catalog.ts lib/innerRep/runtime', { encoding: 'utf8' }).trim(); } catch { diff = 'git unavailable'; }

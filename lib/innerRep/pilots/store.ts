@@ -57,6 +57,8 @@ export class PilotStore {
   }
   /** DEV/STAGING ONLY: replace this user's records with clearly-labelled fixtures (never called from production code paths) */
   async replaceRecords(records: PilotRecord[]) { this.current = null; this.blob = { v: PILOT_SCHEMA, seq: records.reduce((m, r) => Math.max(m, r.id), 0), records, draft: null }; await this.persist(); }
+  /** Sign-out: forget everything held in memory (records, draft, session, user). Storage is cleared separately by clearPilotKeys. */
+  dropMemory() { this.current = null; this.blob = { v: PILOT_SCHEMA, seq: 0, records: [], draft: null }; this.userId = ''; }
   async clearAll() { this.current = null; this.blob = { v: PILOT_SCHEMA, seq: 0, records: [], draft: null }; try { await this.o.storage.removeItem(keyFor(this.userId)); } catch {} }
   /** discard without recording (e.g. after a safety halt) */
   async discard() { this.current = null; this.blob.draft = null; await this.persist(); }
