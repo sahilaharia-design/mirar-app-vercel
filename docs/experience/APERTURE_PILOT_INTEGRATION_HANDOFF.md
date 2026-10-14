@@ -24,6 +24,8 @@ Canonical artwork bytes, Instrument Serif/DM Sans, tokens, approved motion, redu
 
 ## Runtime copy findings for Claude (no runtime edits here)
 
+Actionable paths, reproductions, expected behavior, suggested fixes and acceptance checks are in [PILOT_RUNTIME_COPY_ACTIONS.md](PILOT_RUNTIME_COPY_ACTIONS.md), verified against `mirar-unified` at `7cc38ac` on 14 October 2026.
+
 1. `lookAgainValue` can describe “noting how certain it felt” when a person leaves immediately after naming a reading, before the weight step.
 2. `attendValue` can say each named pull has a place when the person leaves mid-allocation or chooses unknown for a place.
 3. `attendValue.carriedForward` describes “nothing was pulling” on `could_not_name`, though hard-to-tell is a distinct outcome.
