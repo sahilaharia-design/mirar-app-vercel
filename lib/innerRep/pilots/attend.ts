@@ -128,7 +128,8 @@ export function attendValue(rec: AttendRecord): RepValue {
   const established: string[] = [];
   if (f.pulls.length) established.push(`What you named as pulling at you: ${names(f.pulls)}.`);
   if (f.attendNow) established.push(`You chose to attend to ${names([f.attendNow])} first.`);
-  else if (f.dispositions.length && f.dispositions.length === f.pulls.length && by('unknown').length < f.dispositions.length) established.push('You chose not to give any one of them your attention first.');
+  // A deliberate "no attention first" is claimed only when EVERY named pull was placed with a known place. Unknown or unanswered placements are not a choice.
+  else if (f.outcome === 'arranged' && f.dispositions.length === f.pulls.length && f.pulls.length > 0 && by('unknown').length === 0) established.push('You chose not to give any one of them your attention first.');
   for (const d of by('set_aside')) established.push(`Set aside: ${names([d.pull])} (${WHEN_LABEL[d.when ?? 'no_time_set'].toLowerCase()}).`);
   if (by('leave_open').length) established.push(`Left open: ${names(by('leave_open').map((x) => x.pull))}.`);
   if (by('let_be').length) established.push(`You chose to do nothing for now with: ${names(by('let_be').map((x) => x.pull))}.`);

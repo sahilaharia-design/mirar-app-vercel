@@ -174,6 +174,30 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     const enough = buildPilotMirror([mkLA(1, '2026-10-10', true), mkLA(2, '2026-10-11', true), mkLA(3, '2026-10-12', true)], '2026-10-20');
     check('finding 4: three eligible same-exercise sessions give a count, and only then "populated"', enough.state === 'populated' && enough.statements.some((x) => x.id === 'reweigh') && !enough.statements.some((x) => x.facts.kind === 'pilot_sparse'));
   }
+  console.log('— Mixed unknown / unanswered Attend placements (Codex final review P1) —');
+  {
+    const DELIB = /chose not to give any one of them your attention first/;
+    const run = (m: Record<string, any>, stopAfter?: number) => { const s = new PilotSession('attend', ctxAt('2026-10-14')); drive(s, script(m), stopAfter); if (stopAfter) s.leave(); return s.record(1) as AttendRecord; };
+    const lines = (r: AttendRecord) => pilotReceipt(r).value.established.join(' ');
+    const mirrorLatest = (r: AttendRecord) => buildPilotMirror([r], '2026-10-20').statements.filter((x) => x.facts.kind === 'pilot_latest').map((x) => x.text).join(' ');
+    const mixed = run({ pulls: multi('work', 'rest'), 'place:work': o('leave_open'), 'place:rest': unk, sit: o('settled') });
+    check('mixed known + unknown placements: the receipt does not claim a deliberate no-attention choice', mixed.facts.attendNow === null && mixed.facts.dispositions.some((d) => d.disposition === 'unknown') && !DELIB.test(lines(mixed)), lines(mixed));
+    check('…and neither does the Mirror (the person\'s latest answers)', !DELIB.test(mirrorLatest(mixed)), mirrorLatest(mixed));
+    check('…while each known placement and the unknown one are still shown', /Left open: “A work task”/.test(lines(mixed)) && pilotReceipt(mixed).value.unknown.some((x) => /Where you wanted “A need to rest”/.test(x)));
+    const allKnown = run({ pulls: multi('work', 'rest'), 'place:work': o('leave_open'), 'place:rest': o('let_be'), sit: o('settled') });
+    check('all placements known and no attend-now: the deliberate statement is kept (it is the person\'s choice)', DELIB.test(lines(allKnown)) && DELIB.test(mirrorLatest(allKnown)));
+    const allUnknown = run({ pulls: multi('work', 'rest'), 'place:work': unk, 'place:rest': unk, sit: o('settled') });
+    check('all placements unknown: no deliberate claim', !DELIB.test(lines(allUnknown)) && !DELIB.test(mirrorLatest(allUnknown)));
+    const unanswered = run({ pulls: multi('work', 'rest', 'asked'), 'place:work': o('leave_open') }, 2);
+    check('left with placements unanswered: no deliberate claim in the receipt or the Mirror', unanswered.status === 'left' && !DELIB.test(lines(unanswered)) && !DELIB.test(mirrorLatest(unanswered)), lines(unanswered));
+    const withNow = run({ pulls: multi('work', 'rest'), 'place:work': o('attend_now'), 'place:rest': unk, hold_offer: o('after'), sit: o('settled') });
+    check('an attend-now with an unknown elsewhere still says what was chosen, with no "not any one" claim', /attend to “A work task” first/.test(lines(withNow)) && !DELIB.test(lines(withNow)));
+    // Mirror per-pull counts stay honest when some sessions were "not sure"
+    const mk = (n: number, d: string) => run({ pulls: multi('work'), 'place:work': d === 'unknown' ? unk : o(d), sit: o('settled') });
+    const recs = (['leave_open', 'unknown', 'let_be', 'leave_open'] as const).map((d, i) => ({ ...mk(i, d), id: i + 1, date: `2026-10-1${i}` })) as AttendRecord[];
+    const pm = buildPilotMirror(recs, '2026-10-20').statements.find((x) => x.id === 'pull:work');
+    check('Mirror per-pull count names the "not sure" sessions instead of dropping them from the tally', !!pm && /not sure where to place it once/.test(pm.text) && /left it open twice/.test(pm.text), pm?.text);
+  }
   console.log('— Session behaviour —');
   {
     const s = new PilotSession('look_again', ctxAt('2026-10-14')); s.answer(opt(s.step()!, 'no_reply')); s.answer(skip(s.step()!));

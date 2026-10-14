@@ -71,7 +71,7 @@ export function buildPilotMirror(records: PilotRecord[], today: string): PilotMi
     const s = at.filter((r) => r.facts.pulls.includes(pull.id)); if (s.length < SPARSE_MIN) continue;
     const cnt = (d: string) => s.filter((r) => r.facts.dispositions.find((x) => x.pull === pull.id)?.disposition === d).length;
     const f = { pull: pull.id, label: pull.label, sessions: s.length, of: at.length, attended: cnt('attend_now'), setAside: cnt('set_aside'), open: cnt('leave_open'), letBe: cnt('let_be'), unknown: cnt('unknown') };
-    statements.push({ id: `pull:${pull.id}`, section: 'come_up', source: 'observed', text: `“${pull.label}” was among what you named in ${f.sessions} of your ${f.of} Attend sessions. You attended to it ${times(f.attended)}, set it aside ${times(f.setAside)}, left it open ${times(f.open)}, and did nothing with it ${times(f.letBe)}.`, facts: { kind: 'pilot_pull', ...f }, trace: { pilotRecordIds: s.map((r) => r.id) }, provenance: 'exact', date: s[s.length - 1].date });
+    statements.push({ id: `pull:${pull.id}`, section: 'come_up', source: 'observed', text: `“${pull.label}” was among what you named in ${f.sessions} of your ${f.of} Attend sessions. You attended to it ${times(f.attended)}, set it aside ${times(f.setAside)}, left it open ${times(f.open)}, and did nothing with it ${times(f.letBe)}${f.unknown ? `, and said you were not sure where to place it ${times(f.unknown)}` : ''}.`, facts: { kind: 'pilot_pull', ...f }, trace: { pilotRecordIds: s.map((r) => r.id) }, provenance: 'exact', date: s[s.length - 1].date });
   }
 
   // Carrying: things the person set aside within the window and has not been asked about again. Never "overdue", never a task.
