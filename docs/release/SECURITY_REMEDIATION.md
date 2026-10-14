@@ -1,4 +1,7 @@
-# Security remediation status (12 October 2026)
+# Security remediation status (updated 14 October 2026)
+
+**14 October update.** The owner rotated `ADMIN_SECRET` and deleted `admin-user-list` and `admin-analytics` through the official CLI. I verified independently: both endpoints return **404** (POST and OPTIONS, no credential and a dummy credential; status codes only), `supabase functions list` shows exactly 12 ACTIVE functions with neither admin function, and the `ADMIN_SECRET` and `CRON_SECRET` digest prefixes read back as reported (`036a3a4aa35c`, `43b107c51abc`). Sections 2 to 4 below are the historical state before deletion. Still open: historical log review (the CLI cannot read hosted logs; see `SUPABASE_REMEDIATION_CHECKLIST.md` section F), the staging redirect URL awaiting approval (section G), and first-time and returning real-auth sign-in.
+
 
 No secret, token or user record appears in this document. Where I probed a live endpoint I discarded the response body and recorded only the HTTP status and byte count.
 
@@ -76,10 +79,10 @@ The repository schedules hourly jobs for `email-nudge` (and earlier `daily-remin
 |---|---|
 | `CRON_SECRET` rotated; four v1 cron jobs paused; no service-role key found in any job (reported 13 Oct) | **Done** (see `SUPABASE_REMEDIATION_CHECKLIST.md`) |
 | Functions currently reject missing, wrong and anon credentials | **Verified** |
-| Old secret still valid | **Yes until you rotate** |
+| Old secret | **Invalid** (rotated; the functions that read it no longer exist) |
 | Fail-closed fix built | **Done** (not deployed; needs your login) |
-| Rotation and deletion | **Waiting on you** (script ready) |
-| Historical access review | **Waiting on you** (query provided) |
+| Rotation and deletion | **Done** (owner, CLI) and **verified 404 by me**, 14 Oct |
+| Historical access review | **Open**: aggregate query and honest-reporting rules in the checklist, section F; coverage depends on plan retention |
 | `trial-lifecycle` | Open pattern, low impact, **scheduler unverified**, unchanged |
 | Legacy service-role functions | Flagged, unprobed, unused by v2 |
 | Bundles expose only anon key | **Verified** |

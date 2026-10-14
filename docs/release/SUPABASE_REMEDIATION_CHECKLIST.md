@@ -4,24 +4,26 @@ Project `jranpiyhluyuqigqfyhn`. Built from your read-only findings plus my indep
 
 **Rules for whoever executes this (including the browser extension):** never `select` the `command` column of `cron.job` or `cron.job_run_details.return_message`; never display, copy or log a secret value; generate any new secret inside the page and paste it straight into the dashboard field without echoing it. If any result ever shows a credential, stop, treat it as compromised, and tell me only that it happened.
 
-## Status (updated 13 October 2026, from the account owner's reports; not independently verifiable by me)
+## Status (updated 14 October 2026; owner reports, with what I independently verified marked)
 
 | Item | Status |
 |---|---|
 | Four v1 cron jobs paused (`active = false`, verified in SQL) | **Done** |
 | Credential types classified: two cron-secret-header jobs, one empty-header job, one anon-key job; **no service-role JWT or sb_secret key** | **Done** (no database-wide key exposure from the jobs) |
 | `CRON_SECRET` rotated (digest changed, CLI "Finished supabase secrets set"; `ADMIN_SECRET` and the other digests unchanged) | **Done**: the disclosed value is invalid |
-| Rotate `ADMIN_SECRET` | **Open** |
-| Retire `admin-user-list` and `admin-analytics`, then verify both endpoints | **Open** (I re-probe status codes once told) |
-| Review historical function logs (window from 18 April 2026 to rotation) | **Open** |
+| Rotate `ADMIN_SECRET` (current digest prefix `036a3a4aa35c`) | **Done** (owner via CLI; I read the digest prefix back with `supabase secrets list`: matches) |
+| Retire `admin-user-list` and `admin-analytics` | **Done and verified by me**: POST and OPTIONS to both return **404** (no credential, dummy credential); `supabase functions list` shows exactly **12** ACTIVE functions and neither admin function |
+| `CRON_SECRET` digest prefix `43b107c51abc` | **Verified** by read-back (unchanged since the first rotation) |
+| Temporary plaintext secret files removed from the owner's Mac | Owner-reported; not verifiable by me |
+| Review historical function logs (from 18 April 2026) | **Open: not possible from the CLI** (it has no hosted-log command). Owner runs the aggregate query in section F; coverage is limited by plan retention |
 | Remove the paused jobs so the old hardcoded values leave the database | Later, with approval |
 | First-time signup on the real-auth staging build, and returning login | **Open** |
-| Redirect URL `https://mirar-v2-review-real.vercel.app/auth/callback` added | **Open** |
+| Redirect URL `https://mirar-unified-real.vercel.app/auth/callback` added (replaces the earlier `mirar-v2-review-real` entry as the real-auth staging target) | **Open: awaiting explicit approval** (exact change in section G) |
 
 Production promotion of the v2 app stays blocked until the open items pass.
 
 ## What changed in my inventory (reconciled to the 14 deployed functions)
-- The repository has **16** functions (I said 17 earlier; that was a miscount). **14 are deployed.** Not deployed: `email-nudge` and `whatsapp-nudge`.
+- The repository has **16** functions (I said 17 earlier; that was a miscount). **12 are deployed now** (14 before the two admin functions were deleted on 14 October). Not deployed: `email-nudge` and `whatsapp-nudge`.
 - So **no email or WhatsApp nudge can run**, and **`NUDGE_SECRET` being missing is irrelevant**: it is read only by those two functions, and none of the four active jobs calls them (confirm with the boolean query in step 2).
 - My script's `delete` mode targets only `admin-analytics` and `admin-user-list`, both deployed. It is still correct. It does not touch jobs.
 - The 8 flagged functions are all deployed. `send-notification` is **not** a webhook target (no webhooks exist) and no function or job in the repository calls it.
@@ -133,3 +135,53 @@ Then run the signup test (steps in `CLEANUP_PLAN.md` section 7, starting at `htt
 
 ## E. Production release stays blocked until
 Step 3 and Steps 4 to 6 done and verified; the log review from `CLEANUP_PLAN.md` section 6 reported; the signup test passes on the real-auth staging build; Redirect URLs confirmed; `scripts/release/preflight-app.sh` passes. Rollback remains the current production deployment `mirar-7rphdq5qg-…`.
+
+## F. Historical log review (owner, in the dashboard; I cannot read hosted logs)
+The CLI has no hosted-log command, and I will not extract the stored access token to call the Management API. Run in Dashboard > Logs > Edge Functions (Logs Explorer). Report only the numbers, never row contents.
+
+1. **How far back the logs go** (this decides whether April 18 is covered):
+```sql
+select min(timestamp) as earliest, max(timestamp) as latest, count(*) as rows_total from function_edge_logs
+```
+2. **Aggregate of both admin endpoints** (a 200 means the correct secret was supplied; 404 after deletion is expected and harmless):
+```sql
+select
+  r.pathname as path,
+  count(*) as calls,
+  countif(resp.status_code = 200) as ok_200,
+  countif(resp.status_code = 401) as unauthorized_401,
+  countif(resp.status_code >= 500) as errors_5xx,
+  countif(resp.status_code = 404) as not_found_404,
+  min(timestamp) as first_seen, max(timestamp) as last_seen
+from function_edge_logs
+cross join unnest(metadata) as m
+cross join unnest(m.request) as r
+cross join unnest(m.response) as resp
+where r.pathname like '%admin-user-list%' or r.pathname like '%admin-analytics%'
+group by path
+```
+3. **Only if `ok_200` is above 0:** list those rows (time, path, user agent, status; add the IP column only if you need it) and stop; do not paste addresses or emails to me. An unexplained 200 on `admin-user-list` means user emails and ids were returned: treat it as an incident and take advice on notification (a question for a qualified adviser, not for me).
+4. Check whether a **log drain** or an earlier export exists (Dashboard > Project Settings > Log Drains); that is the only source that could cover dates beyond plan retention.
+
+**How to report findings honestly.** Three separate statements: (a) the earliest log available; (b) what the logs show inside that window; (c) the dates before it, which are *unknown*, not clear. The old secret was in public browser bundles for months, so for any period without logs the safe assumption is that the endpoints could have been called successfully. Retention differs by plan; if the earliest row is much later than 18 April, April 18 to that date is unreviewable.
+
+## G. Real-auth staging: the exact change that needs your approval
+Not applied. Dashboard > Authentication > URL Configuration > **Redirect URLs** > Add URL, exactly:
+```
+https://mirar-unified-real.vercel.app/auth/callback
+```
+No wildcard. Do **not** change Site URL (stays `https://mirar-app.vercel.app`), providers, email templates, or any other setting. Existing entries stay. After the test, remove this entry if you prefer; production sign-in is unaffected either way.
+
+**Why it is needed.** The web app asks Supabase to return to `<its own origin>/auth/callback` (`stores/auth-store.ts`). Without this entry Supabase falls back to the Site URL, so the email link would open production's older build instead of the staging build.
+**What it does not do.** It does not open the staging build to the public: the alias remains Vercel-protected, so the person clicking the email link must also be signed in to Vercel in that browser, or they will see a Vercel login before the callback runs.
+
+### Read-only state I verified (no email sent, nothing changed)
+Public auth settings: email provider only; sign-up enabled; auto-confirm off. The staging build requests `https://mirar-unified-real.vercel.app/auth/callback` (from its own origin). `mirar-unified-real` is a real-auth build: no mock user, no fixture loader.
+
+### Real-auth validation plan (after you approve and add the entry)
+Run in your own browser (the link returns to the browser that opens it, so I cannot observe it in mine). I will not ask for the link or any token.
+1. Open the protected alias (I supply a fresh share link) and choose Enter / sign in with an email you own. Check the email's link: its `redirect_to` should be the staging callback, not production.
+2. Click it in the same browser: you should land signed in on Today (onboarding for a first-time account). Note any error screen.
+3. Complete today's rep, open an extra practice (Look Again or Attend), reload, confirm the unfinished practice resumes without your words.
+4. Sign out: pilot and engine device data should clear. Sign in again with the same email (returning login) and confirm a clean Today with no stale pilot records.
+5. Tell me what you saw (screens and wording, no URLs containing tokens). I will compare with the expected behaviour and update the gate.
