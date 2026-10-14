@@ -133,6 +133,7 @@ export function attendValue(rec: AttendRecord): RepValue {
   for (const d of by('set_aside')) established.push(`Set aside: ${names([d.pull])} (${WHEN_LABEL[d.when ?? 'no_time_set'].toLowerCase()}).`);
   if (by('leave_open').length) established.push(`Left open: ${names(by('leave_open').map((x) => x.pull))}.`);
   if (by('let_be').length) established.push(`You chose to do nothing for now with: ${names(by('let_be').map((x) => x.pull))}.`);
+  if (by('unknown').length) established.push(`You said you were not sure where to place: ${names(by('unknown').map((x) => x.pull))}.`);
   if (f.sit) established.push(`How the arrangement sat afterwards: ${f.sit === 'unknown' ? 'you were not sure' : SIT_LABEL[f.sit].toLowerCase()}.`);
   if (f.outcome === 'nothing_pulling') established.push('You said nothing is pulling at you right now.');
 

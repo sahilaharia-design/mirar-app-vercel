@@ -183,6 +183,7 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     const mixed = run({ pulls: multi('work', 'rest'), 'place:work': o('leave_open'), 'place:rest': unk, sit: o('settled') });
     check('mixed known + unknown placements: the receipt does not claim a deliberate no-attention choice', mixed.facts.attendNow === null && mixed.facts.dispositions.some((d) => d.disposition === 'unknown') && !DELIB.test(lines(mixed)), lines(mixed));
     check('…and neither does the Mirror (the person\'s latest answers)', !DELIB.test(mirrorLatest(mixed)), mirrorLatest(mixed));
+    check('…and the Mirror says plainly which placement the person was not sure about', /not sure where to place: “A need to rest”/.test(mirrorLatest(mixed)), mirrorLatest(mixed));
     check('…while each known placement and the unknown one are still shown', /Left open: “A work task”/.test(lines(mixed)) && pilotReceipt(mixed).value.unknown.some((x) => /Where you wanted “A need to rest”/.test(x)));
     const allKnown = run({ pulls: multi('work', 'rest'), 'place:work': o('leave_open'), 'place:rest': o('let_be'), sit: o('settled') });
     check('all placements known and no attend-now: the deliberate statement is kept (it is the person\'s choice)', DELIB.test(lines(allKnown)) && DELIB.test(mirrorLatest(allKnown)));
