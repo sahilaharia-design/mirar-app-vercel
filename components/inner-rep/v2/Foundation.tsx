@@ -30,16 +30,16 @@ export function PageTransition({ children, ...props }: ViewProps) {
  }, [progress, reduced]);
  return <Animated.View {...props} style={[props.style, { opacity: progress, transform: [{ translateY: progress.interpolate({ inputRange: [0,1], outputRange: [M.motion.travel,0] }) }] }]}>{children}</Animated.View>;
 }
-export function Prompt({ children, label, display = false, compact = false, reveal = false, style }: { children: string; label?: string; display?: boolean; compact?: boolean; reveal?: boolean; style?:StyleProp<TextStyle> }) {
+export function Prompt({ children, label, display = false, compact = false, reveal = false, level, style }: { children: string; label?: string; display?: boolean; compact?: boolean; reveal?: boolean; level?:1|2; style?:StyleProp<TextStyle> }) {
  const generatedId = useId(); const ref = useRef<Text>(null); const { width } = useWindowDimensions();
  useEffect(() => {
   if (Platform.OS === 'web') { const node = ref.current as unknown as HTMLElement | null; node?.setAttribute('tabindex','-1'); node?.focus({ preventScroll: !reveal }); if (reveal) node?.scrollIntoView({ block: 'start', behavior: 'instant' }); }
   else { const node = findNodeHandle(ref.current); if (node) AccessibilityInfo.setAccessibilityFocus(node); else AccessibilityInfo.announceForAccessibility(children); }
  }, [children, reveal]);
  const size = compact ? Math.min(36, Math.max(28, width*.035)) : display ? Math.min(72, Math.max(40,width*.055)) : Math.min(56, Math.max(32, width*.045));
- return <Text ref={ref} nativeID={label ?? generatedId} accessibilityRole="header" aria-level={compact ? 2 : 1} style={[styles.prompt, compact && { marginBottom: M.space.lg }, { fontSize: size, lineHeight: size * 1.12 },style]}>{children}</Text>;
+ return <Text ref={ref} nativeID={label ?? generatedId} accessibilityRole="header" aria-level={level ?? (compact ? 2 : 1)} style={[styles.prompt, compact && { marginBottom: M.space.lg }, { fontSize: size, lineHeight: size * 1.12 },style]}>{children}</Text>;
 }
-export function Eyebrow({ children }: { children: React.ReactNode }) { return <Text style={styles.eyebrow}>{children}</Text>; }
+export function Eyebrow({ children, style }: { children: React.ReactNode; style?:StyleProp<TextStyle> }) { return <Text style={[styles.eyebrow,style]}>{children}</Text>; }
 export function Body({ children, ...props }: React.ComponentProps<typeof Text>) { return <Text {...props} style={[styles.body, props.style]}>{children}</Text>; }
 export function Action({ children, onPress, secondary = false, disabled = false, selected, testID, expanded }: { children: string; onPress: () => void; secondary?: boolean; disabled?: boolean; selected?: boolean; testID?: string; expanded?: boolean }) {
  return <Pressable testID={testID} aria-expanded={expanded} onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityState={{ disabled, selected }} aria-pressed={selected} style={({ pressed }) => [styles.action, secondary ? styles.secondary : styles.primary, disabled && { backgroundColor: M.color.disabled }, pressed && { opacity: .85 }]}>

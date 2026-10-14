@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "adfe9f150724c5ef8e43723ccf42194b5a250cf8",
+  "cleanExpoBuild": true,
+  "productionFlags": {
+    "pilots": false,
+    "mockAuth": false,
+    "reviewStates": false
+  },
+  "pilotContentAndFixturesExcluded": true,
+  "checkedMarkers": [
+    "buildFixtures",
+    "FIXTURE DATA",
+    "Optional extra practice",
+    "Stays on this screen only",
+    "may not want to reply",
+    "Another plane of the Mirror",
+    "Only one thing can have your attention first"
+  ],
+  "realSupabaseConfigurationUsed": false
+}

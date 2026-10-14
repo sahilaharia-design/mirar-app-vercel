@@ -22,9 +22,10 @@ export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { 
  const send = async (reason: CorrectionReason) => { if (!onCorrection) return; setPending(true); setError(false); try { await onCorrection(reason); setReasonGiven(reason); setCorrected(true); setPendingReason(null); } catch { setError(true); } finally { setPending(false); } };
  const finishNote = async (use: boolean) => { const crisis = use && containsCrisisLanguage(note); setNote(''); if (crisis) { setPendingReason(null); onSafety?.(); return; } if (pendingReason) await send(pendingReason); };
  return <View style={styles.mirror}>
+  <Eyebrow>Possible reading · revisable</Eyebrow>
   <Eyebrow>{insight.tier === 'hedged' ? 'Something to consider' : 'Worth noticing'}</Eyebrow>
   {!given?<Prompt label="mirror-prompt">{insight.text}</Prompt>:<Prompt compact reveal label="mirror-receipt">{given==='partly'?'This reading needs qualifying.':given==='no'?'This reading is set aside.':given==='unsure'?'Room to remain unsure.':'Your response is recorded.'}</Prompt>}
-  <Body style={styles.hint}>{insight.evidence.independentN} independent observations · {insight.evidence.promptedN} chosen from offered options · {insight.evidence.introducedN} raised by you</Body>
+  <View style={styles.countPlane}><Eyebrow style={{color:M.color.ink}}>Recorded observations · not a cause</Eyebrow><Body style={[styles.hint,{color:M.color.ink}]}>{insight.evidence.independentN} independent observations · {insight.evidence.promptedN} chosen from offered options · {insight.evidence.introducedN} raised by you</Body></View>
   <Action secondary expanded={evidence} onPress={() => setEvidence(!evidence)}>{evidence ? 'Hide the context' : 'Why am I seeing this?'}</Action>
   {evidence && <View style={styles.evidence}><Body>{insight.evidence.independentN} independent observations</Body><Body>{insight.evidence.promptedN} chosen from offered options</Body><Body>{insight.evidence.introducedN} raised by you</Body></View>}
   <View style={styles.feedback}>
@@ -50,6 +51,6 @@ export function HonestMirror({ insight, onFeedback, onCorrection, onSafety }: { 
   </View>
  </View>;
 }
-const styles = StyleSheet.create({ mirror: { gap: M.space.lg, paddingTop: M.space.xl, borderTopWidth: 1, borderTopColor: M.color.warmInk }, feedback: { gap: M.space.base, marginTop: M.space.lg }, wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md }, evidence: { gap: M.space.sm },
+const styles = StyleSheet.create({ countPlane:{gap:M.space.sm,padding:M.space.base,backgroundColor:M.color.selected,borderLeftWidth:1,borderColor:M.color.warmInk},mirror: { gap: M.space.lg, paddingTop: M.space.xl, borderTopWidth: 1, borderTopColor: M.color.warmInk }, feedback: { gap: M.space.base, marginTop: M.space.lg }, wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: M.space.md }, evidence: { gap: M.space.sm },
  input: { fontFamily: M.font.body, fontSize: 18, lineHeight: 28, minHeight: 96, padding: M.space.base, backgroundColor: M.color.paper, color: M.color.ink, borderBottomWidth: 1, borderColor: M.color.warmInk, borderRadius: M.radius.control, textAlignVertical: 'top' },
  hint: { fontSize: 14, lineHeight: 22 }, skip: { marginTop: M.space.lg }, note: { gap: M.space.base } });

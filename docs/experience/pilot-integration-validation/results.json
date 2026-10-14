@@ -1,0 +1,4189 @@
+[
+  {
+    "screen": "today-empty-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-empty-320",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-empty-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-empty-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-opening-320-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-opening-320-0",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-alternatives-320-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-alternatives-320-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-320-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-320-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-320-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "viewport": 320,
+    "allSelectedReadingsReversibleWithoutEvidenceWrite": true
+  },
+  {
+    "screen": "look-complete-320-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-320-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-320-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-320-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-320-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-320-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-320-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-320-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-320-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-320-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-320-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-320-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-320-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-320-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-320-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-320-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-320-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-320-0-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-320-0-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-320-0-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-320-0-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-320-0-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "hold-320",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "hold-320",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-320-1-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-320-1-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-320-1-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-320-1-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-320-1-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-6",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-6",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-6-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-320-7",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-320-7",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-320-7-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "today-empty-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-empty-390",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-empty-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-empty-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-opening-390-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-opening-390-0",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-alternatives-390-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-alternatives-390-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-390-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-390-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-390-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "viewport": 390,
+    "allSelectedReadingsReversibleWithoutEvidenceWrite": true
+  },
+  {
+    "screen": "look-complete-390-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-390-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-390-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-390-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-390-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-390-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-390-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-390-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-390-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-390-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-390-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-390-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-390-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-390-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-390-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-390-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-390-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-390-0-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-390-0-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-390-0-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-390-0-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-390-0-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "hold-390",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "hold-390",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-390-1-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-390-1-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-390-1-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-390-1-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-390-1-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-6",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-6",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-6-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-390-7",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-390-7",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-390-7-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "today-empty-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-empty-768",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-empty-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-empty-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-opening-768-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-opening-768-0",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-alternatives-768-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-alternatives-768-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-768-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-768-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-768-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "viewport": 768,
+    "allSelectedReadingsReversibleWithoutEvidenceWrite": true
+  },
+  {
+    "screen": "look-complete-768-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-768-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-768-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-768-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-768-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-768-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-768-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-768-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-768-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-768-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-768-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-768-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-768-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-768-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-768-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-768-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-768-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-768-0-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-768-0-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-768-0-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-768-0-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-768-0-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "hold-768",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "hold-768",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-768-1-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-768-1-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-768-1-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-768-1-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-768-1-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-6",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-6",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-6-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-768-7",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-768-7",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-768-7-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "today-empty-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-empty-1024",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-empty-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-empty-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-opening-1024-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-opening-1024-0",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-alternatives-1024-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-alternatives-1024-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1024-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1024-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1024-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "viewport": 1024,
+    "allSelectedReadingsReversibleWithoutEvidenceWrite": true
+  },
+  {
+    "screen": "look-complete-1024-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1024-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1024-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1024-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1024-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1024-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1024-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1024-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1024-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1024-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1024-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1024-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1024-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1024-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1024-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1024-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1024-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1024-0-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-1024-0-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-1024-0-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1024-0-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1024-0-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "hold-1024",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "hold-1024",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1024-1-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-1024-1-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-1024-1-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1024-1-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1024-1-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-6",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-6",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-6-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1024-7",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1024-7",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1024-7-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "today-empty-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "today-empty-1440",
+    "counts": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "mirror-empty-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "mirror-empty-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-opening-1440-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-opening-1440-0",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-alternatives-1440-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-alternatives-1440-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1440-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1440-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1440-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "viewport": 1440,
+    "allSelectedReadingsReversibleWithoutEvidenceWrite": true
+  },
+  {
+    "screen": "look-complete-1440-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1440-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1440-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1440-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1440-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1440-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1440-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-alternatives-1440-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1440-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1440-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1440-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1440-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1440-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-opening-1440-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "look-complete-1440-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "look-complete-1440-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "look-complete-1440-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1440-0-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-1440-0-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-1440-0-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1440-0-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1440-0-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "hold-1440",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "hold-1440",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-0-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1440-1-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-disabled-1440-1-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-disabled-1440-1-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1440-1-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-disabled-1440-1-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-1-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-2-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-3",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-3",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-3-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-4",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-4",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-4-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-5",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-5",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-5-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-6",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-6",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-6-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "attend-complete-1440-7",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "attend-complete-1440-7",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "attend-complete-1440-7-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "screen": "resume-without-words",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "resume-without-words",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "left-look",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "left-look",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "left-hold",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "left-hold",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "left-no-answers",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "left-no-answers",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "safety-no-record",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "safety-no-record",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "retry-kept-original",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "retry-kept-original",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "retry-unknown-check",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "retry-unknown-check",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "back-frees-first-slot-and-keep",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "back-frees-first-slot-and-keep",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "left-partial-allocation",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "left-partial-allocation",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "draft-replacement",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "draft-replacement",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "carry-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "carry-0",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "carry-mirror-0",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "carry-mirror-0",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "carry-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "carry-1",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "carry-mirror-1",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "carry-mirror-1",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "carry-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "carry-2",
+    "counts": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "carry-mirror-2",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "carry-mirror-2",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "populated-pilot-mirror",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "populated-pilot-mirror",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "screen": "full-integrated-journey",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "full-integrated-journey",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "entryDailyRepPilotMirrorJourney": true,
+    "separateRuntimeFacts": true
+  },
+  {
+    "screen": "keyboard-reduced-motion",
+    "geometry": {
+      "cookies": "",
+      "local": [],
+      "overflow": false,
+      "session": [],
+      "small": []
+    }
+  },
+  {
+    "axe": "keyboard-reduced-motion",
+    "counts": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "coverage": {
+      "situation": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "unknown"
+      ],
+      "observation": [
+        "0",
+        "skip"
+      ],
+      "camera": [
+        "0",
+        "1",
+        "2",
+        "unknown"
+      ],
+      "interpretation": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "weight": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "alternatives": [
+        "",
+        "0",
+        "0,1,2,3",
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "reweigh": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "exit": [
+        "0",
+        "1",
+        "unknown"
+      ],
+      "observation_retry": [
+        "0",
+        "skip"
+      ],
+      "camera_retry": [
+        "1",
+        "2",
+        "unknown"
+      ],
+      "pulls": [
+        "",
+        "0",
+        "0,1",
+        "0,1,2,3,4",
+        "5,6,7",
+        "unknown"
+      ],
+      "place:messages": [
+        "0",
+        "2"
+      ],
+      "place:work": [
+        "0",
+        "1",
+        "2"
+      ],
+      "when:work": [
+        "0",
+        "1",
+        "2"
+      ],
+      "place:asked": [
+        "2"
+      ],
+      "place:worry": [
+        "3"
+      ],
+      "place:phone": [
+        "2"
+      ],
+      "hold_offer": [
+        "0",
+        "1",
+        "unknown"
+      ],
+      "hold": [
+        "0"
+      ],
+      "sit": [
+        "0",
+        "1",
+        "2",
+        "unknown"
+      ],
+      "place:want": [
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "place:rest": [
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "place:avoiding": [
+        "1",
+        "2",
+        "3",
+        "unknown"
+      ],
+      "when:want": [
+        "0",
+        "1",
+        "2"
+      ],
+      "when:rest": [
+        "0",
+        "1",
+        "2"
+      ],
+      "when:avoiding": [
+        "0",
+        "1",
+        "2"
+      ],
+      "rearrange": [
+        "0",
+        "1"
+      ],
+      "carry:work": [
+        "0",
+        "1",
+        "unknown"
+      ],
+      "carry:rest": [
+        "0",
+        "1",
+        "unknown"
+      ]
+    },
+    "browserErrors": []
+  }
+]

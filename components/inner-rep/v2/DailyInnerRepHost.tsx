@@ -7,7 +7,7 @@ import { useInnerRepV2Store } from '../../../stores/inner-rep-v2-store';
 import { DailyInnerRep } from './DailyExperience';
 import { Action, Body } from './Foundation';
 import { MIRAR as M } from '../../../design-system/native';
-import { router } from 'expo-router';
+const PilotOffersHost: React.ComponentType | null = process.env.EXPO_PUBLIC_PILOTS === '1' ? require('../../pilots/PilotHosts').PilotOffersHost : null;
 
 const greetingKey = () => { const h = new Date().getHours(); return h < 12 ? 'common.greeting_morning' : h < 17 ? 'common.greeting_afternoon' : 'common.greeting_evening'; };
 
@@ -30,8 +30,7 @@ export function DailyInnerRepHost() {
     onSafety={() => { void discardForSafety(); }}
     onFeedback={feedback}
     onCorrection={correction}
+    extraPractice={PilotOffersHost ? <PilotOffersHost /> : undefined}
   />;
-  // Staging only (EXPO_PUBLIC_PILOTS=1): an optional, clearly separate entry to the extra-practice pilots. Absent in Production.
-  if (process.env.EXPO_PUBLIC_PILOTS !== '1') return rep;
-  return <View style={{ flex: 1 }}>{rep}<View style={{ padding: M.space.base, backgroundColor: M.color.surface, borderTopWidth: 1, borderTopColor: M.color.border, alignItems: 'flex-start' }}><Action secondary onPress={() => router.push('/pilots')}>Optional extra practice (preview)</Action></View></View>;
+  return rep;
 }
