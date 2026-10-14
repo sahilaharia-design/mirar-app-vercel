@@ -18,7 +18,7 @@ Project `jranpiyhluyuqigqfyhn`. Built from your read-only findings plus my indep
 | Review historical function logs (from 18 April 2026) | **Open: not possible from the CLI** (it has no hosted-log command). Owner runs the aggregate query in section F; coverage is limited by plan retention |
 | Remove the paused jobs so the old hardcoded values leave the database | Later, with approval |
 | First-time signup on the real-auth staging build, and returning login | **Open** |
-| Redirect URL `https://mirar-unified-real.vercel.app/auth/callback` added (replaces the earlier `mirar-v2-review-real` entry as the real-auth staging target) | **Open: awaiting explicit approval** (exact change in section G) |
+| Redirect URL `https://mirar-unified-real.vercel.app/auth/callback` added (replaces the earlier `mirar-v2-review-real` entry as the real-auth staging target) | **Done 14 Oct (owner-approved; applied by Claude through the owner's signed-in dashboard, one entry only).** Verified after a fresh reload: 4 redirect entries (`mirar://`, `http://localhost:8081`, `https://mirar-app.vercel.app`, `https://mirar-unified-real.vercel.app/auth/callback`); Site URL unchanged `https://mirar-app.vercel.app`. No other setting touched. |
 
 Production promotion of the v2 app stays blocked until the open items pass.
 
@@ -165,8 +165,8 @@ group by path
 
 **How to report findings honestly.** Three separate statements: (a) the earliest log available; (b) what the logs show inside that window; (c) the dates before it, which are *unknown*, not clear. The old secret was in public browser bundles for months, so for any period without logs the safe assumption is that the endpoints could have been called successfully. Retention differs by plan; if the earliest row is much later than 18 April, April 18 to that date is unreviewable.
 
-## G. Real-auth staging: the exact change that needs your approval
-Not applied. Dashboard > Authentication > URL Configuration > **Redirect URLs** > Add URL, exactly:
+## G. Real-auth staging redirect (APPLIED 14 October with approval; kept here as the record)
+Applied exactly as below and verified. Dashboard > Authentication > URL Configuration > **Redirect URLs** > Add URL, exactly:
 ```
 https://mirar-unified-real.vercel.app/auth/callback
 ```
