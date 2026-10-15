@@ -10,6 +10,7 @@ import type { AnyIntent } from '../../lib/innerRep/backup/continuity';
 import { ExperiencePage, X } from '../experience/ExperienceKit';
 import { Body } from '../inner-rep/v2/Foundation';
 import { StubServicePanel } from './StubServicePanel';
+import { InterimControls } from './InterimControls';
 
 // Mounted only behind EXPO_PUBLIC_HISTORY_SYNC=1 (staging). Codex's presentation, driven by the real ContinuityController; the service is a STUB (no network).
 // One authoritative host feeds all three slots and their privacy notices together (Codex handoff: never mount a backup-enabled status beside the old device-only disclosure).
@@ -44,6 +45,7 @@ export default function ContinuityScreen() {
   if (!port) return <ExperiencePage><View style={X.space}><Body>Opening practice history…</Body></View></ExperiencePage>;
   return <>
     <ContinuitySettings port={port} onBack={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)/profile'))} />
+    <InterimControls />
     {process.env.EXPO_PUBLIC_REVIEW_STATES === '1' ? <StubServicePanel /> : null}
   </>;
 }
