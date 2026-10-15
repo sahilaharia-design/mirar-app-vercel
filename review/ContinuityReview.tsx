@@ -44,7 +44,7 @@ export function ContinuityReview(){
   if(intent==='disable')setS({...s,consent:'paused',mayOfferCard:false,actions:{...(s.actions??base.actions!),turnOn:true,turnOff:false},enabled:false,phase:s.accountCopy==='verified'?'paused':'device'});
   if(intent==='retry')setS({...s,phase:s.accountCopy==='unknown'?'unavailable':operation==='recover'?'recovering':operation==='delete'?'deleting':'syncing'});
   if(intent==='recover')setS({...s,phase:'recovering'});
-  if(intent==='keep_account'||intent==='keep_device')setS({...s,phase:'syncing'});
+  if(intent==='keep_account')setS({...s,phase:'syncing'});
   if(intent==='delete')setS({...s,phase:'deleting'});
   if(intent==='clear_device'){memory.clear();await runtime.init('continuity-review-fictional');refresh();setS({...s,phase:'device_cleared'});}
   if(intent==='sign_out'){memory.clear();await runtime.init('continuity-review-fictional');refresh();setPage('signedout');}

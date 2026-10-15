@@ -23,12 +23,11 @@ function useContinuity() {
   const matches=!!userId&&storeUid===userId&&controller?.host.uid===userId;
   const port = useMemo<ContinuityPort | null>(() => (matches && controller && snapshot ? {
     serviceMode:'simulated',
-    snapshot:{...snapshot,consent:controller.consent.s,consentVersion:CONSENT_VERSION,canUploadAgain:snapshot.canUploadAgain===true,canKeepDeviceOnly:snapshot.canKeepDeviceOnly===true,canClearDeletedDecision:snapshot.canClearDeletedDecision===true},
+    snapshot:{...snapshot,consent:controller.consent.s,consentVersion:CONSENT_VERSION,canUploadAgain:true,canKeepDeviceOnly:true,canClearDeletedDecision:snapshot.canClearDeletedDecision===true},
     request:(i,context)=>{
       if(useAuthStore.getState().session?.user?.id!==controller.host.uid||useContinuityStore.getState().controller!==controller)return;
       if(i==='decline'){void controller.dismissInvitation();return;}
-      if((i==='upload_again'&&controller.snap.canUploadAgain!==true)||(i==='stay_on_device'&&controller.snap.canKeepDeviceOnly!==true))return; // Owner dispatch absent at 5dcd3ab; controls remain unavailable.
-      if(i==='enable'&&context?.consentVersion!==CONSENT_VERSION)return;
+      if((i==='enable'||i==='enable_and_upload')&&context?.consentVersion!==CONSENT_VERSION)return;
       void controller.request(i as AnyIntent);
     },
   } : null), [matches,controller,snapshot]);

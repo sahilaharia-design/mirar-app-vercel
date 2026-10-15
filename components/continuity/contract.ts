@@ -24,9 +24,12 @@ export interface ContinuitySnapshot {
   fileTransferVerified?: false; // No export/import action until implementation and verification are complete.
   canExport?: boolean; // Owner capability: verified saver is available, not proof that a file was saved.
   unsentOnDevice?: number;
-  notice?: 'account_copy_removed'|'history_reset'|'turned_off_elsewhere'|'account_copy_deleted_device_kept'|'server_flag_pending';
+  confirmUpload?: {count:number;fromDay:string;throughDay:string};
+  automaticChecks?: 'none'|'while_backup_on';
+  signOutWarning?: {unsent:number;canSaveFile:boolean};
+  notice?: 'account_copy_removed'|'history_reset'|'turned_off_elsewhere'|'account_copy_deleted_device_kept'|'server_flag_pending'|'file_saved';
   decision?: 'histories_differ'|'copy_was_deleted';
-  error?: {intent:ContinuityIntent;message:string};
+  error?: {intent:string;message:string}; // May describe a refused legacy request; never rendered as an action.
   pilotHistory?: 'device_only';
   unfinishedPracticeAndOffers?: 'device_only';
   canUploadAgain?: boolean; // False until controller exposes a real owner dispatch.
@@ -34,7 +37,7 @@ export interface ContinuitySnapshot {
   canClearDeletedDecision?: boolean; // Owner must resolve the pending decision as part of clearing.
   deletionDisclosure?: string; // Qualified, verified provider retention wording. Required for release.
 }
-export type ContinuityIntent = 'enable' | 'disable' | 'retry' | 'recover' | 'keep_account' | 'keep_device' | 'export_then_account' | 'delete' | 'delete_account_copy' | 'check_account' | 'upload_again' | 'stay_on_device' | 'clear_device' | 'decline' | 'sign_out';
+export type ContinuityIntent = 'enable' | 'disable' | 'retry' | 'recover' | 'keep_account' | 'export_then_account' | 'delete' | 'delete_account_copy' | 'check_account' | 'upload_again' | 'stay_on_device' | 'clear_device' | 'decline' | 'enable_and_upload' | 'save_file' | 'sign_out';
 export interface ContinuityPort {
   snapshot: ContinuitySnapshot;
   serviceMode?: 'simulated'|'live'; // G3 is simulated; missing mode never asserts live persistence.
