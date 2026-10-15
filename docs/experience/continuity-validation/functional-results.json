@@ -1,0 +1,209 @@
+{
+  "audits": [
+    {
+      "label": "actual-rep-completion-invitation",
+      "width": 390,
+      "axe": {
+        "inapplicable": 56,
+        "incomplete": 0,
+        "passes": 33,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "actual-memory-mirror",
+      "width": 390,
+      "axe": {
+        "inapplicable": 53,
+        "incomplete": 0,
+        "passes": 36,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "enable-failed-unchanged",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "enable-ack-not-complete",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "confirmed-ready",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "withdraw-retains-account-copy",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "cancel-signout-preserves-runtime",
+      "width": 390,
+      "axe": {
+        "inapplicable": 53,
+        "incomplete": 0,
+        "passes": 36,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "signout-pending-warning",
+      "width": 390,
+      "axe": {
+        "inapplicable": 56,
+        "incomplete": 0,
+        "passes": 33,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "recovery-explicit-confirmation",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "conflict-explicit-device-choice",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "conflict-explicit-account-choice",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "confirmed-delete-clears-only-review-memory",
+      "width": 390,
+      "axe": {
+        "inapplicable": 53,
+        "incomplete": 0,
+        "passes": 36,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "simulated-signout",
+      "width": 390,
+      "axe": {
+        "inapplicable": 61,
+        "incomplete": 0,
+        "passes": 28,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "keyboard-reduced-motion-consent",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    }
+  ],
+  "boundary": {
+    "local": 0,
+    "session": 0,
+    "remote": []
+  },
+  "keyboard": {
+    "text": "Turn on backup",
+    "outline": "solid"
+  }
+}

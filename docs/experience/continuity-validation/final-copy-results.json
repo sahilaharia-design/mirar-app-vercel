@@ -1,0 +1,142 @@
+[
+  {
+    "label": "final-consent",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-signout",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-signout",
+    "width": 390,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent",
+    "width": 768,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-signout",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-signout",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-signout",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  }
+]

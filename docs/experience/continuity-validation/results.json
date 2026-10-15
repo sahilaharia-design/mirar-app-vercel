@@ -1,0 +1,1682 @@
+[
+  {
+    "label": "today-default",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-device",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "consent-off",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Only on this device",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backed up to my account",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup is off \u00b7 account copy kept",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backing up changes",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Changes waiting on this device",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Two histories need your choice",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "An account copy is available",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Bringing back your practice",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup on \u00b7 no history yet",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup cannot be checked",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Removing practice history",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "History removed",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "That change was not completed",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "signout-uncertain",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "off-confirm",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-unacknowledged",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-acknowledged",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-account",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-device",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "mirror-with-conflict",
+    "width": 320,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "me-with-conflict",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "today-default",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-device",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "consent-off",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Only on this device",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backed up to my account",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup is off \u00b7 account copy kept",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backing up changes",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Changes waiting on this device",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Two histories need your choice",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "An account copy is available",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Bringing back your practice",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup on \u00b7 no history yet",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup cannot be checked",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Removing practice history",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "History removed",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "That change was not completed",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "signout-uncertain",
+    "width": 390,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "off-confirm",
+    "width": 390,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-unacknowledged",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-acknowledged",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-account",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-device",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "mirror-with-conflict",
+    "width": 390,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "me-with-conflict",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "today-default",
+    "width": 768,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-device",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "consent-off",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Only on this device",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backed up to my account",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup is off \u00b7 account copy kept",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backing up changes",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Changes waiting on this device",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Two histories need your choice",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "An account copy is available",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Bringing back your practice",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup on \u00b7 no history yet",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup cannot be checked",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Removing practice history",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "History removed",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "That change was not completed",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "signout-uncertain",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "off-confirm",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-unacknowledged",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-acknowledged",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-account",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-device",
+    "width": 768,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "mirror-with-conflict",
+    "width": 768,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "me-with-conflict",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "today-default",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-device",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "consent-off",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Only on this device",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backed up to my account",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup is off \u00b7 account copy kept",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backing up changes",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Changes waiting on this device",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Two histories need your choice",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "An account copy is available",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Bringing back your practice",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup on \u00b7 no history yet",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup cannot be checked",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Removing practice history",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "History removed",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "That change was not completed",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "signout-uncertain",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "off-confirm",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-unacknowledged",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-acknowledged",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-account",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-device",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "mirror-with-conflict",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "me-with-conflict",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "today-default",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-device",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "consent-off",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Only on this device",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backed up to my account",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup is off \u00b7 account copy kept",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backing up changes",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Changes waiting on this device",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Two histories need your choice",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "An account copy is available",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Bringing back your practice",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup on \u00b7 no history yet",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Backup cannot be checked",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "Removing practice history",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "History removed",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "That change was not completed",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "signout-uncertain",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "off-confirm",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-unacknowledged",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "delete-acknowledged",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-account",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "replace-device",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "mirror-with-conflict",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "me-with-conflict",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  }
+]
