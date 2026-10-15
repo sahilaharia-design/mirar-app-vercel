@@ -7,6 +7,8 @@ import { useInnerRepV2Store } from '../../../stores/inner-rep-v2-store';
 import { DailyInnerRep } from './DailyExperience';
 import { Action, Body } from './Foundation';
 import { MIRAR as M } from '../../../design-system/native';
+const ContinuityTodayHost: React.ComponentType | null = process.env.EXPO_PUBLIC_HISTORY_SYNC === '1' ? require('../../continuity/ContinuityHosts').ContinuityTodayHost : null;
+const useContinuityNotice: () => string | undefined = process.env.EXPO_PUBLIC_HISTORY_SYNC === '1' ? require('../../continuity/ContinuityHosts').useContinuityNotice : () => undefined;
 const PilotOffersHost: React.ComponentType | null = process.env.EXPO_PUBLIC_PILOTS === '1' ? require('../../pilots/PilotHosts').PilotOffersHost : null;
 
 const greetingKey = () => { const h = new Date().getHours(); return h < 12 ? 'common.greeting_morning' : h < 17 ? 'common.greeting_afternoon' : 'common.greeting_evening'; };
@@ -14,6 +16,7 @@ const greetingKey = () => { const h = new Date().getHours(); return h < 12 ? 'co
 /** Connects the Codex presentation (DailyInnerRep) to the v2 runtime. No presentation or engine logic lives here. */
 export function DailyInnerRepHost() {
   const { t } = useTranslation();
+  const continuityNotice = useContinuityNotice();
   const userId = useAuthStore((s) => s.session?.user?.id);
   const { status, today, dayKey, practiceDays, receipt, load, progress, complete, discardForSafety, feedback, correction } = useInnerRepV2Store();
   // reload on focus: picks up a new calendar day without a full app restart
@@ -31,6 +34,8 @@ export function DailyInnerRepHost() {
     onFeedback={feedback}
     onCorrection={correction}
     extraPractice={PilotOffersHost ? <PilotOffersHost /> : undefined}
+    continuity={ContinuityTodayHost ? <ContinuityTodayHost /> : undefined}
+    privacyNotice={continuityNotice}
   />;
   return rep;
 }

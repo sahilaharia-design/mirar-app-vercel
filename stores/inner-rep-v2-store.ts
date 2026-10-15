@@ -11,7 +11,11 @@ import { clearPilotKeys } from '../lib/innerRep/pilots/keys';
 // delegates every decision to the frozen engine. DEV PERSISTENCE: structured state in AsyncStorage (browser localStorage on
 // web), per user, device-local. There is no Supabase table for v2 (no migration has been approved or applied).
 const EMPTY_MIRROR: MirrorModel = { version: 1, engineVersion: 'v2.0.1-correction-fix', state: 'empty', retained: { instances: 0, from: null, mayBeTruncated: false }, statements: [], sections: { said: [], practised: [], come_up: [], carrying: [], readings: [], shifted: [], unknown: [] } };
-const runtime = createRuntime({ storage: AsyncStorage as unknown as KV });
+const baseRuntime = createRuntime({ storage: AsyncStorage as unknown as KV });
+// Continuity (opt-in backup) prototype, DEFAULT OFF. With EXPO_PUBLIC_HISTORY_SYNC=1 the runtime is wrapped by the event recorder, which journals structured
+// events on this device only (the journal is never sent anywhere unless the person opts in). The direct env comparison is inlined at build time, so a build
+// without the flag contains none of the continuity code (preflight scans for it). EXPO_PUBLIC_HISTORY_SYNC must never be set in the Production environment.
+const runtime: ReturnType<typeof createRuntime> = process.env.EXPO_PUBLIC_HISTORY_SYNC === '1' ? (require('../lib/innerRep/backup/hook') as typeof import('../lib/innerRep/backup/hook')).attachRecorder(baseRuntime) : baseRuntime;
 
 interface State {
   status: 'idle' | 'loading' | 'ready' | 'error';
@@ -58,5 +62,19 @@ export async function clearInnerRepV2Data() {
   await clearPilotKeys(AsyncStorage as unknown as KV);
   // in-memory pilot state too (staging only; the direct env comparison is inlined, so Production bundles contain no pilot store)
   if (process.env.EXPO_PUBLIC_PILOTS === '1') (require('./pilot-store') as typeof import('./pilot-store')).resetPilotMemory();
+  if (process.env.EXPO_PUBLIC_HISTORY_SYNC === '1') {   // continuity: stop recording for this account, clear its device-local continuity state, drop the controller
+    (require('../lib/innerRep/backup/hook') as typeof import('../lib/innerRep/backup/hook')).historyBus.detach();
+    await (require('../lib/innerRep/backup/keys') as typeof import('../lib/innerRep/backup/keys')).clearHistoryKeys(AsyncStorage as unknown as KV);
+    (require('./continuity-store') as typeof import('./continuity-store')).stopContinuity();
+  }
   useInnerRepV2Store.setState({ status: 'idle', userId: null, dayKey: '', today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
+}
+
+/** Clears THIS DEVICE's practice for the signed-in account (engine state, device-only pilots) and reloads a fresh Today. Never touches an account copy and never signs out. */
+export async function resetDevicePractice(userId: string) {
+  await clearV2Keys(AsyncStorage as unknown as KV);
+  await clearPilotKeys(AsyncStorage as unknown as KV);
+  if (process.env.EXPO_PUBLIC_PILOTS === '1') (require('./pilot-store') as typeof import('./pilot-store')).resetPilotMemory();
+  useInnerRepV2Store.setState({ status: 'idle', today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
+  await useInnerRepV2Store.getState().load(userId);
 }

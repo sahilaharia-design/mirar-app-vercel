@@ -6,7 +6,9 @@ import { createRuntime } from '../../lib/innerRep/runtime/v2-runtime';
 import { BackupEvent, CONSENT_VERSION, validateEvent } from '../../lib/innerRep/backup/events';
 import { Recorded, localIso, recordRuntime } from '../../lib/innerRep/backup/recorder';
 import { MemKV, replayFresh } from '../../lib/innerRep/backup/replay';
-import { exportJournal, importJournal, ServerPort, SyncClient } from '../../lib/innerRep/backup/sync';
+import { ServerPort, ServiceError, SyncClient } from '../../lib/innerRep/backup/sync';
+import { exportJournal, importJournal, receiptFor, verifiedExport } from '../../lib/innerRep/backup/export';
+import { StubService } from '../../lib/innerRep/backup/stub-service';
 import { canSync, consentReduce, ConsentState, DECLINE_QUIET_DAYS, mayOffer } from '../../lib/innerRep/backup/consent';
 import { backupView, ClientFacts } from '../../lib/innerRep/backup/view';
 import { ENGINE_VERSION, VOCAB, at, noTrace, sameJSON } from './backup-fixtures';
@@ -17,9 +19,9 @@ let seedN = 12345; const rnd = () => { seedN = (seedN * 1664525 + 1013904223) % 
 const canon = (x: any): string => JSON.stringify(x, (_k, v) => (v && typeof v === 'object' && !Array.isArray(v) ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, v[k]])) : v));
 
 class Counting implements ServerPort { n = 0; payloads: string[] = []; constructor(public inner: ServerPort, public fail: { off: boolean } = { off: false }) {}
-  private g<T>(f: () => Promise<T>) { this.n++; if (this.fail.off) return Promise.reject(new Error('offline')); return f(); }
+  private g<T>(f: () => Promise<T>) { this.n++; if (this.fail.off) return Promise.reject(new ServiceError('offline', 'offline')); return f(); }
   status() { return this.g(() => this.inner.status()); } enable(e: string, c: string) { return this.g(() => this.inner.enable(e, c)); } disable() { return this.g(() => this.inner.disable()); }
-  append(b: number, ev: BackupEvent[]) { this.payloads.push(JSON.stringify(ev)); return this.g(() => this.inner.append(b, ev)); } pull(a: number) { return this.g(() => this.inner.pull(a)); } deleteAll() { return this.g(() => this.inner.deleteAll()); } }
+  append(b: number, ev: BackupEvent[], epoch: string) { this.payloads.push(JSON.stringify(ev)); return this.g(() => this.inner.append(b, ev, epoch)); } pull(a: number) { return this.g(() => this.inner.pull(a)); } deleteAll() { return this.g(() => this.inner.deleteAll()); } }
 
 interface Device { uid: string; clock: { d: Date }; rt: Recorded; client: SyncClient; port: Counting; recorded: BackupEvent[] }
 function newDevice(uid: string, port: ServerPort, fail?: { off: boolean }): Device {
@@ -130,34 +132,98 @@ async function backends(): Promise<Backend[]> {
       check('every payload that was sent passes the whitelist and the catalog vocabulary', d.client.journal().every((e) => validateEvent(e, VOCAB).ok));
     }
 
-    console.log('— Deleting on one device is never undone by another —');
+    const saver = (ok = true) => async () => ok;                                                  // a saver that confirms (or refuses) the write
+    const exportOf = async (events: BackupEvent[]) => { const r = await verifiedExport(events, ENGINE_VERSION, (e) => validateEvent(e, VOCAB), saver(true)); if (!r.ok) throw new Error('export failed'); return r.receipt; };
+
+    console.log('— Delete the ACCOUNT copy only: other devices stop, nobody restores it silently —');
     { const uid = await mk(); const d1 = newDevice(uid, be.port(uid)); for (let k = 1; k <= 3; k++) await doDay(d1, k, k); d1.client.outbox = [...d1.recorded]; await d1.client.connect();
       const d2 = newDevice(uid, be.port(uid)); await d2.client.connect(); await adopt(d2); await doDay(d2, 4, 0);          // d2 has an unsent event
-      await d1.client.deleteServerCopy(); const calls = d2.port.payloads.length; const o = await d2.client.sync();
-      check('after deletion the server holds nothing', (await be.serverEvents(uid)).length === 0 && (await be.port(uid).status()) === null);
-      check('the other device notices, stops, and does NOT re-upload its history', o.skipped === 'server_copy_removed' && d2.port.payloads.length === calls && (await be.serverEvents(uid)).length === 0 && d2.client.enabled === false);
-      check('the deleting device keeps its own local history (deletion of the server copy is not deletion of the device)', d1.client.journal().length >= 3);
-      const o2 = await d2.client.sync(); check('and it stays stopped until the person turns backup on again with fresh consent', o2.skipped === 'disabled' && (await be.serverEvents(uid)).length === 0);
+      check('deleting the account copy from a device that holds the same history needs no export (nothing is lost)', await d1.client.deleteAccountCopy().then(() => true, () => false));
+      check('the account copy is gone and the deleting device kept its own history', (await be.serverEvents(uid)).length === 0 && (await be.port(uid).status()) === null && d1.client.journal().length === d1.recorded.length && d1.client.enabled === false);
+      const calls = d2.port.payloads.length; const o = await d2.client.sync();
+      check('the other device notices, stops, and does NOT re-upload its history', o.skipped === 'server_copy_removed' && d2.port.payloads.length === calls && (await be.serverEvents(uid)).length === 0 && d2.client.enabled === false && d2.client.resetNotice !== null);
+      check('it keeps ALL of its history on the device (what it had synced and what was unsent), as unsent history', d2.client.journal().length === d1.recorded.length + d2.recorded.length && d2.client.outbox.length === d2.client.journal().length);
+      const c = await d2.client.connect();
+      check('turning backup on again on that device does NOT silently upload: it must be an explicit decision that the account copy was deleted', c.status === 'decision_required' && c.reason === 'copy_was_deleted' && (await be.serverEvents(uid)).length === 0 && (await be.port(uid).status()) === null && d2.client.enabled === false);
+      let refused = false; try { await d2.client.resolve({ upload_again: { confirm: false as any } }); } catch { refused = true; }
+      check('"upload again" needs an explicit confirmation flag', refused && (await be.serverEvents(uid)).length === 0);
+      const r = await d2.client.resolve({ upload_again: { confirm: true } });
+      check('after explicit confirmation the history uploads into a NEW history (a new epoch)', r.rebuilt === false && (await be.serverEvents(uid)).length === d1.recorded.length + d2.recorded.length && (await be.port(uid).status())!.epoch !== undefined && d2.client.enabled === true);
+    }
+    console.log('— History reset elsewhere (deleted, then turned on again with new practice): an old device cannot restore or append —');
+    { const uid = await mk(); const old = newDevice(uid, be.port(uid)); for (let k = 1; k <= 3; k++) await doDay(old, k, k); old.client.outbox = [...old.recorded]; await old.client.connect(); const oldEpoch = old.client.epoch;
+      const other = newDevice(uid, be.port(uid)); await other.client.connect(); await adopt(other);
+      await other.client.deleteAccountCopy();                                                     // the person deletes the account history...
+      const fresh = newDevice(uid, be.port(uid)); await doDay(fresh, 1, 3); await doDay(fresh, 2, 3); fresh.client.adoptLocal([...fresh.recorded]); await fresh.client.connect();   // ...and later starts a new history on another device
+      check('the account now holds a NEW history under a different epoch', (await be.serverEvents(uid)).length === fresh.recorded.length && (await be.port(uid).status())!.epoch !== oldEpoch);
+      const before = canon(await be.serverEvents(uid)); const o = await old.client.sync();
+      check('the old device is told the history was reset, stops, and writes nothing to the new history', o.skipped === 'history_reset' && canon(await be.serverEvents(uid)) === before && old.client.enabled === false);
+      const c = await old.client.connect();
+      check('and if it reconnects it gets a decision (two different histories), never an automatic merge or restore', c.status === 'decision_required' && c.reason === 'histories_differ' && canon(await be.serverEvents(uid)) === before);
     }
 
-    console.log('— First opt-in: never an automatic merge —');
-    { // local-only handled above. server-only and both:
-      const uid = await mk(); const src = newDevice(uid, be.port(uid)); for (let k = 1; k <= 4; k++) await doDay(src, k, k); src.client.outbox = [...src.recorded]; await src.client.connect();
+    console.log('— Turning backup off: immediate, nothing more uploaded, unsent events stay on the device —');
+    { const uid = await mk(); const d = newDevice(uid, be.port(uid)); await d.client.connect(); await adopt(d); await doDay(d, 1, 1); await d.client.sync();      // the account is no longer empty, so uploads go one rep at a time
+      for (let k = 2; k <= 6; k++) await doDay(d, k, k);
+      let appendCalls = 0; const inner = d.port.inner; const origAppend = inner.append.bind(inner); (inner as any).append = async (...a: any[]) => { appendCalls++; if (appendCalls === 2) { void d.client.disable(); } return (origAppend as any)(...a); };
+      const o = await d.client.sync();
+      check('turning backup off in the middle of a sync stops further uploads at once', o.skipped === 'disabled' && appendCalls <= 3 && d.client.outbox.length > 0, `skipped=${o.skipped} appendCalls=${appendCalls} outbox=${d.client.outbox.length} sent=${o.sent} server=${d.client.server.length}`);
+      (inner as any).append = origAppend; const n = d.port.n; const o2 = await d.client.sync();
+      check('after turning off there are no calls at all', o2.skipped === 'disabled' && d.port.n === n);
+      const waiting = d.client.outbox.length; await doDay(d, 7, 1);
+      check('events made while off stay on the device (unsent), and nothing is lost', d.client.outbox.length >= waiting + 1 && d.client.journal().length === d.recorded.length, `outbox=${d.client.outbox.length} waiting=${waiting} journal=${d.client.journal().length} recorded=${d.recorded.length}`);
+      const serverBefore = (await be.serverEvents(uid)).length; check('…and the server copy stays exactly as it was', serverBefore === d.client.server.length);
+      const c = await d.client.connect(); const after = (await be.serverEvents(uid)).length;
+      check('turning backup on again sends what was waiting (subject to the normal conflict rules)', c.status === 'connected' && after >= serverBefore && d.client.outbox.length === 0, JSON.stringify(c));
+    }
+    console.log('— Verified export gates every operation that could discard a history —');
+    { const uid = await mk(); const A = newDevice(uid, be.port(uid)); for (let k = 1; k <= 3; k++) await doDay(A, k, k); A.client.outbox = [...A.recorded]; await A.client.connect();
+      const B = newDevice(uid, be.port(uid)); await doDay(B, 1, 3); await doDay(B, 2, 3); B.client.adoptLocal([...B.recorded]); const before = canon(await be.serverEvents(uid));
+      const c = await B.client.connect(); check('different histories: a decision is required and nothing changes on either side', c.status === 'decision_required' && c.reason === 'histories_differ' && canon(await be.serverEvents(uid)) === before && B.client.enabled === false);
+      const bad = await verifiedExport(B.recorded, ENGINE_VERSION, (e) => validateEvent(e, VOCAB), saver(false));
+      check('an export the saver could not confirm is NOT an export (cancelled, or a plain browser download that cannot be confirmed)', !bad.ok && bad.reason === 'cancelled_or_unconfirmed' && !(await verifiedExport(B.recorded, ENGINE_VERSION, (e) => validateEvent(e, VOCAB), null)).ok);
+      check('an export whose file does not re-validate is refused before anything is written', !(await verifiedExport([{ kind: 'rep_abandoned', day: '2026-06-01', engine: ENGINE_VERSION, template: 'nope' } as BackupEvent], ENGINE_VERSION, (e) => validateEvent(e, VOCAB), saver(true))).ok);
+      let r1 = ''; try { await B.client.resolve({ keep_account: { receipt: receiptFor([], ENGINE_VERSION) } }); } catch (e) { r1 = (e as Error).message; }
+      check('"use the account\'s history" is refused without a verified export of THIS device\'s history (a receipt for different contents does not count)', /verified export/.test(r1) && canon(await be.serverEvents(uid)) === before && B.client.dropped.length === 0);
+      let r2 = ''; try { await B.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: await exportOf(B.recorded) } }); } catch (e) { r2 = (e as Error).message; }
+      check('replacing the account copy is refused with a receipt for the wrong history (it must be a verified export of the ACCOUNT copy)', /verified export of the account copy/.test(r2) && canon(await be.serverEvents(uid)) === before);
+      const rcpt = await exportOf(B.client.journal()); const res = await B.client.resolve({ keep_account: { receipt: rcpt } });
+      check('with a verified export of this device\'s history, the account\'s history is used and the device\'s is set aside, not destroyed', res.rebuilt && B.client.dropped.length === B.recorded.length && canon(await be.serverEvents(uid)) === before);
+      await adopt(B); check('and the device\'s state then equals the account\'s', sameJSON(noTrace(B.rt._state()), await stateAfterReplay(uid, await be.serverEvents(uid))));
+      // clear this device only
+      let r3 = ''; B.client.outbox = B.client.outbox.concat([]); try { await B.client.clearDevice(); } catch (e) { r3 = (e as Error).message; }
+      const synced = await B.client.canDiscardDeviceWithoutExport();
+      check('clearing this device needs a verified export unless a fresh read of the account proves nothing would be lost', synced ? r3 === '' : /verified export/.test(r3));
+      const C = newDevice(uid, be.port(uid)); await doDay(C, 1, 2); await doDay(C, 2, 2); C.client.adoptLocal([...C.recorded]);          // history that exists ONLY on this device
+      let r4 = ''; try { await C.client.clearDevice(); } catch (e) { r4 = (e as Error).message; }
+      check('device-only history can NEVER be cleared without a verified export', /verified export/.test(r4) && C.client.journal().length === C.recorded.length);
+      check('with the verified export it can be cleared, and the account is untouched', (await C.client.clearDevice(await exportOf(C.client.journal()))) === true && C.client.journal().length === 0 && canon(await be.serverEvents(uid)) === before);
+      // explicit combined deletion
+      let r5 = ''; try { await A.client.deleteBoth(); } catch (e) { r5 = (e as Error).message; }
+      check('combined deletion (account AND device) is explicit and needs a verified export of the full history', /verified export/.test(r5) && (await be.serverEvents(uid)).length > 0);
+      await A.client.deleteBoth(await exportOf(A.client.journal()));
+      check('with the export it removes both: the account copy and this device\'s history', (await be.serverEvents(uid)).length === 0 && (await be.port(uid).status()) === null && A.client.journal().length === 0);
+      // account-only deletion from a device holding different history
+      const uid2 = await mk(); const P = newDevice(uid2, be.port(uid2)); for (let k = 1; k <= 3; k++) await doDay(P, k, 1); P.client.outbox = [...P.recorded]; await P.client.connect();
+      const Q = newDevice(uid2, be.port(uid2)); await doDay(Q, 1, 3); Q.client.adoptLocal([...Q.recorded]); await Q.client.connect(); await Q.client.resolve({ stay_on_device: true });
+      let r6 = ''; try { await Q.client.deleteAccountCopy(); } catch (e) { r6 = (e as Error).message; }
+      check('deleting the account copy from a device that does NOT hold the same history needs a verified export of the account copy', /verified export of the account copy/.test(r6) && (await be.serverEvents(uid2)).length > 0);
+    }
+    console.log('— First opt-in and file export: never an automatic merge —');
+    { const uid = await mk(); const src = newDevice(uid, be.port(uid)); for (let k = 1; k <= 4; k++) await doDay(src, k, k); src.client.outbox = [...src.recorded]; await src.client.connect();
       const same = newDevice(uid, be.port(uid)); same.client.adoptLocal(src.recorded.slice(0, 2)); const c = await same.client.connect();
       check('local history that is a prefix of the account\'s: restores the rest, no question asked', c.status === 'connected' && c.mode === 'restore' && same.client.journal().length === src.recorded.length);
-      const diff = newDevice(uid, be.port(uid)); diff.clock.d = at(0); await doDay(diff, 1, 3); await doDay(diff, 2, 3);               // a different history for the same days
-      diff.client.adoptLocal([...diff.recorded]); const before = canon(await be.serverEvents(uid)); const c2 = await diff.client.connect();
-      check('different histories on both sides: the client asks and changes NOTHING', c2.status === 'decision_required' && canon(await be.serverEvents(uid)) === before && diff.client.enabled === false && diff.client.journal().length === diff.recorded.length);
-      let refused = false; try { await diff.client.resolve({ keep_device: { confirmOverwriteAccountCopy: false as any } }); } catch { refused = true; }
-      check('replacing the account copy with this device\'s history needs an explicit confirmation flag', refused && canon(await be.serverEvents(uid)) === before);
-      const r = await diff.client.resolve('keep_account_and_export');
-      const imp = importJournal(r.exported!, ENGINE_VERSION, (e) => validateEvent(e, VOCAB));
-      check('"keep the account\'s and export this device\'s" returns a file that re-imports and validates, before anything is set aside', imp.ok && imp.events.length === diff.recorded.length && canon(await be.serverEvents(uid)) === before);
-      check('the device\'s own events are kept in its dropped list as "kept on this device only"', diff.client.dropped.length === diff.recorded.length && diff.client.dropped.every((x) => /kept on this device only/.test(x.reason)));
-      await adopt(diff); check('after choosing the account copy the device\'s state equals the account\'s', sameJSON(noTrace(diff.rt._state()), await stateAfterReplay(uid, await be.serverEvents(uid))));
+      const uid3 = await mk(); const only = newDevice(uid3, be.port(uid3)); for (let k = 1; k <= 2; k++) await doDay(only, k, 1); only.client.outbox = [...only.recorded];
+      check('turning on with an account that has no profile creates nothing until the person has decided (the decision check is a read)', (await be.port(uid3).status()) === null);
+      const c3 = await only.client.connect(); check('local-only history and an empty account: uploads it, no decision asked', c3.status === 'connected' && c3.mode === 'upload' && (await be.serverEvents(uid3)).length === only.recorded.length);
       const uid2 = await mk(); const s2 = newDevice(uid2, be.port(uid2)); for (let k = 1; k <= 3; k++) await doDay(s2, k, 1); s2.client.outbox = [...s2.recorded]; await s2.client.connect();
-      const dv = newDevice(uid2, be.port(uid2)); await doDay(dv, 1, 3); await doDay(dv, 2, 3); dv.client.adoptLocal([...dv.recorded]); await dv.client.connect(); await dv.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true } });
-      check('with explicit confirmation, "keep this device\'s" replaces the account copy and the new server log replays', canon((await be.serverEvents(uid2)).map(canon)) === canon(dv.recorded.map(canon)) && (await stateAfterReplay(uid2, await be.serverEvents(uid2))) !== undefined);
+      const dv = newDevice(uid2, be.port(uid2)); await doDay(dv, 1, 3); await doDay(dv, 2, 3); dv.client.adoptLocal([...dv.recorded]); await dv.client.connect(); const acct = canon(await be.serverEvents(uid2));
+      let refused = false; try { await dv.client.resolve({ keep_device: { confirmOverwriteAccountCopy: false as any, accountCopyReceipt: await exportOf(await be.serverEvents(uid2)) } }); } catch { refused = true; }
+      check('replacing the account copy with this device\'s history needs the explicit confirmation flag', refused && canon(await be.serverEvents(uid2)) === acct);
+      await dv.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: await exportOf(await be.serverEvents(uid2)) } });
+      check('with the confirmation AND a verified export of the account copy, the account copy is replaced and the new account log replays', canon((await be.serverEvents(uid2)).map(canon)) === canon(dv.recorded.map(canon)) && (await stateAfterReplay(uid2, await be.serverEvents(uid2))) !== undefined);
+      const exp = exportJournal(dv.recorded, ENGINE_VERSION); const imp = importJournal(exp, ENGINE_VERSION, (e) => validateEvent(e, VOCAB));
+      check('an exported file re-imports and validates under the whitelist and the catalog', imp.ok && imp.events.length === dv.recorded.length);
     }
     const bad = importJournal('{"schema":1,"engine":"v9","events":[]}', ENGINE_VERSION, () => ({ ok: true })); check('an import file for another engine version, or with a hostile entry, is refused', !bad.ok && !importJournal(exportJournal([{ kind: 'rep_abandoned', day: '2026-06-01', engine: ENGINE_VERSION, template: 'nope' }], ENGINE_VERSION), ENGINE_VERSION, (e) => validateEvent(e, VOCAB)).ok);
   }

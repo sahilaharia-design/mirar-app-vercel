@@ -31,7 +31,7 @@ export function fromWire(w: WireAnswer): StepAnswer {
   }
 }
 
-export interface Recorded extends V2Runtime { journal(): BackupEvent[]; }
+export interface Recorded extends V2Runtime { journal(): BackupEvent[]; /** forget everything about the previous account and seed the abandoned-day memory from this account's journal */ attach(events: BackupEvent[]): void; }
 /** Wraps a runtime. `now` MUST be the same clock the runtime uses. The journal is the device's structured event log. */
 export function recordRuntime(rt: V2Runtime, o: { engine: string; now: () => Date; journal?: BackupEvent[]; onEvent?: (e: BackupEvent) => void }): Recorded {
   const journal: BackupEvent[] = o.journal ?? [];
@@ -42,6 +42,7 @@ export function recordRuntime(rt: V2Runtime, o: { engine: string; now: () => Dat
   return {
     ...rt,
     journal: () => journal,
+    attach(events: BackupEvent[]) { journal.length = 0; journal.push(...events); abandoned.clear(); for (const e of events) if (e.kind === 'rep_abandoned') abandoned.add(e.day); },
     async init(uid: string) {
       await rt.init(uid);
       // an unfinished rep from an earlier day was just abandoned by the runtime: journal it once

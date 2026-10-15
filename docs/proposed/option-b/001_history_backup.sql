@@ -33,6 +33,10 @@ create table public.inner_rep_profile (
   consented_on    date,
   last_seq        integer not null default 0 check (last_seq >= 0),
   last_day        date,
+  -- Identifies one generation of the account's history. A new random value is created whenever the profile is created, so deleting the
+  -- history and later turning backup on again yields a NEW epoch. A device that synced under an older epoch is therefore recognised as
+  -- stale and can neither append to, nor silently restore, the new history (G1 condition: deletion must not be undone by an old device).
+  epoch           uuid    not null default gen_random_uuid(),
   created_day     date    not null default current_date,
   updated_day     date    not null default current_date
 );
@@ -152,7 +156,7 @@ begin
   values (uid, p_engine, true, p_consent_version, current_date)
   on conflict (user_id) do update set sync_enabled = true, consent_version = excluded.consent_version, consented_on = excluded.consented_on, updated_day = current_date
   returning * into prof;
-  return jsonb_build_object('sync_enabled', prof.sync_enabled, 'last_seq', prof.last_seq, 'last_day', prof.last_day, 'engine_version', prof.engine_version);
+  return jsonb_build_object('sync_enabled', prof.sync_enabled, 'last_seq', prof.last_seq, 'last_day', prof.last_day, 'engine_version', prof.engine_version, 'epoch', prof.epoch);
 end $$;
 
 -- Turn backup OFF. Stops new writes. Keeps what is already stored (deleting is a separate, deliberate function).
@@ -165,10 +169,10 @@ begin
   return jsonb_build_object('sync_enabled', false);
 end $$;
 
--- Append events. p_base_seq is the last server sequence the caller has replayed (optimistic concurrency): if the log has moved on,
+-- Append events. p_epoch must be the epoch the caller synced under (a mismatch means the account history was deleted and started again since). p_base_seq is the last server sequence the caller has replayed (optimistic concurrency): if the log has moved on,
 -- NOTHING is written and the caller must pull, replay and rebase. Validation failures abort the whole batch (a bug or tampering);
 -- ordering conflicts are reported per event and do not abort (a second device that lost a day is a normal outcome).
-create function public.inner_rep_append_events(p_base_seq integer, p_events jsonb) returns jsonb
+create function public.inner_rep_append_events(p_epoch uuid, p_base_seq integer, p_events jsonb) returns jsonb
 language plpgsql security definer set search_path = '' as $$
 declare
   uid uuid := auth.uid(); prof public.inner_rep_profile%rowtype; ev jsonb; i int := 0; reason text; d date;
@@ -178,6 +182,7 @@ begin
   if p_events is null or jsonb_typeof(p_events) <> 'array' or jsonb_array_length(p_events) > 200 then raise exception 'events must be an array of at most 200' using errcode = '22023'; end if;
   select * into prof from public.inner_rep_profile where user_id = uid for update;
   if not found or not prof.sync_enabled then raise exception 'backup is not turned on' using errcode = '42501'; end if;
+  if prof.epoch is distinct from p_epoch then raise exception 'account history was reset' using errcode = '55000'; end if;
   if prof.last_seq <> p_base_seq then return jsonb_build_object('status', 'stale', 'last_seq', prof.last_seq); end if;
 
   for ev in select * from jsonb_array_elements(p_events) loop
@@ -229,8 +234,8 @@ end $$;
 
 -- ─── 5. Function privileges: signed-in users only; never anon, never public ─────────────────────────────────────────
 revoke all on function public.inner_rep_is_real_date(text), public.inner_rep_validate_event(text, text, date, jsonb),
-  public.inner_rep_enable_backup(text, text), public.inner_rep_disable_backup(), public.inner_rep_append_events(integer, jsonb),
+  public.inner_rep_enable_backup(text, text), public.inner_rep_disable_backup(), public.inner_rep_append_events(uuid, integer, jsonb),
   public.inner_rep_delete_my_practice() from public, anon, authenticated;   -- Supabase's default privileges grant EXECUTE to authenticated explicitly, so it must be revoked by name
 grant execute on function public.inner_rep_enable_backup(text, text), public.inner_rep_disable_backup(),
-  public.inner_rep_append_events(integer, jsonb), public.inner_rep_delete_my_practice() to authenticated;
+  public.inner_rep_append_events(uuid, integer, jsonb), public.inner_rep_delete_my_practice() to authenticated;
 -- inner_rep_validate_event / inner_rep_is_real_date are internal (called by the definer functions); not granted to clients.

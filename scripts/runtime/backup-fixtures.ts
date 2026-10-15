@@ -48,3 +48,11 @@ export const noTrace = (s: any) => ({ ...s, instances: s.instances.map((i: any) 
 export const ID_KEYS = new Set(['id', 'instanceId', 'seq', 'intentRef', 'lastProbeInstance', 'trace']);
 export const noIds = (s: any): any => Array.isArray(s) ? s.map(noIds) : s && typeof s === 'object' ? Object.fromEntries(Object.entries(s).filter(([k]) => !ID_KEYS.has(k)).map(([k, v]) => [k, noIds(v)])) : s;
 
+
+/** Complete one practice on day k (the first option at every step unless `pick` says otherwise) through a recorder-wrapped runtime. Returns false if no rep was served. */
+export async function completeDay(rt: ReturnType<typeof recordRuntime>, uid: string, clock: { d: Date }, k: number, pick = 0): Promise<boolean> {
+  clock.d = at(k); await rt.init(uid); const td = rt.today(); if (td.kind !== 'rep') return false;
+  const a: StepAnswer[] = []; for (let g = 0; g < 10; g++) { const st = nextStep(td.context, a); if (!st) break;
+    if (st.type === 'choice') a.push({ stepId: st.id, kind: 'option', optionId: st.options[pick % st.options.length].id }); else if (st.type === 'timeframe') a.push({ stepId: st.id, kind: 'timeframe', timeframe: 'none' }); else if (st.type === 'domain_chips') a.push({ stepId: st.id, kind: 'domain', domain: st.domains[0] }); else if (st.type === 'yes_no') a.push({ stepId: st.id, kind: 'no' }); else a.push({ stepId: st.id, kind: 'skip' }); }
+  await rt.complete(a); return true;
+}

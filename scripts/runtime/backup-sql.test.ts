@@ -22,7 +22,8 @@ const rep = (day: string, o = 'phone') => ev('rep_completed', day, { template: '
 
   const as = async <T,>(uid: string | null, fn: () => Promise<T>): Promise<T> => { await db.exec('reset role'); await db.query("select set_config('request.jwt.claim.sub', $1, false)", [uid ?? '']); await db.exec(uid === null ? 'set role anon' : 'set role authenticated'); try { return await fn(); } finally { await db.exec('reset role'); } };
   const fails_ = async (fn: () => Promise<unknown>, re: RegExp) => { try { await fn(); return false; } catch (e: any) { return re.test(String(e?.message ?? e)); } };
-  const append = (uid: string, base: number, events: object[]) => as(uid, async () => (await db.query('select public.inner_rep_append_events($1, $2::jsonb) as r', [base, JSON.stringify(events)])).rows[0].r);
+  const epochOf = (uid: string) => db.query('select epoch::text as e from public.inner_rep_profile where user_id = $1', [uid]).then((r: any) => r.rows[0]?.e ?? '00000000-0000-0000-0000-000000000000');
+  const append = async (uid: string, base: number, events: object[], epoch?: string) => { const ep = epoch ?? (await epochOf(uid)); return as(uid, async () => (await db.query('select public.inner_rep_append_events($1::uuid, $2, $3::jsonb) as r', [ep, base, JSON.stringify(events)])).rows[0].r); };
   const enable = (uid: string) => as(uid, async () => (await db.query("select public.inner_rep_enable_backup($1, '2026-10-v1') as r", [ENGINE_VERSION])).rows[0].r);
   const count = (uid: string | null, table: string) => as(uid, async () => (await db.query(`select count(*)::int c from public.${table}`)).rows[0].c);
   const rows = (uid: string) => as(uid, async () => (await db.query("select seq, to_char(day,'YYYY-MM-DD') as day, kind, engine_version, payload from public.inner_rep_event order by seq")).rows);
@@ -113,6 +114,19 @@ const rep = (day: string, o = 'phone') => ev('rep_completed', day, { template: '
   check('with backup off the server refuses writes', await fails_(() => append(A, 6, [rep('2026-06-06')]), /backup is not turned on/));
   check('turning it off keeps what is already stored (deletion is a separate act) and it is still readable by its owner', (await count(A, 'inner_rep_event')) === 6);
   await enable(A); check('turning it on again continues the same sequence (no reset, no duplicate)', (await append(A, 6, [rep('2026-06-06')])).last_seq === 7);
+
+  console.log('— Account-history epoch: deleting history cannot be undone by an old device —');
+  {
+    const U = 'eeeeeeee-0000-0000-0000-000000000005'; await db.exec(`insert into auth.users values ('${U}')`); await enable(U); const e1 = await epochOf(U);
+    check('turning backup on creates an epoch, and turning it on again keeps the same epoch', /^[0-9a-f-]{36}$/.test(e1) && (await enable(U), await epochOf(U)) === e1);
+    await append(U, 0, [rep('2026-06-01')]);
+    check('an append that names a different epoch is refused and writes nothing', await fails_(() => append(U, 1, [rep('2026-06-02')], '11111111-1111-1111-1111-111111111111'), /account history was reset/) && (await count(U, 'inner_rep_event')) === 1);
+    await as(U, () => db.query('select public.inner_rep_delete_my_practice()')); await enable(U); const e2 = await epochOf(U);
+    check('deleting the history and turning backup on again creates a NEW epoch', e2 !== e1);
+    check('an old device (still holding the old epoch) can neither append to nor restore into the new history', await fails_(() => append(U, 0, [rep('2026-06-01')], e1), /account history was reset/) && (await count(U, 'inner_rep_event')) === 0);
+    check('the deleted history is not recoverable through any read (zero rows, new profile has no sequence)', (await count(U, 'inner_rep_event')) === 0 && (await db.query('select last_seq from public.inner_rep_profile where user_id = $1', [U])).rows[0].last_seq === 0);
+    check('with backup turned off and on again the epoch is unchanged (turning off is not deleting)', (await as(U, () => db.query('select public.inner_rep_disable_backup()')), await enable(U), await epochOf(U)) === e2);
+  }
 
   console.log('— Deletion —');
   const del = await as(A, async () => (await db.query('select public.inner_rep_delete_my_practice() as r')).rows[0].r);
