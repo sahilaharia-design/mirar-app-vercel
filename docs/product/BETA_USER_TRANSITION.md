@@ -1,6 +1,6 @@
-# Existing beta users: transition plan (draft for approval)
+# Existing beta users: transition plan (decided 15 October, later)
 
-**Date:** 15 October 2026. **Status:** plan only. **Rules (founder):** do not silently reset or charge anyone. I cannot see user records, so every count below is unknown; the founder runs the read-only counts listed in section 6.
+**Date:** 15 October 2026. **Decision (founder):** existing beta users receive the **standard new 14-day trial (348 hours)**, beginning only after their first completed v2 Inner Rep; no automatic billing, no bulk resets, no reliance on legacy trial rows. This is Option 1 below. **Status:** plan only; nothing is implemented. **Rules (founder):** do not silently reset or charge anyone. I cannot see user records, so every count below is unknown; the founder runs the read-only counts listed in section 6.
 
 ## 1. Who "existing beta users" are
 | Group | Where they exist | Notes |
@@ -17,13 +17,13 @@
 4. **Any exception is explicit.** A founder grant (`comped`) or trial correction is an `entitlement_event` with `source: admin`, who/when/why, visible to the person in-app.
 5. **Nothing is reset behind someone's back.** A trial that has started is displayed with its end time and cannot be restarted.
 
-## 3. Options for how group A is treated (founder decision)
+## 3. Options considered for group A (Option 1 chosen)
 | Option | What happens | Pros | Cons |
 |---|---|---|---|
 | **1. Standard path (recommended)** | v2 is a new product: the 14-day trial starts at their first completed v2 rep, like anyone's. A clear notice explains the change. | Simplest; one rule; fair; cheapest; nothing to maintain | No special recognition of early supporters |
 | 2. Standard trial + "founding member" price lock | As 1, plus a promise of a held price if they subscribe within a window | Rewards early users | Creates a long-lived promise (terms, GST, support); needs counsel and a cohort flag |
 | 3. Longer first period for beta users | e.g. 30 days instead of 14 | Generous | A second rule to build, test and explain; more complexity in a bootstrapped build |
-Recommendation: Option 1 now; if recognition is wanted, a one-time discount code issued later at the gateway (no engine or entitlement change). All options keep the guarantees above.
+Chosen: Option 1; if recognition is wanted, a one-time discount code issued later at the gateway (no engine or entitlement change). All options keep the guarantees above.
 
 ## 4. Notices
 - **In-app, at first sign-in after promotion (always):** what changed, that no card is needed, that the trial starts when they finish their first practice and lasts 14 days (plus the courtesy), what happens at the end, and how to delete their account or old data.
@@ -43,7 +43,7 @@ Counts only, no emails or content: number of accounts; number created before the
 |---|---|
 | Beta user completes their first rep on the new product | Trial starts like anyone's |
 | Beta user who already used the staging build with the same email | Staging has its own storage and no entitlement; counts as a new start in production |
-| Two accounts, one person | Allowed; one trial per normalised email only (limits cheap repeats; a different address is a different person for our purposes) |
-| Account deleted and recreated | Same normalised email: no second trial (the claim row persists as a hash unless counsel requires erasure of it; decision) |
+| Two accounts, one person | Eligibility is **per account**: another address is another account and another trial. No alias normalisation or tracking (founder decision); revisit only on demonstrated need (contract §10) |
+| Account deleted and recreated | A new account is a new trial; deleting removes the entitlement row and events (cascade). Accepted; revisit only on demonstrated need |
 | Internal and tester accounts | `comped`/`internal`, logged; never counted in conversion metrics |
 | Someone asks for more time | Explicit logged admin extension; never a hidden reset |

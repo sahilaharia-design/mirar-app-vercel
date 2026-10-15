@@ -1,118 +1,122 @@
-# Trial entitlement contract: DRAFT v0.1 for founder approval
+# Trial entitlement contract: v1.0 (final for approval)
 
-**Date:** 15 October 2026. **Status: DRAFT. Nothing here is implemented.** No migration, no function, no table, no payment code, no production change. The frozen engine is untouched; Codex's continuity work is untouched. Implementation needs the separate approvals in section 13.
+**Date:** 15 October 2026. **Status:** the founder's decisions of 15 October (later) are applied. **Nothing here is implemented.** No migration, no function, no table, no payment code, no email, no production change. The frozen engine and Codex's continuity work are untouched. Implementation needs the separate approvals in section 13.
+**Executable specification:** `scripts/entitlement/model.ts` with focused local tests `scripts/entitlement/entitlement.test.ts` (63 checks, all passing, pure in-memory). The exact server proposal is `docs/product/E1_ENTITLEMENT_PROPOSAL.md` and `docs/proposed/entitlement/`.
 **Mission anchor:** everyday emotional and mental hygiene leading to better emotional fitness. The trial exists so a person can find out, honestly, whether a daily practice is worth keeping.
 
-## 1. Approved product rules (founder, 15 October)
-1. A **14-day free trial** with complete access to the supported membership experience.
-2. The trial **starts only after the first successfully completed Daily Inner Rep**, never at signup.
-3. Timing is **server-authoritative** (rule chosen in section 2).
-4. At expiry the person keeps **account access, supported available history, export and deletion**. New member reps require an active subscription.
-5. A gentle **day-7 checkpoint** and **day-12 expiry notice**; no guilt, artificial urgency or pressure.
-6. A minimal **first-rep-completed signal** is approved in principle for entitlement, subject to privacy disclosure and separately approved database/security work.
-7. Existing beta users are never silently reset or charged (section 11, `BETA_USER_TRANSITION.md`).
-8. Evidence thresholds are **not** changed to make the Mirror appear more often.
+## 1. Decisions of record (founder)
+1. **Length: 348 hours** from the server-recorded first completed Daily Inner Rep (336 h + a 12 h courtesy). The expiry is **disclosed and displayed accurately** (exact local time, section 6).
+2. **Start:** only after the first successfully completed rep, never at signup.
+3. **Server-authoritative timing.** The device clock decides nothing that matters; it is used only inside bounded offline allowances (section 5).
+4. **Bounded offline experience** with the precise rules in section 5 (72 h and 3 reps), clock-tamper protection, and defined behaviour when the server is unavailable beyond the allowance.
+5. **Notices:** in-app day-7 and day-12 first; email later, only when transactional email, communication rules and reviewed copy exist. No duplicates, no pressure.
+6. **Expiry:** the person keeps account access, available history, export and deletion; new member reps need an active subscription.
+7. **Beta users** receive the standard new 14-day trial that begins only after their first completed v2 rep. No automatic billing, no bulk resets, no reliance on legacy trial rows.
+8. **First-completion signal:** minimal and authenticated, no answers and no emotional content; approved **in principle**. Final disclosure and any live storage need separate approval.
+9. **Eligibility is per account**, determined by the account's own server row. No aggressive email normalisation, no invasive anti-abuse tracking, unless a need is demonstrated (section 10).
+10. **Evidence thresholds are never changed** to make the Mirror appear more often.
 
-## 2. Timing rule: comparison and recommendation
-Compared by `scripts/sim/trial-timing.ts` (generated: `docs/sim/trial-timing.md`): 4,032 cases per rule (24 start hours x 24 habit hours x 7 travel scenarios). A habitual practitioner completes one rep per device-local calendar date; 14 reps is the fair baseline.
-
-| Rule | Mean reps | Day lost (<14 reps) | Needs stored time zone | Moving parts |
-|---|---|---|---|---|
-| A. End of local day 14 + 12 h | 14.26 | 1.9% | **yes** (zone at start, calendar math) | zone, midnight rule, courtesy |
-| **B. 336 hours exactly** | 14.24 | **7.0%** (15.8% for a move 13.5 h west, 1.7% London, 0% no travel) | no | one constant |
-| **B+. 336 hours + fixed 12 h** | 14.74 | **0.1%** | no | two constants, one sum |
-| C. Local day 14, no courtesy | 13.76 | 26.3% | yes | zone, midnight rule |
-
-Without travel, **no rule loses a day** (every rule gave 14 or more). Day losses appear only when the device's time zone moves west during the trial, because the device's calendar date then arrives later in absolute time. The 12-hour courtesy covers every modelled move except a rare extreme.
-
-**Recommendation: B+. `trial_ends_at = first_rep_completed_at + 348 hours`** (14 days plus a fixed 12-hour courtesy), computed on the server from the database clock.
-- Least complex: one instant, no time zone stored or interpreted, no calendar arithmetic, no DST edge (India has none, but travellers do).
-- Predictable: the person can be told one exact end time. Day-7 note at +168 h; day-12 note at +288 h; both are simple additions.
-- Fair: 0.1% of modelled cases lose a day; the cost is a bonus day for some people (mean 14.74 reps), which is harmless: the trial has no marginal cost.
-- Honest to describe: "Your 14 days run until <exact time in your local zone>. We add 12 hours so a late start or travel never costs you a day."
-- If you prefer **exactly 336 hours**, it is equally simple; the price is a lost practice day for about 7% of the modelled mix and 16% of far-west travellers. I do not recommend it, but it is a legitimate choice if the promise "exactly 14 x 24 hours" is valued more.
-
-Test vectors (IST start → B+ end): 2026-10-15 07:10 → 2026-10-29 19:10; 2026-10-15 23:50 → 2026-10-30 11:50; 2026-10-16 00:05 → 2026-10-30 12:05. The device clock never decides anything.
+## 2. The timing rule
+`trial_ends_at = trial_started_at + 348 hours`, both set once by the database clock when the first-completion signal is first accepted. Comparison of rules (4,032 modelled cases each, `docs/sim/trial-timing.md`): local-calendar-day + 12 h loses a practice day in 1.9% of cases and needs a stored time zone; exactly 336 h in 7.0% (15.8% after a 13.5 h westward move, 0% without travel); **336 h + 12 h in 0.1%, with no time zone**. Test vectors (India time): 15 Oct 07:10 → 29 Oct 19:10; 15 Oct 23:50 → 30 Oct 11:50; 16 Oct 00:05 → 30 Oct 12:05. The day-7 notice window opens at +168 h and the day-12 window at +288 h.
 
 ## 3. States and what each allows
-| State | Meaning | Start a new member rep | See history and Mirror | Export file | Delete account | Membership page |
+| State | Meaning | New member rep | See history and Mirror | Export file | Delete account | Membership page |
 |---|---|---|---|---|---|---|
-| `new` | Signed in, first rep not yet completed | **yes (the first rep)** | n/a | yes | yes | read-only info |
-| `trialing` | `now < trial_ends_at` | yes | yes | yes | yes | yes |
-| `trial_expired` | trial over, no subscription | **no** | **yes** | **yes** | **yes** | yes (price once, Continue / Not now, equal weight) |
-| `active` | paid (defined later by the billing contract) | yes | yes | yes | yes | yes |
-| `past_due`, `cancel_pending`, `lapsed` | billing states (billing contract) | per that contract | yes | yes | yes | yes |
-| `comped` | explicit founder grant (testers, partners), recorded | yes | yes | yes | yes | yes |
+| `new` | Account exists; first rep not yet completed | **yes (the first rep)** | n/a | yes | yes | information only |
+| `trialing` | `now < trial_ends_at` | yes (within the offline allowance if offline) | yes | yes | yes | yes |
+| `trial_expired` | trial over, no subscription | **no** | **yes** | **yes** | **yes** | yes: the price once; Continue and Not now carry equal weight |
+| `comped` | explicit, logged founder grant | yes | yes | yes | yes | yes |
+| billing states | defined by the billing contract | per that contract | yes | yes | yes | yes |
+A rep begun before expiry may be finished. Viewing history, export and deletion are **never** gated. No state change is silent: the server records an event and the app tells the person.
 
-Rules: a rep begun before expiry may be finished; viewing history is never gated; export and deletion are never gated; a state change is never silent (an `entitlement_event` is written and the person is told in-app). Billing states are placeholders so the interface does not change when payment is added.
+## 4. The first-completion signal
+- **When:** the moment a rep is completed (`complete()` succeeded and the engine marked it completed). Not on opening, not on an abandoned or skipped rep, not on a safety stop. Only when the cached state is `new`.
+- **What is sent:** an authenticated call with **no arguments**: no answers, no template, no duration, no device, no client time. The server stamps its own clock. Nothing about the practice can be carried by the call (the function takes no parameters).
+- **Idempotent:** the first accepted call sets the start and end; later calls return the same values and change nothing. A retry after a lost reply is harmless (tested).
+- **Disclosure (DRAFT, needs qualified review before use):** *"To run your 14-day trial, Mirar records the moment you finish your first practice. It does not record what you chose."* This is the one practice-derived fact the server holds.
 
-## 4. The first-rep-completed signal
-- **When:** the moment the first rep is completed (`complete()` succeeded and the engine marked it completed; an abandoned or skipped rep does not count; a safety stop never counts). Not on tapping "Begin".
-- **What the client sends:** an authenticated request with **no body** (the user is the JWT subject). **Nothing about the rep: no id, template, answers, duration or device.** The server stamps `now()` from the database clock.
-- **Idempotent:** the first accepted call sets `trial_started_at`, `trial_ends_at` and writes an event; later calls return the existing values and change nothing. A retry after a network failure is safe.
-- **Offline or failed:** the practice is already stored on the device, so nothing is lost. The client retries with backoff and on every launch. Meanwhile the app shows "Your 14 days begin once this is confirmed" and allows practice in state `start_pending` for up to **72 hours** (a decision, section 12); after that it asks for a connection. The trial start is the server's receipt time, which can only favour the person.
-- **Disclosure:** this is the only practice-derived fact the server holds: the date and time of the first completed rep. The privacy page and the first-rep moment must say so plainly (DRAFT, counsel to review): *"To run your 14-day trial, Mirar records when you finish your first practice. It does not record what you chose."*
-- **Abuse limits:** authenticated only; rate-limited per user; no effect after the first success; no client-supplied time is trusted.
+## 5. Offline and server-unavailable rules (precise)
+Parameters (constants in the model and the client): **PENDING 72 h**, **FRESH 72 h**, **MAX REPS BETWEEN CONTACTS 3**, **BACKWARD TOLERANCE 5 min**. A **contact** is a successful answer from `entitlement_get` or `entitlement_first_rep_completed`. Practice is already stored on the device; these rules only decide whether a **new member rep may be started**.
 
-## 5. Reading entitlement (client)
-- On launch and at most daily, the client calls a read-only function (`get_entitlement`) that returns the person's own row only: `state`, `trial_started_at`, `trial_ends_at`, `now` (server), and later `paid_through`.
-- The client caches the answer with its fetch time. **Offline grace:** a cached `trialing`/`active` answer is honoured until its end plus 72 hours without contact (a decision). Expiry is judged against `trial_ends_at` using the **server `now` offset recorded at fetch** so a changed device clock cannot extend it beyond the grace.
-- This is a **soft paywall** by design (section 6.5 of the masterplan): the engine and practice run locally. Do not market anything as locked. No signed token is needed for v1.
+**Device-side facts kept per account** (cached on the device; nothing else about practice): `state`, `trial_started_at`, `trial_ends_at`, `server_now` at the last contact (`anchorServer`), `offset = server_now − device clock at that contact`, `pending` (device time of an unconfirmed first completion, if any), `repsSince` (member reps completed since the last contact). **Per device:** a high-water mark of the device clock (`hw`), shared by all accounts.
 
-## 6. Notices (service messages, not marketing)
-| Notice | When | Content rule |
+**Effective time.** `t = max(device clock, hw)`; the stored `hw` is updated every time the app reads the clock, so `t` never goes backwards. Estimated server time `est = t + offset`.
+
+**Decision for a new member rep (checked in this order):**
+| # | Condition | Result |
 |---|---|---|
-| Trial started | on server confirmation | In-app: exact end time in the person's local zone; what happens at the end; no card was asked for |
-| Day-7 checkpoint | +168 h (in-app on next open; one email only if the person has an email and has not opted out of non-essential mail) | In-app: a plain count of completed days, computed on the device from the person's own history. Email: the trial dates and a link only (the server knows no practice counts). Factual, no encouragement quotas |
-| Day-12 notice | +288 h | Factual: the date it ends, that history, export and deletion stay available, what continuing costs once, equal "Continue" and "Not now" |
-| Expired | at `trial_ends_at` | In-app on next open: what remains; no email unless the person opted in |
-Never: countdown timers, "last chance", loss language, streak language, repeated reminders. At most one email per notice. Email send itself is a separate approved piece (masterplan section 16).
+| 1 | No cached status for this account (never fetched, signed out, storage cleared, invalid session) | **Not allowed**: "connect to continue" (`needs_connection_no_status`) |
+| 2 | A first completion is waiting for the server (`pending`) and `t − pending > 72 h` | Not allowed (`needs_connection_pending`) |
+| 3 | `pending` waiting, within 72 h, and `repsSince < 3` | Allowed (`ok_pending`) |
+| 4 | Pending allowed by time but `repsSince ≥ 3` | Not allowed (`needs_connection_reps`) |
+| 5 | State `new` (first rep not yet done) | Allowed (`ok_first_rep`) |
+| 6 | State `trialing` and `est ≥ trial_ends_at` | **Expired locally**, even offline (`expired`). The cached end is the end; the allowance never extends it |
+| 7 | State `trialing`, `est − anchorServer > 72 h` | Not allowed (`needs_connection_stale`) |
+| 8 | State `trialing`, fresh, but `repsSince ≥ 3` | Not allowed (`needs_connection_reps`) |
+| 9 | State `trialing`, not expired, fresh, `repsSince < 3` | Allowed (`ok_trial`) |
+| 10 | State `trial_expired` | Not allowed (`expired`) |
+| 11 | State `comped` | Same freshness and count rules as 7 to 9 |
+| 12 | Any "Not allowed" while a rep is already in progress | The rep in progress may be finished; no new one may start |
+View history, export and deletion are available in **every** row.
 
-## 7. Server data (draft; NOT applied; exact SQL will be shown for approval first)
-- `entitlement`: `user_id` PK, `state`, `trial_started_at`, `trial_ends_at`, `start_source` ('first_rep'), `cohort` ('standard' | 'beta' | 'internal'), `updated_at`, `version`. Created lazily by `get_entitlement()` or on first sign-in, never by a client write.
-- `entitlement_event`: append-only (`user_id`, `kind`, `at`, `source` ('system' | 'admin' | 'billing'), small whitelisted `detail`). Every state change and every admin action writes one.
-- `trial_claim`: `email_key` (hash of the normalised email: lower-case, plus-tags removed, Gmail dots removed) → `user_id`, so one trial per person-address. Normalisation is deterministic and unit-tested.
-- RLS: owners may `select` their own rows only; **no client insert, update or delete on any of these**. Writes happen only inside `security definer` functions (`record_first_rep_completed()`, later billing functions) or the service role. `trial_started_at` cannot change once set except by an explicit admin event.
-- **Legacy `trial_tracking` and `subscriptions` are never read by the new gate.** Their owner-writable policies must be removed (separate approved change) because they are a self-grant hazard.
-- Time source: database `now()` only.
+**Transitions.**
+- *Sign-in / launch / daily / "check my membership"* → `entitlement_get` (or the waiting first-completion signal first). Success replaces the cache, resets `repsSince` to 0, recomputes `offset`, and resets `hw` to the device clock. The server's answer always wins (a trial started on another device, a comp, an extension, an expiry).
+- *First rep completed* → state `new`: mark `pending`, count the rep, send the signal. Success: the cache becomes `trialing` with the **server's receipt time** as the start (waiting never consumes trial time). Failure: stays pending; retried at launch and on every reconnect.
+- *Each later completed member rep* → `repsSince += 1`.
+- *Invalid or signed-out session* → the cache is deleted; nothing is trusted until the person signs in again online.
+- *Sign-out* → that account's cache is deleted; `hw` stays.
+- *Account switch* → each account is judged only by its own cache; an account with no cache gets nothing from another's.
 
-## 8. Expiry experience (summary of the approved rule 4)
-Account access, history and Mirror visible, export and deletion available, no new member reps, price shown once without pressure, reactivation without a second trial. A short, plain note that history is on this device and how to save it. Details: `TRIAL_LENGTH_EVALUATION.md`.
+**When the server is unavailable beyond the allowance** (device offline, or our service down or paused): rows 2, 4, 7, 8 apply. The person keeps their history, Mirror, export and deletion and sees one calm line: *"Connect to continue your practice. Your history is safe on this device."* (copy to be reviewed; "safe" will be replaced by a verified phrase). **Nothing is extended automatically**, because an automatic extension would make an outage a loophole and an unbounded one would make the trial indefinite. If the outage is ours, the remedy is an **explicit, logged** extension by the founder (`entitlement_admin('extend', …)`), after which the person sees it in the app.
+
+**Clock-tamper protection (layers, and the honest limit).**
+1. *Calibration:* a wrong device clock, early or late by hours or days, is absorbed by `offset` at the first contact (tested).
+2. *High-water mark:* while the app observes time, `t` cannot go backwards; a backwards step beyond 5 minutes is flagged but never rewinds the trial (tested).
+3. *Count backstop (clock-independent):* at most **3 member reps between two server contacts**, whatever the clock says. This is what bounds a person who sets the clock back while the app is closed, when no observation could catch it (tested: they get at most 3 reps, across restarts).
+4. *Cleared storage:* removes the cache as well, so there is **no** status to exploit offline (tested).
+5. *Forward jumps* only shorten the allowance; one contact restores it with the true end (tested).
+6. *Every contact* re-anchors time from the server.
+7. *The server decides:* the trial end is a fixed instant in the database. Nothing a device does changes it.
+**Honest limit.** This is a soft paywall around a local product. A determined person who stays offline permanently, clears nothing, and keeps manipulating the clock can complete 3 member reps per connection and no more; reconnecting returns them to the true end. Sign-in itself needs a connection, so a normal web visit contacts the server at every launch.
+
+**Repeated or indefinite access considered.** Repeating the first rep after clearing storage and signing in again does not restart a trial that the server has started; if it never started, the loop requires wiping the practice history every time, which defeats the product. A new account is a new trial (section 10). Multiple devices share one server clock and one end. An automatic outage extension does not exist.
+
+## 6. Notices (in-app first; email later)
+| Notice | Window | Rules |
+|---|---|---|
+| Trial started | on server confirmation | Shows the **exact end time in the person's local zone** (for example "until Thursday 30 October, 11:50"), that no card was asked for, and what happens at the end. The same time appears on the membership page, computed from `trial_ends_at` only |
+| Day-7 checkpoint | opens at +168 h, shown at most once per device, available afterwards on the membership page | Factual: the end date; a plain count of completed days from the device's own history; history, export and deletion stay available; no encouragement quotas |
+| Day-12 notice | opens at +288 h, once per device | Factual: the date it ends; what stays available; what continuing costs, once; Continue and Not now carry equal weight |
+| Expired | at `trial_ends_at` | The expired state itself (section 3); no banner stack |
+Never: countdown timers, "last chance", loss or guilt language, streak language, repeated nagging, dark-pattern defaults. **Duplicates:** each notice appears once per device (device-local mark). A second device may show it once more; that is accepted until email exists, when a server-side "sent" mark becomes necessary anyway. **Email** day-7/day-12 messages are a later, separately approved piece (transactional-email contract, reviewed copy, recipients, opt-out rules).
+
+## 7. Server data and security model (proposal in E1)
+- `entitlement` (one row per account): `state` ∈ new, trialing, trial_expired, comped; `trial_started_at`, `trial_ends_at`; `cohort` ∈ standard, internal; `version`. `entitlement_event` (append-only audit, no free-form data). Both reference `auth.users` and are deleted with the account.
+- **Clients have no table privileges.** They may call exactly two functions: `entitlement_get()` and `entitlement_first_rep_completed()` (no arguments). Admin actions are `entitlement_admin(...)`, **service role only**, with a mandatory reason. RLS is enabled with no policies as defence in depth.
+- Database triggers keep `trial_started_at` immutable and forbid moving `trial_ends_at` earlier. Time comes only from the database clock.
+- **No scheduled job:** expiry is evaluated and recorded lazily on read.
+- **Legacy `trial_tracking` and `subscriptions` are never read, written or referenced.** (A separate, optional change, E1b, would make their owner-write policies read-only; see the proposal.)
+
+## 8. Expiry experience
+Account access, history, Mirror, export and deletion stay; no new member reps; the price shown once without pressure; reactivation returns the person directly with no second trial; a plain note that history lives on this device and how to save it. Details: `TRIAL_LENGTH_EVALUATION.md`.
 
 ## 9. Standalone value (the answer to "only 17% see a reading")
-Evidence thresholds stay as they are. The trial must stand on three things the product can deliver without a reading. These are requirements for Claude (read models) and Codex (presentation); none changes the engine.
+Evidence thresholds stay as they are. The trial stands on: a closing built only from the session's own answers (designed, to be verified/built); today's receipt (built); a factual Mirror history with an honest sparse state (read model built; copy with Codex); one truthful "what Mirar will remember" line after a rep (to specify); follow-through on commitments and events (engine built); a practice-days count without a streak (built). **Do not show how close a person is to a reading** (it would invite steering their answers and break the independence the evidence rules protect). Readings appear only when there is enough of their own evidence; many people will not see one for weeks, and the copy says so honestly.
 
-| Layer | Requirement | Acceptance | Status today |
-|---|---|---|---|
-| Immediate rep experience | Every rep ends with a closing built **only from that session's own answers**, correct for "I don't know", declines and "nothing today" | A matrix of answer cases each produce a non-generic, non-inferential close; zero claims about the person | Designed in `MIRAR_VALUE_AND_RUNTIME_CONTRACT.md` §4; closing is generic in the staged build, to be verified |
-| Today's receipt | The exact response is shown and survives reload | Receipt equals stored answers | **Built and tested** (`runtime/receipt.ts`) |
-| Factual Mirror history | The Mirror shows what the person said, what they practised, what Mirar has not been told, commitments carried; labelled factual, with a plain line that readings appear only when there is enough of their own evidence and that many people will not see one for weeks | Mirror "sparse" state reads as honest and useful, not empty or broken | Read model built (`mirror-contract.ts`); copy and sparse-state design with Codex |
-| Meaningful follow-through | After a rep, one truthful "what Mirar will remember / ask about next" line; commitments and events followed up within the engine's budgets | Line appears only when something is actually stored; follow-up occurs on schedule in tests | Engine follow-through built; the after-rep line and Today cue to be specified |
-| Practice rhythm without gamification | Practice days this month as a descriptive count, no streak | Count equals completed local dates | `practiceDaysThisMonth()` built |
-
-**A caution that protects the evidence.** Do not tell people how close they are to a reading ("Work has come up 2 times, 3 needed"): doing so would invite them to steer their answers and would break the independence the evidence rules protect. Say only that readings appear when enough of their own evidence exists. The engine's refusal reasons stay internal.
-
-## 10. Test plan (local first; no network)
-1. **Pure-model tests (extend `trial-timing.ts` into a test file when approved):** B+ end instant for 24 start hours; day-7 and day-12 instants; idempotent start; clock-skew cases (device clock forward and back changes nothing); offline grace edges; mid-rep expiry; email normalisation vectors (dots, plus tags, case, Unicode, Gmail vs non-Gmail).
-2. **Legacy isolation test:** the gate never reads `trial_tracking` or `subscriptions` (static check plus a test with poisoned legacy values).
-3. **Local database tests on in-memory Postgres 17 (same method as the backup SQL), before any staging:** owner-only `select`; every client write refused; `record_first_rep_completed()` idempotent and bound to `auth.uid()`; `trial_started_at` immutability; event append; default-privilege hazard (revoke by name, as found in the backup work).
-4. **Two-account isolation:** user A cannot read or influence user B's entitlement.
-5. **Staging only after approval:** real-browser run of the three flows (first rep → trial start; offline start; expiry), and a day-7/day-12 timeline with the clock accelerated on the server side (never the device clock).
-6. **Accessibility and mobile** for every state screen (Codex).
+## 10. Eligibility and abuse
+Per account. A person who creates another account with another address gets another trial; the cost to us is nil (the engine is local and the free tier carries it). **No email-alias normalisation, no hashing of addresses, no device fingerprinting.** Revisit only on **demonstrated need**: after launch, once a month, look at aggregate counts only (accounts created, trials started, subscriptions started, per week); if a review of support and billing evidence shows repeat-trial use that materially affects revenue, bring a proportionate proposal for approval. Nothing is collected for this purpose now.
 
 ## 11. Existing beta users
-See `docs/product/BETA_USER_TRANSITION.md`. In one line: nobody's state changes until they themselves complete a first rep on the new product; nobody is charged because no payment instrument exists until they choose to add one; any exception is an explicit, logged founder action.
+The standard new trial, starting only at their first completed v2 rep; no automatic billing (no payment instrument exists), no bulk reset or backfill, legacy trial rows ignored and tested as ignored. Details and options: `docs/product/BETA_USER_TRANSITION.md`.
 
-## 12. Decisions still needed
-1. **B+ (348 h) versus exactly 336 h** (section 2). Recommended: B+.
-2. Offline allowances: 72 hours in `start_pending`, and 72 hours of cached-status grace. Recommended as written.
-3. Whether the day-7 and day-12 emails go to everyone with an email or only to those who opted into non-essential mail (counsel).
-4. Whether `trial_claim` abuse limiting by normalised email is wanted at launch (recommended; cheap; privacy-neutral because it stores a hash).
-5. Beta handling options (A, B, C in the transition doc).
-6. Wording of the first-rep disclosure (counsel).
+## 12. Tests (all local)
+`scripts/entitlement/entitlement.test.ts`, 63 checks: **expiry** (exact 348 h, millisecond boundaries, single recording, post-expiry signal, immutability, admin extension and comp, zone-independent display); **repeated signals** (idempotence, simultaneous calls, lost reply, other accounts, a second device); **offline recovery** (pending 72 h to the millisecond, server-receipt start, reconnect, launch retry, cached freshness, never past the end, unavailable vs offline, invalid session); **clock changes** (set back while closed, restart, cleared storage, forward jump and correction, wrong clock calibrated, small steps, zone independence, the 3-rep backstop); **account switching** (separate caches, no borrowing, sign-out, expired A vs new B, per-account bounds); **legacy isolation** (a trap on the legacy data never fires, poisoned legacy rows change nothing, static scans of the SQL, the model and the client code). `scripts/entitlement/entitlement-sql.test.ts` is written but **not run** (E1 not approved); it must be run on a throwaway in-memory Postgres first and then on a real Postgres 17.
 
 ## 13. Approvals and boundaries
-This contract needs your approval; then, as **separate** gates, none of which is requested now: **E1** the exact entitlement SQL shown for approval and run first on a local Postgres 17; **E2** staging application of that SQL with test accounts only; **E3** privacy-policy and first-rep disclosure text after qualified review; **E4** any client change (Codex presentation, Claude data layer); **E5** production activation. G4 (backup storage) stays blocked and is independent. Payment collection, the Cashfree contract and transactional email are separate contracts.
+Approving this contract does not approve execution of anything. Separate gates, none requested here: **E1** review and approve the exact SQL text and the local dry-run on a throwaway in-memory database (`E1_ENTITLEMENT_PROPOSAL.md`); **E1b** (optional) the legacy owner-write policy change; **E2** apply to a staging project with test accounts only; **E3** privacy and first-completion disclosure text after qualified review; **E4** client work (Claude data layer, Codex presentation); **E5** production. G4 (backup storage) stays blocked and independent. Payment, Cashfree, email sending and Supabase configuration remain untouched.
 
-## 14. Out of scope here
-Cashfree integration and subscription states beyond the placeholders, email sending, pricing and GST, Look Again and Attend entitlement, cross-device history, language.
+## 14. Decisions still open
+1. Exact copy of the end-time display, the notices and the "connect to continue" line (with Codex; legal review of the first-completion disclosure).
+2. Whether the three constants (72 h, 72 h, 3 reps) are acceptable (recommended as written; they are constants, easy to change before E4).
+3. Whether to approve E1b.
+4. Notice recipients and rules for the later email stage.
