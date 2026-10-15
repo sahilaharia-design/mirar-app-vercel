@@ -1,0 +1,52 @@
+// READ-ONLY: how the REAL runtime treats calendar-day boundaries, a clock/time-zone move and an interrupted first rep.
+// Drives lib/innerRep/runtime/v2-runtime.ts (frozen engine) with an injected clock. Changes nothing. Run: npx tsx scripts/sim/trial-boundaries.ts
+import { createRuntime } from '../../lib/innerRep/runtime/v2-runtime';
+import { MemKV } from '../../lib/innerRep/backup/replay';
+import { nextStep, StepAnswer } from '../../lib/innerRep/v2/contracts';
+
+const D = (y: number, m: number, d: number, h = 10, mi = 0) => new Date(y, m - 1, d, h, mi);
+let clock = D(2026, 10, 15);
+const store = new MemKV();
+const mk = () => createRuntime({ storage: store, now: () => clock });
+const answers = (td: any, upto = 99): StepAnswer[] => { const a: StepAnswer[] = []; for (let g = 0; g < upto; g++) { const st = nextStep(td.context, a); if (!st) break; a.push(st.type === 'choice' ? { stepId: st.id, kind: 'option', optionId: st.options[0].id } : st.type === 'timeframe' ? { stepId: st.id, kind: 'timeframe', timeframe: 'none' } : { stepId: st.id, kind: 'skip' }); } return a; };
+const completedDays = (rt: any) => (rt as any).practiceDaysThisMonth?.() ?? -1;
+const rows: string[][] = [];
+const row = (scenario: string, observed: string, reading: string) => { rows.push([scenario, observed, reading]); };
+
+(async () => {
+  // 1 — late-evening completion, next-morning availability
+  let rt = mk(); await rt.init('u1'); clock = D(2026, 10, 15, 23, 58);
+  let td: any = rt.today(); await rt.complete(answers(td));
+  row('Rep completed 23:58, same day reopened 23:59', rt.today().kind === 'done' ? 'no second rep (done)' : 'second rep served', 'one rep per local calendar day holds up to midnight');
+  clock = D(2026, 10, 16, 0, 2); rt = mk(); await rt.init('u1');
+  td = rt.today(); row('Reopened 00:02 next day', td.kind === 'rep' ? 'a new rep is available' : td.kind, 'the new day starts at local midnight, 4 minutes after the previous rep');
+  await rt.complete(answers(td));
+
+  // 2 — clock moved BACK a civil day after a rep on day 16 (westward travel, or a wrong clock)
+  clock = D(2026, 10, 15, 22, 0); rt = mk(); await rt.init('u1');
+  let t2: any; let err = '';
+  try { t2 = rt.today(); } catch (e) { err = String((e as Error).message); }
+  row('Device date moved back one day (to a day already completed)', err ? `error: ${err}` : t2.kind, 'a day already completed shows as done; no duplicate rep');
+
+  // 3 — clock moved back to a day BEFORE any stored rep (new store)
+  const s3 = new MemKV(); clock = D(2026, 10, 20); const rtA = createRuntime({ storage: s3, now: () => clock }); await rtA.init('u3'); const tdA: any = rtA.today(); await rtA.complete(answers(tdA));
+  clock = D(2026, 10, 18); const rtB = createRuntime({ storage: s3, now: () => clock }); await rtB.init('u3');
+  let tB: any; err = ''; try { tB = rtB.today(); if (tB.kind === 'rep') await rtB.complete(answers(tB)); } catch (e) { err = String((e as Error).message); }
+  row('Device date moved back two days to a day with no rep', err ? `error: ${err}` : `${tB.kind}${tB.kind === 'rep' ? ' (served and completed; stored under the earlier date)' : ''}`, 'engine tolerates out-of-order days; a date that goes backwards could let someone practise the same real day twice (see risk)');
+
+  // 4 — forward jump (eastward travel / skipped days)
+  clock = D(2026, 10, 25); const rtC = createRuntime({ storage: s3, now: () => clock }); await rtC.init('u3'); const tC: any = rtC.today();
+  row('Device date jumps forward 5 days', tC.kind, 'gap days are not penalised; an absence is just an absence');
+
+  // 5 — interrupted first rep (onboarding abandoned mid-rep, then resumed same day, then next day)
+  const s5 = new MemKV(); clock = D(2026, 11, 1, 9); const r5 = createRuntime({ storage: s5, now: () => clock }); await r5.init('u5'); const t5: any = r5.today();
+  const part = answers(t5, 1); await r5.progress(part);
+  const r5b = createRuntime({ storage: s5, now: () => clock }); await r5b.init('u5'); const t5b: any = r5b.today();
+  row('First rep started, one answer given, app closed and reopened same day', t5b.kind === 'rep' ? `resumes with ${t5b.draft.length} answer(s) kept` : t5b.kind, 'resume works; the rep is not yet completed, so a "first completed rep" signal has not fired');
+  clock = D(2026, 11, 2, 9); const r5c = createRuntime({ storage: s5, now: () => clock }); await r5c.init('u5');
+  const t5c: any = r5c.today(); row('Next day after leaving the first rep unfinished', `${t5c.kind}; completed this month: ${completedDays(r5c)}`, 'the unfinished rep is recorded as skipped (not completed); a new rep is served; a trial that starts only at the first COMPLETED rep has not started');
+  await r5c.complete(answers(t5c)); row('Then the first rep is completed', `completed this month: ${completedDays(r5c)}`, 'this is the moment a "first completed rep" signal would fire');
+
+  const out = ['# Day-boundary, clock and interrupted-rep behaviour of the real runtime (generated, read-only)', '', 'Generated by `scripts/sim/trial-boundaries.ts`. Runtime and engine unchanged; clock injected.', '', '| Scenario | Observed | Reading |', '|---|---|---|', ...rows.map((r) => `| ${r.join(' | ')} |`)];
+  console.log(out.join('\n')); require('fs').writeFileSync('docs/sim/trial-boundaries.md', out.join('\n') + '\n');
+})();

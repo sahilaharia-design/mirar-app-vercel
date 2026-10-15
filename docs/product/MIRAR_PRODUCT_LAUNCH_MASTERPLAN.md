@@ -194,7 +194,7 @@ Discover (mirar.life, search, word of mouth)
 ### 6.1 In scope (one membership, no tiers)
 1. v2 Daily Inner Rep and Honest Mirror (promoted after the existing release blockers clear).
 2. Email-link account; legal acceptance; minimum age check.
-3. 7-day trial, no payment details.
+3. **14-day** trial (recommended; was proposed as 7), no payment details, started by the first completed rep. See `docs/product/TRIAL_LENGTH_EVALUATION.md` and section 6.4.
 4. Cashfree subscription (monthly ₹199, yearly ₹1,499; *proposed, not final*), UPI AutoPay first.
 5. Server-recorded membership state written only by verified webhooks; client reads it.
 6. In-app membership page: status, next date, cancel, receipts, support link.
@@ -211,7 +211,10 @@ Look Again and Attend (until human-tested), account backup and cross-device sync
 `none → trialing(7d) → [active | expired]`; `active → past_due(grace N days) → [active | lapsed]`; `active → cancel_requested(until period end) → expired`; `any → refunded/revoked`; `expired|lapsed → active (reactivation, no second trial)`.
 Data (design only, nothing created): a `membership` row per user readable by its owner, **writable only by the service role**; an append-only `billing_event` table keyed by the gateway's event id for idempotency; a `mandate` record (state, method, max amount, next debit). All client write policies on the legacy `subscriptions` and `trial_tracking` tables must be removed before any of this goes live.
 
-### 6.4 Trial eligibility (proposal, founder decision)
+### 6.4 Trial length and eligibility (evaluated 15 October; founder decision)
+**Evaluation result (full report: `docs/product/TRIAL_LENGTH_EVALUATION.md`; generated tables in `docs/sim/trial-evaluation.md` and `docs/sim/trial-boundaries.md`).** Against the unchanged engine, 12 synthetic profiles x 20 seeds: a 7-day window gives about 6.6 reps, 6.3 distinct exercises, 12 immediate Mirror lines and **2%** of runs shown any evidence-bound reading (median first reading day 5); a 14-day window gives about 12.3 reps, 11.5 exercises, 15 lines, follow-ups on named items 0.8 versus 0.1, and **17%** shown a reading (median day 9); 28 days reaches 55%. No reading was ever withheld once eligible (eligibility equals delivery); the gap is the evidence rules, which were not changed. **Recommendation: 14 days, started by the first completed rep, expiry computed on server time with a 12-hour courtesy, read-only expiry, day-7 checkpoint.** Unproven: real behaviour, value of the immediate lines, conversion difference, willingness to pay. Synthetic results describe the engine, not people.
+
+**Eligibility (proposal, founder decision)**
 One trial per verified email address after normalising aliases (case, plus-tags, dots for Gmail); trial starts when the first Daily Inner Rep is completed (so a signup that never practises is not burned); trial length in calendar days in the user's local day boundary, stored as an absolute UTC end; returning after expiry gets no second trial; existing beta users get a defined grandfather rule (decision). Abuse by creating new emails is acknowledged and accepted at this price; mitigations are rate limits and a disposable-domain list, not device fingerprinting (privacy).
 
 ### 6.5 Honest limits of a client-side product
@@ -330,7 +333,7 @@ No guarantee of backup, restore or recovery; no uptime or response promises; no 
 ## 12. Decisions requiring the founder
 
 1. Final prices, whether they include GST, and whether the annual plan is shown from day one.
-2. Trial rules: start at signup or first rep; length 7 days (see risk R1 below); grandfathering of existing beta users; behaviour after expiry (recommended: read-only history and export, no new reps).
+2. Trial rules: **14 days from the first completed rep (recommended after evaluation; 7 days ends before follow-ups and, in 98% of synthetic runs, before any reading)**; server-time rule with 12-hour courtesy; disclosure of the first-rep signal; grandfathering of existing beta users; behaviour after expiry (recommended: read-only history and export, no new reps).
 3. Whether Look Again and Attend are in the first paid release (recommended: no, until human-tested).
 4. Reminder scope: email only for launch (recommended) and the default time.
 5. Vercel plan (confirm and accept Pro if required).
@@ -357,7 +360,7 @@ No guarantee of backup, restore or recovery; no uptime or response promises; no 
 - **Variety by design.** 23 templates over six areas, repeat windows, lenses.
 
 ### Weaknesses the code makes visible
-- **First-session value is mostly the experience of the rep itself.** The Mirror deliberately says nothing early (a day-1 "convergence insight" was treated as a defect). If the first rep does not feel useful by itself, a 7-day trial may expire before the first reading. The synthetic simulations show a handful of readings by about two weeks; that is a model of my own invented users, not evidence about people.
+- **First-session value is mostly the experience of the rep itself.** (Quantified on synthetic users in `TRIAL_LENGTH_EVALUATION.md`.) The Mirror deliberately says nothing early (a day-1 "convergence insight" was treated as a defect). If the first rep does not feel useful by itself, a 7-day trial may expire before the first reading. The synthetic simulations show a handful of readings by about two weeks; that is a model of my own invented users, not evidence about people.
 - **Daily variety is finite.** Synthetic first exact repeats occur around day 18. After a month, templates recur; authored content depth is the main cost of a long subscription.
 - **No visible progress loop by design.** No streaks, scores or badges is the right ethics but leaves the retention burden on usefulness and on gentle reminders, which v2 does not have.
 - **Device-local history.** The most likely reason for churn and refund requests is losing history, or never being able to see it across devices.
@@ -381,7 +384,7 @@ No guarantee of backup, restore or recovery; no uptime or response promises; no 
 Versus mood trackers (Daylio-style), Mirar is an evidence-bounded reading with a basis you can inspect. Versus AI companions, it is deterministic and private. Versus meditation or therapy apps, it makes no clinical claims and is a daily practice with memory. These are positioning statements supported by the architecture; whether customers value them enough to pay is untested.
 
 ### Paid-retention risks (ranked)
-R1 trial too short for the first Mirror reading; R2 history loss; R3 content repetition after month one; R4 no reminders; R5 English only; R6 Mirror too quiet early; R7 trust damage from any billing error; R8 guilt-free design leaves no habit hook. Each has a measurable proxy in section 6.6 once measurement exists.
+R1 trial too short for the first Mirror reading (evaluated: a reading appears in 2% of synthetic runs by day 7, 17% by day 14, 55% by day 28; the trial cannot rely on it); R2 history loss; R3 content repetition after month one; R4 no reminders; R5 English only; R6 Mirror too quiet early; R7 trust damage from any billing error; R8 guilt-free design leaves no habit hook. Each has a measurable proxy in section 6.6 once measurement exists.
 
 ---
 
@@ -425,7 +428,7 @@ Columns: **ID**; **Customer outcome**; **P**; **Status (evidence)**; **Owner**; 
 | H1 | Knows exactly where my history lives | P0 | Functional + warnings built | X, C | none | Plain copy in funnel and Me; sign-out warning; save-a-copy where available | Copy audit; browser matrix | none / ₹0 | Yes |
 | H2 | Can keep a copy of my practice | P1 | Partial: Chromium desktop only | C, X | none | Export on supported browsers; clear unsupported message | Browser matrix | none / ₹0 | No |
 | H3 | Cross-device history | P2 | Simulated only; G4 blocked | C | Pro decision, legal review, G4 | Not promised | n/a | Pro $25/mo later / n/a | No (not sold) |
-| T1 | Trial that is clear and fair | P0 | Missing (legacy scaffold unusable) | C, X, F | A1 decisions | 7-day trial per rules in 6.4; one per person; server record | Test matrix incl. timezone/clock edges | none / ₹0 | Yes |
+| T1 | Trial that is clear and fair | P0 | Missing (legacy scaffold unusable); length and start rule evaluated | C, X, F | A1 decisions | 14-day (recommended) trial per rules in 6.4; one per person; server record | Test matrix incl. timezone/clock edges | none / ₹0 | Yes |
 | T2 | Told before the trial ends | P0 | Missing | C, X | E-mail arch | Notice on day 5/6, in-app and email, factual | Sandbox timeline test | none / ₹0 | Yes |
 | B1 | Pays easily by UPI AutoPay or card | P0 | Missing | C, X, F | D1, S1 | Sandbox lifecycle green | Test record | setup fee ask / % per txn ask | Yes |
 | B2 | Never charged wrongly; receipts | P0 | Missing | C | B1 | Webhook idempotent; reconcile to gateway daily; receipts mailed | Replay/out-of-order tests, reconciliation run | none / ₹0 | Yes |
