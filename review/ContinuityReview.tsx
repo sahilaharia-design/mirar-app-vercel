@@ -21,8 +21,8 @@ function example(phase:ContinuityPhase):ContinuitySnapshot {
  return {...base,phase,consent,mayOfferCard:phase==='device',enabled:!off,
  accountCopy:noCopy?'none':['unavailable','error'].includes(phase)?'unknown':'verified',
  pending:['offline','syncing','conflict'].includes(phase)?2:0,
- actions:{...base.actions,turnOn:off,turnOff:!off,deleteBackedUp:!noCopy,chooseHistory:phase==='conflict',recover:phase==='recoverable',reviewDropped:phase==='kept_local',retry:['offline','unavailable','error'].includes(phase)},
- ...(phase==='conflict'?{deviceSummary:{events:2,throughDay:'2026-10-15'},accountSummary:{events:3,throughDay:'2026-10-14'}}:{}),
+ actions:{...base.actions!,turnOn:off,turnOff:!off,deleteBackedUp:!noCopy,chooseHistory:phase==='conflict',recover:phase==='recoverable',reviewDropped:phase==='kept_local',retry:['offline','unavailable','error'].includes(phase)},
+ ...(phase==='conflict'?{deviceSummary:{completedReps:2,throughDay:'2026-10-15'},accountSummary:{completedReps:3,throughDay:'2026-10-14'}}:{}),
  ...(phase==='kept_local'?{droppedCount:2,dropped:[{day:'2026-10-14',reason:'day_already_recorded' as const},{day:'2026-10-15',reason:'history_changed' as const}]}:{}),
  ...(!noCopy?{lastConfirmedDay:'2026-10-14'}:{})};
 }
@@ -39,9 +39,9 @@ export function ContinuityReview(){
  const confirm=async()=>{
   if(!pending)return;
   const intent=pending;setPending(null);if(intent!=='retry')setOperation(intent);
-  if(intent==='enable')setS({...s,consent:'on',mayOfferCard:false,actions:{...s.actions,turnOn:false,turnOff:true,deleteBackedUp:true},enabled:true,phase:s.accountCopy==='verified'?'conflict':'syncing',pending:1,...(s.accountCopy==='verified'?{deviceSummary:{events:days,throughDay:'15 October 2026'},accountSummary:{events:3,throughDay:'14 October 2026'}}:{})});
+  if(intent==='enable')setS({...s,consent:'on',mayOfferCard:false,actions:{...(s.actions??base.actions!),turnOn:false,turnOff:true,deleteBackedUp:true},enabled:true,phase:s.accountCopy==='verified'?'conflict':'syncing',pending:1,...(s.accountCopy==='verified'?{deviceSummary:{completedReps:days,throughDay:'15 October 2026'},accountSummary:{completedReps:3,throughDay:'14 October 2026'}}:{})});
   if(intent==='decline'){setS({...s,consent:'declined',mayOfferCard:false,phase:s.accountCopy==='verified'?'paused':'device'});setDismissed(true);}
-  if(intent==='disable')setS({...s,consent:'paused',mayOfferCard:false,actions:{...s.actions,turnOn:true,turnOff:false},enabled:false,phase:s.accountCopy==='verified'?'paused':'device'});
+  if(intent==='disable')setS({...s,consent:'paused',mayOfferCard:false,actions:{...(s.actions??base.actions!),turnOn:true,turnOff:false},enabled:false,phase:s.accountCopy==='verified'?'paused':'device'});
   if(intent==='retry')setS({...s,phase:s.accountCopy==='unknown'?'unavailable':operation==='recover'?'recovering':operation==='delete'?'deleting':'syncing'});
   if(intent==='recover')setS({...s,phase:'recovering'});
   if(intent==='keep_account'||intent==='keep_device')setS({...s,phase:'syncing'});
@@ -60,7 +60,7 @@ export function ContinuityReview(){
  <View role="region" accessibilityLabel="Prototype controls" style={{padding:12,gap:10,backgroundColor:'#FAF7F2',borderBottomWidth:1,borderColor:'#BDB1A2'}}>
  <Body style={{color:'#2A2A30',fontSize:14}}>Continuity prototype · simulated service · memory only. Nothing is backed up.</Body>
  <View role="navigation" accessibilityLabel="Practice navigation" style={{flexDirection:'row',flexWrap:'wrap',gap:8}}>{['today','mirror','me'].map(p=><Action key={p} secondary selected={page===p} onPress={()=>setPage(p)}>{p==='me'?'Me':p==='today'?'Today':'The Mirror'}</Action>)}<Action secondary expanded={page==='scenarios'} onPress={()=>setPage(page==='scenarios'?'today':'scenarios')}>Review states</Action></View>
- {page==='history'&&s.actions.turnOn&&<Action secondary onPress={()=>setS({...s,consentVersion:s.consentVersion==='2026-10-v1'?'sample-revised':s.consentVersion==='sample-revised'?undefined:'2026-10-v1'})}>Change sample disclosure</Action>}
+ {page==='history'&&s.actions?.turnOn&&<Action secondary onPress={()=>setS({...s,consentVersion:s.consentVersion==='2026-10-v1'?'sample-revised':s.consentVersion==='sample-revised'?undefined:'2026-10-v1'})}>Change sample disclosure</Action>}
  {message&&<Body role="status" style={{fontSize:14}}>{message}</Body>}
  {pending&&<View style={{gap:8}}><Body>Simulator: choose the response. UI waits for the owner’s service.</Body><View style={{flexDirection:'row',flexWrap:'wrap',gap:8}}><Action secondary onPress={()=>void confirm()}>Simulate acknowledgment</Action><Action secondary onPress={()=>{setPending(null);setMessage('Simulated failure. Previous state preserved.');}}>Simulate failure</Action></View></View>}
  {['syncing','recovering','deleting'].includes(s.phase)&&!pending&&<View style={{flexDirection:'row',flexWrap:'wrap',gap:8}}><Action secondary onPress={()=>void finish()}>Simulate confirmed completion</Action><Action secondary onPress={()=>{setS({...s,phase:'error'});setMessage('Simulated operation failure. No success is claimed.');}}>Simulate operation failure</Action></View>}
