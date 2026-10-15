@@ -40,7 +40,7 @@ export function ContinuityMeHost() { const { port } = useContinuity(); return po
 /** The full history/settings screen (route /continuity). */
 export default function ContinuityScreen() {
   const { port, controller } = useContinuity();
-  useEffect(() => { if (controller && controller.snap.phase === 'device' && !controller.snap.enabled) void controller.refresh(); }, [controller]);       // opening this screen is the explicit act that allows ONE read of the account
+  // No read of the account happens on opening this screen: the person asks for it (a visible "Check for a backed-up copy" control), or backup is already on.
   if (!port) return <ExperiencePage><View style={X.space}><Body>Opening practice history…</Body></View></ExperiencePage>;
   return <>
     <ContinuitySettings port={port} onBack={() => (router.canGoBack() ? router.back() : router.replace('/(tabs)/profile'))} />

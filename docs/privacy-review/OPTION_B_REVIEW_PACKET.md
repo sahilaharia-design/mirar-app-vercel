@@ -65,8 +65,9 @@ With backup **off** the app makes **no** service call, except one read the perso
 |---|---|---|
 | Local journal and practice state | until sign-out, or until cleared | unchanged from today |
 | Account events and profile (opted in) | until the person deletes them or deletes the account; **no automatic expiry in v1** (founder decision, subject to your review) | **requires qualified retention review** |
-| Provider backups of the database | provider's managed policy | **unverified: whether backups exist on this plan, for how long, and how long deleted data can persist** |
-| Provider and application logs | provider's policy | **unverified** |
+| Provider backups of the database | provider's managed policy | **Verified 15 Oct (read-only): the project is on the Free plan, which has no provider backups. Changes if the plan changes. Not for user-facing statement until reviewed.** See `G2_PROVIDER_VERIFICATION.md` |
+| Provider and application logs | provider's policy | Documented: 1-day retention on Free. Content of the logs not reviewed |
+| Paused projects | provider's policy | Free projects pause after 1 week of inactivity (documented). Effect on stored data and restore window **unresolved** |
 **No retention or deletion-timing statement may be shown to users until the unverified items above are established and this packet has been reviewed.** The prototype's interface text for this is an explicit placeholder: *"How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised."*
 
 ## 7. Security design and the evidence we have
@@ -86,13 +87,13 @@ All of the following were executed on a **throwaway in-memory PostgreSQL 16 and 
 
 ## 8. Known risks and open issues
 1. **Sensitivity of structured data** (§2.3), and the possibility that it is treated as health-related data.
-2. **Provider facts unverified** (§4, §6), including plan, region, backups, pausing when inactive, log content and retention.
+2. **Provider facts:** plan (Free, spend cap on), region (Seoul), backups (none), pausing (7-day inactivity, effect on data unresolved), log retention (1 day) are now established in `G2_PROVIDER_VERIFICATION.md`; provider terms, staff access and write-ahead-log residue are not.
 3. **No Mirar staff-access policy yet.**
 4. **A device-local journal now exists even with backup off** (so turning backup on later loses nothing). It is the same class of data as today's device state, is cleared at sign-out, and is never sent unless the person opts in. The reviewer should confirm this is acceptable to disclose as "kept on this device".
-5. **Replacing a history is destructive by design** and is therefore gated; we ask whether it should exist at all (the alternative is "use the account's" or "save a file and delete").
+5. **Replacing the account copy with a device history has been removed from v1** (founder decision). The remaining discard paths always require a verified saved file.
 6. **Deleting leaves no instant guarantee** because of provider backups.
 7. **Age and capacity:** the app is for adults; no age verification exists. *Question for the reviewer.*
-8. **Cross-border transfer:** hosting region unverified.
+8. **Cross-border transfer:** hosting region is ap-northeast-2 (Seoul, South Korea).
 
 ## 9. Questions for the qualified reviewer
 1. Which laws apply to this processing for our users (we are Mumbai-based; users may also be elsewhere), and what do they require for consent, notice, purpose, retention, erasure, access, portability and breach notification?
@@ -106,8 +107,16 @@ All of the following were executed on a **throwaway in-memory PostgreSQL 16 and 
 9. Does the device-local journal with backup off change anything in our current privacy notice?
 10. Do pilots (Look Again, Attend) staying device-only create any disclosure obligations?
 
+## 9a. Added questions after G2 and the 15 October product decisions
+11. The app reads the account without being asked only while backup is on (on opening and after changes, to keep both sides consistent); with backup off it reads only when the person presses "Check for a backed-up copy". Does the notice need to describe the automatic checks beyond what the interface says?
+12. Retained device events upload after turning backup back on only after a confirmation that states the count and the days covered. Is that an adequate informed act, or is more needed?
+13. With no provider backups, is it acceptable to disclose "deletion removes the copy" with the provider-backup caveat left as "none on the current plan, which may change"? Or must we avoid any statement until a plan is fixed?
+14. One-day provider log retention: does it satisfy the access-log and incident-response expectation for a feature of this sensitivity?
+15. Seoul hosting for users in India and elsewhere: transfer basis and notice.
+
 ## 10. What we will not do until this review is complete
 Show consent to any real user, store any real practice in the account, enable sync in any build a real person can use, state any retention period, or run the database migration against any Supabase project. Each of those is a separate approval step.
 
 ## 11. Files
 `docs/product/OPTION_B_IMPLEMENTATION_SPEC.md` (architecture and approval gates), `docs/proposed/option-b/001_history_backup.sql` (draft, not applied), `lib/innerRep/backup/` (prototype), `docs/experience/CONTINUITY_FRONTEND_HANDOFF.md` and `docs/experience/CONTINUITY_G3_UI_CHANGE_REQUESTS.md` (interface), `docs/release/REAL_AUTH_TEST_RECORD.md` (why this exists).
+- `docs/privacy-review/G2_PROVIDER_VERIFICATION.md`: read-only provider evidence and unresolved questions (15 October).

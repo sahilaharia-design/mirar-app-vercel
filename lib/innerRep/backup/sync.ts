@@ -37,7 +37,6 @@ export type ConnectOutcome =
   | { status: 'decision_required'; reason: DecisionReason; localCount: number; accountCount: number };
 export type Resolution =
   | { keep_account: { receipt: ExportReceipt } }                                                        // receipt of THIS DEVICE's history, which is set aside
-  | { keep_device: { confirmOverwriteAccountCopy: true; accountCopyReceipt: ExportReceipt } }          // receipt of the ACCOUNT copy, which is replaced
   | { upload_again: { confirm: true } }                                                                // only after the account copy was deleted
   | { stay_on_device: true }                                                                           // change nothing; backup stays off
   | { clear_device: { receipt: ExportReceipt } };
@@ -122,11 +121,6 @@ export class SyncClient {
       if (!receiptMatches(choice.keep_account.receipt, local, eng)) throw new Error('a verified export of this device\'s history is required first');
       await this.enableOnServer(); this.dropped.push(...local.map((event) => ({ event, reason: 'kept on this device only (the account copy was chosen; a verified file was saved first)' })));
       this.server = remote; this.outbox = []; this.resetNotice = null; this.enabled = true; done(); return { rebuilt: true };
-    }
-    if ('keep_device' in choice) {
-      if (reason !== 'histories_differ' || choice.keep_device.confirmOverwriteAccountCopy !== true) throw new Error('replacing the account copy needs explicit confirmation');
-      if (!receiptMatches(choice.keep_device.accountCopyReceipt, remote, eng)) throw new Error('a verified export of the account copy is required first');
-      await this.o.port.deleteAll(); await this.enableOnServer(); this.server = []; this.outbox = local; this.resetNotice = null; this.enabled = true; done(); await this.sync(); return { rebuilt: false };
     }
     throw new Error('unknown choice');
   }
