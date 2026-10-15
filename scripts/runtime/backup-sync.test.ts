@@ -150,6 +150,16 @@ async function backends(): Promise<Backend[]> {
       const r = await d2.client.resolve({ upload_again: { confirm: true } });
       check('after explicit confirmation the history uploads into a NEW history (a new epoch)', r.rebuilt === false && (await be.serverEvents(uid)).length === d1.recorded.length + d2.recorded.length && (await be.port(uid).status())!.epoch !== undefined && d2.client.enabled === true);
     }
+    console.log('— A device that never saw the deletion cannot undo it by turning backup on —');
+    { const uid = await mk(); const A = newDevice(uid, be.port(uid)); for (let k = 1; k <= 3; k++) await doDay(A, k, k); A.client.outbox = [...A.recorded]; await A.client.connect();
+      await A.client.disable();                                                                    // A is idle / paused and has not synced since
+      const B = newDevice(uid, be.port(uid)); await B.client.connect(); await adopt(B); await B.client.deleteAccountCopy();   // the person deletes the account copy from another device
+      check('the account copy is gone and A has not noticed', (await be.port(uid).status()) === null && A.client.epoch !== null);
+      const c = await A.client.connect();
+      check('turning backup on from the idle device does NOT silently re-upload: it must be an explicit decision that the account copy was deleted', c.status === 'decision_required' && c.reason === 'copy_was_deleted' && (await be.port(uid).status()) === null && (await be.serverEvents(uid)).length === 0 && A.client.enabled === false);
+      const r = await A.client.resolve({ upload_again: { confirm: true } });
+      check('only the explicit confirmation uploads it again, into a new history', (await be.serverEvents(uid)).length === A.recorded.length && r.rebuilt === false);
+    }
     console.log('— History reset elsewhere (deleted, then turned on again with new practice): an old device cannot restore or append —');
     { const uid = await mk(); const old = newDevice(uid, be.port(uid)); for (let k = 1; k <= 3; k++) await doDay(old, k, k); old.client.outbox = [...old.recorded]; await old.client.connect(); const oldEpoch = old.client.epoch;
       const other = newDevice(uid, be.port(uid)); await other.client.connect(); await adopt(other);

@@ -1,6 +1,6 @@
 # Option B, implementation-ready: opt-in "Back up my practice"
 
-**Status (15 October 2026):** design complete; **local, non-persistent prototype built and tested**; **nothing executed against Supabase.** No migration has been run, no table exists, RLS is unchanged, no practice is stored on Supabase, sync is not enabled, production retention is unchanged. Every database statement below was executed only on a throwaway in-memory PostgreSQL 16 (PGlite) outside the repository's dependencies.
+**Status (15 October 2026, updated after G1):** design approved in direction with conditions (§16); **G3 local-only integration built and tested** behind a default-off flag with a stub service; **nothing executed against Supabase.** No migration has been run, no table exists, RLS is unchanged, no practice is stored on Supabase, sync is not enabled, production retention is unchanged. Every database statement below was executed only on a throwaway in-memory PostgreSQL 16 (PGlite) outside the repository's dependencies.
 
 **Decision of record (founder, 15 October):** Option B from `DURABLE_HISTORY_DECISION_MEMO.md` is the intended architecture: explicitly opt-in, off by default, structured history that survives sign-out and moves across devices, with user control central. This is **continuity, not surveillance, scoring or a time-bound program.** This document is the implementation-ready version of that memo. It extends it; where it departs from it, §3 says so and why.
 
@@ -140,3 +140,30 @@ Elevated to a **top product workstream**, sequenced beside, not ahead of, the re
 ## 15. Delivered (all local, none imported by the app)
 `lib/innerRep/backup/` (`events.ts`, `recorder.ts`, `replay.ts`, `sync.ts`, `consent.ts`, `view.ts`); `docs/proposed/option-b/` (`001_history_backup.sql`, generated `002_catalog_seed.sql`, README); tests `scripts/runtime/backup*.test.ts` and helpers; `scripts/runtime/gen-backup-catalog.ts`. A production-equivalent bundle contains none of it (preflight scan).
 **To run the SQL tests:** install `@electric-sql/pglite` in a directory outside the repository and set `PGLITE_DIR`; without it the SQL suite prints SKIP and the scenario suite runs on the in-memory model only.
+
+## 16. G1 decisions (15 October, later) and how each is resolved
+| G1 decision or condition | Resolution | Evidence |
+|---|---|---|
+| Minimised structured-event model; preserve what exact replay needs | Unchanged: catalog ids, domain ids, calendar days; nothing else. Added: a random `epoch` per history generation (an identifier, not personal data) | SQL and replay suites |
+| Engine history first; pilots stay device-local; UI discloses it | Snapshot scope is `engine_only`; `pilotHistory` and `unfinishedPracticeAndOffers` are `device_only`; sign-out advice says pilots are device-only | `continuity.test.ts` |
+| Export/import approved as a feature, but never incomplete | Export is complete (verified save, re-validated, receipt-bound) and **default off** behind `EXPO_PUBLIC_HISTORY_EXPORT` and the presence of a *confirming* saver. **Import is not built and no import capability is exposed.** | `backup-sync.test.ts`, `continuity.test.ts` |
+| Paid plan acceptable if verified necessary; no purchase | Nothing changed. The three provider facts (backups, pausing, logs) remain to be verified in G2 | review packet §6 |
+| Independent qualified review before consent or storage | Packet prepared: `docs/privacy-review/OPTION_B_REVIEW_PACKET.md`. Interface copy is placeholder only; no retention promise appears anywhere | packet |
+| No automatic expiry in v1 | Accepted, flagged for the retention review | packet §6 |
+| "Delete backed-up practice" deletes the account copy; "Clear practice on this device" separate; any combined deletion explicit | Three separate controller intents: `delete_account_copy`, `clear_device`, and an explicitly named `delete`. Codex's UI still offers only the combined one (change request 1) | `continuity.test.ts` |
+| Deleting account history must prevent old devices silently restoring it | Epoch per history generation (SQL + client); a device that synced under an older epoch, or finds the copy gone, stops and keeps its history; reconnecting needs an explicit decision. **A hole was found during G3 (an idle device that never saw the deletion could re-upload it by turning backup on) and fixed.** | SQL epoch tests; `backup-sync.test.ts` (3 scenarios); `continuity.test.ts` |
+| Turning backup off stops new uploads immediately; unsent events remain device-local; fate disclosed | `disable()` takes effect before any further upload, including mid-sync; unsent events stay in the device journal and are uploaded only if backup is turned on again; snapshot carries `unsentOnDevice` and the UI must state the fate (change request 3). **A defect where an in-flight upload's result was dropped was found and fixed.** | `backup-sync.test.ts` |
+| Conflicts never merge or replace automatically; a real export must succeed before anything that might discard a local history | `decision_required` writes nothing; every discard path (`keep_account`, `keep_device`, `clear_device`, `delete`, `delete_account_copy` when not identical) requires a verified-export **receipt bound to exactly that history**; a save the browser cannot confirm does not count | `backup-sync.test.ts`, `continuity.test.ts` |
+| Reconcile profile deletion and consent state | **Deleting the account history turns backup off** (the profile, which held the flag, is gone): the snapshot reports `enabled:false`, `accountCopy:'none'`, never a misleading "on". Starting again is an explicit new consent and a new epoch | `continuity.test.ts` |
+| Preserve owner-only access, no free-text transmission, exact replay | Unchanged and re-run in full | all suites |
+
+### Decisions still open
+1. **Explicit read when the history screen is opened** (the only call made while backup is off): acceptable as a stopgap, or require a visible "Check for a backed-up copy" button? (Recommended: the button.)
+2. **Sign-out with unsent changes:** today it warns and never blocks. Should it require a saved copy first? (Recommended: no; offer a save, never trap someone.)
+3. **Turn off, then on:** unsent changes upload on re-enable (current). Alternative: ask. (Recommended: current, with the disclosure.)
+4. **Replace the account copy with this device's history** (`keep_device`): keep behind export-and-confirmation, or remove the capability entirely? (Recommended: remove from v1; offer "use the account's" or "save a file and delete".)
+5. **Import:** whether and when to build it; its safe-handling and the conflict behaviour of an imported file.
+6. **Who** performs the privacy/legal review; the **plan** question after provider facts are verified.
+
+### Exact next approval gate
+**G2: privacy and legal review plus provider-fact verification.** Approve (a) the packet going to the named qualified reviewer, and (b) my doing **read-only** checks in the provider dashboard (plan, backups, pausing, region, log retention). Without G2 there is no consent wording, no retention statement and no basis to request G4. In parallel (no approval needed beyond this): Codex's UI changes (`CONTINUITY_G3_UI_CHANGE_REQUESTS.md`). **G4 (a staging migration) can be requested only after G2 outputs and the UI changes exist**, and will arrive as exact SQL for your approval, never run first.

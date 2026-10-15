@@ -109,6 +109,7 @@ export class ContinuityController {
   // ── operations ──
   private async doCheck() {
     try { const r = await this.client.inspect(); this.offline = false; this.unavailable = false;
+      if (r.verdict === 'removed' || r.verdict === 'reset') { this.consent = consentReduce(this.consent, { a: 'server_copy_removed' }); this.notice = r.verdict === 'removed' ? 'account_copy_removed' : 'history_reset'; }
       this.accountCopy = r.relation === 'none' ? 'none' : 'verified'; this.accountSummary = r.relation === 'none' ? null : summaryOf(r.remote);
       if (r.relation === 'differ') this.client.markDecision('histories_differ', r.remote);
     } catch (e) { this.accountCopy = 'unknown'; if (e instanceof ServiceError && e.kind === 'offline') this.offline = true; else this.unavailable = true; }   // a failed read is never "empty"

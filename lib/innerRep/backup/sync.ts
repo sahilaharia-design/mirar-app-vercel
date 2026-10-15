@@ -77,18 +77,19 @@ export class SyncClient {
   get pendingAccount(): BackupEvent[] | null { return this.pendingRemote; }
 
   /** READ-ONLY. What does the account hold, and how does it relate to this device? Never enables, writes or changes any state except by the caller's choice. Throws ServiceError if the account cannot be read: failure is never reported as "empty". */
-  async inspect(): Promise<{ relation: Relation; remote: BackupEvent[]; epoch: string | null; enabledOnServer: boolean }> {
-    const st = await this.o.port.status(); if (!st) return { relation: 'none', remote: [], epoch: null, enabledOnServer: false };
+  async inspect(): Promise<{ relation: Relation; remote: BackupEvent[]; epoch: string | null; enabledOnServer: boolean; verdict?: 'same' | 'removed' | 'reset' }> {
+    const st = await this.o.port.status(); const verdict = this.checkEpoch(st ? st.epoch : null);
+    if (!st) return { relation: 'none', remote: [], epoch: null, enabledOnServer: false, verdict };
     const remote = (await this.o.port.pull(0)).map((x) => x.event); const local = this.journal();
     const relation: Relation = remote.length === 0 ? 'none' : isPrefix(local, remote) ? (local.length === remote.length ? 'identical' : 'account_extends') : isPrefix(remote, local) ? 'device_extends' : 'differ';
-    return { relation, remote, epoch: st.epoch, enabledOnServer: st.enabled };
+    return { relation, remote, epoch: st.epoch, enabledOnServer: st.enabled, verdict };
   }
   /** Records that a decision is needed (no writes). Used by the controller after an inspection found two different histories. */
   markDecision(reason: DecisionReason, remote: BackupEvent[]) { this.pendingRemote = remote; this.pendingReason = reason; }
 
   // ── first opt-in and reconnect: reads first, writes only after the person has decided ──
   async connect(): Promise<ConnectOutcome> {
-    const st = await this.o.port.status();
+    const st = await this.o.port.status(); this.checkEpoch(st ? st.epoch : null);          // a copy deleted or restarted since this device last synced is never silently refilled
     const remote = st ? (await this.o.port.pull(0)).map((x) => x.event) : []; const local = this.journal();
     const decide = (reason: DecisionReason): ConnectOutcome => { this.pendingRemote = remote; this.pendingReason = reason; return { status: 'decision_required', reason, localCount: local.length, accountCount: remote.length }; };
     if (remote.length === 0) {
@@ -165,6 +166,13 @@ export class SyncClient {
       return { ...out, skipped: kindOf(e) };
     }
     return out;
+  }
+  /** Compares the epoch this device synced under with what the account shows now. If the copy is gone or was started again, this device stops and keeps its history as unsent history. Call on every read of the account. */
+  checkEpoch(accountEpoch: string | null): 'same' | 'removed' | 'reset' {
+    if (!this.epoch) return 'same';
+    if (accountEpoch === null) { this.markReset(); return 'removed'; }
+    if (accountEpoch !== this.epoch) { this.markReset(); return 'reset'; }
+    return 'same';
   }
   /** The account copy was deleted or started again elsewhere: stop, keep everything on this device as unsent history, and never re-upload without an explicit decision. */
   private markReset() { this.resetNotice = { syncedEvents: this.server.length + (this.resetNotice?.syncedEvents ?? 0) }; this.outbox = [...this.server, ...this.outbox]; this.server = []; this.epoch = null; this.enabled = false; }

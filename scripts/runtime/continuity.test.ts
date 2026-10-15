@@ -125,6 +125,14 @@ const serverOf = (h: Harness) => h.svc.core(h.uid).events;
     svc.simulateOtherDeviceWrites('two1', await phantomDay('two1', ENGINE_VERSION, svc.core('two1').events, at(2))); await h.day(2, 2); await settle();
     check('the other device got the day first: this device keeps the account\'s history, its own rep for that day is dropped with a reason, and the app is told to adopt the rebuilt state', h.ctl.client.dropped.length >= 1 && h.applied.length >= 1 && h.ctl.snap.phase === 'ready');
   }
+  console.log('— An idle device that never saw a deletion cannot undo it —');
+  { const svc = new StubService({ engine: ENGINE_VERSION }); const h = await harness({ svc, uid: 'idle1' }); await h.ctl.request('enable'); for (let k = 1; k <= 3; k++) await h.day(k, k); await settle();
+    await h.ctl.request('disable'); svc.simulateCopyDeletedElsewhere('idle1');
+    await h.ctl.request('enable');
+    check('turning backup on after the account copy was deleted elsewhere is a decision, not an upload (nothing is written to the account)', h.ctl.snap.phase === 'conflict' && h.ctl.snap.decision === 'copy_was_deleted' && svc.core('idle1').events.length === 0 && svc.core('idle1').profile === null && !h.ctl.snap.enabled);
+    const h2 = await harness({ svc, uid: 'idle2' }); await h2.ctl.request('enable'); for (let k = 1; k <= 2; k++) await h2.day(k, k); await settle(); await h2.ctl.request('disable'); svc.simulateCopyDeletedElsewhere('idle2'); await h2.ctl.refresh();
+    check('an explicit check on that device reports that the account copy was removed, and offers no restore of it', h2.ctl.snap.notice === 'account_copy_removed' && h2.ctl.snap.accountCopy === 'none' && h2.ctl.snap.phase !== 'recoverable' && svc.core('idle2').events.length === 0);
+  }
   console.log('— Sign-out, reload, invitation, and what the snapshot may contain —');
   { const h = await harness(); await h.ctl.request('enable'); await h.day(1); await settle(); const reloaded = await h.reload(); await settle();
     check('reloading restores consent and the confirmed state from the device (no network at load while off)', reloaded.snap.enabled && reloaded.snap.phase === 'ready' && reloaded.client.journal().length === serverOf(h).length);
