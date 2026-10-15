@@ -1,0 +1,306 @@
+[
+  {
+    "label": "actual-today",
+    "width": 320,
+    "axe": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-me-direct-signout",
+    "width": 320,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-signout-deeplink",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-history-no-auto-check",
+    "width": 320,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-explicit-check",
+    "width": 320,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-mirror",
+    "width": 320,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-today",
+    "width": 390,
+    "axe": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-me-direct-signout",
+    "width": 390,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-signout-deeplink",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-history-no-auto-check",
+    "width": 390,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-explicit-check",
+    "width": 390,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-mirror",
+    "width": 390,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-today",
+    "width": 768,
+    "axe": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-me-direct-signout",
+    "width": 768,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-signout-deeplink",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-history-no-auto-check",
+    "width": 768,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-explicit-check",
+    "width": 768,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-mirror",
+    "width": 768,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-today",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-me-direct-signout",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-signout-deeplink",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-history-no-auto-check",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-explicit-check",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-mirror",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-today",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 52,
+      "incomplete": 0,
+      "passes": 37,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-me-direct-signout",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-signout-deeplink",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-history-no-auto-check",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-explicit-check",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 53,
+      "incomplete": 0,
+      "passes": 36,
+      "violations": 0
+    }
+  },
+  {
+    "label": "actual-mirror",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 50,
+      "incomplete": 0,
+      "passes": 39,
+      "violations": 0
+    }
+  },
+  {
+    "label": "signed-out-no-prior-continuity-ui",
+    "passed": true
+  }
+]
