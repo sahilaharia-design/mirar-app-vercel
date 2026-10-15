@@ -1,5 +1,7 @@
 # Review packet: opt-in "Back up my practice" (Option B)
 
+> **Distribution status (15 October):** ready, but **no reviewer has been appointed and no external sharing is authorized.** Do not send, upload or quote this packet outside the founder's own accounts until that changes.
+
 **For:** an independent, qualified privacy/legal reviewer, and a security reviewer. **From:** Mirar engineering. **Date:** 15 October 2026. **Status of the feature:** *design and a local, in-memory prototype only.* **Nothing is live.** No database table exists, no personal practice is stored anywhere but the person's own device, no account-level sync is enabled, no retention period has been set, no consent text has been shown to a real user. This packet exists so that a qualified person can review the design **before** any of that happens. **We are not asking for approval of a live service; we are asking what must change before one could be considered.**
 
 **Please treat every statement below as an engineering description, not a legal claim or a promise to users.** Where a fact depends on the hosting provider or on law, it is listed as *unverified* and as a question.

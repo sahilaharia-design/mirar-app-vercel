@@ -35,3 +35,18 @@
 4. Provider processing terms: data-processing agreement, sub-processors, any transfer mechanism for Seoul hosting.
 5. Whether the provider keeps any copy of deleted rows beyond backups (for example write-ahead log segments) and for how long. Not stated in the pages I read.
 6. Which of the provider's own administrators can access project data and under what policy (for the "who can see it" disclosure).
+
+## Decision of 15 October (later): Supabase Pro is deferred
+Development continues on the Free plan. Consequences, so nothing is promised that the platform cannot carry:
+
+| We must **not** promise or release (under the Free plan) | Why |
+|---|---|
+| "Your practice is safe / backed up" as a guarantee, or restore after a provider incident | No provider backups; a bad migration or an incident is unrecoverable from the provider |
+| Account-history backup for real people (G4 stays blocked) | Durability, review and consent gates are not met |
+| Availability or uptime commitments of any kind | Free projects can be paused after 7 days of low activity; no SLA |
+| Fast investigation of incidents or abuse | 1 day of log retention |
+| Retention or deletion-timing statements | Provider facts and legal review are not complete |
+| Cross-device continuity as a paid benefit | Practice is device-local; the only protection is a person-held file, which works only where the confirming save picker exists |
+| Reminders that depend on the project being awake | A paused project sends nothing; see the masterplan |
+
+What can still be responsibly offered: device-local practice with a clear statement that clearing the browser or signing out removes it, the verified file export (where available), and honest copy about both.
