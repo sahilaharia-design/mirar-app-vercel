@@ -17,6 +17,8 @@ export interface DailyExperienceProps {
  today: { kind: 'rep'; payload: RepPayload; context: FlowContext } | ({ kind: 'done' } & Completion);
  receipt?:Receipt|null;
  extraPractice?: React.ReactNode;
+ continuity?: React.ReactNode;
+ privacyNotice?: string;
  greeting: string; continuityCue?: string; practiceDays?: number;
  draft?: StepAnswer[];
  onProgress?: (answers: StepAnswer[]) => void;
@@ -30,7 +32,7 @@ export interface DailyExperienceProps {
 export function DailyInnerRep(props: DailyExperienceProps) {
  return <VisualFoundation><Experience {...props} /></VisualFoundation>;
 }
-function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection, extraPractice }: DailyExperienceProps) {
+function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, practiceDays, draft = [], onProgress, onDismiss, onComplete, onSafety, onFeedback, onCorrection, extraPractice, continuity, privacyNotice }: DailyExperienceProps) {
  const [stage, setStage] = useState<'today' | 'rep' | 'completed' | 'safety'>('today');
  const [answers, setAnswers] = useState<StepAnswer[]>(draft); const [receipt, setReceipt] = useState<{context:FlowContext;answers:StepAnswer[]}|null>(null); const [guide,setGuide]=useState(false); const [completion, setCompletion] = useState<Completion | null>(null);
  const { width } = useWindowDimensions(); const complete = completion ?? (today.kind === 'done' ? today : null);
@@ -60,11 +62,11 @@ function Experience({ today, receipt:runtimeReceipt, greeting, continuityCue, pr
     </View>
     <Action onPress={() => setStage('rep')}>{answers.length ? 'Resume' : 'Begin'}</Action><View style={styles.entryNote}><Body style={X.small}>{answers.length?'Your structured choices are kept so you can resume. Optional words are not saved.':'There is no answer to perform. You can leave any time.'}</Body></View>
     </View><View style={[styles.todayWindow,width>=1024&&{flex:1}]}><View style={{height:width>=1024?220:130}}><WindowStudy quiet height={width>=1024?220:130}/></View>{width>=768&&<><Eyebrow>Today’s opening</Eyebrow><Text style={styles.windowTitle}>{nextStep(today.context,answers)?.prompt ?? 'A little room to notice.'}</Text></>}<View style={styles.details}>{today.payload.capacityLabel && <Body>{today.payload.capacityLabel}</Body>}<Body>{today.payload.estimatedSeconds} seconds</Body></View></View></View>
-    {!practiceDays && <View style={styles.entryNote}><Action secondary expanded={guide} onPress={()=>setGuide(!guide)}>What is an Inner Rep?</Action>{guide&&<View style={X.space}><SectionTitle>A small exercise, not a test.</SectionTitle><Body>Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.</Body><Body style={X.small}>Optional words are not saved. This beta keeps practice on this device and clears it when you sign out.</Body></View>}</View>}
+    {!practiceDays && <View style={styles.entryNote}><Action secondary expanded={guide} onPress={()=>setGuide(!guide)}>What is an Inner Rep?</Action>{guide&&<View style={X.space}><SectionTitle>A small exercise, not a test.</SectionTitle><Body>Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.</Body><Body style={X.small}>{privacyNotice ?? 'Optional words are not saved. This beta keeps practice on this device and clears it when you sign out.'}</Body></View>}</View>}
     {continuityCue && <Body style={styles.bottom}>{continuityCue}</Body>}
     {!!practiceDays && <Body style={styles.practice}>{practiceDays} {practiceDays === 1 ? 'day' : 'days'} of practice this month</Body>}
    </PageTransition> : null}
-   {stage !== 'rep' && stage !== 'safety' && extraPractice}
+   {stage !== 'rep' && stage !== 'safety' && <>{extraPractice}{continuity}</>}
   </View>
  </ScrollView>;
 }
