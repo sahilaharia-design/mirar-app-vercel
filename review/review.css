@@ -5,3 +5,6 @@ main { min-height: 100vh; display: flex; flex-direction: column; }
 [role=heading]:focus { outline: none !important; }
 button, input, textarea { font-family: var(--font-sans); }
 * { box-sizing: border-box; }
+
+/* Review-only viewport; production routes do not import this stylesheet. */
+#root:has([data-testid="continuity-review"]) { height: 100dvh; display:flex; flex-direction:column; overflow:hidden; }
