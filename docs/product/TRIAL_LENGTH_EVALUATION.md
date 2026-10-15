@@ -2,6 +2,8 @@
 
 **Date:** 15 October 2026. **Status:** read-only evaluation. The engine, evidence rules, thresholds, billing, Supabase, production and every deployment are unchanged. Evidence: `scripts/sim/trial-eval.ts` → `docs/sim/trial-evaluation.md`; `scripts/sim/trial-boundaries.ts` → `docs/sim/trial-boundaries.md`. Re-run with `npx tsx scripts/sim/trial-eval.ts` and `npx tsx scripts/sim/trial-boundaries.ts`.
 
+> **Superseded in part (15 October, later):** the founder approved the 14-day, first-completed-rep trial. The timing rule in this report (end of local day N plus 12 h) was compared against exactly 336 h in `docs/sim/trial-timing.md`; the contract now recommends **336 h plus a fixed 12 h (348 h)**, which needs no stored time zone. See `TRIAL_ENTITLEMENT_CONTRACT.md` §2.
+
 ## Recommendation
 **Use a 14-day trial, started by the first completed rep, with an honest read-only expiry state.** This is a reasoned judgement from the engine's behaviour and the product's structure, **not** a conversion finding: there is no conversion data, and none is invented here. A 7-day trial would end before the product shows most of what makes it different. A 14-day trial still ends before most people would see an evidence-bound reading, so the trial must be sold on the practice and the memory, with honest expectation-setting, not on the Mirror reading.
 
