@@ -1,4 +1,4 @@
-# Change requests for Codex: continuity UI after the G1 decisions and the G3 integration
+# Change requests for Codex: continuity UI after the G1 decisions and the G3 integration (revision 2, 15 October: founder product decisions applied)
 
 **From:** Claude. **Date:** 15 October 2026. Your PR #5 frontend is integrated unchanged behind `EXPO_PUBLIC_HISTORY_SYNC=1` (default off) and runs against the real controller (`lib/innerRep/backup/continuity.ts`) with a stub service. It works end to end. The founder's G1 decisions require these presentation changes **before** any user-facing build. I have not edited your files except mounting them; the adapter already supports everything below.
 
@@ -22,3 +22,28 @@ Hosted preview (protected): `https://mirar-continuity-preview.vercel.app` (expor
 
 ## Contract additions (additive; nothing removed)
 Intents `check_account`, `delete_account_copy`, `clear_device`. Snapshot fields `notice`, `decision`, `unsentOnDevice`, `error {intent, message}`, `pilotHistory`, `unfinishedPracticeAndOffers`. Types: `lib/innerRep/backup/continuity.ts` (`ContinuitySnapshotX`, `AnyIntent`).
+
+
+## Revision 2: founder decisions of 15 October and the controller changes that carry them
+All additive except the removal of `keep_device`. Types: `lib/innerRep/backup/continuity.ts`. Tests: `scripts/runtime/continuity.test.ts`.
+
+**R1. Remove "use this device's history (replaces the account's)".** It no longer exists. The controller refuses `keep_device` with an error and changes nothing. Conflict (`histories_differ`) offers only: *use the account's history* (`keep_account` / `export_then_account`, needs a confirmed saved file, sets this device's history aside as kept-on-device), *Decide later* (`stay_on_device`, backup stays off, nothing changes). Please remove replacement copy and the confirmation checkbox for it.
+
+**R2. Visible "Check for a backed-up copy" (replaces request 8's stopgap).** I removed the automatic read on opening the screen. Intent `check_account` is now only sent when the person presses a plain control that says what it does ("Looks for a backed-up copy in your account. Changes nothing."). The stub review panel still has its own button for testing.
+
+**R3. Automatic checks are disclosed.** `snapshot.automaticChecks` is `'none'` while backup is off and `'while_backup_on'` when on. When on, say in one line that Mirar checks your account copy when the app opens and after changes, to keep both consistent. When off, say that nothing is checked unless you ask.
+
+**R4. Turning on with retained practice needs a confirmation.** When `enable` is requested and practice is retained on this device (made before consent, or while backup was off), the controller makes no service call and publishes `snapshot.confirmUpload = { count, fromDay, throughDay }` (phase unchanged). Show: "Turning on will back up N completed practices from <fromDay> to <throughDay> that are currently only on this device." Buttons: **Back up these and turn on** (intent `enable_and_upload`) and **Keep them on this device** (intent `stay_on_device`, equal weight). You may fold this into the consent screen: if the consent screen shows the count and says this, it may send `enable_and_upload` directly. There is no "upload only new ones" option: skipping events would break exact replay.
+
+**R5. `copy_was_deleted` choices now have intents** (request 5): *Upload it again* = `upload_again` (explicit), *Keep it only on this device* = `stay_on_device`, *Clear this device* = `clear_device` (needs a saved file).
+
+**R6. Sign-out warning.** `snapshot.signOutWarning = { unsent, canSaveFile }` is present when signing out would remove practice that is not in the account. Say so plainly with the count; if `canSaveFile`, offer **Save a file first** (intent `save_file`, result `notice: 'file_saved'`), then **Sign out** and **Cancel**. Never block sign-out. If `canSaveFile` is false say a file cannot be saved here. Keep "Signing out removes your practice from this device."
+
+**R7. Export is a priority.** `save_file` saves a verified file of this device's history on its own, without changing anything else. Offer it from the history screen when `canExport`. Import stays absent: do not show any import control.
+
+**R8. Notice added:** `file_saved` ("A copy of your history was saved. Nothing else changed.").
+
+**R9. Contract:** `ContinuityIntent` still contains `keep_device` in `components/continuity/contract.ts`. Please remove it from the union when you update the UI; the adapter's `AnyIntent` keeps it only to refuse it.
+
+## Status
+Nothing above is in a Codex file. The preview built from this branch shows the existing UI plus these snapshot fields; screens for R1–R8 are Codex's to build. Until then the hosted review build behaves safely (conflict offers keep_account only if exports exist; the old keep_device button errors with a message).

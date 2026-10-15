@@ -195,8 +195,8 @@ async function backends(): Promise<Backend[]> {
       check('an export whose file does not re-validate is refused before anything is written', !(await verifiedExport([{ kind: 'rep_abandoned', day: '2026-06-01', engine: ENGINE_VERSION, template: 'nope' } as BackupEvent], ENGINE_VERSION, (e) => validateEvent(e, VOCAB), saver(true))).ok);
       let r1 = ''; try { await B.client.resolve({ keep_account: { receipt: receiptFor([], ENGINE_VERSION) } }); } catch (e) { r1 = (e as Error).message; }
       check('"use the account\'s history" is refused without a verified export of THIS device\'s history (a receipt for different contents does not count)', /verified export/.test(r1) && canon(await be.serverEvents(uid)) === before && B.client.dropped.length === 0);
-      let r2 = ''; try { await B.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: await exportOf(B.recorded) } }); } catch (e) { r2 = (e as Error).message; }
-      check('replacing the account copy is refused with a receipt for the wrong history (it must be a verified export of the ACCOUNT copy)', /verified export of the account copy/.test(r2) && canon(await be.serverEvents(uid)) === before);
+      let r2 = ''; try { await B.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: await exportOf(B.recorded) } } as any); } catch (e) { r2 = (e as Error).message; }
+      check('destructive replacement of the account copy is not offered in v1: the option is refused and nothing changes', /unknown choice/.test(r2) && canon(await be.serverEvents(uid)) === before);
       const rcpt = await exportOf(B.client.journal()); const res = await B.client.resolve({ keep_account: { receipt: rcpt } });
       check('with a verified export of this device\'s history, the account\'s history is used and the device\'s is set aside, not destroyed', res.rebuilt && B.client.dropped.length === B.recorded.length && canon(await be.serverEvents(uid)) === before);
       await adopt(B); check('and the device\'s state then equals the account\'s', sameJSON(noTrace(B.rt._state()), await stateAfterReplay(uid, await be.serverEvents(uid))));
@@ -228,10 +228,8 @@ async function backends(): Promise<Backend[]> {
       const c3 = await only.client.connect(); check('local-only history and an empty account: uploads it, no decision asked', c3.status === 'connected' && c3.mode === 'upload' && (await be.serverEvents(uid3)).length === only.recorded.length);
       const uid2 = await mk(); const s2 = newDevice(uid2, be.port(uid2)); for (let k = 1; k <= 3; k++) await doDay(s2, k, 1); s2.client.outbox = [...s2.recorded]; await s2.client.connect();
       const dv = newDevice(uid2, be.port(uid2)); await doDay(dv, 1, 3); await doDay(dv, 2, 3); dv.client.adoptLocal([...dv.recorded]); await dv.client.connect(); const acct = canon(await be.serverEvents(uid2));
-      let refused = false; try { await dv.client.resolve({ keep_device: { confirmOverwriteAccountCopy: false as any, accountCopyReceipt: await exportOf(await be.serverEvents(uid2)) } }); } catch { refused = true; }
-      check('replacing the account copy with this device\'s history needs the explicit confirmation flag', refused && canon(await be.serverEvents(uid2)) === acct);
-      await dv.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: await exportOf(await be.serverEvents(uid2)) } });
-      check('with the confirmation AND a verified export of the account copy, the account copy is replaced and the new account log replays', canon((await be.serverEvents(uid2)).map(canon)) === canon(dv.recorded.map(canon)) && (await stateAfterReplay(uid2, await be.serverEvents(uid2))) !== undefined);
+      let refused = false; try { await dv.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: await exportOf(await be.serverEvents(uid2)) } } as any); } catch { refused = true; }
+      check('with a verified export of the account copy in hand, replacing it is STILL refused (v1 has no replace-account path)', refused && canon(await be.serverEvents(uid2)) === acct);
       const exp = exportJournal(dv.recorded, ENGINE_VERSION); const imp = importJournal(exp, ENGINE_VERSION, (e) => validateEvent(e, VOCAB));
       check('an exported file re-imports and validates under the whitelist and the catalog', imp.ok && imp.events.length === dv.recorded.length);
     }

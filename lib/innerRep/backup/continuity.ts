@@ -19,14 +19,20 @@ export const historyKey = (uid: string) => `${HISTORY_KEY_PREFIX}:${uid}`;
 /** Provider backup-removal window and access wording are NOT yet verified or reviewed: no retention promise is made. */
 export const PENDING_DELETION_DISCLOSURE = 'Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.';
 
-export type ExtendedIntent = 'check_account' | 'delete_account_copy' | 'clear_device';   // additive to Codex's contract; the UI does not offer them yet
+export type ExtendedIntent = 'check_account' | 'delete_account_copy' | 'clear_device' | 'enable_and_upload' | 'stay_on_device' | 'upload_again' | 'save_file';   // additive to Codex's contract
 export type AnyIntent = ContinuityIntent | ExtendedIntent;
-export type Notice = 'account_copy_removed' | 'history_reset' | 'turned_off_elsewhere' | 'account_copy_deleted_device_kept' | 'server_flag_pending';
+export type Notice = 'account_copy_removed' | 'history_reset' | 'turned_off_elsewhere' | 'account_copy_deleted_device_kept' | 'server_flag_pending' | 'file_saved';
 export type ContinuitySnapshotX = ContinuitySnapshot & {
   notice?: Notice; decision?: 'histories_differ' | 'copy_was_deleted';
   /** Changes made since backup was turned off or stopped: they stay on this device and are uploaded only if backup is turned on again. */
   unsentOnDevice: number; error?: { intent: AnyIntent; message: string };
   pilotHistory: 'device_only'; unfinishedPracticeAndOffers: 'device_only';
+  /** Set while turning backup on would upload events that are retained on this device. Nothing is sent until `enable_and_upload`; `stay_on_device` cancels. No service call is made while this is showing. */
+  confirmUpload?: { count: number; fromDay: string; throughDay: string };
+  /** When the app reads the account without being asked. 'none' while backup is off; 'while_backup_on' = on opening and after changes, to keep both sides consistent. */
+  automaticChecks: 'none' | 'while_backup_on';
+  /** Present when signing out would remove practice that is not in the account. Sign-out is never blocked. */
+  signOutWarning?: { unsent: number; canSaveFile: boolean };
 };
 
 export interface HostPorts {
@@ -55,7 +61,7 @@ export const safeMessage = (e: unknown): string => {
 export class ContinuityController {
   client: SyncClient; consent: ConsentState = { s: 'off' };
   private accountCopy: 'none' | 'verified' | 'unknown' = 'unknown'; private accountSummary: Summary | null = null; private lastConfirmedDay: string | null = null;
-  private deletedNotice = false; private notice: Notice | null = null; private busy: null | 'syncing' | 'recovering' | 'deleting' | 'working' = null;
+  private awaitingUpload: { count: number; fromDay: string; throughDay: string } | null = null; private deletedNotice = false; private notice: Notice | null = null; private busy: null | 'syncing' | 'recovering' | 'deleting' | 'working' = null;
   private disposed = false; private offline = false; private unavailable = false; private error: { intent: AnyIntent; message: string } | null = null; private lastIntent: AnyIntent | null = null;
   private listeners = new Set<(s: ContinuitySnapshotX) => void>(); private chain: Promise<unknown> = Promise.resolve(); private syncQueued = false;
   snap: ContinuitySnapshotX;
@@ -96,7 +102,11 @@ export class ContinuityController {
         case 'disable': await this.doDisable(); break;
         case 'recover': await this.doEnable(); break;                                            // recovering is an explicit act that restores and turns backup on here
         case 'keep_account': case 'export_then_account': await this.doKeepAccount(); break;
-        case 'keep_device': await this.doKeepDevice(); break;
+        case 'keep_device': throw new Error('replacing the account copy is not available in this version');
+        case 'enable_and_upload': await this.doEnable(true); break;
+        case 'stay_on_device': await this.doStayOnDevice(); break;
+        case 'upload_again': await this.doUploadAgain(); break;
+        case 'save_file': await this.doSaveFile(); break;
         case 'delete': await this.doDeleteBoth(); break;
         case 'delete_account_copy': await this.doDeleteAccountCopy(); break;
         case 'clear_device': await this.doClearDevice(); break;
@@ -114,7 +124,11 @@ export class ContinuityController {
       if (r.relation === 'differ') this.client.markDecision('histories_differ', r.remote);
     } catch (e) { this.accountCopy = 'unknown'; if (e instanceof ServiceError && e.kind === 'offline') this.offline = true; else this.unavailable = true; }   // a failed read is never "empty"
   }
-  private async doEnable() {
+  private async doEnable(confirmed = false) {
+    // Events retained on this device (made before consent, or while backup was off) leave it only after the person has seen how many and said yes. No service call is made before that.
+    const held = this.client.outbox;
+    if (held.length && !confirmed && !this.client.enabled) { this.awaitingUpload = { count: held.length, fromDay: held[0].day, throughDay: held[held.length - 1].day }; return; }
+    this.awaitingUpload = null;
     // Consent is recorded only after the service has answered: while the request is in flight the snapshot says "syncing" and `enabled` stays false.
     const out = await this.client.connect();
     this.consent = consentReduce(this.consent, { a: 'accept', version: CONSENT_VERSION, day: localIso(this.host.now()) });
@@ -124,7 +138,20 @@ export class ContinuityController {
     if (out.rebuilt) await this.host.applyRebuilt(await this.client.rebuild());
     this.settle(); if (this.client.outbox.length) this.scheduleSync();
   }
+  private async doStayOnDevice() {
+    this.awaitingUpload = null;
+    if (this.client.decisionPending) { await this.client.resolve({ stay_on_device: true }); this.accountSummary = this.client.summaries().account ?? this.accountSummary; }
+  }
+  private async doUploadAgain() {
+    if (this.client.decisionPending !== 'copy_was_deleted') throw new Error('nothing to upload again');
+    await this.client.resolve({ upload_again: { confirm: true } });
+    this.consent = consentReduce(this.consent, { a: 'accept', version: CONSENT_VERSION, day: localIso(this.host.now()) });
+    this.accountCopy = 'verified'; this.accountSummary = this.client.summaries().account; this.settle(); if (this.client.outbox.length) this.scheduleSync();
+  }
+  /** A real saved file of this device's history. Changes nothing else. */
+  private async doSaveFile() { await this.needExport(this.client.journal()); this.notice = 'file_saved'; }
   private async doDisable() {
+    this.awaitingUpload = null;
     const r = await this.client.disable(); this.consent = consentReduce(this.consent, { a: 'turn_off' });
     this.accountCopy = this.client.server.length || this.accountSummary ? 'verified' : this.accountCopy; this.accountSummary = this.client.summaries().account ?? this.accountSummary;
     if (!r.serverConfirmed) this.notice = 'server_flag_pending';
@@ -139,11 +166,6 @@ export class ContinuityController {
     const receipt = await this.needExport(this.client.journal());
     await this.client.resolve({ keep_account: { receipt } }); this.accountSummary = this.client.summaries().account;
     await this.host.applyRebuilt(await this.client.rebuild()); this.settle();
-  }
-  private async doKeepDevice() {
-    const remote = this.client.pendingAccount; if (this.client.decisionPending !== 'histories_differ' || !remote) throw new Error('nothing to choose between');
-    const receipt = await this.needExport(remote);
-    await this.client.resolve({ keep_device: { confirmOverwriteAccountCopy: true, accountCopyReceipt: receipt } }); this.accountSummary = this.client.summaries().account; this.settle();
   }
   private async doDeleteBoth() {
     const all = this.client.journal(); const receipt = all.length ? await this.needExport(all) : undefined;
@@ -195,7 +217,7 @@ export class ContinuityController {
     if (this.busy === 'deleting') phase = 'deleting';
     else if (this.busy === 'recovering') phase = 'recovering';
     else if (this.error) phase = 'error';
-    else if (this.busy === 'working' && this.lastIntent === 'enable') phase = 'syncing';
+    else if (this.busy === 'working' && (this.lastIntent === 'enable' || this.lastIntent === 'enable_and_upload')) phase = 'syncing';
     else if (decision) phase = 'conflict';
     else if (on) phase = this.unavailable ? 'unavailable' : this.offline ? 'offline' : this.busy === 'syncing' || this.client.outbox.length > 0 ? 'syncing' : this.client.server.length === 0 && deviceEmpty ? 'empty' : 'ready';
     else if (this.consent.s === 'paused') phase = 'paused';
@@ -211,6 +233,8 @@ export class ContinuityController {
       scope: 'engine_only', canExport: this.canExport, deletionDisclosure: PENDING_DELETION_DISCLOSURE,
       ...(this.notice ? { notice: this.notice } : {}), ...(decision ? { decision } : {}), ...(this.error ? { error: this.error } : {}),
       unsentOnDevice: on ? 0 : this.client.outbox.length, pilotHistory: 'device_only', unfinishedPracticeAndOffers: 'device_only',
+      ...(this.awaitingUpload && !on && !decision ? { confirmUpload: this.awaitingUpload } : {}), automaticChecks: on ? 'while_backup_on' : 'none',
+      ...(this.client.outbox.length ? { signOutWarning: { unsent: this.client.outbox.length, canSaveFile: this.canExport } } : {}),
     };
   }
 }
