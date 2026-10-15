@@ -1,0 +1,30 @@
+[
+  {
+    "label": "unconfirmed-copy-Changes waiting on this device",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "unconfirmed-copy-That change was not completed",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  }
+]
