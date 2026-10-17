@@ -17,6 +17,8 @@ export { exportJournal, importJournal } from './export';
 export interface PortStatus { enabled: boolean; lastSeq: number; lastDay: string | null; epoch: string }
 export type AppendResult = { status: 'ok'; lastSeq: number; results: string[] } | { status: 'stale'; lastSeq: number };
 export interface ServerPort {
+  /** True only for the in-memory stub. Any port without this marker is treated as a LIVE service by the controller (strictest rules). */
+  readonly simulated?: boolean;
   status(): Promise<PortStatus | null>;                       // null = no profile on the server
   enable(engine: string, consentVersion: string): Promise<PortStatus>;
   disable(): Promise<void>;
@@ -215,6 +217,8 @@ export class SyncClient {
     this.enabled = false; this.generation++;
     try { await this.o.port.disable(); this.serverDisablePending = false; return { serverConfirmed: true }; } catch { this.serverDisablePending = true; return { serverConfirmed: false }; }
   }
+  /** Stops every upload from this moment WITHOUT any network call (used when the consent wording changed). Unsent events stay on the device. */
+  pauseLocal() { this.enabled = false; this.generation++; }
   /** Reads the account's current copy (status + pull). Throws ServiceError if it cannot be verified. */
   private async accountCopy(): Promise<{ epoch: string; events: BackupEvent[] } | null> {
     const st = await this.o.port.status(); if (!st) return null;
@@ -232,15 +236,26 @@ export class SyncClient {
     await this.o.port.deleteAll();
     this.resetNotice = { syncedEvents: (a?.events.length ?? 0) + (this.resetNotice?.syncedEvents ?? 0) }; this.outbox = this.journal(); this.server = []; this.epoch = null; this.enabled = false; this.generation++;
   }
-  /** CLEAR THIS DEVICE ONLY. Returns true when the device history was cleared (the host then clears storage and engine state). Needs a verified export unless a fresh account read proves nothing is lost. */
+  /** CLEAR THIS DEVICE ONLY. Returns true when the device history was cleared (the host then clears storage and engine state). ALWAYS needs a verified export of this device's history (when there is any): "the account has it" is not accepted as proof, because the account's durability is not something this client can verify. */
   async clearDevice(receipt?: ExportReceipt): Promise<boolean> {
-    if (!(await this.canDiscardDeviceWithoutExport()) && !receiptMatches(receipt, this.journal(), this.o.engine)) throw new Error('a verified export of this device\'s history is required first');
+    if (this.journal().length > 0 && !receiptMatches(receipt, this.journal(), this.o.engine)) throw new Error('a verified export of this device\'s history is required first');
     this.server = []; this.outbox = []; this.dropped = []; this.resetNotice = null; this.epoch = null; this.enabled = false; this.generation++; return true;
   }
-  /** EXPLICIT COMBINED DELETION: the account copy and this device's copy. Always needs a verified export of the full history (nothing will remain anywhere), unless there is no history. */
-  async deleteBoth(receipt?: ExportReceipt): Promise<void> {
-    const all = this.journal();
-    if (all.length > 0 && !receiptMatches(receipt, all, this.o.engine)) throw new Error('a verified export of the full history is required first');
+  /** What must be saved before a deletion that would destroy BOTH copies: the smallest set of histories that together contain everything (the device journal, and the account copy when it holds something the device does not). Reads the account fresh. */
+  async exportPlan(): Promise<{ label: 'device' | 'account'; events: BackupEvent[] }[]> {
+    const dev = this.journal(); const a = await this.accountCopy(); const acct = a?.events ?? [];
+    const D = { label: 'device' as const, events: dev }, A = { label: 'account' as const, events: acct };
+    if (!dev.length && !acct.length) return [];
+    if (!acct.length) return [D];
+    if (!dev.length) return [A];
+    if (isPrefix(acct, dev)) return [D];            // the device holds everything the account does (identical, or the device has more)
+    if (isPrefix(dev, acct)) return [A];            // the account holds everything the device does
+    return [D, A];                                  // different histories: both would be lost
+  }
+  /** EXPLICIT COMBINED DELETION: the account copy and this device's copy. Needs a verified export of every history the deletion would destroy (see exportPlan), and re-checks them against a FRESH read of the account. */
+  async deleteBoth(receipts: ExportReceipt[] = []): Promise<void> {
+    const plan = await this.exportPlan();
+    for (const h of plan) if (!receipts.some((r) => receiptMatches(r, h.events, this.o.engine))) throw new Error(`a verified export of the ${h.label} history is required first`);
     await this.o.port.deleteAll(); this.server = []; this.outbox = []; this.dropped = []; this.resetNotice = null; this.epoch = null; this.enabled = false; this.generation++;
   }
   /** Rebuilds a runtime from the full local history (after a restore or a conflict). */

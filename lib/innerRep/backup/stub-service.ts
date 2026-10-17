@@ -62,6 +62,7 @@ export class StubService {
     };
     const c = () => this.core(uid);
     return {
+      simulated: true,
       status: () => guard('status', () => c().status()),
       enable: (_e, _v) => guard('enable', () => c().enable()),
       disable: () => guard('disable', () => c().disable()),

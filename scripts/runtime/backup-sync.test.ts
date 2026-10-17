@@ -203,7 +203,7 @@ async function backends(): Promise<Backend[]> {
       // clear this device only
       let r3 = ''; B.client.outbox = B.client.outbox.concat([]); try { await B.client.clearDevice(); } catch (e) { r3 = (e as Error).message; }
       const synced = await B.client.canDiscardDeviceWithoutExport();
-      check('clearing this device needs a verified export unless a fresh read of the account proves nothing would be lost', synced ? r3 === '' : /verified export/.test(r3));
+      check('clearing this device ALWAYS needs a verified export of its history, even when a fresh read shows the account holds all of it (the account\'s durability is not verified here)', /verified export/.test(r3) && B.client.journal().length > 0, `synced=${synced}`);
       const C = newDevice(uid, be.port(uid)); await doDay(C, 1, 2); await doDay(C, 2, 2); C.client.adoptLocal([...C.recorded]);          // history that exists ONLY on this device
       let r4 = ''; try { await C.client.clearDevice(); } catch (e) { r4 = (e as Error).message; }
       check('device-only history can NEVER be cleared without a verified export', /verified export/.test(r4) && C.client.journal().length === C.recorded.length);
@@ -211,7 +211,7 @@ async function backends(): Promise<Backend[]> {
       // explicit combined deletion
       let r5 = ''; try { await A.client.deleteBoth(); } catch (e) { r5 = (e as Error).message; }
       check('combined deletion (account AND device) is explicit and needs a verified export of the full history', /verified export/.test(r5) && (await be.serverEvents(uid)).length > 0);
-      await A.client.deleteBoth(await exportOf(A.client.journal()));
+      await A.client.deleteBoth([await exportOf(A.client.journal())]);
       check('with the export it removes both: the account copy and this device\'s history', (await be.serverEvents(uid)).length === 0 && (await be.port(uid).status()) === null && A.client.journal().length === 0);
       // account-only deletion from a device holding different history
       const uid2 = await mk(); const P = newDevice(uid2, be.port(uid2)); for (let k = 1; k <= 3; k++) await doDay(P, k, 1); P.client.outbox = [...P.recorded]; await P.client.connect();
