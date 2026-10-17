@@ -1,0 +1,209 @@
+{
+  "audits": [
+    {
+      "label": "decline-and-real-mirror",
+      "width": 390,
+      "axe": {
+        "inapplicable": 53,
+        "incomplete": 0,
+        "passes": 36,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "no-click-success",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "service-confirmed-ready",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "off-retains-copy-without-date",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "reconsent-declined",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "account-delete-preserves-device",
+      "width": 390,
+      "axe": {
+        "inapplicable": 53,
+        "incomplete": 0,
+        "passes": 36,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "separate-device-clear",
+      "width": 390,
+      "axe": {
+        "inapplicable": 53,
+        "incomplete": 0,
+        "passes": 36,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "signout-never-blocked-by-waiting",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "kept-local-not-error",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "removed-not-auto-uploaded",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "account-choice-failure-no-success",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "device-choice-needs-confirmation",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "restore-explicit-ack",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    },
+    {
+      "label": "keyboard-reduced-motion",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      }
+    }
+  ],
+  "boundary": {
+    "local": 0,
+    "session": 0,
+    "remote": 0
+  },
+  "keyboard": {
+    "text": "Turn on backup",
+    "outline": "solid"
+  }
+}

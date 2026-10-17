@@ -16,70 +16,56 @@ def audit(label,w):
  g=json.loads(json.loads(run('eval',"JSON.stringify({overflow:document.documentElement.scrollWidth>innerWidth,bad:[...document.querySelectorAll('[role=button],button')].filter(e=>!e.disabled&&e.getBoundingClientRect().height>0).filter(e=>e.getBoundingClientRect().height<44||e.getBoundingClientRect().width<44).map(e=>e.textContent)})")));assert not g['overflow'] and not g['bad'],g
  rows.append({'label':label,'width':w,'axe':d['counts'],'geometry':g})
 def state(n):click('Review states');click(n);text('Where your practice lives.')
-phases=['Only on this device','Backed up to my account','Backup is off · account copy kept','Backing up changes','Changes waiting on this device','Two histories need your choice','An account copy is available','Bringing back your practice','Backup on · no history yet','Backup cannot be checked','Removing practice history','History removed','That change was not completed']
-
+phases=['Only on this device','Backed up to my account','Backup is off · account copy kept','Backing up changes','Changes waiting on this device','Two histories need your choice','An account copy is available','Bringing back your practice','Backup on · no history yet','Backup cannot be checked','Removing practice history','Account history removed','That change was not completed','Review backup consent','Some entries stay on this device','Account copy removed · backup off','Device history cleared','Account practice restored']
+def snapshot():return run('snapshot')
+def has(t):assert t in snapshot(),t
+def missing(t):assert t not in snapshot(),t
+def begin():
+ run('open','about:blank')
+ run('open',os.environ.get('MIRAR_CONTINUITY_URL','http://127.0.0.1:5196/?continuity'));text('Manage practice history');run('wait','350')
+def ack():click('Simulate acknowledgment')
 def matrix():
  for w,h in [(320,568),(390,844),(768,1024),(1024,768),(1440,900)]:
-  run('set','viewport',str(w),str(h));run('open',os.environ.get('MIRAR_CONTINUITY_URL','http://127.0.0.1:5196/?continuity'));text('Manage practice history');run('wait','250');audit('today-default',w)
-  click('Manage practice history');audit('account-device',w)
-  click('Back up my practice');audit('consent-off',w);click('Not now');text('Where your practice lives.')
-  for name in phases:
-   state(name);audit(name,w)
-   if name in ['Only on this device','Backed up to my account','Two histories need your choice','An account copy is available']:
-    run('screenshot',str(OUT/f'{w}-{phases.index(name)}.png'))
-  click('Sign out');audit('signout-uncertain',w);click('Cancel');
-  state('Backed up to my account');click('Turn off backup');audit('off-confirm',w);click('Cancel');
-  click('Delete my backed-up practice');audit('delete-unacknowledged',w);click('I understand which history will be removed');audit('delete-acknowledged',w);click('Cancel');
-  state('Two histories need your choice');click('Review using account history');audit('replace-account',w);click('Cancel');click('Review using device history');audit('replace-device',w);click('Cancel');
-  click('The Mirror');audit('mirror-with-conflict',w);click('Me');audit('me-with-conflict',w)
-  print('Validated viewport',w,flush=True)
- (OUT/'results.json').write_text(json.dumps(rows,indent=2)+'\n')
- print('PASS',len(rows),'audits')
-
+  run('set','viewport',str(w),str(h));begin();audit('today-default',w);click('Manage practice history');audit('device-controls',w)
+  click('Back up my practice');audit('consent',w);click('Not now');ack()
+  for phase in phases:
+   state(phase);audit(phase,w)
+   if phase!='Backed up to my account':missing('Last confirmed backup:')
+  state('Backed up to my account');has('Last confirmed backup:');click('Delete my backed-up practice');audit('account-delete',w);has('This device’s practice and your sign-in account remain');click('Cancel')
+  click('Clear history from this device');audit('device-clear',w);has('It does not delete the account copy');click('Cancel')
+  state('Changes waiting on this device');click('Sign out');has('Wait while it finishes');audit('signout-waiting',w);click('Cancel')
+  state('Two histories need your choice');has('structured entries');missing('completed Daily Inner Reps');click('Review using account history');has('Device-only entries remain separately');audit('use-account',w);click('Cancel');click('Review using device history');audit('replace-account-explicit',w);click('Cancel')
+  click('The Mirror');audit('mirror',w);click('Me');audit('me',w)
+  print('PASS viewport',w,flush=True)
+ (OUT/'integration-matrix.json').write_text(json.dumps(rows,indent=2)+'\n');print('PASS',len(rows),'audits')
 def functional():
- def has(t):
-  assert t in run('snapshot'),t
- 
- def missing(t):
-  assert t not in run('snapshot'),t
- 
- run('set','viewport','390','844');run('open',os.environ.get('MIRAR_CONTINUITY_URL','http://127.0.0.1:5196/?continuity'));text('Manage practice history');run('wait','350');click('Begin');text("I don't know");click("I don't know");text('Explore backup');audit('actual-rep-completion-invitation',390)
- click('Not now');missing('Explore backup');click('The Mirror');has('1 day of practice');audit('actual-memory-mirror',390)
- click('Manage practice history');click('Back up my practice');click('Not now');has('Only on this device')
- click('Back up my practice');click('Turn on backup');has('Only on this device');click('Simulate failure');has('Only on this device');audit('enable-failed-unchanged',390)
- click('Back up my practice');click('Turn on backup');click('Simulate acknowledgment');has('Backing up changes');missing('StaticText "Backed up to my account"');audit('enable-ack-not-complete',390)
- click('Simulate operation failure');has('That change was not completed');click('Try again');click('Simulate acknowledgment');click('Simulate confirmed completion');has('Backed up to my account');audit('confirmed-ready',390)
- click('Turn off backup');click('Cancel');has('Backed up to my account');click('Turn off backup');click('Turn off backup');has('Backed up to my account');click('Simulate acknowledgment');has('Backup is off · account copy kept');audit('withdraw-retains-account-copy',390)
- click('Sign out');has('The confirmed account copy will remain');click('Cancel');click('The Mirror');has('1 day of practice');audit('cancel-signout-preserves-runtime',390)
- state('Changes waiting on this device');click('Sign out');has('Some changes are not confirmed');audit('signout-pending-warning',390);click('Cancel')
- state('An account copy is available');click('Restore account history');has('An account copy is available');click('Simulate acknowledgment');has('Bringing back your practice');click('Simulate operation failure');has('That change was not completed');click('Try again');click('Simulate acknowledgment');has('Bringing back your practice');click('Simulate confirmed completion');has('No fictional practice was injected');audit('recovery-explicit-confirmation',390)
- state('Two histories need your choice');click('Review using account history');click('Cancel');has('Two histories need your choice');click('Review using device history');click('I understand which history will be removed');click('Confirm replacement');has('Two histories need your choice');click('Simulate acknowledgment');has('Backing up changes');click('Simulate confirmed completion');audit('conflict-explicit-device-choice',390)
- state('Two histories need your choice');click('Review using account history');click('I understand which history will be removed');click('Confirm replacement');click('Simulate acknowledgment');click('Simulate confirmed completion');audit('conflict-explicit-account-choice',390)
- state('Backed up to my account');click('Delete my backed-up practice');click('Cancel');click('The Mirror');has('1 day of practice');click('Manage practice history');click('Delete my backed-up practice');click('I understand which history will be removed');click('Delete account and device history');click('Simulate acknowledgment');has('Removing practice history');click('Simulate operation failure');has('That change was not completed');click('Try again');click('Simulate acknowledgment');has('Removing practice history');click('Simulate confirmed completion');has('History removed');has('Backup remains on');click('The Mirror');missing('1 day of practice');audit('confirmed-delete-clears-only-review-memory',390)
- click('Manage practice history');click('Sign out');click('Sign out');click('Simulate acknowledgment');has('Simulated sign-out complete');audit('simulated-signout',390)
- # Keyboard-only activation of opt-in through focus/Enter; no pointer click for the final consent intent.
- run('open',os.environ.get('MIRAR_CONTINUITY_URL','http://127.0.0.1:5196/?continuity'));text('Manage practice history');click('Manage practice history');click('Back up my practice');run('set','media','reduced-motion')
- for _ in range(35):
+ run('set','viewport','390','844');begin();click('Begin');text("I don't know");click("I don't know");text('Explore backup');click('Not now');has('Requested: decline');ack();click('The Mirror');has('1 day of practice');audit('decline-and-real-mirror',390)
+ click('Manage practice history');click('Back up my practice');click('Turn on backup');has('Only on this device');click('Simulate failure');has('Only on this device');audit('no-click-success',390)
+ click('Back up my practice');click('Turn on backup');ack();has('Backing up changes');missing('Last confirmed backup:');click('Simulate confirmed completion');has('Last confirmed backup:');audit('service-confirmed-ready',390)
+ click('Turn off backup');click('Turn off backup');ack();has('Backup is off · account copy kept');missing('Last confirmed backup:');audit('off-retains-copy-without-date',390)
+ state('Review backup consent');click('Review backup consent');has('Turn on backup');click('Not now');has('Requested: decline');ack();audit('reconsent-declined',390)
+ state('Backed up to my account');click('Delete my backed-up practice');click('Cancel');click('The Mirror');has('1 day of practice');click('Manage practice history');click('Delete my backed-up practice');click('I understand which history will be removed');click('Delete account history');ack();has('Removing practice history');click('Simulate confirmed completion');has('Account history removed');has('Backup is off');click('The Mirror');has('1 day of practice');audit('account-delete-preserves-device',390)
+ click('Manage practice history');click('Clear history from this device');click('Cancel');click('The Mirror');has('1 day of practice');click('Manage practice history');click('Clear history from this device');click('I understand which history will be removed');click('Clear device history');ack();has('Device history cleared');click('The Mirror');missing('1 day of practice');audit('separate-device-clear',390)
+ state('Changes waiting on this device');click('Sign out');click('Wait while it finishes');has('Where your practice lives.');missing('Simulate acknowledgment');click('Sign out');click('Sign out');has('Requested: sign out');click('Simulate failure');audit('signout-never-blocked-by-waiting',390)
+ state('Some entries stay on this device');has('Another device recorded this day first');audit('kept-local-not-error',390)
+ state('Account copy removed · backup off');has('will not be uploaded unless you choose');missing('Last confirmed backup:');audit('removed-not-auto-uploaded',390)
+ state('Two histories need your choice');has('2 structured entries');click('Review using account history');click('I understand which history will be used');click('Confirm replacement');has('Requested: keep account');click('Simulate failure');audit('account-choice-failure-no-success',390)
+ state('Two histories need your choice');click('Review using device history');click('I understand which history will be removed');click('Confirm replacement');has('Requested: keep device');click('Simulate failure');audit('device-choice-needs-confirmation',390)
+ state('An account copy is available');click('Restore account history');ack();has('Bringing back your practice');click('Simulate confirmed completion');has('Account practice restored');has('No fictional practice was injected');has('Back up my practice');missing('button "Turn off backup"');audit('restore-explicit-ack',390)
+ begin();click('Manage practice history');click('Back up my practice');run('set','media','reduced-motion')
+ for _ in range(40):
   run('press','Tab');a=json.loads(json.loads(run('eval','JSON.stringify({text:document.activeElement.textContent,outline:getComputedStyle(document.activeElement).outlineStyle})')))
   if a['text']=='Turn on backup':break
- else:raise AssertionError('Keyboard could not reach opt-in')
- assert a['outline']!='none',a
- run('press','Enter');has('Requested: enable');audit('keyboard-reduced-motion-consent',390)
- resources=json.loads(json.loads(run('eval','JSON.stringify({local:localStorage.length,session:sessionStorage.length,remote:performance.getEntriesByType("resource").map(x=>x.name).filter(x=>!x.startsWith(location.origin))})')))
- assert resources=={'local':0,'session':0,'remote':[]},resources
- (OUT/'functional-results.json').write_text(json.dumps({'audits':rows,'boundary':resources,'keyboard':a},indent=2)+'\n')
- print('PASS',len(rows),'functional audits, no storage or remote resources')
-
-def final():
- run('set','media','reduced-motion')
- for w,h in [(320,568),(390,844),(768,1024),(1024,768),(1440,900)]:
-  run('set','viewport',str(w),str(h));run('open',os.environ.get('MIRAR_CONTINUITY_URL','http://127.0.0.1:5196/?continuity'));text('Manage practice history');run('wait','250');run('screenshot',str(OUT/f'today-{w}.png'))
-  click('Manage practice history');click('Back up my practice');audit('final-consent',w);run('screenshot',str(OUT/f'consent-{w}.png'));click('Not now')
-  state('Changes waiting on this device');click('Sign out');audit('final-signout',w);hastext=run('snapshot');assert 'Look Again, Attend and unfinished sessions' in hastext;run('screenshot',str(OUT/f'signout-{w}.png'));click('Cancel')
-  if w==390:
-   state('Two histories need your choice');run('screenshot',str(OUT/'conflict-390.png'));state('An account copy is available');run('screenshot',str(OUT/'recovery-390.png'));state('Backed up to my account');click('Delete my backed-up practice');run('screenshot',str(OUT/'delete-390.png'));click('Cancel');click('Me');run('screenshot',str(OUT/'me-390.png'));click('The Mirror');run('screenshot',str(OUT/'mirror-390.png'))
- (OUT/'final-copy-results.json').write_text(json.dumps(rows,indent=2)+'\n')
- print('PASS final consent/signout, 10 audits')
-
+ else:raise AssertionError('Cannot reach consent')
+ assert a['outline']!='none';run('press','Enter');has('Requested: enable');audit('keyboard-reduced-motion',390)
+ boundary=json.loads(json.loads(run('eval','JSON.stringify({local:localStorage.length,session:sessionStorage.length,remote:performance.getEntriesByType("resource").filter(x=>!x.name.startsWith(location.origin)).length})')))
+ assert boundary=={'local':0,'session':0,'remote':0},boundary
+ (OUT/'integration-functional.json').write_text(json.dumps({'audits':rows,'boundary':boundary,'keyboard':a},indent=2)+'\n');print('PASS',len(rows),'functional audits')
+def consent_version():
+ for w,h in [(320,568),(390,844)]:
+  run('set','viewport',str(w),str(h));begin();click('Manage practice history');click('Back up my practice');click('Change sample disclosure');has('disclosure version is unavailable or has changed');assert 'button "Turn on backup" [disabled' in snapshot();audit('stale-disclosure-disabled',w)
+  click('Back');click('Manage practice history');click('Change sample disclosure');click('Back up my practice');assert 'button "Turn on backup" [disabled' in snapshot();audit('missing-disclosure-disabled',w)
+  click('Change sample disclosure');assert 'button "Turn on backup" [disabled' in snapshot();click('Back');click('Manage practice history');click('Back up my practice');click('Turn on backup');has('Requested: enable');audit('reviewed-current-disclosure',w)
+ (OUT/'integration-consent-version.json').write_text(json.dumps(rows,indent=2)+'\n');print('PASS',len(rows),'version audits')
 if __name__=='__main__':
- {'matrix':matrix,'functional':functional,'final':final}[sys.argv[1] if len(sys.argv)>1 else 'matrix']()
+ {'matrix':matrix,'functional':functional,'consent':consent_version}[sys.argv[1] if len(sys.argv)>1 else 'matrix']()

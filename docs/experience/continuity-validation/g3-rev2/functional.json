@@ -1,0 +1,773 @@
+{
+  "audits": [
+    {
+      "state": "explicit-check-only",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "device",
+        "snapshot": {
+          "phase": "device",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "none",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 0,
+            "throughDay": ""
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none"
+        },
+        "calls": 1,
+        "callsAtOpen": 0,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "actual-service-ack",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "syncing",
+        "snapshot": {
+          "phase": "ready",
+          "requestPending": false,
+          "enabled": true,
+          "accountCopy": "verified",
+          "pending": 0,
+          "lastConfirmedDay": "2026-06-01",
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "while_backup_on"
+        },
+        "calls": 5,
+        "callsAtOpen": 1,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "safe-error-retry",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "error",
+        "snapshot": {
+          "phase": "ready",
+          "requestPending": false,
+          "enabled": true,
+          "accountCopy": "verified",
+          "pending": 0,
+          "lastConfirmedDay": "2026-06-01",
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "while_backup_on"
+        },
+        "calls": 6,
+        "callsAtOpen": 1,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "turnoff-ack-retains-copy",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "ready",
+        "snapshot": {
+          "phase": "paused",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "accountSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none"
+        },
+        "calls": 6,
+        "callsAtOpen": 5,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "server-flag-pending",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "server_flag_pending",
+        "snapshot": {
+          "phase": "paused",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 3,
+            "throughDay": "2026-06-03"
+          },
+          "accountSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "notice": "server_flag_pending",
+          "unsentOnDevice": 1,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none",
+          "signOutWarning": {
+            "unsent": 1,
+            "canSaveFile": false
+          }
+        },
+        "calls": 6,
+        "callsAtOpen": 6,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "explicit-recovery-actual-replay",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "recoverable",
+        "snapshot": {
+          "phase": "ready",
+          "requestPending": false,
+          "enabled": true,
+          "accountCopy": "verified",
+          "pending": 0,
+          "lastConfirmedDay": "2026-06-01",
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "while_backup_on"
+        },
+        "calls": 5,
+        "callsAtOpen": 2,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 1,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "no-saver-no-replacement",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "conflict_no_export",
+        "snapshot": {
+          "phase": "conflict",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "decision": "histories_differ",
+          "unsentOnDevice": 1,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none",
+          "signOutWarning": {
+            "unsent": 1,
+            "canSaveFile": false
+          }
+        },
+        "calls": 2,
+        "callsAtOpen": 2,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "save-cancel-no-adoption",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "conflict_with_export",
+        "snapshot": {
+          "phase": "error",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": true,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "decision": "histories_differ",
+          "error": {
+            "intent": "keep_account",
+            "message": "The copy was not saved, so nothing was changed."
+          },
+          "unsentOnDevice": 1,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none",
+          "signOutWarning": {
+            "unsent": 1,
+            "canSaveFile": true
+          }
+        },
+        "calls": 2,
+        "callsAtOpen": 2,
+        "fileAttempts": 1,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "saved-device-copy-before-adoption",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "conflict_with_export",
+        "snapshot": {
+          "phase": "device",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-02"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": true,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none"
+        },
+        "calls": 3,
+        "callsAtOpen": 2,
+        "fileAttempts": 1,
+        "fileConfirmed": 1,
+        "applied": 1,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "conflict-stays-device-only",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "conflict_with_export",
+        "snapshot": {
+          "phase": "device",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-01"
+          },
+          "accountSummary": {
+            "completedReps": 1,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": true,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 1,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none",
+          "signOutWarning": {
+            "unsent": 1,
+            "canSaveFile": true
+          }
+        },
+        "calls": 2,
+        "callsAtOpen": 2,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "all-destructive-blocked-without-saver",
+      "width": 390,
+      "axe": {
+        "inapplicable": 55,
+        "incomplete": 0,
+        "passes": 34,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "ready",
+        "snapshot": {
+          "phase": "ready",
+          "requestPending": false,
+          "enabled": true,
+          "accountCopy": "verified",
+          "pending": 0,
+          "lastConfirmedDay": "2026-06-02",
+          "deviceSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "accountSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "while_backup_on"
+        },
+        "calls": 5,
+        "callsAtOpen": 5,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "combined-cancel-keeps-device",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "ready_with_export",
+        "snapshot": {
+          "phase": "error",
+          "requestPending": false,
+          "enabled": true,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "accountSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": true,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "error": {
+            "intent": "delete",
+            "message": "The copy was not saved, so nothing was changed."
+          },
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "while_backup_on"
+        },
+        "calls": 5,
+        "callsAtOpen": 5,
+        "fileAttempts": 1,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "combined-actual-ack",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "ready_with_export",
+        "snapshot": {
+          "phase": "deleted",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "none",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 0,
+            "throughDay": ""
+          },
+          "scope": "engine_only",
+          "canExport": true,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none"
+        },
+        "calls": 6,
+        "callsAtOpen": 5,
+        "fileAttempts": 1,
+        "fileConfirmed": 1,
+        "applied": 0,
+        "clearCount": 1,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "account-only-keeps-device",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "account_copy_deleted_device_kept",
+        "snapshot": {
+          "phase": "device",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "none",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "notice": "account_copy_deleted_device_kept",
+          "unsentOnDevice": 2,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none",
+          "signOutWarning": {
+            "unsent": 2,
+            "canSaveFile": false
+          }
+        },
+        "calls": 10,
+        "callsAtOpen": 10,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "removed-copy-stays-local",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "copy_was_deleted",
+        "snapshot": {
+          "phase": "device",
+          "requestPending": false,
+          "enabled": false,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 2,
+            "throughDay": "2026-06-02"
+          },
+          "accountSummary": {
+            "completedReps": 0,
+            "throughDay": ""
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 2,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "none",
+          "signOutWarning": {
+            "unsent": 2,
+            "canSaveFile": false
+          }
+        },
+        "calls": 7,
+        "callsAtOpen": 7,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    },
+    {
+      "state": "keyboard-reduced-motion-actual-ack",
+      "width": 390,
+      "axe": {
+        "inapplicable": 54,
+        "incomplete": 0,
+        "passes": 35,
+        "violations": 0
+      },
+      "geometry": {
+        "overflow": false,
+        "bad": []
+      },
+      "snapshot": {
+        "scenario": "device",
+        "snapshot": {
+          "phase": "empty",
+          "requestPending": false,
+          "enabled": true,
+          "accountCopy": "verified",
+          "pending": 0,
+          "deviceSummary": {
+            "completedReps": 0,
+            "throughDay": ""
+          },
+          "scope": "engine_only",
+          "canExport": false,
+          "deletionDisclosure": "Deleting removes the account copy. How long the hosting provider may keep copies in its own backups has not been verified, so no period is promised. This wording is pending qualified review.",
+          "unsentOnDevice": 0,
+          "pilotHistory": "device_only",
+          "unfinishedPracticeAndOffers": "device_only",
+          "automaticChecks": "while_backup_on"
+        },
+        "calls": 4,
+        "callsAtOpen": 0,
+        "fileAttempts": 0,
+        "fileConfirmed": 0,
+        "applied": 0,
+        "clearCount": 0,
+        "signedOut": false
+      }
+    }
+  ],
+  "keyboard": {
+    "text": "Turn on backup",
+    "outline": "solid"
+  },
+  "boundary": {
+    "local": 0,
+    "session": 0,
+    "remote": 0
+  }
+}

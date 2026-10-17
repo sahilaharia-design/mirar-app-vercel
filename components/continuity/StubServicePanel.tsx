@@ -16,7 +16,7 @@ export function StubServicePanel() {
   const stub = getStubService(); const [, bump] = useState(0); const [msg, setMsg] = useState('');
   if (!uid || !controller) return null;
   const act = async (label: string, f: () => void | Promise<void>) => { await f(); setMsg(label); bump((n) => n + 1); };
-  return <View role="group" style={[X.rule, X.space]} accessibilityLabel="Simulated service controls, review only">
+  return <View role="region" style={[X.rule, X.space]} accessibilityLabel="Simulated service controls, review only">
     <Eyebrow>SIMULATED SERVICE · review only · no network · reload resets</Eyebrow>
     <Body style={X.small}>Current simulated behaviour: {stub.mode}{stub.failNext ? ` · next ${stub.failNext} request(s) fail` : ''}{stub.staleOnce ? ' · next write reports a stale history' : ''}. Account copy on the stub: {stub.core(uid).events.length} event(s).</Body>
     <View style={X.row}>{MODES.map((m) => <Action key={m} secondary selected={stub.mode === m} onPress={() => void act(`mode: ${m}`, () => { stub.mode = m; })}>{m}</Action>)}</View>
