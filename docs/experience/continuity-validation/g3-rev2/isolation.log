@@ -1,0 +1,15 @@
+pass  setup: account A has an engine rep done, one completed pilot record and an unfinished pilot
+pass  setup: account A's engine Mirror is not empty
+pass  after sign-out, before anything reloads: no pilot records, no session, no Resume offer
+pass  after sign-out the pilot store reports not-ready, so the Today/Mirror pilot hosts render nothing
+pass  after sign-out the engine store is empty too (no rep state, empty Mirror)
+pass  after sign-out no practice key of any account remains on the device
+pass  account B sees no Resume, no records and no session from account A (unfinished and completed)
+pass  account B gets a fresh engine Today (rep offered, empty Mirror, no receipt)
+pass  account B's pilot Mirror is empty (no statements from A)
+pass  B's own unfinished practice resumes for B
+pass  A signs back in: nothing of A's or B's pilot data is present (by design: sign-out clears the device)
+pass  A signs back in: today's rep is offered again and the Mirror is empty (the documented continuity limitation)
+pass  switching account without sign-out: B still sees nothing of A (loader resets state per user)
+
+PASS: account isolation checks

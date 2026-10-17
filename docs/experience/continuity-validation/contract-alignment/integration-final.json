@@ -1,0 +1,226 @@
+[
+  {
+    "label": "final-consent-copy",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "restore-keeps-backup-off",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-delete-final",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "device-clear-final",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "excluded-signout-final",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent-copy",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "restore-keeps-backup-off",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "account-delete-final",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "device-clear-final",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "excluded-signout-final",
+    "width": 390,
+    "axe": {
+      "inapplicable": 56,
+      "incomplete": 0,
+      "passes": 33,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent-copy",
+    "width": 768,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "restore-keeps-backup-off",
+    "width": 768,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent-copy",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "restore-keeps-backup-off",
+    "width": 1024,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "final-consent-copy",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "restore-keeps-backup-off",
+    "width": 1440,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  }
+]

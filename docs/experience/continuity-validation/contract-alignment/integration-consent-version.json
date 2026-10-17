@@ -1,0 +1,86 @@
+[
+  {
+    "label": "stale-disclosure-disabled",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "missing-disclosure-disabled",
+    "width": 320,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "reviewed-current-disclosure",
+    "width": 320,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "stale-disclosure-disabled",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "missing-disclosure-disabled",
+    "width": 390,
+    "axe": {
+      "inapplicable": 55,
+      "incomplete": 0,
+      "passes": 34,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  },
+  {
+    "label": "reviewed-current-disclosure",
+    "width": 390,
+    "axe": {
+      "inapplicable": 54,
+      "incomplete": 0,
+      "passes": 35,
+      "violations": 0
+    },
+    "geometry": {
+      "overflow": false,
+      "bad": []
+    }
+  }
+]

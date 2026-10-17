@@ -1,0 +1,78 @@
+— Default state: nothing is on, nothing is called —
+pass  the default is "only on this device": backup off, no account copy known, engine-only scope
+pass  real practice is journaled on the device while backup is off, and the snapshot says those changes stay here
+pass  with backup off there is NO service call of any kind (loading, recording, rendering)
+pass  the deletion disclosure is the explicit "pending review" wording: no retention period is promised
+— Turning on: never "ready" before the service confirms —
+pass  while the request is in flight the phase is "syncing" (a request is not proof), never "ready"
+pass  after the service confirms: ready, nothing pending, last confirmed day is the service-confirmed day
+pass  the account copy equals the device journal (completed practice already on this device was included)
+pass  a new practice while on is sent, and the confirmed day moves only after confirmation
+— Offline, unavailable and failures: never reported as empty or as success —
+pass  on, then offline: "changes waiting on this device" with the pending count, and no confirmed day
+pass  a service that cannot be reached is "unavailable" (we cannot confirm), not offline and not empty
+pass  back online it catches up and returns to ready
+pass  turning on while offline fails safely: backup stays off, phase "error", a safe message, nothing uploaded
+pass  the error message carries no ids, SQL, epochs or stack detail
+pass  retry repeats the failed operation (not a generic write) and succeeds
+pass  a failed read of the account is "unavailable" and the account copy is "unknown", never "none"
+— Turning backup off: immediate, and the fate of unsent changes is stated —
+pass  paused: backup off, the earlier account copy still exists, and new changes are not uploaded
+pass  the unsent changes are counted and stay on this device (the snapshot states their fate)
+pass  turning backup on again uploads what was waiting (after the confirmation)
+— Retained events leave the device only after an informed confirmation (founder decision 3) —
+pass  turning on with practice retained on this device asks first: the count and days are shown, consent is NOT recorded, and no service call is made
+pass  "stay on this device" cancels: still off, nothing sent, nothing lost, no confirmation left showing
+pass  only the explicit "enable_and_upload" sends the retained events
+pass  after turning off, new practice is retained, and turning on again asks again before any upload
+— Automatic checks are disclosed and exist only while backup is on —
+pass  while backup is off the snapshot states there are no automatic checks, and opening the app makes no call
+pass  while backup is on the snapshot discloses automatic checks
+pass  and turning off returns it to none
+— Sign-out: warned when practice is not in the account; never blocked; a real saved file is offered —
+pass  unsent practice produces a sign-out warning with the count and whether a file can be saved
+pass  "save a file" really saves (confirmed by the saver), changes nothing else, and says so
+pass  sign-out is allowed regardless of the warning
+pass  with no confirming saver, "save a file" fails safely with a stated reason and the warning says a file cannot be saved here
+pass  when everything is in the account there is no warning
+— A deleted account copy: upload again is explicit; "stay on this device" changes nothing —
+pass  the decision appears and nothing is written
+pass  "stay on this device": no decision left, backup off, nothing written, practice kept
+pass  "upload again" is the explicit act that re-creates the account copy
+— New device: an account copy is offered only after an explicit check, and restoring replays it —
+pass  a new device with backup off is "only on this device" and has made no call
+pass  after the explicit check: "an account copy is available", with its summary, and nothing restored yet
+pass  while recovering the phase is "recovering" (no fake practice is shown)
+pass  recovery replays the account history through the engine and hands the rebuilt state to the app
+— Different histories on both sides: a conflict, never a merge, and a real export first —
+pass  a check finds two different histories: phase "conflict", both summaries shown, nothing changed on either side
+pass  replacing this device's history is refused when no verified export is possible (export unavailable): nothing changes
+pass  a save that was cancelled or could not be confirmed is not an export: nothing changes
+pass  with a confirmed saved copy the account history is used, this device's is set aside (kept), and the app receives the rebuilt state
+pass  "use this device's history" no longer exists: it is refused, the account copy is untouched, the conflict stays open
+— Deleting: three separate, explicit actions —
+pass  "delete the account copy" removes only the account copy: backup is OFF, this device keeps its practice, and the snapshot says so
+pass  deleting the account history leaves backup OFF (no misleading "enabled" status without a profile)
+pass  turning it on again does not silently re-upload the deleted history: a decision is required
+pass  "clear this device" clears only this device: the account copy is untouched and recovery is offered
+pass  combined deletion shows "deleting" until the service confirms (not assumed)
+pass  combined deletion removes the account copy AND this device's practice, leaves backup off, and says "deleted"
+pass  combined deletion needs a confirmed saved copy: with no saver available nothing is deleted
+— Removed or reset elsewhere: stop, keep everything on the device, never re-upload —
+pass  another device deleted the account copy: this device stops, backup shows off, the notice says the copy was removed, and its history is untouched
+pass  and it did not upload anything after the removal
+pass  the account was reset and started again elsewhere: an old device stops with a clear notice and writes nothing to the new history
+— Simulated other device: a real same-day conflict —
+pass  the other device got the day first: this device keeps the account's history, its own rep for that day is dropped with a reason, and the app is told to adopt the rebuilt state
+— An idle device that never saw a deletion cannot undo it —
+pass  turning backup on after the account copy was deleted elsewhere is a decision, not an upload (nothing is written to the account)
+pass  an explicit check on that device reports that the account copy was removed, and offers no restore of it
+— Sign-out, reload, invitation, and what the snapshot may contain —
+pass  reloading restores consent and the confirmed state from the device (no network at load while off)
+pass  sign-out advice is computed from live state: unconfirmed count, account copy, and that pilots are device-only
+pass  sign-out calls the existing sign-out once and nothing is written back afterwards
+pass  the invitation is eligible only after a completed practice, and "Not now" silences it for 30 days (then it may be offered once more)
+pass  no snapshot ever carries event payloads, option ids, free text, or identifiers
+pass  every one of Codex's 13 phases was produced by real adapter state in these scenarios (missing: none)
+
+PASS: continuity controller checks (real engine, stub service, explicit simulated outcomes)
