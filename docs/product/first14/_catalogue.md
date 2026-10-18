@@ -1,0 +1,25 @@
+| Template | Role · capacity · intensity · sensitivity · seconds | Question as authored (verbatim) | Answer options (verbatim) | Extra steps it can trigger | Evaluator tone tag |
+|---|---|---|---|---|---|
+| `foc_attention` | training · focus · light · low · 25s | Think about the last two hours. Did anything take more attention than it deserved? | [My phone] [Work] [Another person] [Overthinking] [Nothing in particular] | context chips (if_burden) | light |
+| `foc_loops` | training · focus · light · low · 20s | How many unfinished things are running in the background of your head right now? | [Basically none] [One or two] [Several] [Too many to count] | context chips (if_burden) | light |
+| `foc_settle` | training · focus · light · low · 20s | Which is closer to today? | [I could settle into one thing.] [I kept switching between things.] | — | light |
+| `en_drain` | training · energy · medium · low · 30s | What took the most out of you today, if anything? | [Work] [My partner] [Family] [Friends] [Money] [My body] [My own thoughts] [Nothing — I feel fine] | — | introspective |
+| `en_helped` | training · energy · light · low · 20s | What has helped you recharge lately? | [Rest or sleep] [Moving my body] [Being with someone] [Time alone] [Nothing has helped yet] | — | light |
+| `en_pace` | training · energy · light · low · 20s | Which is closer to today? | [I pushed past what I had.] [I paced myself.] | — | light |
+| `rel_boundary` | training · relationships · medium · medium · 35s | Is someone else's mood affecting yours today? | [My partner] [Family] [A friend] [Someone at work] [No one] | follow-up “How much of the mood is yours?” | introspective |
+| `rel_appreciation` | training · relationships · light · low · 25s | Is there someone you appreciated today? | [Yes] [Not today] | typed words (“A few words (optional)”, max 80); context chips (if_present) | light |
+| `rel_connect` | training · relationships · light · low · 25s | Is there someone you've been meaning to reach out to? | [My partner] [Family] [A friend] [No one right now] | timeframe “When would you like to do it?” | introspective |
+| `gro_update` | training · growth · light · low · 30s | Has anything changed how you see a situation lately? | [Yes, clearly] [A little] [Nothing comes to mind] | context chips (if_present) | introspective |
+| `gro_mistake` | training · growth · medium · medium · 25s | Which is closer to today? | [There's something I got wrong that I'd rather not look at.] [I can look at what I got wrong without flinching.] | — | introspective |
+| `gro_noticed` | training · growth · light · low · 20s | Did you notice or learn something today? | [Something small] [Something that mattered] [Not today] | — | light |
+| `dir_know_act` | training · direction · medium · low · 25s | Which is closer to today? | [I need more clarity.] [I already know. I just haven't acted.] | — | introspective |
+| `dir_fits` | training · direction · light · low · 25s | Does the direction you're heading still fit? | [Yes, it fits] [Mostly] [Not really] [I've outgrown it] | context chips (if_burden) | introspective |
+| `dir_time` | training · direction · light · low · 25s | Did today's time go to what matters to you? | [Mostly] [Partly] [Not really] | context chips (if_burden) | introspective |
+| `act_tiny` | training · action · light · low · 25s | Pick one small thing for the next day, or choose none. | [Reply to one message] [Five minutes outside] [Start something for two minutes] [Nothing — I am resting, on purpose] | timeframe “When would you like to do it?” | light |
+| `act_credit` | training · action · light · low · 20s | Did you do something today you can give yourself credit for? | [Yes] [Maybe] [Not today] | follow-up “What was it about?” | light |
+| `act_friction` | training · action · medium · low · 30s | What's the hardest part of starting something right now? | [Finding the time] [Having the energy] [Something about it worries me] [I'm not sure how to start] [Starting isn't the problem] | context chips (if_burden) | introspective |
+| `cont_commitment` | continuity · action · light · low · 15s | You mentioned you might do something. How is that going? | [Done] [Partly] [Not yet, later] [I've changed my mind] [I've decided not to] | — | introspective |
+| `cont_thread` | continuity · direction · light · low · 15s | Is this still weighing on you? | [Yes, a lot] [Somewhat] [Not today] [This isn't what's on my mind] | — | introspective |
+| `cont_event` | continuity · direction · light · low · 15s | How is that sitting with you now? | [Heavier] [About the same] [Lighter] [Settled] | — | introspective |
+| `probe_anchor` | probe · direction · light · low · 20s | What's most on your mind today? | [Work] [My partner] [Family] [Friends] [Money] [My body or health] [Myself] [Time] [Technology] [Something else] [Something significant happened] [Nothing in particular] | — | introspective |
+| `presence` | presence · direction · light · low · 10s | Does anything need your attention today? | [Nothing right now] [Something does] | context chips (if_present) | introspective |

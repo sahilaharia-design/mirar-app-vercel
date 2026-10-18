@@ -1,0 +1,3117 @@
+{
+ "walkSeed": 1,
+ "personas": {
+  "everyday": [
+   {
+    "day": 1,
+    "date": "Monday 19 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Think about the last two hours. Did anything take more attention than it deserved?",
+    "templateId": "foc_attention",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Focus",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 1,
+    "today": [
+     "Monday 19 October",
+     "Good afternoon.",
+     "Think about the last two hours. Did anything take more attention than it deserved?",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Focus",
+     "25 seconds",
+     "[What is an Inner Rep?] → “A small exercise, not a test. Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.”"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "options": [
+       "My phone",
+       "Work",
+       "Another person",
+       "Overthinking",
+       "Nothing in particular"
+      ],
+      "allowUnknown": true,
+      "answer": "“My phone”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Think about the last two hours. Did anything take more attention than it deserved?",
+     "Your selected response: My phone",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "1 day of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Relationships, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 1 statement) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 2,
+    "date": "Tuesday 20 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is there someone you appreciated today?",
+    "templateId": "rel_appreciation",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 2,
+    "today": [
+     "Tuesday 20 October",
+     "Good afternoon.",
+     "Is there someone you appreciated today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "1 day of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is there someone you appreciated today?",
+      "options": [
+       "Yes",
+       "Not today"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes”"
+     },
+     {
+      "id": "words",
+      "type": "words",
+      "prompt": "A few words (optional)",
+      "options": [],
+      "allowUnknown": false,
+      "answer": "(skipped)"
+     },
+     {
+      "id": "capture_domain",
+      "type": "domain_chips",
+      "prompt": "What's this mostly connected to?",
+      "options": [
+       "Work",
+       "Partner",
+       "Family",
+       "Friends",
+       "Myself",
+       "Body or health",
+       "Money",
+       "Time",
+       "Technology",
+       "Something else"
+      ],
+      "allowUnknown": false,
+      "answer": "chip “Work”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Is there someone you appreciated today?",
+     "Your selected response: Yes",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "2 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 2 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 3,
+    "date": "Wednesday 21 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Has anything changed how you see a situation lately?",
+    "templateId": "gro_update",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Growth",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 30,
+    "practiceDays": 3,
+    "today": [
+     "Wednesday 21 October",
+     "Good afternoon.",
+     "Has anything changed how you see a situation lately?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Growth",
+     "30 seconds",
+     "2 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Has anything changed how you see a situation lately?",
+      "options": [
+       "Yes, clearly",
+       "A little",
+       "Nothing comes to mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Nothing comes to mind”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "You can leave it here.",
+     "The offered question: Has anything changed how you see a situation lately?",
+     "Your selected response: Nothing comes to mind",
+     "Your response to the offered question",
+     "There is no need to turn this into another task."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "3 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Action.",
+     "Source material → [Read your selected responses] (collapsed; 3 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 4,
+    "date": "Thursday 22 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Which is closer to today?",
+    "templateId": "en_pace",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Energy",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 4,
+    "today": [
+     "Thursday 22 October",
+     "Good afternoon.",
+     "Which is closer to today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Energy",
+     "20 seconds",
+     "3 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Which is closer to today?",
+      "options": [
+       "I pushed past what I had.",
+       "I paced myself."
+      ],
+      "allowUnknown": true,
+      "answer": "“I paced myself.”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Which is closer to today?",
+     "Your selected response: I paced myself.",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "4 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Action.",
+     "Source material → [Read your selected responses] (collapsed; 4 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 5,
+    "date": "Friday 23 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 6,
+    "date": "Saturday 24 October",
+    "opened": true,
+    "left": false,
+    "prompt": "What's taking up the most room in your head today?",
+    "templateId": "probe_anchor",
+    "frame": "base",
+    "layer": "probe",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 5,
+    "today": [
+     "Saturday 24 October",
+     "Good afternoon.",
+     "What's taking up the most room in your head today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "20 seconds",
+     "4 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "What's taking up the most room in your head today?",
+      "options": [
+       "Work",
+       "My partner",
+       "Family",
+       "Friends",
+       "Money",
+       "My body or health",
+       "Myself",
+       "Time",
+       "Technology",
+       "Something else",
+       "Something significant happened",
+       "Nothing in particular"
+      ],
+      "allowUnknown": true,
+      "answer": "“Work”"
+     },
+     {
+      "id": "thread_offer",
+      "type": "yes_no",
+      "prompt": "Want Mirar to check in on this now and then? You can stop any time.",
+      "options": [
+       "Yes",
+       "No"
+      ],
+      "allowUnknown": false,
+      "answer": "“No”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: What's taking up the most room in your head today?",
+     "Your selected response: Work",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "5 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Action.",
+     "Source material → [Read your selected responses] (collapsed; 5 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 7,
+    "date": "Sunday 25 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is work getting in the way of something you meant to do?",
+    "templateId": "act_friction",
+    "frame": "lens",
+    "bound": "work",
+    "layer": "training",
+    "capacity": "Action",
+    "intensity": "medium",
+    "sensitivity": "low",
+    "seconds": 30,
+    "practiceDays": 6,
+    "today": [
+     "Sunday 25 October",
+     "Good afternoon.",
+     "Is work getting in the way of something you meant to do?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Action",
+     "30 seconds",
+     "5 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is work getting in the way of something you meant to do?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Not today”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "You can leave it here.",
+     "The offered question: Is work getting in the way of something you meant to do?",
+     "Your selected response: Not today",
+     "Your response to the offered question",
+     "There is no need to turn this into another task."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "6 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Action.",
+     "Source material → [Read your selected responses] (collapsed; 6 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 8,
+    "date": "Monday 26 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Did work pull at your attention today?",
+    "templateId": "foc_attention",
+    "frame": "lens",
+    "bound": "work",
+    "layer": "training",
+    "capacity": "Focus",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 7,
+    "today": [
+     "Monday 26 October",
+     "Good afternoon.",
+     "Did work pull at your attention today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Focus",
+     "25 seconds",
+     "6 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did work pull at your attention today?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes, a lot”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did work pull at your attention today?",
+     "Your selected response: Yes, a lot",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "7 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Action.",
+     "Source material → [Read your selected responses] (collapsed; 7 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 9,
+    "date": "Tuesday 27 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 10,
+    "date": "Wednesday 28 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Did today's time go to what matters to you?",
+    "templateId": "dir_time",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Direction",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 8,
+    "today": [
+     "Wednesday 28 October",
+     "Good afternoon.",
+     "Did today's time go to what matters to you?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Direction",
+     "25 seconds",
+     "7 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did today's time go to what matters to you?",
+      "options": [
+       "Mostly",
+       "Partly",
+       "Not really"
+      ],
+      "allowUnknown": true,
+      "answer": "“Mostly”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did today's time go to what matters to you?",
+     "Your selected response: Mostly",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "8 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-28)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did today's time go to what matters to you? You chose “Mostly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “My phone”."
+    ]
+   },
+   {
+    "day": 11,
+    "date": "Thursday 29 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is there someone you've been meaning to reach out to?",
+    "templateId": "rel_connect",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 9,
+    "today": [
+     "Thursday 29 October",
+     "Good afternoon.",
+     "Is there someone you've been meaning to reach out to?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "8 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is there someone you've been meaning to reach out to?",
+      "options": [
+       "My partner",
+       "Family",
+       "A friend",
+       "No one right now"
+      ],
+      "allowUnknown": true,
+      "answer": "“No one right now”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "You can leave it here.",
+     "The offered question: Is there someone you've been meaning to reach out to?",
+     "Your selected response: No one right now",
+     "Your response to the offered question",
+     "There is no need to turn this into another task."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "9 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-28)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Relationships: 2 reps completed. (2026-10-29)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is there someone you've been meaning to reach out to? You chose “No one right now”.",
+     "Did today's time go to what matters to you? You chose “Mostly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”.",
+     "Is there someone you appreciated today? You chose “Yes”."
+    ]
+   },
+   {
+    "day": 12,
+    "date": "Friday 30 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Did you notice or learn something today?",
+    "templateId": "gro_noticed",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Growth",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 10,
+    "today": [
+     "Friday 30 October",
+     "Good afternoon.",
+     "Did you notice or learn something today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Growth",
+     "20 seconds",
+     "9 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did you notice or learn something today?",
+      "options": [
+       "Something small",
+       "Something that mattered",
+       "Not today"
+      ],
+      "allowUnknown": true,
+      "answer": "“Something that mattered”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did you notice or learn something today?",
+     "Your selected response: Something that mattered",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "10 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-28)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 2 reps completed. (2026-10-30)",
+     "· A fact about practice: Relationships: 2 reps completed. (2026-10-29)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did you notice or learn something today? You chose “Something that mattered”.",
+     "Is there someone you've been meaning to reach out to? You chose “No one right now”.",
+     "Did today's time go to what matters to you? You chose “Mostly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Has anything changed how you see a situation lately? You chose “Nothing comes to mind”."
+    ]
+   },
+   {
+    "day": 13,
+    "date": "Saturday 31 October",
+    "opened": true,
+    "left": false,
+    "prompt": "What has helped you recharge lately?",
+    "templateId": "en_helped",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Energy",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 11,
+    "today": [
+     "Saturday 31 October",
+     "Good afternoon.",
+     "What has helped you recharge lately?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Energy",
+     "20 seconds",
+     "10 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "What has helped you recharge lately?",
+      "options": [
+       "Rest or sleep",
+       "Moving my body",
+       "Being with someone",
+       "Time alone",
+       "Nothing has helped yet"
+      ],
+      "allowUnknown": true,
+      "answer": "“Moving my body”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: What has helped you recharge lately?",
+     "Your selected response: Moving my body",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "11 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-28)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-31)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 2 reps completed. (2026-10-30)",
+     "· A fact about practice: Relationships: 2 reps completed. (2026-10-29)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "What has helped you recharge lately? You chose “Moving my body”.",
+     "Did you notice or learn something today? You chose “Something that mattered”.",
+     "Is there someone you've been meaning to reach out to? You chose “No one right now”.",
+     "Did today's time go to what matters to you? You chose “Mostly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”."
+    ]
+   },
+   {
+    "day": 14,
+    "date": "Sunday 1 November",
+    "opened": true,
+    "left": false,
+    "prompt": "Did work take your energy today?",
+    "templateId": "en_drain",
+    "frame": "lens",
+    "bound": "work",
+    "layer": "training",
+    "capacity": "Energy",
+    "intensity": "medium",
+    "sensitivity": "low",
+    "seconds": 30,
+    "practiceDays": 1,
+    "today": [
+     "Sunday 1 November",
+     "Good afternoon.",
+     "Did work take your energy today?",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Energy",
+     "30 seconds",
+     "[What is an Inner Rep?] → “A small exercise, not a test. Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.”"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did work take your energy today?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Somewhat”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did work take your energy today?",
+     "Your selected response: Somewhat",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "1 day of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-28)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-31)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 2 reps completed. (2026-10-30)",
+     "· A fact about practice: Relationships: 2 reps completed. (2026-10-29)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did work take your energy today? You chose “Somewhat”.",
+     "What has helped you recharge lately? You chose “Moving my body”.",
+     "Did you notice or learn something today? You chose “Something that mattered”.",
+     "Is there someone you've been meaning to reach out to? You chose “No one right now”.",
+     "Did today's time go to what matters to you? You chose “Mostly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Not today”.",
+     "What's taking up the most room in your head today? You chose “Work”."
+    ]
+   }
+  ],
+  "avoider": [
+   {
+    "day": 1,
+    "date": "Monday 19 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Think about the last two hours. Did anything take more attention than it deserved?",
+    "templateId": "foc_attention",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Focus",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 1,
+    "today": [
+     "Monday 19 October",
+     "Good afternoon.",
+     "Think about the last two hours. Did anything take more attention than it deserved?",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Focus",
+     "25 seconds",
+     "[What is an Inner Rep?] → “A small exercise, not a test. Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.”"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "options": [
+       "My phone",
+       "Work",
+       "Another person",
+       "Overthinking",
+       "Nothing in particular"
+      ],
+      "allowUnknown": true,
+      "answer": "“I don’t know”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "Room for not knowing.",
+     "The offered question: Think about the last two hours. Did anything take more attention than it deserved?",
+     "Your selected response: I don’t know",
+     "Your response to the offered question",
+     "Not knowing is a complete answer. Nothing more is asked of you."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "1 day of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: You answered “I don’t know” 1 of 1 times. That is respected, and nothing is assumed from it.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Relationships, Growth, Action.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": []
+   },
+   {
+    "day": 2,
+    "date": "Tuesday 20 October",
+    "opened": true,
+    "left": true,
+    "prompt": "Is there someone you appreciated today?",
+    "templateId": "rel_appreciation",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 1,
+    "today": [
+     "Tuesday 20 October",
+     "Good afternoon.",
+     "Is there someone you appreciated today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "1 day of practice this month"
+    ]
+   },
+   {
+    "day": 3,
+    "date": "Wednesday 21 October",
+    "opened": true,
+    "left": true,
+    "prompt": "Is there someone you appreciated today?",
+    "templateId": "rel_appreciation",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 1,
+    "today": [
+     "Wednesday 21 October",
+     "Good afternoon.",
+     "Is there someone you appreciated today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "1 day of practice this month"
+    ]
+   },
+   {
+    "day": 4,
+    "date": "Thursday 22 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 5,
+    "date": "Friday 23 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is there someone you appreciated today?",
+    "templateId": "rel_appreciation",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 2,
+    "today": [
+     "Friday 23 October",
+     "Good afternoon.",
+     "Is there someone you appreciated today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "1 day of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is there someone you appreciated today?",
+      "options": [
+       "Yes",
+       "Not today"
+      ],
+      "allowUnknown": true,
+      "answer": "“Not today”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "You can leave it here.",
+     "The offered question: Is there someone you appreciated today?",
+     "Your selected response: Not today",
+     "Your response to the offered question",
+     "There is no need to turn this into another task."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "2 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-23)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: You answered “I don’t know” 1 of 2 times. That is respected, and nothing is assumed from it.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 1 statement) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is there someone you appreciated today? You chose “Not today”."
+    ]
+   },
+   {
+    "day": 6,
+    "date": "Saturday 24 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 7,
+    "date": "Sunday 25 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 8,
+    "date": "Monday 26 October",
+    "opened": true,
+    "left": false,
+    "prompt": "What has helped you recharge lately?",
+    "templateId": "en_helped",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Energy",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 3,
+    "today": [
+     "Monday 26 October",
+     "Good afternoon.",
+     "What has helped you recharge lately?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Energy",
+     "20 seconds",
+     "2 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "What has helped you recharge lately?",
+      "options": [
+       "Rest or sleep",
+       "Moving my body",
+       "Being with someone",
+       "Time alone",
+       "Nothing has helped yet"
+      ],
+      "allowUnknown": true,
+      "answer": "“Being with someone”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: What has helped you recharge lately?",
+     "Your selected response: Being with someone",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "3 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-23)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: You answered “I don’t know” 1 of 3 times. That is respected, and nothing is assumed from it.",
+     "· What remains open: No completed training reps yet in: Direction, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 2 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "What has helped you recharge lately? You chose “Being with someone”.",
+     "Is there someone you appreciated today? You chose “Not today”."
+    ]
+   },
+   {
+    "day": 9,
+    "date": "Tuesday 27 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 10,
+    "date": "Wednesday 28 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 11,
+    "date": "Thursday 29 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 12,
+    "date": "Friday 30 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 13,
+    "date": "Saturday 31 October",
+    "opened": false,
+    "left": false
+   },
+   {
+    "day": 14,
+    "date": "Sunday 1 November",
+    "opened": false,
+    "left": false
+   }
+  ],
+  "reflective": [
+   {
+    "day": 1,
+    "date": "Monday 19 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Think about the last two hours. Did anything take more attention than it deserved?",
+    "templateId": "foc_attention",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Focus",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 1,
+    "today": [
+     "Monday 19 October",
+     "Good afternoon.",
+     "Think about the last two hours. Did anything take more attention than it deserved?",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Focus",
+     "25 seconds",
+     "[What is an Inner Rep?] → “A small exercise, not a test. Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.”"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Think about the last two hours. Did anything take more attention than it deserved?",
+      "options": [
+       "My phone",
+       "Work",
+       "Another person",
+       "Overthinking",
+       "Nothing in particular"
+      ],
+      "allowUnknown": true,
+      "answer": "“Work”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Think about the last two hours. Did anything take more attention than it deserved?",
+     "Your selected response: Work",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "1 day of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Relationships, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 1 statement) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 2,
+    "date": "Tuesday 20 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is there someone you appreciated today?",
+    "templateId": "rel_appreciation",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 2,
+    "today": [
+     "Tuesday 20 October",
+     "Good afternoon.",
+     "Is there someone you appreciated today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "1 day of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is there someone you appreciated today?",
+      "options": [
+       "Yes",
+       "Not today"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes”"
+     },
+     {
+      "id": "words",
+      "type": "words",
+      "prompt": "A few words (optional)",
+      "options": [],
+      "allowUnknown": false,
+      "answer": "(types a few words; never stored)"
+     },
+     {
+      "id": "capture_domain",
+      "type": "domain_chips",
+      "prompt": "What's this mostly connected to?",
+      "options": [
+       "Work",
+       "Partner",
+       "Family",
+       "Friends",
+       "Myself",
+       "Body or health",
+       "Money",
+       "Time",
+       "Technology",
+       "Something else"
+      ],
+      "allowUnknown": false,
+      "answer": "chip “Work”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Is there someone you appreciated today?",
+     "Your selected response: Yes",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "2 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Direction, Energy, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 2 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 3,
+    "date": "Wednesday 21 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Did today's time go to what matters to you?",
+    "templateId": "dir_time",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Direction",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 3,
+    "today": [
+     "Wednesday 21 October",
+     "Good afternoon.",
+     "Did today's time go to what matters to you?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Direction",
+     "25 seconds",
+     "2 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did today's time go to what matters to you?",
+      "options": [
+       "Mostly",
+       "Partly",
+       "Not really"
+      ],
+      "allowUnknown": true,
+      "answer": "“Not really”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did today's time go to what matters to you?",
+     "Your selected response: Not really",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "3 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Energy, Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 3 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 4,
+    "date": "Thursday 22 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Which is closer to today?",
+    "templateId": "en_pace",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Energy",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 4,
+    "today": [
+     "Thursday 22 October",
+     "Good afternoon.",
+     "Which is closer to today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Energy",
+     "20 seconds",
+     "3 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Which is closer to today?",
+      "options": [
+       "I pushed past what I had.",
+       "I paced myself."
+      ],
+      "allowUnknown": true,
+      "answer": "“I paced myself.”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Which is closer to today?",
+     "Your selected response: I paced myself.",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "4 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 4 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 5,
+    "date": "Friday 23 October",
+    "opened": true,
+    "left": false,
+    "prompt": "What's most on your mind today?",
+    "templateId": "probe_anchor",
+    "frame": "base",
+    "layer": "probe",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 5,
+    "today": [
+     "Friday 23 October",
+     "Good afternoon.",
+     "What's most on your mind today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "20 seconds",
+     "4 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "What's most on your mind today?",
+      "options": [
+       "Work",
+       "My partner",
+       "Family",
+       "Friends",
+       "Money",
+       "My body or health",
+       "Myself",
+       "Time",
+       "Technology",
+       "Something else",
+       "Something significant happened",
+       "Nothing in particular"
+      ],
+      "allowUnknown": true,
+      "answer": "“Work”"
+     },
+     {
+      "id": "thread_offer",
+      "type": "yes_no",
+      "prompt": "Want Mirar to check in on this now and then? You can stop any time.",
+      "options": [
+       "Yes",
+       "No"
+      ],
+      "allowUnknown": false,
+      "answer": "“Yes”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: What's most on your mind today?",
+     "Your selected response: Work",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "5 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 5 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 6,
+    "date": "Saturday 24 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is work getting in the way of something you meant to do?",
+    "templateId": "act_friction",
+    "frame": "lens",
+    "bound": "work",
+    "layer": "training",
+    "capacity": "Action",
+    "intensity": "medium",
+    "sensitivity": "low",
+    "seconds": 30,
+    "practiceDays": 6,
+    "today": [
+     "Saturday 24 October",
+     "Good afternoon.",
+     "Is work getting in the way of something you meant to do?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Action",
+     "30 seconds",
+     "5 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is work getting in the way of something you meant to do?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Somewhat”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Is work getting in the way of something you meant to do?",
+     "Your selected response: Somewhat",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "6 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 6 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 7,
+    "date": "Sunday 25 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Did work pull at your attention today?",
+    "templateId": "foc_attention",
+    "frame": "lens",
+    "bound": "work",
+    "layer": "training",
+    "capacity": "Focus",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 7,
+    "today": [
+     "Sunday 25 October",
+     "Good afternoon.",
+     "Did work pull at your attention today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Focus",
+     "25 seconds",
+     "6 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did work pull at your attention today?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes, a lot”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did work pull at your attention today?",
+     "Your selected response: Yes, a lot",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "7 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Growth, Action.",
+     "Source material → [Read your selected responses] (collapsed; 7 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 8,
+    "date": "Monday 26 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Has anything changed how you see a situation lately?",
+    "templateId": "gro_update",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Growth",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 30,
+    "practiceDays": 8,
+    "today": [
+     "Monday 26 October",
+     "Good afternoon.",
+     "Has anything changed how you see a situation lately?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Growth",
+     "30 seconds",
+     "7 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Has anything changed how you see a situation lately?",
+      "options": [
+       "Yes, clearly",
+       "A little",
+       "Nothing comes to mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes, clearly”"
+     },
+     {
+      "id": "capture_domain",
+      "type": "domain_chips",
+      "prompt": "What's this mostly connected to?",
+      "options": [
+       "Work",
+       "Partner",
+       "Family",
+       "Friends",
+       "Myself",
+       "Body or health",
+       "Money",
+       "Time",
+       "Technology",
+       "Something else"
+      ],
+      "allowUnknown": false,
+      "answer": "chip “Myself”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Has anything changed how you see a situation lately?",
+     "Your selected response: Yes, clearly",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "8 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 1 rep completed. (2026-10-21)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”.",
+     "Think about the last two hours. Did anything take more attention than it deserved? You chose “Work”."
+    ]
+   },
+   {
+    "day": 9,
+    "date": "Tuesday 27 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Does anything need your attention today?",
+    "templateId": "presence",
+    "frame": "base",
+    "layer": "presence",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 10,
+    "practiceDays": 9,
+    "today": [
+     "Tuesday 27 October",
+     "Good afternoon.",
+     "Does anything need your attention today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "10 seconds",
+     "8 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Does anything need your attention today?",
+      "options": [
+       "Nothing right now",
+       "Something does"
+      ],
+      "allowUnknown": true,
+      "answer": "“Something does”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Does anything need your attention today?",
+     "Your selected response: Something does",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "9 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 2 reps completed. (2026-10-27)",
+     "· A fact about practice: Energy: 1 rep completed. (2026-10-22)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Does anything need your attention today? You chose “Something does”.",
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”.",
+     "Is there someone you appreciated today? You chose “Yes”."
+    ]
+   },
+   {
+    "day": 10,
+    "date": "Wednesday 28 October",
+    "opened": true,
+    "left": false,
+    "prompt": "What has helped you recharge lately?",
+    "templateId": "en_helped",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Energy",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 20,
+    "practiceDays": 10,
+    "today": [
+     "Wednesday 28 October",
+     "Good afternoon.",
+     "What has helped you recharge lately?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Energy",
+     "20 seconds",
+     "9 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "What has helped you recharge lately?",
+      "options": [
+       "Rest or sleep",
+       "Moving my body",
+       "Being with someone",
+       "Time alone",
+       "Nothing has helped yet"
+      ],
+      "allowUnknown": true,
+      "answer": "“Rest or sleep”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: What has helped you recharge lately?",
+     "Your selected response: Rest or sleep",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "10 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 2 reps completed. (2026-10-27)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-28)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "What has helped you recharge lately? You chose “Rest or sleep”.",
+     "Does anything need your attention today? You chose “Something does”.",
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”.",
+     "Did today's time go to what matters to you? You chose “Not really”."
+    ]
+   },
+   {
+    "day": 11,
+    "date": "Thursday 29 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Which is closer to today?",
+    "templateId": "dir_know_act",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Direction",
+    "intensity": "medium",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 11,
+    "today": [
+     "Thursday 29 October",
+     "Good afternoon.",
+     "Which is closer to today?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Direction",
+     "25 seconds",
+     "10 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Which is closer to today?",
+      "options": [
+       "I need more clarity.",
+       "I already know. I just haven't acted."
+      ],
+      "allowUnknown": true,
+      "answer": "“I already know. I just haven't acted.”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Which is closer to today?",
+     "Your selected response: I already know. I just haven't acted.",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "11 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 3 reps completed. (2026-10-29)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-28)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Which is closer to today? You chose “I already know. I just haven't acted”.",
+     "What has helped you recharge lately? You chose “Rest or sleep”.",
+     "Does anything need your attention today? You chose “Something does”.",
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”.",
+     "Which is closer to today? You chose “I paced myself”."
+    ]
+   },
+   {
+    "day": 12,
+    "date": "Friday 30 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Is work still weighing on you?",
+    "templateId": "cont_thread",
+    "frame": "thread_check",
+    "bound": "work",
+    "layer": "continuity",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 15,
+    "practiceDays": 12,
+    "today": [
+     "Friday 30 October",
+     "Good afternoon.",
+     "Is work still weighing on you?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "15 seconds",
+     "11 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is work still weighing on you?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes, a lot”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Is work still weighing on you?",
+     "Your selected response: Yes, a lot",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "12 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 3 reps completed. (2026-10-29)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-28)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is work still weighing on you? You chose “Yes, a lot”.",
+     "Which is closer to today? You chose “I already know. I just haven't acted”.",
+     "What has helped you recharge lately? You chose “Rest or sleep”.",
+     "Does anything need your attention today? You chose “Something does”.",
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”.",
+     "What's most on your mind today? You chose “Work”."
+    ]
+   },
+   {
+    "day": 13,
+    "date": "Saturday 31 October",
+    "opened": true,
+    "left": false,
+    "prompt": "Did work pull you away from what matters to you?",
+    "templateId": "dir_time",
+    "frame": "lens",
+    "bound": "work",
+    "layer": "training",
+    "capacity": "Direction",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 13,
+    "today": [
+     "Saturday 31 October",
+     "Good afternoon.",
+     "Did work pull you away from what matters to you?",
+     "Room for today. No need to catch up.",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Direction",
+     "25 seconds",
+     "12 days of practice this month"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Did work pull you away from what matters to you?",
+      "options": [
+       "Yes, a lot",
+       "Somewhat",
+       "Not today",
+       "This isn't what's on my mind"
+      ],
+      "allowUnknown": true,
+      "answer": "“Yes, a lot”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "This session, in view.",
+     "The offered question: Did work pull you away from what matters to you?",
+     "Your selected response: Yes, a lot",
+     "Your response to the offered question",
+     "The offered question and selected response stay together. No further conclusion is added."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "13 days of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 3 reps completed. (2026-10-29)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-28)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 1 rep completed. (2026-10-20)",
+     "These are completed reps, not levels of emotional fitness.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Did work pull you away from what matters to you? You chose “Yes, a lot”.",
+     "Is work still weighing on you? You chose “Yes, a lot”.",
+     "Which is closer to today? You chose “I already know. I just haven't acted”.",
+     "What has helped you recharge lately? You chose “Rest or sleep”.",
+     "Does anything need your attention today? You chose “Something does”.",
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”.",
+     "Is work getting in the way of something you meant to do? You chose “Somewhat”."
+    ]
+   },
+   {
+    "day": 14,
+    "date": "Sunday 1 November",
+    "opened": true,
+    "left": false,
+    "prompt": "Is there someone you've been meaning to reach out to?",
+    "templateId": "rel_connect",
+    "frame": "base",
+    "layer": "training",
+    "capacity": "Relationships",
+    "intensity": "light",
+    "sensitivity": "low",
+    "seconds": 25,
+    "practiceDays": 1,
+    "today": [
+     "Sunday 1 November",
+     "Good afternoon.",
+     "Is there someone you've been meaning to reach out to?",
+     "[Begin]",
+     "There is no answer to perform. You can leave any time.",
+     "Relationships",
+     "25 seconds",
+     "[What is an Inner Rep?] → “A small exercise, not a test. Notice what is real, exercise a capacity, then take that noticing into your day. “I don’t know” is a real answer. You can disagree with the mirror.”"
+    ],
+    "steps": [
+     {
+      "id": "primary",
+      "type": "choice",
+      "prompt": "Is there someone you've been meaning to reach out to?",
+      "options": [
+       "My partner",
+       "Family",
+       "A friend",
+       "No one right now"
+      ],
+      "allowUnknown": true,
+      "answer": "“Family”"
+     },
+     {
+      "id": "timeframe",
+      "type": "timeframe",
+      "prompt": "When would you like to do it?",
+      "options": [
+       "Today",
+       "Tomorrow",
+       "This week",
+       "Pick a date",
+       "No deadline"
+      ],
+      "allowUnknown": false,
+      "answer": "“Tomorrow”"
+     }
+    ],
+    "done": [
+     "Done for today.",
+     "Take it into life",
+     "Something you chose to carry.",
+     "The offered question: Is there someone you've been meaning to reach out to?",
+     "Your selected response: Family",
+     "Your response to the offered question",
+     "Your chosen intention: Reach out to your family",
+     "Tomorrow",
+     "The intention is yours. Its outcome is yours to name."
+    ],
+    "mirrorChanged": true,
+    "mirror": [
+     "The Mirror · no verdict on you",
+     "A view with room around it.",
+     "Practice, responses and possible readings. Each keeps its own source.",
+     "A quiet Mirror does not need to be filled.",
+     "Daily Inner Rep facts · not ability",
+     "What has been exercised.",
+     "1 day of practice this month. No need for consecutive days.",
+     "· A fact about practice: Direction: 3 reps completed. (2026-10-29)",
+     "· A fact about practice: Energy: 2 reps completed. (2026-10-28)",
+     "· A fact about practice: Focus: 1 rep completed. (2026-10-19)",
+     "· A fact about practice: Growth: 1 rep completed. (2026-10-26)",
+     "· A fact about practice: Relationships: 2 reps completed. (2026-11-01)",
+     "These are completed reps, not levels of emotional fitness.",
+     "A chosen intention",
+     "Only what was genuinely chosen.",
+     "· Your selected response: You chose to carry: Reach out to your family (around 2026-11-02). (2026-11-01)",
+     "An intention is not an outcome. A supplied follow-up lets you name what happened.",
+     "Mirar’s side of the window",
+     "There need not be a reading.",
+     "No personal explanation is supplied to fill the space. Practice can be useful without a reflection.",
+     "Your side of the window",
+     "Room to leave something open.",
+     "· What remains open: No completed training reps yet in: Action.",
+     "Source material → [Read your selected responses] (collapsed; 8 statements) — The offered question stays with the selected response. Neither is a description of who you are.",
+     "In this beta, practice stays on this device. It is not synced. Signing out clears it. Optional words are not saved."
+    ],
+    "said": [
+     "Is there someone you've been meaning to reach out to? You chose “Family”.",
+     "Did work pull you away from what matters to you? You chose “Yes, a lot”.",
+     "Is work still weighing on you? You chose “Yes, a lot”.",
+     "Which is closer to today? You chose “I already know. I just haven't acted”.",
+     "What has helped you recharge lately? You chose “Rest or sleep”.",
+     "Does anything need your attention today? You chose “Something does”.",
+     "Has anything changed how you see a situation lately? You chose “Yes, clearly”.",
+     "Did work pull at your attention today? You chose “Yes, a lot”."
+    ]
+   }
+  ]
+ },
+ "aggregate": {
+  "everyday": {
+   "p": "everyday",
+   "seeds": 40,
+   "openedPerRun": "12.0",
+   "repsPerRun": "12.0",
+   "leftPerRun": "0.0",
+   "distinctTemplatesPerRun": "10.9",
+   "stepsPerRep": "1.24",
+   "mediumShare": "26%",
+   "sensitiveShare": "8%",
+   "introspectiveShare": "62%",
+   "lightShare": "38%",
+   "wordsPerRun": "0.5",
+   "chipsPerRun": "0.8",
+   "threadOffersPerRun": "1.0",
+   "timeframePerRun": "0.4",
+   "unknownPerRun": "0.4",
+   "insightsPerRun": "0.0",
+   "runsWithInsight": "0%",
+   "medianFirstInsightDay": null,
+   "day1": {
+    "foc_attention": 40
+   },
+   "exposure": {
+    "probe": {
+     "by4": "0%",
+     "by7": "100%",
+     "by14": "100%",
+     "medianFirstDay": 6,
+     "earliest": 6
+    },
+    "lens": {
+     "by4": "0%",
+     "by7": "98%",
+     "by14": "100%",
+     "medianFirstDay": 7,
+     "earliest": 7
+    },
+    "medium": {
+     "by4": "58%",
+     "by7": "95%",
+     "by14": "100%",
+     "medianFirstDay": 4,
+     "earliest": 3
+    },
+    "words": {
+     "by4": "45%",
+     "by7": "45%",
+     "by14": "45%",
+     "medianFirstDay": 2,
+     "earliest": 2
+    },
+    "chips": {
+     "by4": "53%",
+     "by7": "55%",
+     "by14": "65%",
+     "medianFirstDay": 2,
+     "earliest": 2
+    },
+    "offer": {
+     "by4": "0%",
+     "by7": "100%",
+     "by14": "100%",
+     "medianFirstDay": 6,
+     "earliest": 6
+    },
+    "commitment": {
+     "by4": "3%",
+     "by7": "3%",
+     "by14": "38%",
+     "medianFirstDay": 11,
+     "earliest": 4
+    },
+    "heavy": {
+     "by4": "60%",
+     "by7": "63%",
+     "by14": "98%",
+     "medianFirstDay": 4,
+     "earliest": 3
+    },
+    "continuity": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "20%",
+     "medianFirstDay": 14,
+     "earliest": 13
+    },
+    "repeat": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "95%",
+     "medianFirstDay": 8,
+     "earliest": 8
+    },
+    "sameQuestion": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "95%",
+     "medianFirstDay": 10,
+     "earliest": 10
+    }
+   },
+   "earlyDays": {
+    "1": "foc_attention 100%",
+    "2": "rel_appreciation 100%",
+    "3": "en_pace 25%, dir_know_act 20%, gro_mistake 18%, gro_update 13%",
+    "4": "en_pace 18%, en_helped 15%, dir_fits 13%, dir_know_act 13%",
+    "5": "",
+    "6": "probe_anchor 98%, presence 3%"
+   },
+   "byDay": [
+    {
+     "day": 1,
+     "reps": 40,
+     "introspective": "0%"
+    },
+    {
+     "day": 2,
+     "reps": 40,
+     "introspective": "0%"
+    },
+    {
+     "day": 3,
+     "reps": 40,
+     "introspective": "60%"
+    },
+    {
+     "day": 4,
+     "reps": 40,
+     "introspective": "53%"
+    },
+    {
+     "day": 5,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 6,
+     "reps": 40,
+     "introspective": "100%"
+    },
+    {
+     "day": 7,
+     "reps": 40,
+     "introspective": "100%"
+    },
+    {
+     "day": 8,
+     "reps": 40,
+     "introspective": "100%"
+    },
+    {
+     "day": 9,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 10,
+     "reps": 40,
+     "introspective": "65%"
+    },
+    {
+     "day": 11,
+     "reps": 40,
+     "introspective": "80%"
+    },
+    {
+     "day": 12,
+     "reps": 40,
+     "introspective": "55%"
+    },
+    {
+     "day": 13,
+     "reps": 40,
+     "introspective": "53%"
+    },
+    {
+     "day": 14,
+     "reps": 40,
+     "introspective": "83%"
+    }
+   ]
+  },
+  "avoider": {
+   "p": "avoider",
+   "seeds": 40,
+   "openedPerRun": "5.0",
+   "repsPerRun": "3.1",
+   "leftPerRun": "1.9",
+   "distinctTemplatesPerRun": "3.1",
+   "stepsPerRep": "1.07",
+   "mediumShare": "10%",
+   "sensitiveShare": "6%",
+   "introspectiveShare": "23%",
+   "lightShare": "77%",
+   "wordsPerRun": "0.1",
+   "chipsPerRun": "0.1",
+   "threadOffersPerRun": "0.1",
+   "timeframePerRun": "0.0",
+   "unknownPerRun": "1.0",
+   "insightsPerRun": "0.0",
+   "runsWithInsight": "0%",
+   "medianFirstInsightDay": null,
+   "day1": {
+    "foc_attention": 40
+   },
+   "exposure": {
+    "probe": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "38%",
+     "medianFirstDay": 8,
+     "earliest": 8
+    },
+    "lens": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "0%",
+     "medianFirstDay": null,
+     "earliest": null
+    },
+    "medium": {
+     "by4": "8%",
+     "by7": "35%",
+     "by14": "50%",
+     "medianFirstDay": 5,
+     "earliest": 3
+    },
+    "words": {
+     "by4": "3%",
+     "by7": "5%",
+     "by14": "5%",
+     "medianFirstDay": 5,
+     "earliest": 2
+    },
+    "chips": {
+     "by4": "3%",
+     "by7": "5%",
+     "by14": "5%",
+     "medianFirstDay": 5,
+     "earliest": 2
+    },
+    "offer": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "10%",
+     "medianFirstDay": 8,
+     "earliest": 8
+    },
+    "commitment": {
+     "by4": "3%",
+     "by7": "3%",
+     "by14": "3%",
+     "medianFirstDay": 3,
+     "earliest": 3
+    },
+    "heavy": {
+     "by4": "8%",
+     "by7": "38%",
+     "by14": "58%",
+     "medianFirstDay": 5,
+     "earliest": 3
+    },
+    "continuity": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "0%",
+     "medianFirstDay": null,
+     "earliest": null
+    },
+    "repeat": {
+     "by4": "0%",
+     "by7": "0%",
+     "by14": "0%",
+     "medianFirstDay": null,
+     "earliest": null
+    },
+    "sameQuestion": {
+     "by4": "58%",
+     "by7": "58%",
+     "by14": "73%",
+     "medianFirstDay": 3,
+     "earliest": 3
+    }
+   },
+   "earlyDays": {
+    "1": "foc_attention 100%",
+    "2": "rel_appreciation 100%",
+    "3": "rel_appreciation 58%, en_helped 15%, dir_time 8%, act_tiny 5%",
+    "4": "",
+    "5": "rel_appreciation 45%, dir_know_act 15%, gro_mistake 13%, en_pace 8%",
+    "6": ""
+   },
+   "byDay": [
+    {
+     "day": 1,
+     "reps": 40,
+     "introspective": "0%"
+    },
+    {
+     "day": 2,
+     "reps": 17,
+     "introspective": "0%"
+    },
+    {
+     "day": 3,
+     "reps": 22,
+     "introspective": "32%"
+    },
+    {
+     "day": 4,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 5,
+     "reps": 23,
+     "introspective": "26%"
+    },
+    {
+     "day": 6,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 7,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 8,
+     "reps": 22,
+     "introspective": "73%"
+    },
+    {
+     "day": 9,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 10,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 11,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 12,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 13,
+     "reps": 0,
+     "introspective": "n/a"
+    },
+    {
+     "day": 14,
+     "reps": 0,
+     "introspective": "n/a"
+    }
+   ]
+  },
+  "reflective": {
+   "p": "reflective",
+   "seeds": 40,
+   "openedPerRun": "14.0",
+   "repsPerRun": "14.0",
+   "leftPerRun": "0.0",
+   "distinctTemplatesPerRun": "12.2",
+   "stepsPerRep": "1.44",
+   "mediumShare": "12%",
+   "sensitiveShare": "5%",
+   "introspectiveShare": "65%",
+   "lightShare": "35%",
+   "wordsPerRun": "0.9",
+   "chipsPerRun": "1.9",
+   "threadOffersPerRun": "1.4",
+   "timeframePerRun": "1.4",
+   "unknownPerRun": "0.3",
+   "insightsPerRun": "0.1",
+   "runsWithInsight": "8%",
+   "medianFirstInsightDay": 11,
+   "day1": {
+    "foc_attention": 40
+   },
+   "exposure": {
+    "probe": {
+     "by4": "0%",
+     "by7": "100%",
+     "by14": "100%",
+     "medianFirstDay": 5,
+     "earliest": 5
+    },
+    "lens": {
+     "by4": "23%",
+     "by7": "100%",
+     "by14": "100%",
+     "medianFirstDay": 6,
+     "earliest": 2
+    },
+    "medium": {
+     "by4": "40%",
+     "by7": "75%",
+     "by14": "90%",
+     "medianFirstDay": 6,
+     "earliest": 3
+    },
+    "words": {
+     "by4": "95%",
+     "by7": "95%",
+     "by14": "95%",
+     "medianFirstDay": 2,
+     "earliest": 2
+    },
+    "chips": {
+     "by4": "95%",
+     "by7": "95%",
+     "by14": "100%",
+     "medianFirstDay": 2,
+     "earliest": 1
+    },
+    "offer": {
+     "by4": "23%",
+     "by7": "100%",
+     "by14": "100%",
+     "medianFirstDay": 5,
+     "earliest": 1
+    },
+    "commitment": {
+     "by4": "15%",
+     "by7": "23%",
+     "by14": "90%",
+     "medianFirstDay": 9,
+     "earliest": 3
+    },
+    "heavy": {
+     "by4": "43%",
+     "by7": "53%",
+     "by14": "93%",
+     "medianFirstDay": 7,
+     "earliest": 3
+    },
+    "continuity": {
+     "by4": "0%",
+     "by7": "3%",
+     "by14": "100%",
+     "medianFirstDay": 10,
+     "earliest": 5
+    },
+    "repeat": {
+     "by4": "0%",
+     "by7": "38%",
+     "by14": "98%",
+     "medianFirstDay": 9,
+     "earliest": 7
+    },
+    "sameQuestion": {
+     "by4": "0%",
+     "by7": "8%",
+     "by14": "90%",
+     "medianFirstDay": 9,
+     "earliest": 7
+    }
+   },
+   "earlyDays": {
+    "1": "foc_attention 100%",
+    "2": "rel_appreciation 78%, dir_time/lens 15%, gro_update/lens 8%",
+    "3": "dir_time 30%, en_helped 15%, gro_update/lens 13%, dir_time/lens 8%",
+    "4": "en_pace 30%, rel_appreciation 23%, gro_mistake 13%, dir_know_act 10%",
+    "5": "probe_anchor 98%, cont_commitment/commitment_check 3%",
+    "6": "act_friction/lens 35%, gro_update/lens 30%, en_pace 10%, rel_boundary/lens 10%"
+   },
+   "byDay": [
+    {
+     "day": 1,
+     "reps": 40,
+     "introspective": "0%"
+    },
+    {
+     "day": 2,
+     "reps": 40,
+     "introspective": "23%"
+    },
+    {
+     "day": 3,
+     "reps": 40,
+     "introspective": "70%"
+    },
+    {
+     "day": 4,
+     "reps": 40,
+     "introspective": "35%"
+    },
+    {
+     "day": 5,
+     "reps": 40,
+     "introspective": "100%"
+    },
+    {
+     "day": 6,
+     "reps": 40,
+     "introspective": "83%"
+    },
+    {
+     "day": 7,
+     "reps": 40,
+     "introspective": "78%"
+    },
+    {
+     "day": 8,
+     "reps": 40,
+     "introspective": "53%"
+    },
+    {
+     "day": 9,
+     "reps": 40,
+     "introspective": "75%"
+    },
+    {
+     "day": 10,
+     "reps": 40,
+     "introspective": "60%"
+    },
+    {
+     "day": 11,
+     "reps": 40,
+     "introspective": "83%"
+    },
+    {
+     "day": 12,
+     "reps": 40,
+     "introspective": "90%"
+    },
+    {
+     "day": 13,
+     "reps": 40,
+     "introspective": "80%"
+    },
+    {
+     "day": 14,
+     "reps": 40,
+     "introspective": "78%"
+    }
+   ]
+  }
+ }
+}
