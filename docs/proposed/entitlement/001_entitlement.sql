@@ -122,6 +122,7 @@ begin
   if coalesce(auth.role(), '') <> 'service_role' then raise exception 'service role only' using errcode = '42501'; end if;
   if p_reason is null or char_length(p_reason) not between 1 and 200 then raise exception 'a reason of 1 to 200 characters is required' using errcode = '22023'; end if;
   insert into public.entitlement (user_id) values (p_user) on conflict (user_id) do nothing;
+  if found then insert into public.entitlement_event (user_id, kind, source) values (p_user, 'created', 'system'); end if;
   select * into r from public.entitlement where user_id = p_user for update;
   if p_action = 'comp' then
     update public.entitlement set state = 'comped' where user_id = p_user returning * into r;

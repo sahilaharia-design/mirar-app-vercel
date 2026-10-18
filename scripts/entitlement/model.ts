@@ -56,14 +56,14 @@ export class ServerModel {
   admin(role: string, uid: string, action: 'comp' | 'uncomp' | 'extend', hours: number | null, reason: string | null): Ent {
     if (role !== 'service_role') throw new Error('service role only');
     if (!reason || reason.length < 1 || reason.length > 200) throw new Error('a reason of 1 to 200 characters is required');
-    const r = this.ensure(uid); const now = this.truth();
+    // validate BEFORE creating anything: the SQL function runs in one transaction, so a refused call leaves no row and no event behind
+    if (action === 'extend') { const cur = this.rows.get(uid); if (!cur || cur.start === null) throw new Error('the trial has not started'); if (hours === null || hours < 1 || hours > 8760) throw new Error('hours must be 1 to 8760'); }
+    const h = hours as number; const r = this.ensure(uid); const now = this.truth();
     if (action === 'comp') { r.state = 'comped'; r.version++; this.events.push({ uid, kind: 'admin_comp', at: now, source: 'admin', reason }); }
     else if (action === 'uncomp') { r.state = r.start === null ? 'new' : (r.end as number) <= now ? 'trial_expired' : 'trialing'; r.version++; this.events.push({ uid, kind: 'admin_uncomp', at: now, source: 'admin', reason }); }
     else {
-      if (r.start === null) throw new Error('the trial has not started');
-      if (hours === null || hours < 1 || hours > 8760) throw new Error('hours must be 1 to 8760');
-      r.end = (r.end as number) + hours * H; r.state = r.end > now ? 'trialing' : 'trial_expired'; r.version++;
-      this.events.push({ uid, kind: 'admin_extend', at: now, source: 'admin', hours, reason });
+      r.end = (r.end as number) + h * H; r.state = r.end > now ? 'trialing' : 'trial_expired'; r.version++;
+      this.events.push({ uid, kind: 'admin_extend', at: now, source: 'admin', hours: h, reason });
     }
     return this.json(r);
   }
