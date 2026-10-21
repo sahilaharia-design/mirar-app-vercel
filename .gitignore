@@ -45,3 +45,6 @@ yarn-error.*
 
 # Local visual review build
 dist-review/
+
+# Isolated everyday practice exploration
+dist-practice-lab/
