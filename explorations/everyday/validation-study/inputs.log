@@ -1,10 +1,1 @@
-page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:5193/?practice=message
-Call log:
-[2m  - navigating to "http://127.0.0.1:5193/?practice=message", waiting until "load"[22m
-
-    at /Users/sahilharia/Documents/Mirar v2 visual/explorations/everyday/verify-inputs.cjs:69:13 {
-  log: [
-    '  - navigating to "http://127.0.0.1:5193/?practice=message", waiting until "load"'
-  ],
-  name: 'Error'
-}
+PASS keyboard-only full flow for all three; touch path
