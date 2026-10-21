@@ -55,7 +55,7 @@ async function audit(label) {
   });
   const g = await page.evaluate(() => ({
     overflow: document.documentElement.scrollWidth > innerWidth,
-    small: [...document.querySelectorAll("button,a.choice")]
+    small: [...document.querySelectorAll("button,a")]
       .filter((e) => !e.disabled)
       .filter((e) => {
         let r = e.getBoundingClientRect();

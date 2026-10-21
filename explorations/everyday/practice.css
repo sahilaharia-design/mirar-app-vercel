@@ -611,3 +611,4 @@ footer small {
 h1 {
   scroll-margin-top: 16px;
 }
+header>a:first-of-type{display:inline-flex;align-items:center;min-height:44px}.support a{min-width:44px}
