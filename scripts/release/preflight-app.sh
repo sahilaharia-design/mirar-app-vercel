@@ -12,7 +12,7 @@ names=$(vercel env ls 2>/dev/null | grep -E "Production" | awk '{print $1}' | so
 [ "$names" = "EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_SUPABASE_URL " ] && pass "Production env = Supabase URL + anon key only (no demo, review, admin or dev-tools variables)" || bad "Production env differs: $names"
 
 npx tsc --noEmit >/dev/null 2>&1 && pass "TypeScript" || bad "TypeScript"
-for t in scripts/runtime/pilots.test.ts scripts/runtime/account-isolation.test.ts scripts/runtime/backup.test.ts scripts/runtime/backup-sync.test.ts scripts/runtime/continuity.test.ts scripts/entitlement/entitlement.test.ts scripts/sim/suite.ts scripts/sim/correction-suite.ts scripts/runtime/runtime.test.ts scripts/runtime/mirror.test.ts scripts/runtime/mirror-contract.test.ts scripts/runtime/receipt.test.ts; do
+for t in scripts/runtime/pilots.test.ts scripts/runtime/account-isolation.test.ts scripts/runtime/persist-on-serve.test.ts scripts/runtime/backup.test.ts scripts/runtime/backup-sync.test.ts scripts/runtime/continuity.test.ts scripts/entitlement/entitlement.test.ts scripts/sim/suite.ts scripts/sim/correction-suite.ts scripts/runtime/runtime.test.ts scripts/runtime/mirror.test.ts scripts/runtime/mirror-contract.test.ts scripts/runtime/receipt.test.ts; do
   out=$(npx tsx "$t" 2>&1); echo "$out" | grep -q FAIL && bad "$t" || { echo "$out" | grep -qE "pass|PASS" && pass "$t" || bad "$t (no pass output)"; }
 done
 

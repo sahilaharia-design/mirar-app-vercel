@@ -6,6 +6,7 @@ import { CompletionView, InsightFeedbackValue, KV, TodayView, clearV2Keys, creat
 import type { MirrorModel } from '../lib/innerRep/runtime/mirror-contract';
 import type { Receipt } from '../lib/innerRep/runtime/receipt';
 import { clearPilotKeys } from '../lib/innerRep/pilots/keys';
+import { newServedGuard, recordServed, resetServedGuard } from '../lib/innerRep/runtime/serve';
 
 // Thin reactive wrapper around the v2 runtime adapter. All behaviour lives in lib/innerRep/runtime/v2-runtime.ts, which
 // delegates every decision to the frozen engine. DEV PERSISTENCE: structured state in AsyncStorage (browser localStorage on
@@ -16,6 +17,10 @@ const baseRuntime = createRuntime({ storage: AsyncStorage as unknown as KV });
 // events on this device only (the journal is never sent anywhere unless the person opts in). The direct env comparison is inlined at build time, so a build
 // without the flag contains none of the continuity code (preflight scans for it). EXPO_PUBLIC_HISTORY_SYNC must never be set in the Production environment.
 const runtime: ReturnType<typeof createRuntime> = process.env.EXPO_PUBLIC_HISTORY_SYNC === '1' ? (require('../lib/innerRep/backup/hook') as typeof import('../lib/innerRep/backup/hook')).attachRecorder(baseRuntime) : baseRuntime;
+
+// S1a persist-on-serve guard (in memory; see lib/innerRep/runtime/serve.ts). Reset on sign-out and device reset.
+const served = newServedGuard();
+const dayKeyNow = () => new Date().toDateString();
 
 interface State {
   status: 'idle' | 'loading' | 'ready' | 'error';
@@ -42,7 +47,7 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
     // another user on this device must never inherit this one's in-memory state
     if (get().userId && get().userId !== userId) set({ today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
     set({ status: get().today ? 'ready' : 'loading', userId });
-    try { await runtime.init(userId); set({ today: runtime.today(), practiceDays: runtime.practiceDaysThisMonth(), mirror: runtime.mirror(), receipt: runtime.receipt(), status: 'ready', dayKey: new Date().toDateString() }); }
+    try { await runtime.init(userId); const today = runtime.today(); await recordServed(runtime, today, served, { userId, dayKey: dayKeyNow() }); set({ today, practiceDays: runtime.practiceDaysThisMonth(), mirror: runtime.mirror(), receipt: runtime.receipt(), status: 'ready', dayKey: dayKeyNow() }); }
     catch { set({ status: 'error' }); }
   },
   progress: (answers) => { void runtime.progress(answers); },
@@ -51,7 +56,7 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
     set({ today: { kind: 'done', ...result }, practiceDays: runtime.practiceDaysThisMonth(), mirror: runtime.mirror(), receipt: runtime.receipt() });
     return result;
   },
-  discardForSafety: async () => { await runtime.discardForSafety(); set({ today: runtime.today() }); },
+  discardForSafety: async () => { await runtime.discardForSafety(); served.safetyDay = dayKeyNow(); set({ today: runtime.today() }); },   // S1a: nothing is persisted for the rest of this day
   feedback: async (insightId, value) => { await runtime.feedback(insightId, value); set({ mirror: runtime.mirror() }); },
   correction: async (insightId, reason) => { await runtime.correction(insightId, reason); set({ mirror: runtime.mirror() }); },
 }));
@@ -67,6 +72,7 @@ export async function clearInnerRepV2Data() {
     await (require('../lib/innerRep/backup/keys') as typeof import('../lib/innerRep/backup/keys')).clearHistoryKeys(AsyncStorage as unknown as KV);
     (require('./continuity-store') as typeof import('./continuity-store')).stopContinuity();
   }
+  resetServedGuard(served);
   useInnerRepV2Store.setState({ status: 'idle', userId: null, dayKey: '', today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
 }
 
@@ -75,6 +81,7 @@ export async function resetDevicePractice(userId: string) {
   await clearV2Keys(AsyncStorage as unknown as KV);
   await clearPilotKeys(AsyncStorage as unknown as KV);
   if (process.env.EXPO_PUBLIC_PILOTS === '1') (require('./pilot-store') as typeof import('./pilot-store')).resetPilotMemory();
+  resetServedGuard(served);
   useInnerRepV2Store.setState({ status: 'idle', today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
   await useInnerRepV2Store.getState().load(userId);
 }

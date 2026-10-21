@@ -23,7 +23,7 @@ export async function applyEvent(rt: V2Runtime, clock: { d: Date }, uid: string,
     if (e.kind === 'rep_completed') {
       if (t.payload.frame !== e.frame || (t.payload.bound ?? undefined) !== (e.bound ?? undefined)) throw new ReplayDriftError(`${e.day}: frame/domain differ`);
       try { await rt.complete(e.answers.map(fromWire)); } catch (err) { throw new ReplayDriftError(`${e.day}: the engine would not accept these answers (${(err as Error).message})`); }
-    } else { clock.d = at(e.day, 1); await rt.init(uid); }   // the next time the app opens, the runtime records the unfinished rep as abandoned
+    } else { await rt.progress([]); clock.d = at(e.day, 1); await rt.init(uid); }   // S1a: the live host persists a rep when it is served (lib/innerRep/runtime/serve.ts); the replay does the same, so the next time the app opens the runtime records the unfinished rep as abandoned exactly as it did live
   } else {
     const ins = rt._state().insights.find((i) => new Date(i.day * 86400000).toISOString().slice(0, 10) === e.insightDay);
     if (!ins) throw new ReplayDriftError(`${e.day}: no insight on ${e.insightDay}`);
