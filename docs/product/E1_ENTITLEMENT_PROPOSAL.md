@@ -70,3 +70,6 @@ Migration 005 left `FOR ALL USING (user_id = auth.uid())` policies on `trial_tra
 - Say whether **E1b** may be prepared for its own review.
 - Confirm the three constants (72 h, 72 h, 3 reps) are acceptable.
 Nothing else will happen until then. Cashfree, email sending, Supabase, production and Codex's continuity work remain untouched.
+
+## 12. Supabase Data API grants (30 October 2026)
+Compatible with no change: the tables have no client grants (revoked explicitly) and the two client functions are granted explicitly. Verified from an empty database under legacy, new and strict default-privilege regimes (`scripts/release/grant-regime-check.ts`, 433 assertions, PGlite 16 and native PostgreSQL 17.5, disposable). Checklist and the `service_role` note: `docs/release/RELEASE_RUNBOOK.md` §6. Nothing applied to Supabase.
