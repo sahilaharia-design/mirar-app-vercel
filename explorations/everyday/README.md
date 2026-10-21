@@ -57,7 +57,7 @@ The value contract's competitor exclusivity and self-reported before/after propo
 
 **Truthful value:** the person operates on a set of competing pulls and produces a concrete arrangement. This is materially different from reporting “I kept switching.”
 
-**Status:** `PilotSession('attend') → session.step(): PStep → PAnswer → session.answer() → record()/valueOf()`. Same runtime emits sequence, disables second foreground choice, supports back and allows one rearrangement. In-memory only; `prior:[]`; no store/backup imports, no pilot or engine writes. Fictional choices must never be replayed into personal evidence.
+**Status:** `PilotSession('attend') → session.step(): PStep → PAnswer → session.answer() → record()/valueOf()`. Same runtime emits sequence, disables second foreground choice, supports back and allows one rearrangement. In-memory only; `prior:[]`; no store/backup imports, no pilot or engine writes. Neither fictional responses nor own-life review choices are saved or replayed into personal evidence.
 
 ### 3. Before you say yes.
 
