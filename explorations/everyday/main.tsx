@@ -101,11 +101,17 @@ function Window({
 }
 function Frame({
   children,
-  mode = "Proposed mechanic · mocked",
+  mode = "Prototype · mocked · fictional",
+  source = "prototype",
+  scope = "fictional",
+  compact = false,
   onExit,
 }: {
   children: React.ReactNode;
   mode?: string;
+  source?: "prototype" | "pilot";
+  scope?: "fictional" | "own_life";
+  compact?: boolean;
   onExit?: () => void;
 }) {
   return (
@@ -118,16 +124,25 @@ function Frame({
           <img className="wordmark" src={String(Wordmark)} alt="Mirar" />
         </a>
         <span>Everyday emotional fitness</span>
+        <a className="support-link" href="#support">
+          Support
+        </a>
         {onExit && (
           <Button className="text-button" onClick={onExit}>
             Not now
           </Button>
         )}
       </header>
-      <main id="practice">
+      <main id="practice" tabIndex={-1} data-source={source} data-scope={scope}>
         <p className="review-note">
-          Experience exploration · {mode} · Not saved
+          Founder/adviser review · {mode} · Not saved
         </p>
+        {!compact && (
+          <p className="study-disclosure">
+            This is an early prototype, not Mirar’s released product. Nothing
+            you choose is saved or sent. It makes no claim about helping you.
+          </p>
+        )}
         {children}
       </main>
       <footer>
@@ -138,11 +153,28 @@ function Frame({
           Practice is the product.
         </p>
         <small>
-          Review only. No account, storage, analytics or sending.
+          Review only. No Mirar account, practice storage, analytics or sending.
           <br />
-          New behavioral approval pending Claude’s realignment spec.
+          Reconciled for founder review; participant approval is pending.
         </small>
       </footer>
+      <section id="support" className="support" aria-label="Support">
+        <details>
+          <summary>Support, if you need it</summary>
+          <p>
+            You can stop or skip anything here. This prototype is not therapy or
+            treatment.
+          </p>
+          <p>
+            In India: emergency assistance <a href="tel:112">112</a>.
+            Mental-health support: Tele MANAS{" "}
+            <a href="tel:+9114416?oai_link_source=model_response_hotline">
+              14416
+            </a>
+            . If you are elsewhere, use your local support or emergency service.
+          </p>
+        </details>
+      </section>
     </>
   );
 }
@@ -150,7 +182,7 @@ function Exit({ restart }: { restart: () => void }) {
   return (
     <section className="closing">
       <p className="eyebrow">Left here</p>
-      <h1>Another time is fine.</h1>
+      <FocusTitle stamp="left">Another time is fine.</FocusTitle>
       <p>
         You stopped this try. Nothing was saved, sent or counted as a completed
         practice.
@@ -299,7 +331,7 @@ function Message() {
               : seen.includes("reading")
                 ? "You put a reading next to the message."
                 : seen.length
-                  ? "You looked again at the message itself."
+                  ? "You left the reading here without comparing another one."
                   : "You read the message without choosing an interpretation."}{" "}
             {outcome === "keep"
               ? `You kept “${s.readings[first ?? 2]}” as your reading; the words alone do not confirm it.`
@@ -504,7 +536,10 @@ function Attention() {
   const label = (id: string) => PULLS.find((p) => p.id === id)?.label ?? id;
   return (
     <Frame
-      mode="Real Attend session · fictional rehearsal"
+      mode="Real Attend session · your own attention"
+      source="pilot"
+      scope="own_life"
+      compact={!!step && step.id !== "pulls"}
       onExit={() => {
         session.leave();
         setLeft(true);
@@ -520,10 +555,13 @@ function Attention() {
               : facts?.outcome === "nothing_pulling"
                 ? "Nothing needs arranging."
                 : facts?.dispositions.some((d) => d.disposition === "unknown")
-                  ? "Some placed. Some still open."
+                  ? facts.dispositions.some((d) => d.disposition !== "unknown")
+                    ? "Some placed. Some still open."
+                    : "Still open. Nothing placed yet."
                   : "A place for each. Not a list to finish."
           }
           onAgain={reset}
+          next="Try Attend again"
           details={
             <>
               <p>{value?.usefulNow}</p>
@@ -533,9 +571,9 @@ function Attention() {
                 ))}
               </ul>
               <p>
-                This uses the existing Attend step machine and closing facts. In
-                this rehearsal, its record stays in memory; return offers and
-                saving are not connected.
+                This optional practice uses the existing Attend steps. Your
+                choices stay only in this open page; saving, reminders and
+                return offers are not connected.
               </p>
             </>
           }
@@ -544,8 +582,10 @@ function Attention() {
             {facts?.outcome === "could_not_name"
               ? "You checked, and chose not knowing. No placement is claimed."
               : facts?.outcome === "nothing_pulling"
-                ? "You chose nothing for this scene. You do not have to invent something to arrange."
-                : `You tried giving the scene’s pulls different places. ${facts?.dispositions.filter((d) => d.disposition !== "unknown").length} of ${facts?.pulls.length} have a chosen place.`}
+                ? "You said nothing was pulling at you. You do not have to invent something to arrange."
+                : facts?.dispositions.some((d) => d.disposition !== "unknown")
+                  ? `You gave the things you named different places. ${facts.dispositions.filter((d) => d.disposition !== "unknown").length} of ${facts.pulls.length} have a chosen place.`
+                  : "You looked at what was pulling at you and left its place undecided. Nothing has been placed."}
           </p>
           {facts?.outcome === "arranged" && (
             <PlacementBoard facts={facts} label={label} />
@@ -566,32 +606,21 @@ function Attention() {
                 ? "Between one thing and the next."
                 : step.type === "hold"
                   ? "One thing, for this moment."
-                  : "Give it somewhere to be."}
+                  : "Give it a place."}
             </FocusTitle>
             <p>
-              Imagine an ordinary afternoon: a task half-finished, a message
-              waiting, a phone nearby. Choose for this made-up scene, not about
-              yourself.
+              {step.id === "pulls"
+                ? "An optional practice about your own attention right now. Choose from the fixed list; there is no typing. You can skip anything by choosing ‘I don’t know’ or ‘Not now’."
+                : "One place at a time. You can leave at any point."}
             </p>
           </div>
-          <div className="practice-grid attention-grid">
-            <section className="scene">
-              <Window layer={facts?.attendNow ? "reading" : "words"}>
-                <span className="eyebrow">One place in the foreground</span>
-                <p>
-                  {facts?.attendNow
-                    ? label(facts.attendNow)
-                    : "Not everything needs to be now."}
-                </p>
-              </Window>
-              {facts && facts.pulls.length > 0 && (
-                <PlacementBoard facts={facts} label={label} />
-              )}
-            </section>
+          <div
+            className={`practice-grid attention-grid ${step.id === "pulls" ? "attention-entry" : "attention-placement"}`}
+          >
             <section className="workbench">
               <p className="eyebrow">
                 {step.type === "multi"
-                  ? "Choose the props for the scene"
+                  ? "What has your attention?"
                   : step.type === "hold"
                     ? "Self-paced · no timer"
                     : "Place, don’t prioritise"}
@@ -614,6 +643,22 @@ function Attention() {
                 Set aside, leave open, do nothing and don’t know are different,
                 equally legitimate choices. No reminders are created.
               </p>
+            </section>
+            <section className="scene">
+              <Window layer={facts?.attendNow ? "reading" : "words"}>
+                <span className="eyebrow">One place in the foreground</span>
+                <p>
+                  {facts?.attendNow
+                    ? label(facts.attendNow)
+                    : "Not everything needs to be now."}
+                </p>
+              </Window>
+              {facts && facts.pulls.length > 0 && (
+                <details className="arrangement">
+                  <summary>Arrangement so far</summary>
+                  <PlacementBoard facts={facts} label={label} />
+                </details>
+              )}
             </section>
           </div>
         </>
@@ -861,10 +906,11 @@ function Reply() {
             <section className="workbench">
               {phase === "edit" ? (
                 <>
-                  <h2>Make a reply you could stand behind in this scene.</h2>
+                  <h2>Try a reply in this scene.</h2>
                   <p>
-                    Try changing the offer. Keep it, shrink it, check first or
-                    decline.
+                    Try the wording, or keep it as it is. An offer, a pause, a
+                    smaller offer and a decline are all available; no response
+                    is graded.
                   </p>
                   <div
                     className="choices"
@@ -941,14 +987,17 @@ function Reply() {
 }
 function Hub() {
   return (
-    <Frame mode="Two mocked mechanics · one real session contract">
+    <Frame mode="Message/Reply: fictional mock-ups · Attention: real own-life practice">
       <section className="intro hub">
         <p className="eyebrow">Three first-session tries</p>
         <h1>
           Something ordinary.
           <br />A different way through.
         </h1>
-        <p>No life story. No score. Just a small thing to try.</p>
+        <p>
+          Two fictional rehearsals and one optional practice about your own
+          attention. No typing, no score, no saved choices.
+        </p>
       </section>
       <div className="concepts">
         {concepts.map((c, i) => (
@@ -979,8 +1028,9 @@ function Hub() {
         </p>
         <p>
           The message and reply mechanics are mocked proposals. Attend runs the
-          existing step contract with no storage. All scenes are fictional; none
-          become personal evidence.
+          existing step contract with no storage. Message and Reply are
+          fictional; Attention is about your own life. None become personal
+          evidence or change your Mirar account.
         </p>
       </details>
     </Frame>

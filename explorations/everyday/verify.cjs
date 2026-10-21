@@ -12,7 +12,8 @@ const out = process.env.PRACTICE_EVIDENCE || "/tmp/mirar-everyday-evidence";
 fs.mkdirSync(out, { recursive: true });
 const rows = [],
   errors = [],
-  external = [];
+  external = [],
+  practiceNetwork = [];
 let page;
 const button = (n) => page.getByRole("button", { name: n, exact: true });
 const click = async (n) => {
@@ -103,6 +104,15 @@ async function run() {
   page = await context.newPage();
   page.on("pageerror", (e) => errors.push(String(e)));
   page.on("request", (r) => {
+    if (
+      ["fetch", "xhr", "websocket", "eventsource"].includes(r.resourceType()) ||
+      r.method() !== "GET"
+    )
+      practiceNetwork.push({
+        type: r.resourceType(),
+        method: r.method(),
+        url: r.url(),
+      });
     if (!r.url().startsWith(base) && !r.url().startsWith("data:"))
       external.push(r.url());
   });
@@ -242,7 +252,7 @@ async function run() {
   for (const early of ["I don’t know", "Nothing is pulling at me right now"]) {
     await open("attention");
     await click(early);
-    await absent("You tried giving");
+    await absent("You gave the things you named");
     await audit("attention-empty-" + early);
   }
   await open("attention");
@@ -337,6 +347,7 @@ async function run() {
   await shot("message-practice-390");
   assert.deepEqual(errors, []);
   assert.deepEqual(external, []);
+  assert.deepEqual(practiceNetwork, []);
   fs.writeFileSync(
     path.join(out, "results.json"),
     JSON.stringify(
@@ -344,6 +355,7 @@ async function run() {
         audits: rows,
         errors,
         external,
+        practiceNetwork,
         staticStorage: "zero localStorage/sessionStorage across all audits",
         keyboard: true,
         reducedMotion: true,

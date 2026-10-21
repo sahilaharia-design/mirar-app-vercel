@@ -465,14 +465,14 @@ footer small {
     min-height: 240px;
   }
   .window-words {
-  position: relative;
-  z-index: 1;
+    position: relative;
+    z-index: 1;
     padding: 24px;
   }
   .window-words > p {
-  background: var(--surface-secondary);
-  width: fit-content;
-  padding: 2px 4px;
+    background: var(--surface-secondary);
+    width: fit-content;
+    padding: 2px 4px;
     font-size: 36px;
     max-width: 90%;
   }
@@ -558,4 +558,56 @@ footer small {
   .hub h1 {
     font-size: 48px;
   }
+}
+
+/* Study preparation: the current Attend operation precedes its graphic/arrangement in DOM and visual order. */
+.study-disclosure {
+  max-width: 760px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: -20px 0 28px;
+}
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px;
+  text-underline-offset: 4px;
+  font-size: 13px;
+}
+.support {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 6% 24px;
+  font-size: 14px;
+}
+.support a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 4px;
+}
+.arrangement {
+  margin-top: 16px;
+}
+@media (max-width: 700px) {
+  .attention-grid .aperture {
+    min-height: 160px;
+  }
+  .attention-grid .workbench {
+    padding-top: 16px;
+  }
+  .review-note {
+    margin-bottom: 24px;
+  }
+  .study-disclosure {
+    margin: -8px 0 24px;
+  }
+  .support-link {
+    margin-left: auto;
+  }
+}
+
+h1 {
+  scroll-margin-top: 16px;
 }
