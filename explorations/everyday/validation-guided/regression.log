@@ -1,0 +1,6 @@
+PASS viewport 320
+PASS viewport 390
+PASS viewport 768
+PASS viewport 1024
+PASS viewport 1440
+PASS 119 audits; no external requests or storage

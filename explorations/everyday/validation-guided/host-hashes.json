@@ -1,0 +1,47 @@
+[
+  {
+    "path": ".vercel/output/config.json",
+    "sha1": "4e825f51cd4607d9467bf45e5e2afa853cd85828",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/assets/index-5MxDfiAu.js",
+    "sha1": "625351d80f255ca6f7635111c0e71b4b1721c7e3",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/assets/index-fXqpIW--.css",
+    "sha1": "5b3fbb0f1c62d12546ecbc7195bdef977608896a",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/assets/mirar-mark-BS5IeR91.png",
+    "sha1": "08ae996e0608226ab033af92e5310c30f4019380",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/assets/mirar-wordmark-B7fqZekE.png",
+    "sha1": "b1b8940d470b0e95661fe41a51f9807f1e8da012",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/fonts/dm-sans-latin.woff2",
+    "sha1": "780cf59b7711cee0db291f06922ca66b12b65dcf",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/fonts/instrument-serif-latin.woff2",
+    "sha1": "6c8e8a291bdd46678c3dc97ecb41ae3e2177215a",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/index.html",
+    "sha1": "3aae2460e884f00de51471a407c86b7210c8f4e1",
+    "match": true
+  },
+  {
+    "path": ".vercel/output/static/review-build.json",
+    "sha1": "583284f5abb1e06fafca591300f15e0b220d97f7",
+    "match": true
+  }
+]

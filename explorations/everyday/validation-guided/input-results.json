@@ -1,0 +1,28 @@
+[
+  {
+    "concept": "message",
+    "input": "keyboard-only",
+    "completed": true,
+    "focusVisible": true,
+    "closingHeadingInViewport": true
+  },
+  {
+    "concept": "attention",
+    "input": "keyboard-only",
+    "completed": true,
+    "focusVisible": true,
+    "closingHeadingInViewport": true
+  },
+  {
+    "concept": "reply",
+    "input": "keyboard-only",
+    "completed": true,
+    "focusVisible": true,
+    "closingHeadingInViewport": true
+  },
+  {
+    "concept": "message",
+    "input": "emulated-touch",
+    "completed": true
+  }
+]

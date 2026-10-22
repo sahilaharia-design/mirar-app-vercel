@@ -1,0 +1,15 @@
+{
+  "deployment": "dpl_DsaWPK3Wikjd3bh3mC7pHQP1x6hK",
+  "source": "36da9f3c456119f4900ab3486ca64e064bd7f22d",
+  "state": "READY",
+  "environment": "preview",
+  "productionTargetUnchanged": true,
+  "protectionUnchanged": true,
+  "customAliases": [],
+  "newCredentialsCreated": false,
+  "newShareBypassLinks": false,
+  "sharedProjectSettingsChanged": false,
+  "authenticatedUploadHashesMatched": 9,
+  "authenticatedBrowserLoginTested": false,
+  "scope": "Anonymous access and authenticated upload/API verification. Founder signs in with existing Vercel access; no interactive hosted SSO walkthrough claimed."
+}

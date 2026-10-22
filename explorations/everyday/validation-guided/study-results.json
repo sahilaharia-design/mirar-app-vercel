@@ -1,0 +1,152 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "maxFive": true,
+      "secondForegroundRefused": true,
+      "allDispositions": true,
+      "unknownNotPlaced": true,
+      "promptBeforeChoices": true,
+      "supportReachable": true
+    },
+    {
+      "width": 390,
+      "maxFive": true,
+      "secondForegroundRefused": true,
+      "allDispositions": true,
+      "unknownNotPlaced": true,
+      "promptBeforeChoices": true,
+      "supportReachable": true
+    },
+    {
+      "width": 768,
+      "maxFive": true,
+      "secondForegroundRefused": true,
+      "allDispositions": true,
+      "unknownNotPlaced": true,
+      "promptBeforeChoices": true,
+      "supportReachable": true
+    },
+    {
+      "width": 1024,
+      "maxFive": true,
+      "secondForegroundRefused": true,
+      "allDispositions": true,
+      "unknownNotPlaced": true,
+      "promptBeforeChoices": true,
+      "supportReachable": true
+    },
+    {
+      "width": 1440,
+      "maxFive": true,
+      "secondForegroundRefused": true,
+      "allDispositions": true,
+      "unknownNotPlaced": true,
+      "promptBeforeChoices": true,
+      "supportReachable": true
+    }
+  ],
+  "audits": [
+    {
+      "label": "repeated-placement",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "support-expanded",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "repeated-placement",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "support-expanded",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "repeated-placement",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "support-expanded",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "repeated-placement",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "support-expanded",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "repeated-placement",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "support-expanded",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "storage": {
+    "local": 0,
+    "session": 0,
+    "indexedDB": 0,
+    "caches": 0,
+    "workers": 0
+  },
+  "realPeopleTested": false,
+  "unknownClosing": true,
+  "messageNoComparisonClaim": true,
+  "reloadClears": true
+}
