@@ -611,4 +611,188 @@ footer small {
 h1 {
   scroll-margin-top: 16px;
 }
-header>a:first-of-type{display:inline-flex;align-items:center;min-height:44px}.support a{min-width:44px}
+header > a:first-of-type {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.support a {
+  min-width: 44px;
+}
+/* Keep keyboard focus clear of the persistent exit and submission controls. */
+html:has(.guided-attention) {
+  scroll-padding-top: 120px;
+  scroll-padding-bottom: 180px;
+}
+/* Guided Attend: one current question, local selection, explicit submission. */
+body:has(.guided-attention) header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--surface-primary);
+}
+.guided-attention {
+  max-width: 850px;
+  padding-bottom: 48px;
+}
+.guided-attention > .review-note {
+  margin-bottom: 28px;
+  font-size: 11px;
+}
+.guided-work {
+  max-width: 620px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+.guided-work h1 {
+  font-size: clamp(32px, 4.2vw, 52px);
+  margin: 10px 0 24px;
+  line-height: 1.12;
+}
+.guided-phase {
+  margin-bottom: 8px;
+}
+.guided-hint {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 480px;
+}
+.guided-options {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.guided-options legend {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 0 0 12px;
+}
+.guided-option {
+  width: 100%;
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+}
+.selection-check,
+.selection-dot {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-subtle);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.selection-dot {
+  border-radius: 50%;
+}
+.guided-option[aria-pressed="true"] .selection-check,
+.guided-option[aria-pressed="true"] .selection-dot {
+  border-color: var(--accent-ink);
+}
+.guided-reason {
+  margin: 8px 8px 4px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.guided-actions {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  width: min(100%, 700px);
+  padding: 12px 24px 16px;
+  background: var(--surface-primary);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.guided-commit {
+  justify-content: center;
+  flex: 1;
+  min-width: 160px;
+}
+.guided-selection {
+  width: 100%;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--text-secondary);
+}
+.guided-back {
+  justify-content: center;
+  min-width: 72px;
+}
+.guided-history {
+  margin-top: 28px;
+  font-size: 14px;
+}
+.guided-history ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.guided-history li {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 12px 0;
+}
+.guided-history strong {
+  font-weight: 500;
+  color: var(--accent-ink);
+}
+.guided-help {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 24px;
+}
+.placement-preview {
+  margin: 16px 0;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.placement-preview strong {
+  font-weight: 500;
+}
+body:has(.guided-actions) .support {
+  padding-bottom: 170px;
+}
+@media (max-width: 700px) {
+  .guided-attention {
+    padding-top: 16px;
+  }
+  .guided-attention > .review-note {
+    margin-bottom: 20px;
+  }
+  .guided-work h1 {
+    font-size: 34px;
+    margin-bottom: 20px;
+  }
+  .guided-option {
+    padding: 10px 12px;
+    min-height: 48px;
+  }
+  .guided-actions {
+    padding: 10px 16px 14px;
+  }
+  .guided-hint {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+}

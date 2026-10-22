@@ -11,6 +11,7 @@ import Mark from "../../assets/brand/mirar-mark.png";
 import Wordmark from "../../assets/brand/mirar-wordmark.png";
 import "../../design-system/tokens.css";
 import "./practice.css";
+import { GuidedAttendStep } from "./GuidedAttendStep";
 
 type Concept = "message" | "attention" | "reply";
 const concepts: { id: Concept; name: string; line: string; act: string }[] = [
@@ -73,8 +74,12 @@ function FocusTitle({
   const ref = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     ref.current?.focus({ preventScroll: true });
+    const inset = ref.current?.closest(".guided-attention")
+      ? (document.querySelector("header")?.getBoundingClientRect().height ??
+          0) + 16
+      : 0;
     const bounds = ref.current?.getBoundingClientRect();
-    if (bounds && (bounds.top < 0 || bounds.bottom > innerHeight))
+    if (bounds && (bounds.top < inset || bounds.bottom > innerHeight))
       ref.current?.scrollIntoView({ block: "start" });
   }, [stamp]);
   return (
@@ -105,6 +110,7 @@ function Frame({
   source = "prototype",
   scope = "fictional",
   compact = false,
+  guided = false,
   onExit,
 }: {
   children: React.ReactNode;
@@ -112,6 +118,7 @@ function Frame({
   source?: "prototype" | "pilot";
   scope?: "fictional" | "own_life";
   compact?: boolean;
+  guided?: boolean;
   onExit?: () => void;
 }) {
   return (
@@ -133,7 +140,13 @@ function Frame({
           </Button>
         )}
       </header>
-      <main id="practice" tabIndex={-1} data-source={source} data-scope={scope}>
+      <main
+        id="practice"
+        tabIndex={-1}
+        data-source={source}
+        data-scope={scope}
+        className={guided ? "guided-attention" : undefined}
+      >
         <p className="review-note">
           Founder/adviser review · {mode} · Not saved
         </p>
@@ -539,7 +552,8 @@ function Attention() {
       mode="Real Attend session · your own attention"
       source="pilot"
       scope="own_life"
-      compact={!!step && step.id !== "pulls"}
+      compact
+      guided
       onExit={() => {
         session.leave();
         setLeft(true);
@@ -599,157 +613,128 @@ function Attention() {
         </Ending>
       ) : (
         <>
-          <div className="intro">
-            <p className="eyebrow">02 / A little less everywhere</p>
-            <FocusTitle stamp={`${step.id}-${tick}`}>
-              {step.id === "pulls"
-                ? "Between one thing and the next."
-                : step.type === "hold"
-                  ? "One thing, for this moment."
-                  : "Give it a place."}
-            </FocusTitle>
-            <p>
-              {step.id === "pulls"
-                ? "An optional practice about your own attention right now. Choose from the fixed list; there is no typing. You can skip anything by choosing ‘I don’t know’ or ‘Not now’."
-                : "One place at a time. You can leave at any point."}
-            </p>
-          </div>
-          <div
-            className={`practice-grid attention-grid ${step.id === "pulls" ? "attention-entry" : "attention-placement"}`}
-          >
-            <section className="workbench">
-              <p className="eyebrow">
-                {step.type === "multi"
-                  ? "What has your attention?"
-                  : step.type === "hold"
-                    ? "Self-paced · no timer"
-                    : "Place, don’t prioritise"}
-              </p>
-              <h2>{step.prompt}</h2>
-              <AttendStep key={`${tick}-${step.id}`} step={step} send={send} />
-              {error && <p role="alert">{error}</p>}
-              {step.allowBack && (
-                <Button
-                  className="text-button"
-                  onClick={() => {
-                    session.back();
-                    setTick((t) => t + 1);
-                  }}
-                >
-                  Back
-                </Button>
-              )}
-              <p className="caption">
-                Set aside, leave open, do nothing and don’t know are different,
-                equally legitimate choices. No reminders are created.
-              </p>
-            </section>
-            <section className="scene">
-              <Window layer={facts?.attendNow ? "reading" : "words"}>
-                <span className="eyebrow">One place in the foreground</span>
-                <p>
-                  {facts?.attendNow
-                    ? label(facts.attendNow)
-                    : "Not everything needs to be now."}
-                </p>
-              </Window>
-              {facts && facts.pulls.length > 0 && (
-                <details className="arrangement">
-                  <summary>Arrangement so far</summary>
-                  <PlacementBoard facts={facts} label={label} />
-                </details>
-              )}
-            </section>
-          </div>
+          <GuidedAttentionView
+            key={`${tick}-${step.id}`}
+            step={step}
+            facts={facts}
+            send={send}
+            error={error}
+            label={label}
+            onBack={() => {
+              session.back();
+              setTick((t) => t + 1);
+            }}
+          />
         </>
       )}
     </Frame>
   );
 }
-function AttendStep({
+function GuidedAttentionView({
   step,
+  facts,
   send,
+  error,
+  label,
+  onBack,
 }: {
   step: PStep;
+  facts: import("../../lib/innerRep/pilots/types").AttendFacts | null;
   send: (a: PAnswer) => void;
+  error: string;
+  label: (id: string) => string;
+  onBack: () => void;
 }) {
-  const [selected, setSelected] = useState<string[]>([]);
-  if (step.type === "hold")
-    return (
-      <>
-        <p className="pause-line">
-          Stay with the chosen pull, or simply pause here. You decide when to
-          end.
-        </p>
-        <Button onClick={() => send({ stepId: step.id, kind: "hold_end" })}>
-          {step.endLabel}
-        </Button>
-      </>
-    );
-  if (step.type === "words") return null; // Attend emits no words step; never create a personal text field.
+  const placing = step.id.startsWith("place:");
+  const timing = step.id.startsWith("when:");
+  const current = placing || timing ? step.id.split(":")[1] : null;
+  const position = current && facts ? facts.pulls.indexOf(current) + 1 : 0;
+  const review = step.id === "sit" || step.id === "rearrange";
+  const phase =
+    step.id === "pulls"
+      ? "Choose what’s pulling"
+      : placing
+        ? `Place one pull · ${position} of ${facts?.pulls.length}`
+        : timing
+          ? "Set aside, without a reminder"
+          : step.id === "hold_offer"
+            ? "An optional pause"
+            : step.type === "hold"
+              ? "At your own pace"
+              : review
+                ? "Look at your arrangement"
+                : "Your practice";
+  const history =
+    facts && facts.dispositions.length > 0 ? (
+      <details
+        className="guided-history"
+        key={step.id}
+        open={review ? true : undefined}
+      >
+        <summary>
+          {review
+            ? "Your arrangement"
+            : `Choices so far · ${facts.dispositions.length} of ${facts.pulls.length}`}
+        </summary>
+        <ul>
+          {facts.dispositions.map((d) => (
+            <li key={d.pull}>
+              <span>{label(d.pull)}</span>
+              <strong>
+                {d.disposition === "unknown"
+                  ? "I don’t know"
+                  : DISPOSITION_LABEL[d.disposition]}
+              </strong>
+            </li>
+          ))}
+        </ul>
+      </details>
+    ) : null;
   return (
-    <div className={`choices ${step.id.startsWith("place:") ? "places" : ""}`}>
-      {step.options.map((o) => (
-        <React.Fragment key={o.id}>
-          <Button
-            disabled={
-              !!o.disabled ||
-              (step.type === "multi" &&
-                selected.length >= step.max &&
-                !selected.includes(o.id))
-            }
-            pressed={
-              step.type === "multi" ? selected.includes(o.id) : undefined
-            }
-            aria-describedby={o.disabled ? `reason-${o.id}` : undefined}
-            onClick={() =>
-              step.type === "multi"
-                ? setSelected((a) =>
-                    a.includes(o.id)
-                      ? a.filter((x) => x !== o.id)
-                      : [...a, o.id],
-                  )
-                : send({ stepId: step.id, kind: "option", optionId: o.id })
-            }
-          >
-            {o.label}
-          </Button>
-          {o.disabled && (
-            <p className="caption" id={`reason-${o.id}`}>
-              {o.disabled}
-            </p>
-          )}
-        </React.Fragment>
-      ))}
-      {step.type === "multi" && (
-        <>
-          <p role="status" className="caption">
-            {selected.length} of {step.max} selected
+    <section className="guided-work" aria-label="Current Attend step">
+      <p className="eyebrow guided-phase">{phase}</p>
+      <FocusTitle stamp={step.id}>{step.prompt}</FocusTitle>
+      {step.id === "pulls" && (
+        <p className="guided-hint">
+          First choose the things. You’ll give them a place next.
+        </p>
+      )}
+      {step.type === "hold" && (
+        <Window layer="reading">
+          <span className="eyebrow">Your chosen foreground</span>
+          <p>
+            {facts?.attendNow ? label(facts.attendNow) : "One thing, for now."}
           </p>
-          <Button
-            className="solid"
-            disabled={!selected.length}
-            onClick={() =>
-              send({ stepId: step.id, kind: "options", optionIds: selected })
-            }
-          >
-            Give these a place
-          </Button>
-          <Button
-            onClick={() =>
-              send({ stepId: step.id, kind: "options", optionIds: [] })
-            }
-          >
-            {step.noneLabel}
-          </Button>
-        </>
+        </Window>
       )}
-      {step.allowUnknown && (
-        <Button onClick={() => send({ stepId: step.id, kind: "unknown" })}>
-          I don’t know
-        </Button>
-      )}
-    </div>
+      {review && history}
+      <GuidedAttendStep
+        step={step}
+        send={send}
+        onBack={onBack}
+        pullLabel={current ? label(current) : undefined}
+      />
+      {error && <p role="alert">{error}</p>}
+      {!review && history}
+      <details className="guided-help">
+        <summary>
+          {step.id === "pulls"
+            ? "About this optional practice"
+            : "A little help, if you need it"}
+        </summary>
+        <p>
+          {step.id === "pulls"
+            ? "Choose from the fixed list about your own attention. There is no typing, and nothing is saved or sent. This is real optional-pilot code in an early review prototype, not Mirar’s released product."
+            : placing
+              ? "You are choosing a place for the pull named above. Only one can be first; set aside, leave open, do nothing and not knowing are all legitimate. Use Back to change an earlier choice where available."
+              : timing
+                ? "These are the runtime’s time options. No task, deadline or reminder is created."
+                : step.type === "hold"
+                  ? "There is no timer or measure of focus. You may end the pause or leave the practice."
+                  : "Your answer is your own. Keeping, changing, uncertainty and leaving remain available where the step supports them."}
+        </p>
+      </details>
+    </section>
   );
 }
 function PlacementBoard({

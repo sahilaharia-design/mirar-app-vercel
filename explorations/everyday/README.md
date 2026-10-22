@@ -90,9 +90,9 @@ These are differences in implemented operations, not measured efficacy or enjoym
 | Main risk | Could still feel like a comprehension quiz, or mere reading | Eight initial options and repeated steps may feel like admin | Scene implies “half an hour” is the answer; generic scripts can feel prescriptive |
 | Research distinction | Can people name the difference between words and interpretation? | Does an arrangement feel useful rather than like tidying a list? | Does editing feel like practice, or finding the socially preferred reply? |
 
-**Recommend Attention as the product foundation to test first**, not an automatic rollout. Its central operation is explicit, its artifact is tangible, and its evidence boundary is already implemented. It gives the strongest answer to “what did you practise?” without relying on a personal inference or a flattering closing. It also carries the biggest first-session friction risk. Test selection and per-pull pacing carefully; do not silently simplify approved runtime sequencing. Any lighter cold-start version belongs in Claude's forthcoming contract.
+**Retain all three as distinct practices for testing.** The founder tried all three and reported interest in returning for a similar but different practice. This is one founder's feedback, not a comparative study or evidence of retention. The immediate priority is reducing Attention's presentation burden while retaining its actual runtime. See [guided Attention changes](GUIDED_ATTENTION.md).
 
-Use Message as the lower-burden challenger. It may win as an invitation for people uninterested in self-improvement, but that is a hypothesis. Keep Reply as the distinct response-rehearsal alternative; it needs content/mechanics approval and stronger testing against a perceived right answer. Do not merge all three into an obligatory first session or a course.
+Message remains a lightweight interpretation practice; Attention offers a tangible arrangement; Reply offers unsent response rehearsal. Meaningful variation in situations, mechanisms and optional depth is the future direction. No daily rotation, personalization, course or obligatory sequence is implemented. Do not select one mechanic for daily repetition on the strength of runtime readiness alone.
 
 ## Human-study protocol (not started)
 
@@ -120,4 +120,4 @@ Before any integration: obtain owner-approved runtime/receipt/evidence/privacy b
 
 ## Validation and accessibility
 
-Current study preparation: see `validation-study/README.md`. The original exploration evidence remains in `validation/` as historical material. Repeat with `verify.cjs`, `PLAYWRIGHT_MODULE`, `AXE_PATH`, `PRACTICE_URL`, and `PRACTICE_EVIDENCE`. Tooling installs outside the repository; no package lock/dependency changes. Test a static build to avoid hot-reload resets.
+Current guided presentation: see `validation-guided/README.md`. Prior study preparation: see `validation-study/README.md`. The original exploration evidence remains in `validation/` as historical material. Repeat with `verify.cjs`, `PLAYWRIGHT_MODULE`, `AXE_PATH`, `PRACTICE_URL`, and `PRACTICE_EVIDENCE`. Tooling installs outside the repository; no package lock/dependency changes. Test a static build to avoid hot-reload resets.

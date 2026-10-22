@@ -15,6 +15,7 @@ const root = process.env.PRACTICE_URL || "http://127.0.0.1:5193";
     reducedMotion: "reduce",
   });
   async function key(name) {
+    if (name === "Give these a place") name = "Continue";
     for (let i = 0; i < 100; i++) {
       await p.keyboard.press("Tab");
       if (
@@ -29,6 +30,17 @@ const root = process.env.PRACTICE_URL || "http://127.0.0.1:5193";
           "none",
         );
         await p.keyboard.press("Enter");
+        if (name !== "Continue" && (await p.locator(".guided-step").count())) {
+          const step = p.locator(".guided-step");
+          const kind = await step.getAttribute("data-kind");
+          const mode = await step.getAttribute("data-answer-mode");
+          if (
+            (kind === "choice" ||
+              (kind === "multi" && ["unknown", "none"].includes(mode))) &&
+            (await p.locator(".guided-commit").count())
+          )
+            await key("Continue");
+        }
         return;
       }
     }

@@ -17,7 +17,19 @@ const rows = [],
 let page;
 const button = (n) => page.getByRole("button", { name: n, exact: true });
 const click = async (n) => {
-  await button(n).click();
+  const name = n === "Give these a place" ? "Continue" : n;
+  await button(name).click();
+  if (name !== "Continue" && (await page.locator(".guided-step").count())) {
+    const step = page.locator(".guided-step");
+    const kind = await step.getAttribute("data-kind");
+    const mode = await step.getAttribute("data-answer-mode");
+    if (
+      (kind === "choice" ||
+        (kind === "multi" && ["unknown", "none"].includes(mode))) &&
+      (await page.locator(".guided-commit").count())
+    )
+      await page.locator(".guided-commit").click();
+  }
 };
 const has = async (t) =>
   assert((await page.locator("body").innerText()).includes(t), t);

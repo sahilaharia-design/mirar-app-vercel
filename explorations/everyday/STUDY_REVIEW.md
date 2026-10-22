@@ -24,7 +24,7 @@ If any URL shows a Vercel permission request, stop: do not add access or publish
 
 **Attention — real optional own-life practice.** All references to a made-up afternoon/props are removed from its entry, active steps, closing and hub description. The existing fixed options and all `PilotSession/PStep/PAnswer` sequencing remain unchanged. No typing, saving, reminders, carry-forward or account connection. Up to five pulls, one foreground, unknown/none, Back where permitted, optional hold and one rearrangement are preserved. All-unknown placement says nothing was placed, not that a deliberate no-action arrangement was made.
 
-For repeated mobile steps, current controls precede the artwork in both DOM and visual order; the repeated introduction is shorter and the arrangement can be opened on demand. There is no drag-only interaction, automatic foreground reassignment, step skipping, reduced-option runtime fork or fabricated response.
+The guided presentation shows the actual current question first. Choose pulls, then explicitly Continue; on each subsequent step choose one response, then Continue. The choice remains a component-local draft until submitted. Earlier placements are collapsed until review becomes relevant. The canonical window supports the optional hold rather than competing with the initial choices. See `GUIDED_ATTENTION.md` for before/after and runtime boundaries. There is no drag-only interaction, automatic foreground reassignment, step skipping, reduced-option runtime fork or fabricated response.
 
 **Reply — fictional mocked composer.** The unsent draft, authored offer options, optional coherent edge lines and read-back remain. Framing explicitly leaves offer/check/smaller/decline legitimate and ungraded. The scene's half-hour is a known fact, not a correct boundary prescription. Keeping the all-day offer describes its uncertain feasibility without moral praise or correction. Nothing is sent or scheduled.
 
@@ -52,7 +52,7 @@ Before invitations: founder approval of the completed preview; independent advis
 
 ## Accessibility and remaining limitations
 
-Current evidence: `validation-study/`. Historical `validation/` remains untouched. Browser accessibility checks, complete keyboard paths, emulated touch and five responsive sizes are covered. Layered-window contrast incompletes remain explicitly documented with opaque backgrounds/token contrast review; no zero-incomplete claim.
+Current evidence: `validation-guided/`. Earlier `validation-study/` and historical `validation/` remain untouched. Browser accessibility checks, complete keyboard paths, emulated touch and five responsive sizes are covered. Layered-window contrast incompletes remain explicitly documented with opaque backgrounds/token contrast review; no zero-incomplete claim.
 
 **Physical phone testing, VoiceOver/TalkBack, switch access, forced-colours and independent clinical/safety review remain outstanding.** Human enjoyment, comprehension, quiz/chore perceptions, comfort and usefulness remain unvalidated. An independent adviser has not been appointed or signed off by this work. Message/Reply do not gain a production runtime or evidence model through study approval. S1, engine/runtime scheduling, G3, billing and production remain outside this branch.
 
