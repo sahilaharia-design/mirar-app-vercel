@@ -18,4 +18,9 @@ Read aloud or hand over. Record answers under the participant code. Same questio
 10. Anything you'd remove?
 11. Anything you'd want in its place?
 
+12. Having tried two different kinds of practice: next time, would you prefer the same kind or a different kind? (same / different / no preference)
+13. Why? (verbatim)
+14. If you came back, what would bring you back: wanting to see something new, or what the exercise itself gave you? Either, both, or neither is fine. (verbatim; moderator codes RM from the answer)
+15. Was there a point where you weren't sure what to do next, or where there was too much on the screen? Which one? (verbatim)
+
 **Close:** confirm nothing was saved, hand over support contacts, tell them how to withdraw their notes.

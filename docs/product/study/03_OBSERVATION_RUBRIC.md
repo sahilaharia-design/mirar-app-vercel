@@ -15,6 +15,17 @@ Code every exposure. One row per participant × prototype × exposure in `04_DAT
 | A | Again tomorrow | yes / maybe / no | Self-report only; **not** a retention measure |
 | F | Felt-effect note | free text, short | Only what the participant volunteers about how it felt. Never probe for depth |
 | K | Concerning content | 0 / 1 | Any trigger in 05 §3 (also triggers stop rule) |
+| N1 | Unassisted first action | Y / N | Participant identified the first action without moderator coaching (no hint, no pointing, no "try tapping…") |
+| NS | Unassisted next steps | count of steps identified unaided / total steps | Per step after the first; a coached step counts as not unaided |
+| O | Overload events | count, with type | Tally each: pause >5 s on a screen (`P`), re-read (`RR`), repeated scrolling (`SC`, ≥2 reversals), asks what to do next (`Q`). Note the screen id |
+| V | Variety preference | same / different / no preference | Asked once after both prototypes (06 Q12–13) |
+| RM | Return motivation | curiosity-new-format / usefulness / both / neither | Coded from the participant's own words (06 Q14–15); see rule below |
+
+**Exploratory codes (N1, NS, O, V, RM).** Added by the founder addendum. They are descriptive observations and carry **no pass/fail threshold**. They do not change the pass criterion below.
+
+**Coaching rule.** Any moderator hint before the participant acts makes that step "coached". Neutral prompts ("What are you thinking?") do not. If a participant is stuck >15 s, record the step as not unaided, then give the minimum neutral prompt first, a hint only after a further 10 s.
+
+**Return motivation rule (RM).** Code `curiosity-new-format` when the reason is the novelty or format ("different", "wanted to see what else"). Code `usefulness` when the reason is what the exercise gave them ("helped me notice", "relevant to my day"). `both` if both are stated. Never infer; if unclear, ask "What would bring you back, the new kind of thing or what it did for you?" once, neutrally.
 
 ## First-exposure flag
 `first_exposure = Y` only for exposure 1 of that prototype for that participant.
@@ -28,3 +39,5 @@ A participant "passes" a prototype if, on their **first exposure**: U ≥ 1, C =
 - Participant treats the output as advice or a verdict.
 - Participant expects the tool to remember.
 - Language drift into therapy/journaling expectations.
+- Too much shown at once: participant does not know what to select first (record the screen and what they looked at).
+- Wants a different format next time rather than the same one (record verbatim).

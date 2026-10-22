@@ -45,6 +45,13 @@ One complete pass through the prototype's daily moment, on a fresh scenario/vari
 - Stop immediately on any trigger in 05 §3.
 - Disclose prototype status before each: "This is an early draft. [Attention only] It asks about your own afternoon; choices are not saved."
 
+## 5a. Added observations (founder addendum, exploratory)
+- **Do not coach the first action or any later step.** Watch whether the participant finds it alone. Hold neutral prompts per the rubric's coaching rule.
+- **Tally overload events** (pause >5 s, re-read, repeated scrolling, "what do I do next?") with the screen id. Do not comment on them.
+- **After both prototypes**, ask 06 Q12–15 in order, neutrally. Do not suggest that variety is good or that the participant should want it.
+- **Keep verbatim.** Write exact words for every "why". Mark paraphrase as paraphrase.
+- Record which Attention build is being used (the build id is shown in the study footer; Codex to supply).
+
 ## 6. Between exposures
 Ask only: (1) "In your own words, what was that asking?" (2) "How easy was that, 1–5?" (3) "Would you do that again tomorrow, yes/maybe/no?" Record answers in the data sheet.
 
