@@ -15,7 +15,7 @@ npx vite --config explorations/everyday/vite.config.ts --port 5192
 - **A little less everywhere.** http://127.0.0.1:5192/?practice=attention
 - **Before you say yes.** http://127.0.0.1:5192/?practice=reply
 
-Each link starts independently, requires no account/history, and refreshes to a new try. No state survives navigation/reload. Mobile layouts are implemented, not static mockups. For a portable static review, build with `npx vite build --config explorations/everyday/vite.config.ts`; serve `dist-practice-lab` with any static server. No deployment was performed. Assets/fonts are bundled or served locally; no API, credentials or environment configuration is required.
+Each link starts independently, requires no account/history, and refreshes to a new try. No state survives navigation/reload. Mobile layouts are implemented, not static mockups. For a portable static review, build with `npx vite build --config explorations/everyday/vite.config.ts`; serve `dist-practice-lab` with any static server. A protected static founder-review Preview is available through the privately supplied address; no production deployment was performed. Assets/fonts are bundled or served locally; the prototype itself needs no API or account configuration. Hosted access uses the existing authorised Vercel login.
 
 ## Sources, and what is not approval
 
