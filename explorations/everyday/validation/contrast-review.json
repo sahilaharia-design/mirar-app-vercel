@@ -1,0 +1,33 @@
+{
+  "method": "WCAG relative luminance from the actual semantic tokens; manual CSS/visual inspection confirms opaque text backgrounds independent of canonical image/reflection. Axe cannot resolve some layered-image backgrounds; those remain recorded as incomplete, not suppressed or claimed as automatic passes.",
+  "pairs": [
+    {
+      "pair": "Window ink on opaque paper",
+      "foreground": "#2A2A30",
+      "background": "#FAF7F2",
+      "WCAG_ratio": 13.35,
+      "normal_AA": true
+    },
+    {
+      "pair": "Window label on opaque paper",
+      "foreground": "#86583D",
+      "background": "#FAF7F2",
+      "WCAG_ratio": 5.65,
+      "normal_AA": true
+    },
+    {
+      "pair": "Body muted on ivory",
+      "foreground": "#6B696E",
+      "background": "#F4F0EA",
+      "WCAG_ratio": 4.78,
+      "normal_AA": true
+    },
+    {
+      "pair": "Selection ink on selected surface",
+      "foreground": "#2A2A30",
+      "background": "#EEE2D5",
+      "WCAG_ratio": 11.19,
+      "normal_AA": true
+    }
+  ]
+}

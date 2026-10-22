@@ -1,0 +1,14 @@
+{
+  "authenticatedUploadHashesMatched": 9,
+  "files": [
+    "src/.vercel/output/config.json",
+    "src/.vercel/output/static/assets/index-CdPLi13I.js",
+    "src/.vercel/output/static/assets/index-q84j28OC.css",
+    "src/.vercel/output/static/assets/mirar-mark-BS5IeR91.png",
+    "src/.vercel/output/static/assets/mirar-wordmark-B7fqZekE.png",
+    "src/.vercel/output/static/fonts/dm-sans-latin.woff2",
+    "src/.vercel/output/static/fonts/instrument-serif-latin.woff2",
+    "src/.vercel/output/static/index.html",
+    "src/.vercel/output/static/review-build.json"
+  ]
+}

@@ -1,0 +1,117 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "explicitSubmission": true,
+    "noSilentReassignment": true,
+    "backDiscardsDraft": true,
+    "holdSelfEnded": true,
+    "noAutomaticTransition": true,
+    "rearrangeOnce": true,
+    "setAsideExactOptions": true,
+    "keyboardUnknownBackHoldExit": true,
+    "noneAndUnknownTruthful": true,
+    "focusedControlsUncovered": true,
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "db": 0,
+      "caches": 0,
+      "workers": 0,
+      "overflow": false
+    },
+    "externalRequests": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "explicitSubmission": true,
+    "noSilentReassignment": true,
+    "backDiscardsDraft": true,
+    "holdSelfEnded": true,
+    "noAutomaticTransition": true,
+    "rearrangeOnce": true,
+    "setAsideExactOptions": true,
+    "keyboardUnknownBackHoldExit": true,
+    "noneAndUnknownTruthful": true,
+    "focusedControlsUncovered": true,
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "db": 0,
+      "caches": 0,
+      "workers": 0,
+      "overflow": false
+    },
+    "externalRequests": []
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "explicitSubmission": true,
+    "noSilentReassignment": true,
+    "backDiscardsDraft": true,
+    "holdSelfEnded": true,
+    "noAutomaticTransition": true,
+    "rearrangeOnce": true,
+    "setAsideExactOptions": true,
+    "keyboardUnknownBackHoldExit": true,
+    "noneAndUnknownTruthful": true,
+    "focusedControlsUncovered": true,
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "db": 0,
+      "caches": 0,
+      "workers": 0,
+      "overflow": false
+    },
+    "externalRequests": []
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "explicitSubmission": true,
+    "noSilentReassignment": true,
+    "backDiscardsDraft": true,
+    "holdSelfEnded": true,
+    "noAutomaticTransition": true,
+    "rearrangeOnce": true,
+    "setAsideExactOptions": true,
+    "keyboardUnknownBackHoldExit": true,
+    "noneAndUnknownTruthful": true,
+    "focusedControlsUncovered": true,
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "db": 0,
+      "caches": 0,
+      "workers": 0,
+      "overflow": false
+    },
+    "externalRequests": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "explicitSubmission": true,
+    "noSilentReassignment": true,
+    "backDiscardsDraft": true,
+    "holdSelfEnded": true,
+    "noAutomaticTransition": true,
+    "rearrangeOnce": true,
+    "setAsideExactOptions": true,
+    "keyboardUnknownBackHoldExit": true,
+    "noneAndUnknownTruthful": true,
+    "focusedControlsUncovered": true,
+    "storage": {
+      "local": 0,
+      "session": 0,
+      "db": 0,
+      "caches": 0,
+      "workers": 0,
+      "overflow": false
+    },
+    "externalRequests": []
+  }
+]

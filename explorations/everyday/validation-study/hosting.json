@@ -1,0 +1,16 @@
+{
+  "deployment": "dpl_j8wR4NhMq5iMPKPsLNkHrLdXWrbc",
+  "source": "e2fbb3ddff07384a20a49ae04ab4af8b8fdade08",
+  "state": "READY",
+  "environment": "preview",
+  "billingPlanVerified": "hobby",
+  "productionTargetUnchanged": true,
+  "protectionUnchanged": true,
+  "customAliases": [],
+  "newCredentialsCreated": false,
+  "newShareBypassLinks": false,
+  "sharedProjectSettingsChanged": false,
+  "authenticatedUploadHashesMatched": 9,
+  "authenticatedBrowserLoginTested": false,
+  "scope": "Anonymous access and authenticated upload/API verification; interactive SSO walkthrough is for founder using existing login."
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "route": "/?practice=message",
+    "status": 302,
+    "redirectHost": "vercel.com",
+    "anonymousPrototypeExposed": false
+  },
+  {
+    "route": "/?practice=attention",
+    "status": 302,
+    "redirectHost": "vercel.com",
+    "anonymousPrototypeExposed": false
+  },
+  {
+    "route": "/?practice=reply",
+    "status": 302,
+    "redirectHost": "vercel.com",
+    "anonymousPrototypeExposed": false
+  },
+  {
+    "route": "/review-build.json",
+    "status": 302,
+    "redirectHost": "vercel.com",
+    "anonymousPrototypeExposed": false
+  },
+  {
+    "route": "/assets/index-CdPLi13I.js",
+    "status": 302,
+    "redirectHost": "vercel.com",
+    "anonymousPrototypeExposed": false
+  }
+]

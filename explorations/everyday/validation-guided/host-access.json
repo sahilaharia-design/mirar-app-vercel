@@ -1,0 +1,27 @@
+[
+  {
+    "route": "/?practice=message",
+    "status": 302,
+    "loginHost": "vercel.com"
+  },
+  {
+    "route": "/?practice=attention",
+    "status": 302,
+    "loginHost": "vercel.com"
+  },
+  {
+    "route": "/?practice=reply",
+    "status": 302,
+    "loginHost": "vercel.com"
+  },
+  {
+    "route": "/review-build.json",
+    "status": 302,
+    "loginHost": "vercel.com"
+  },
+  {
+    "route": "/assets/index-5MxDfiAu.js",
+    "status": 302,
+    "loginHost": "vercel.com"
+  }
+]
