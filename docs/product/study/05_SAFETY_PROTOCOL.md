@@ -29,7 +29,7 @@ Prototypes use fixed options, no free typing, no probing of past events, no diag
 - A local clinician or counselling service chosen by the adviser: `VERIFY`.
 
 ## 6. Incident log
-`date, participant_code, prototype, exposure_no, trigger, action taken, outcome, who was informed, follow-up date`. No identifying details beyond the code.
+`date, participant_code, prototype, try_no, trigger, action taken, outcome, who was informed, follow-up date`. No identifying details beyond the code.
 
 ## 7. Study halt rule
 Two stop events related to content, or any serious incident, pauses the study until the reviewer and founder decide.

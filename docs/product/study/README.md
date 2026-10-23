@@ -6,13 +6,14 @@ Status: **DRAFT for founder and adviser review.** No participant has been contac
 A moderated qualitative screening of three Codex prototypes (**Message**, **Attention**, **Reply**) of the everyday practice. It is **not** evidence of efficacy, retention, conversion or statistical significance.
 
 - 12 adults. Each experiences **two of the three** prototypes (counterbalanced, see `02_MODERATOR_GUIDE.md` §2).
-- **Eight exposures per prototype** (8 of 12 participants see each prototype: 4 first, 4 second).
-- **First-exposure outcomes are recorded separately** from repeat-exposure outcomes (`04_DATA_SHEET.md`).
+- **Eight pairings per prototype** (8 of 12 participants see each prototype: 4 where it is first in their order, 4 second). The gate scores each participant's **first try** of the prototype (n = 8). "First in order" and "first try" are different and are reported separately; later tries are exploratory.
+- **One authoritative gate:** the table in `03_OBSERVATION_RUBRIC.md`, identical to `MIRAR_REALIGNMENT_RECONCILIATION.md` §4.
+- **Build register** in `04_DATA_SHEET.md`: old and new Attention builds are never pooled.
 - 6/8 "pass" per prototype is a **screening gate**, not a result: 95% CI for 6/8 is 35–97%; if the true pass rate is 0.6 / 0.7 / 0.8 the chance of reaching 6/8 is about 31% / 55% / 80%.
-- Attention runs in **study mode**: the real Attend pilot about the person's *own afternoon*, fixed options, no free typing, nothing saved, a voluntary exit at every step.
+- Attention runs in **study mode**: the real Attend pilot about the person's *own afternoon*, fixed options, no free typing, the prototype saves nothing, a voluntary exit at every step. (The moderator's consented notes are kept; see consent.)
 
 ## Addendum (founder feedback, 2026-10-22)
-Existing 12-person counterbalanced design and 6/8 first-exposure screening gate are **unchanged**. Added as **exploratory observations with no thresholds**: unassisted next-step comprehension, information overload events, variety preference, return motivation (curiosity vs usefulness), verbatim preservation. See rubric codes N1/NS/O/V/RM, data-sheet "Exploratory observations", feedback Q12–15. Study preparation stays separate from S1a (implemented, unmerged, pending independent review).
+Existing 12-person counterbalanced design and screening gate (M1–M7, 6 of 8) are **unchanged**. Added as **exploratory observations with no thresholds**: unassisted next-step comprehension, information overload events, variety preference, return motivation (curiosity vs usefulness), verbatim preservation. See rubric codes N1/NS/O/V/RM, data-sheet "Exploratory observations", feedback Q12–15. Study preparation stays separate from S1a (implemented, unmerged, pending independent review).
 
 ## Files
 | File | Purpose |
@@ -23,7 +24,7 @@ Existing 12-person counterbalanced design and 6/8 first-exposure screening gate 
 | `04_DATA_SHEET.md` | Spreadsheet-ready columns, first-exposure split, analysis plan |
 | `05_SAFETY_PROTOCOL.md` | Eligibility, stop rules, escalation, incident log |
 | `06_PARTICIPANT_FEEDBACK.md` | Post-session feedback template (Q12–15 added: variety, return motivation, overload) |
-| `07_FOUNDER_REVIEW_NOTE.md` | Founder's own review, kept apart from participant evidence |
+| `07_FOUNDER_REVIEW_NOTE.md` | Founder's own review (of an earlier Attention build), kept apart from participant evidence |
 | `08_FUTURE_DESIGN_CONSIDERATION.md` | Documentation only: varied daily catalog principle |
 | `../../experience/CODEX_STUDY_PREP_REQUESTS.md` | Coordination list for Codex |
 

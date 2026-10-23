@@ -12,6 +12,8 @@ Scope: preparation only. No session is scheduled. Do not merge PR #6; it predate
 7. **Language.** Signal / check-in / notice. No "reflect", "journal", "heal", "therapy", "mindset", "motivational".
 8. **Accessibility pass.** Keyboard operation, tap targets, readable at phone width; report anything that blocks a participant.
 
+9. **Exact build identity (blocking for booking sessions).** Written confirmation of: (a) the commit the study build is made from (your docs say frontend source `36da9f3…`, PR #6 head `705b90c9da6fea49f3c5caddff3e24a351a72a70`; confirm no code differs between them); (b) the Preview deployment id (`dpl_DsaWPK3Wikjd3bh3mC7pHQP1x6hK` per `hosting.json`) and that it serves that commit; (c) the output hashes of the served JS/CSS/index; (d) the same three facts for Message and Reply; (e) the exact earlier Attention build the founder tried, if it can be identified; (f) a visible, non-participant-facing `build_id` in the study footer. Any later change gets a new id; old and new Attention are never pooled.
+
 ## Not requested
 Engine changes, new pilots, persistence, auth, billing, trial or entitlement UI, depth-preference UI, Reply or A3/A8 promotion.
 

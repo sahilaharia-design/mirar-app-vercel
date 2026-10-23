@@ -12,5 +12,11 @@ Recorded verbatim in substance from the founder's addendum. One person who knows
 - Hypotheses to look for in participants (first-action comprehension, overload, variety, return motivation). It does not pre-judge them.
 - Attention presentation is being refined by Codex with progressive disclosure, without changing the real Attend runtime. The refined build gets its own build id; do not pool its results with the earlier build.
 
+## Which build
+The founder tried the prototypes **before** the guided Attention revision; the exact earlier build id was not recorded. The Attention comments therefore describe a build that is not the study candidate (`ATT-GUIDED-1`) and must not be read as evidence about it. See the build register in `04_DATA_SHEET.md`.
+
+## Separation rule
+No row of this note appears in `tries`, `pairings` or `participants`; it is never counted toward n = 8 or any gate measure, and it is reported under its own heading.
+
 ## Caveats
 Single reviewer; knows the product; not blind; not independent. It cannot be used to claim participants will behave the same way.

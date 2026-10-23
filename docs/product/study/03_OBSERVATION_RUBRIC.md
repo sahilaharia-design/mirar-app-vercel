@@ -1,6 +1,6 @@
 # 03 — Observation rubric (DRAFT)
 
-Code every exposure. One row per participant × prototype × exposure in `04_DATA_SHEET.md`. Code what is observed, not inferred feelings.
+Code every try. One row per participant × prototype × try in `04_DATA_SHEET.md`. Code what is observed, not inferred feelings.
 
 | Code | Dimension | Scale / values | Definition |
 |---|---|---|---|
@@ -11,7 +11,7 @@ Code every exposure. One row per participant × prototype × exposure in `04_DAT
 | H | Hesitation | 0 / 1 / 2 | 0 none, 1 pause >5 s, 2 re-reads or asks what it means |
 | M | Mismatch | Y / N | Participant said no option fit, or chose "other" |
 | R | Relatable | 1–5 (self-report) | "Is this the kind of thing that happens in your day?" |
-| E | Ease | 1–5 (self-report) | Asked between exposures |
+| E | Ease | 1–5 (self-report) | Asked between tries |
 | A | Again tomorrow | yes / maybe / no | Self-report only; **not** a retention measure |
 | F | Felt-effect note | free text, short | Only what the participant volunteers about how it felt. Never probe for depth |
 | K | Concerning content | 0 / 1 | Any trigger in 05 §3 (also triggers stop rule) |
@@ -27,11 +27,32 @@ Code every exposure. One row per participant × prototype × exposure in `04_DAT
 
 **Return motivation rule (RM).** Code `curiosity-new-format` when the reason is the novelty or format ("different", "wanted to see what else"). Code `usefulness` when the reason is what the exercise gave them ("helped me notice", "relevant to my day"). `both` if both are stated. Never infer; if unclear, ask "What would bring you back, the new kind of thing or what it did for you?" once, neutrally.
 
-## First-exposure flag
-`first_exposure = Y` only for exposure 1 of that prototype for that participant.
+## Two different "firsts" (never conflate)
+- `first_in_order = Y` when the prototype was the participant's **first of their two** (order_slot 1).
+- `first_try = Y` for the participant's **first exposure to that prototype** (try_no 1), whichever slot. The gate uses `first_try`; the order check uses `first_in_order`.
 
-## Pass criterion per prototype (screening gate, pre-registered)
-A participant "passes" a prototype if, on their **first exposure**: U ≥ 1, C = Y or X = voluntary-skip with no confusion noted, M = N, and E ≥ 3. The prototype clears the gate at **≥ 6 of 8** passes. This is a go/no-go screen to decide what to iterate, not a measure of effect.
+## Authoritative pre-registered gate (the ONLY pass/fail rule; fixed before any session)
+This table is the founder-approved protocol from `docs/product/MIRAR_REALIGNMENT_RECONCILIATION.md` §4, copied here unchanged. If the two ever differ, fix both before testing. It replaces the earlier U/C/M/E participant-level rule that this file used to contain.
+
+**Unit of analysis.** One *participant × prototype pairing*. Each prototype has **8 pairings** (8 of the 12 participants; 4 where it was first in that participant's order, 4 where it was second). The gate is computed on **each participant's first try of that prototype** (their first exposure to it), n = 8. Further tries are repeats (exploratory only).
+
+| Measure (per prototype, n = 8 first tries) | **Pass** (all must hold) | **Fail** (any one) |
+|---|---|---|
+| M1 can say what they did (reviewer-coded, blind) | ≥ 6 of 8 | |
+| M2 interesting or enjoyable (1–5) / heavy or serious (1–5) | median ≥ 4 / median ≤ 2 | |
+| M4 forced choice quiz / chore / practice / game | | ≥ 3 of 8 choose "quiz" or "chore" |
+| M5 wants to do another (stated) | ≥ 6 of 8 | |
+| M6 discomfort | at most 1 mild, none severe | any severe; any report of pressure |
+| M7 payoff truthfulness and swap test | 100% pass; no statement a participant calls untrue | any untrue statement |
+| Abandoned mid-exercise | ≤ 1 of 8 | ≥ 2 of 8 |
+
+**Reading the gate.** A prototype *clears the screen* only if every Pass condition holds and no Fail condition occurs. Any other outcome is "does not clear". A fail on M6 or M7 drops the prototype regardless of the rest. 6 of 8 is a screening gate, not an estimate (95% CI 35–97%; a true 60% rate still reaches 6/8 about 31% of the time, 70% → 55%, 80% → 80%). No ranking, efficacy, retention, conversion or segment claim.
+
+**Reported alongside, descriptive only:** (a) the same measures for the 4 pairings where the prototype was **first in the participant's order** and the 4 where it was **second** (order check; no test); (b) repeats; (c) the exploratory codes N1, NS, O, V, RM and U/C/H/X/T/R/E/A, none of which has a threshold.
+
+**Note on M3.** The reconciliation table has no M3. It is intentionally unused; do not add one after testing.
+
+**Where each measure is collected.** M1: moderator asks "What, if anything, did you do here?" (feedback Q1), verbatim, coded blind later. M2, M4, M5, M6, M7: feedback Q16–20. M7 swap test: moderator shows the closing summary and asks whether any line is untrue (Q20).
 
 ## Cross-cutting watch list
 - Participant reads "my own afternoon" as hypothetical or third-person (Attention wording).
