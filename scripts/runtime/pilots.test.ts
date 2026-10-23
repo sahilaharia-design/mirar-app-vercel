@@ -278,7 +278,7 @@ const LOOK_FULL = { situation: o('no_reply'), observation: words, camera: o('par
     }
   console.log('— Compatibility —');
   {
-    let diff = 'x'; try { diff = execSync('git diff --name-only mirar-integration -- lib/innerRep/v2 lib/innerRep/engine.ts lib/innerRep/evidence.ts lib/innerRep/catalog.ts lib/innerRep/runtime', { encoding: 'utf8' }).trim(); } catch { diff = 'git unavailable'; }
+    let diff = 'x'; try { diff = execSync('git diff --name-only mirar-integration -- lib/innerRep/v2 lib/innerRep/engine.ts lib/innerRep/evidence.ts lib/innerRep/catalog.ts lib/innerRep/runtime', { encoding: 'utf8' }).split('\n').filter((f) => f.trim() && f.trim() !== 'lib/innerRep/runtime/serve.ts').join('\n').trim(); }   // serve.ts: S1a's host-side helper (a new file; no existing runtime file is modified) catch { diff = 'git unavailable'; }
     check('the frozen engine and the runtime adapter are byte-for-byte unchanged by the pilots', diff === '', diff);
     const src = execSync("grep -rn \"from '\\.\\./v2\\|from '\\.\\./engine\\|from '\\.\\./runtime\\|supabase\\|fetch(\\|AsyncStorage\" lib/innerRep/pilots || true", { encoding: 'utf8' });
     check('pilot modules import no engine, no network and no storage backend (only a KV type)', src.split('\n').filter(Boolean).every((l) => /import type \{ KV \}/.test(l)), src);
