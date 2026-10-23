@@ -13,7 +13,7 @@ names=$(vercel env ls 2>/dev/null | grep -E "Production" | awk '{print $1}' | so
 
 npx tsc --noEmit >/dev/null 2>&1 && pass "TypeScript" || bad "TypeScript"
 scripts/release/engine-freeze-check.sh | grep -q "^PASS" && pass "frozen engine (lib/innerRep/v2) identical to freeze tag" || bad "frozen engine differs from freeze tag"
-for t in scripts/runtime/pilots.test.ts scripts/runtime/account-isolation.test.ts scripts/runtime/persist-on-serve.test.ts scripts/runtime/backup.test.ts scripts/runtime/backup-sync.test.ts scripts/runtime/continuity.test.ts scripts/entitlement/entitlement.test.ts scripts/entitlement/client-port.test.ts scripts/sim/suite.ts scripts/sim/correction-suite.ts scripts/runtime/runtime.test.ts scripts/runtime/mirror.test.ts scripts/runtime/mirror-contract.test.ts scripts/runtime/receipt.test.ts; do
+for t in scripts/runtime/pilots.test.ts scripts/runtime/account-isolation.test.ts scripts/runtime/persist-on-serve.test.ts scripts/runtime/backup.test.ts scripts/runtime/backup-sync.test.ts scripts/runtime/continuity.test.ts scripts/entitlement/entitlement.test.ts scripts/entitlement/client-port.test.ts scripts/entitlement/host.test.ts scripts/sim/suite.ts scripts/sim/correction-suite.ts scripts/runtime/runtime.test.ts scripts/runtime/mirror.test.ts scripts/runtime/mirror-contract.test.ts scripts/runtime/receipt.test.ts; do
   out=$(npx tsx "$t" 2>&1); echo "$out" | grep -q FAIL && bad "$t" || { echo "$out" | grep -qE "pass|PASS" && pass "$t" || bad "$t (no pass output)"; }
 done
 

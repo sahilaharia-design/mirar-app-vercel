@@ -47,12 +47,14 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
     // another user on this device must never inherit this one's in-memory state
     if (get().userId && get().userId !== userId) set({ today: null, practiceDays: 0, mirror: EMPTY_MIRROR, receipt: null });
     set({ status: get().today ? 'ready' : 'loading', userId });
+    if (process.env.EXPO_PUBLIC_ENTITLEMENT === '1') void (require('./entitlement-store') as typeof import('./entitlement-store')).useEntitlementStore.getState().sync(userId);
     try { await runtime.init(userId); const today = runtime.today(); await recordServed(runtime, today, served, { userId, dayKey: dayKeyNow() }); set({ today, practiceDays: runtime.practiceDaysThisMonth(), mirror: runtime.mirror(), receipt: runtime.receipt(), status: 'ready', dayKey: dayKeyNow() }); }
     catch { set({ status: 'error' }); }
   },
   progress: (answers) => { void runtime.progress(answers); },
   complete: async (answers, durationMs) => {
     const result = await runtime.complete(answers, durationMs);
+    if (process.env.EXPO_PUBLIC_ENTITLEMENT === '1') await (require('./entitlement-store') as typeof import('./entitlement-store')).useEntitlementStore.getState().engineRepCompleted().catch(() => {});   // the only trial trigger; a failure never blocks the person's closing
     set({ today: { kind: 'done', ...result }, practiceDays: runtime.practiceDaysThisMonth(), mirror: runtime.mirror(), receipt: runtime.receipt() });
     return result;
   },
@@ -63,6 +65,7 @@ export const useInnerRepV2Store = create<State>((set, get) => ({
 
 /** Sign-out: remove every v2 key on this device and drop in-memory state. */
 export async function clearInnerRepV2Data() {
+  if (process.env.EXPO_PUBLIC_ENTITLEMENT === '1') await (require('./entitlement-store') as typeof import('./entitlement-store')).useEntitlementStore.getState().signOut().catch(() => {});
   await clearV2Keys(AsyncStorage as unknown as KV);
   await clearPilotKeys(AsyncStorage as unknown as KV);
   // in-memory pilot state too (staging only; the direct env comparison is inlined, so Production bundles contain no pilot store)

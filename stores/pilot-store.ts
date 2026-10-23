@@ -36,7 +36,7 @@ export const usePilotStore = create<State>((set, get) => {
     answer: async (a) => { const s = core.session(); if (!s) return; s.answer(a); await core.saveDraft(); bump(); },
     changed: async () => { await core.saveDraft(); bump(); },
     back: async () => { const s = core.session(); if (s && s.back()) { await core.saveDraft(); bump(); } },
-    close: async (how) => { const r = await core.close(how); bump(); return r; },
+    close: async (how) => { const r = await core.close(how); bump(); if (r?.status === 'completed' && process.env.EXPO_PUBLIC_ENTITLEMENT === '1') void (require('./entitlement-store') as typeof import('./entitlement-store')).useEntitlementStore.getState().pilotCompleted().catch(() => {}); return r; },
     discard: async () => { await core.discard(); bump(); },
     replaceRecords: async (r) => { await core.replaceRecords(r); bump(); },
     clearAll: async () => { await core.clearAll(); bump(); },
