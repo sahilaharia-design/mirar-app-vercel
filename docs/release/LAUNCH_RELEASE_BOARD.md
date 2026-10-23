@@ -1,5 +1,7 @@
 # Mirar commercial launch: release board (execution plan)
 
+> Journey matrix, communications matrix, regression suite, severity gate, scope classification and the live dashboard are in [LAUNCH_MVP_MATRIX.md](LAUNCH_MVP_MATRIX.md). This file keeps the decisions, designs and backlog IDs.
+
 Date 2026-10-23. Owner: Claude (integration and release lead). Branch `mirar-launch-execution` (not merged, not pushed beyond the branch). Nothing here applies anything to Supabase, billing, hosting or production.
 
 **Locked direction (founder):** 14-day no-card trial; 348-hour entitlement starting at the server-recorded first completed engine rep; one plan, ₹199/month, no annual; no charge at trial end without explicit subscription consent; no streaks, comparative scores, fabricated insights or pressure; frozen engine unchanged unless approved; the 12-person study is optional (targeted acceptance tests instead).
@@ -352,8 +354,8 @@ Applies to every migration from here on (E1, E6/B1 billing, Option B): new `publ
 | 1 | Async entitlement client + differential test | **Done** (`041b063`) |
 | 2 | Frozen-engine guard in preflight | **Done** (`041b063`) |
 | 3 | L0c launch build profile and preflight rewrite | Next (needs D9) |
-| 4 | L3 entitlement store wiring behind a default-off flag, with mock port and isolation tests | Next, no approval needed (flag off, unwired) |
-| 5 | RC2 practice registry + L11 shelf offer rules with property tests | Next, isolated |
+| 4 | L3 entitlement store wiring behind a default-off flag, with mock port and isolation tests | **Done** (see LAUNCH_MVP_MATRIX.md §1) |
+| 5 | RC2 practice registry + L11 shelf offer rules with property tests | **Done** |
 | 6 | L6 `payoffFor` + swap-test suite | Next, isolated, largest |
 | 7 | B1 billing schema and webhook handler against a mock gateway on a disposable database | After D3 |
 
